@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-# IMPORTANT: change this where your boost lives.
+# IMPORTANT: change this to where your boost lives.
 MY_BOOST_PATH := /Users/michael/Studio/sdk/boost_1_54_0
 
 LOCAL_MODULE    := luabind

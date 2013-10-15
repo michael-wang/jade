@@ -1,5 +1,8 @@
 One dependency is not part of this source code: boost.
 
-You must have boost in local and add its path to: jni/LuabindX/Luabind/Android.mk
+You must have boost in local and add its path to:
+ 
+  - jni/LuabindX/Luabind/Android.mk
+  - jni/Framework/Android.mk
 
 Boost: 1.54.0 is what we used. 

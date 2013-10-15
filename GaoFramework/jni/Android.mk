@@ -5,11 +5,9 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := gaoframework
 LOCAL_SRC_FILES := gaoframework.cpp
 
-LOCAL_SHARED_LIBRARIES := lua luabind luabins
+LOCAL_SHARED_LIBRARIES := framework
 
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-add-path, $(LOCAL_PATH))
-$(call import-module, LuabindX/Lua)
-$(call import-module, LuabindX/Luabind)
-$(call import-module, LuabindX/Luabins)
+$(call import-module, Framework)
