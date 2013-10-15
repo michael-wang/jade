@@ -1,7 +1,7 @@
-package com.studioirregular.jadeninja_prototype1;
+package com.studioirregular.jadeninja.p1;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
@@ -12,7 +12,14 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		System.loadLibrary("jadeninja");
-		nativeTest();
+		nativeCreate();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		nativeDestroy();
 	}
 
 	@Override
@@ -22,6 +29,7 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
-	private native void nativeTest();
+	private native void nativeCreate();
+	private native void nativeDestroy();
 
 }

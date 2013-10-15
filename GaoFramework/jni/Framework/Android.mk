@@ -35,7 +35,7 @@ LOCAL_C_INCLUDES += $(MY_BOOST_PATH)
 
 LOCAL_SHARED_LIBRARIES := lua luabind luabins
 
-include $(BUILD_STATIC_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
 
 $(call import-add-path, $(LOCAL_PATH)/../)
 
