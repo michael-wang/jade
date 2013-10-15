@@ -13,7 +13,7 @@ bin/
 gen/
 obj/
 .*/
-libs/armeabi
+armeabi/
 
 # Local configuration file (sdk path, etc)
 local.properties
