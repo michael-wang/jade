@@ -10,6 +10,9 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		System.loadLibrary("jadeninja");
+		nativeTest();
 	}
 
 	@Override
@@ -18,5 +21,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	private native void nativeTest();
 
 }
