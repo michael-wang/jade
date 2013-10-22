@@ -1,6 +1,7 @@
 package com.studioirregular.gaoframework;
 
 import android.app.Activity;
+import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,17 +15,18 @@ public abstract class AbsGameActivity extends Activity {
 	protected abstract String delegateUpdateLua();
 	protected abstract String delegateRenderLua();
 	
-	protected AssetHelper assetHelper = new AssetHelper();
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.w(TAG, "onCreate");
 		
+		am = getAssets();
+		
 		ActivityOnCreate(
-				assetHelper.getFileContent(this, "Core.lua"),
-				delegateUpdateLua(),
-				delegateRenderLua());
+			am,
+			"Core.lua",
+			delegateUpdateLua(),
+			delegateRenderLua());
 		
 		surfaceView = new MyGLSurfaceView(AbsGameActivity.this);
 		setContentView(surfaceView);
@@ -35,11 +37,13 @@ public abstract class AbsGameActivity extends Activity {
 		super.onDestroy();
 		
 		ActivityOnDestroy();
+		am = null;
 	}
 
+	private AssetManager am;
 	private GLSurfaceView surfaceView;
 	
-	private native void ActivityOnCreate(String luaCore, String luaUpdate, String luaRender);
+	private native void ActivityOnCreate(AssetManager am, String luaCore, String luaUpdate, String luaRender);
 	private native void ActivityOnDestroy();
 	static {
 		System.loadLibrary("gaoframework");

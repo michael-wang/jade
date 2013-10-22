@@ -13,7 +13,7 @@ extern "C" {
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *, jobject, jstring, jstring, jstring);
+  (JNIEnv *, jobject, jobject, jstring, jstring, jstring);
 
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity

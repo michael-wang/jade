@@ -10,6 +10,7 @@
 
 #include <Framework/Application.hpp>
 #include <Framework/LuaScriptManager.hpp>
+#include <android/asset_manager.h>
 #include <jni.h>
 
 static const char SCRIPT_ROUTINE_INIT[] = "OnInitialize";
@@ -23,7 +24,8 @@ public:
 	AndroidApplication();
 	virtual ~AndroidApplication();
 
-	GaoBool Initialize(char* core, char* updateDelegate, char* renderDelegate);
+	GaoBool Initialize(AAssetManager* am, char* coreLuaName, 
+		char* updateLuaName, char* renderLuaName);
 
 	GaoVoid RunOnePass();
 
@@ -49,16 +51,17 @@ protected:
 
 protected:
 	Gao::Framework::LuaScriptManager* luaManager;
-
-private:
-	GaoBool CallLua(GaoConstCharPtr func);
+	AAssetManager* assetManager;
 
 	JNIEnv*  jniEnv;
 	jobject* glRenderer;
 
-	char* luaCore;
-	char* luaUpdate;
-	char* luaRender;
+private:
+	GaoBool CallLua(GaoConstCharPtr func);
+
+	char* coreLuaName;
+	char* updateLuaName;
+	char* renderLuaName;
 };
 
 #endif /* ANDROIDAPPLICATION_H_ */

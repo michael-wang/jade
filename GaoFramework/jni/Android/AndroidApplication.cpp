@@ -8,41 +8,48 @@
 #include <Android/AndroidApplication.h>
 #include <android/log.h>
 #include <Framework/LuaFunction.hpp>
- #include "AndroidLuaScripts.h"
+#include "AndroidLuaScripts.h"
+#include "AssetHelper.h"
 
 using namespace Gao::Framework;
 
 AndroidApplication::AndroidApplication() :
 	luaManager (new LuaScriptManager()),
+	assetManager (NULL),
 	jniEnv (NULL),
 	glRenderer (NULL),
-	luaCore (NULL),
-	luaUpdate (NULL),
-	luaRender (NULL) {
+	coreLuaName (NULL),
+	updateLuaName (NULL),
+	renderLuaName (NULL) {
 }
 
 AndroidApplication::~AndroidApplication() {
 	SAFE_DELETE(luaManager);
+	assetManager = NULL;
 	jniEnv = NULL;
 	glRenderer = NULL;
-	SAFE_DELETE(luaCore);
-	SAFE_DELETE(luaUpdate);
-	SAFE_DELETE(luaRender);
+	SAFE_DELETE(coreLuaName);
+	SAFE_DELETE(updateLuaName);
+	SAFE_DELETE(renderLuaName);
 }
 
-GaoBool AndroidApplication::Initialize(char* core, char* updateDelegate, char* renderDelegate) {
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "Initialize");
+GaoBool AndroidApplication::Initialize(AAssetManager* am, 
+	char* core, char* update, char* render) {
+	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", 
+		"Initialize core:%s, update:%s, render:%s", core, update, render);
 
-	if (core == NULL || updateDelegate == NULL || renderDelegate == NULL) {
+	assetManager = am;
+
+	if (core == NULL || update == NULL || render == NULL) {
 		__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", 
-			"Invalid arguments core:%p, updateDelegate:%p, renderDelegate:%p", 
-			core, updateDelegate, renderDelegate);
+			"Invalid arguments core:%p, update:%p, render:%p", 
+			core, update, render);
 		return FALSE;
 	}
 
-	luaCore = core;
-	luaUpdate = updateDelegate;
-	luaRender = renderDelegate;
+	coreLuaName = core;
+	updateLuaName = update;
+	renderLuaName = render;
 
 	return OnInitialize();
 }
@@ -69,7 +76,11 @@ GaoBool AndroidApplication::OnInitialize() {
 	AndroidLuaScripts::RegisterAndroidClasses(luaManager->GetLuaState());
 	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "RegisterAndroidClasses done!");
 
-	if (!luaManager->RunFromString(luaCore)) {
+	AssetHelper* helper = new AssetHelper(assetManager);
+
+	char* lua = helper->readAsTextFile(coreLuaName);
+	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "core lua:%s", lua);
+	if (!luaManager->RunFromString(lua)) {
 		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run luaCore");
 		return FALSE;
 	}
@@ -77,17 +88,24 @@ GaoBool AndroidApplication::OnInitialize() {
 
 	CallLua(SCRIPT_ROUTINE_INIT);
 
-	if (!luaManager->RunFromString(luaUpdate)) {
+	lua = helper->readAsTextFile(updateLuaName);
+	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "update lua:%s", lua);
+
+	if (!luaManager->RunFromString(lua)) {
 		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run luaUpdate");
 		return FALSE;
 	}
 	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "lua luaUpdate done!");
 
-	if (!luaManager->RunFromString(luaRender)) {
+	lua = helper->readAsTextFile(renderLuaName);
+	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "update lua:%s", lua);
+
+	if (!luaManager->RunFromString(lua)) {
 		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run luaRender");
 		return FALSE;
 	}
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "lua luaRender done!");
+
+	SAFE_DELETE(helper);
 
 	return TRUE;
 }
@@ -111,25 +129,15 @@ GaoVoid AndroidApplication::OnSurfaceChanged(int width, int height) {
 }
 
 GaoVoid AndroidApplication::OnUpdate() {
-	// if (delegateUpdateCode != NULL) {
-	// 	luaManager->RunFromString(delegateUpdateCode);
-	// } else {
-		CallLua(SCRIPT_ROUTINE_UPDATE);
-	// }
+	CallLua(SCRIPT_ROUTINE_UPDATE);
 }
 
 GaoVoid AndroidApplication::OnRender() {
-	// __android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "OnRender code: %s", delegateRenderCode);
-
-	// if (delegateRenderCode != NULL) {
-	// 	luaManager->RunFromString(delegateRenderCode);
-	// } else {
-		CallLua(SCRIPT_ROUTINE_RENDER);
-	// }
+	CallLua(SCRIPT_ROUTINE_RENDER);
 }
 
 GaoBool AndroidApplication::CallLua(GaoConstCharPtr func) {
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "CallLua: %s", func);
+//	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "CallLua: %s", func);
 
 	if (!luaManager->CallFunction(func)) {
 		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run lua function: %s", func);

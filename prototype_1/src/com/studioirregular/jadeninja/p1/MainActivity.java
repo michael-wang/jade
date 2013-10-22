@@ -11,11 +11,11 @@ public class MainActivity extends AbsGameActivity {
 	private static final String TAG = "main-activity";
 	
 	protected String delegateUpdateLua() {
-		return assetHelper.getFileContent(MainActivity.this, "DelegateUpdate.lua");
+		return "DelegateUpdate.lua";
 	}
 	
 	protected String delegateRenderLua() {
-		return assetHelper.getFileContent(MainActivity.this, "DelegateRender.lua");
+		return "DelegateRender.lua";
 	}
 	
 	@Override

@@ -18,7 +18,7 @@ LOCAL_CPP_FEATURES := exceptions
 
 LOCAL_STATIC_LIBRARIES := framework
 
-LOCAL_LDLIBS    := -llog
+LOCAL_LDLIBS    := -llog -landroid
 
 include $(BUILD_SHARED_LIBRARY)
 

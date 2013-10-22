@@ -1,5 +1,6 @@
 #include "com_studioirregular_gaoframework_AbsGameActivity.h"
 #include "com_studioirregular_gaoframework_MyGLRenderer.h"
+#include <android/asset_manager_jni.h>
 #include <android/log.h>
 #include <Android/AndroidApplication.h>
 #include <string>
@@ -8,7 +9,7 @@
 AndroidApplication* app;
 
 // NOTICE: do not handle non-ascii code.
-char* getJniString(JNIEnv* env, jstring jstr) {
+static char* getJniString(JNIEnv* env, jstring jstr) {
 
   	const char* bytes = env->GetStringUTFChars(jstr, NULL);
   	std::string* str = new std::string(bytes);
@@ -27,11 +28,12 @@ char* getJniString(JNIEnv* env, jstring jstr) {
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *env, jobject obj, jstring jLuaCore, jstring jLuaUpdate, jstring jLuaRender) {
+  (JNIEnv *env, jobject obj, jobject am, jstring jLuaCore, jstring jLuaUpdate, jstring jLuaRender) {
 	__android_log_print(ANDROID_LOG_INFO, "gaoframework", "ActivityOnCreate");
 
 	app = new AndroidApplication();
 	app->Initialize(
+    AAssetManager_fromJava(env, am),
 		getJniString(env, jLuaCore),
 		getJniString(env, jLuaUpdate),
 		getJniString(env, jLuaRender));

@@ -4,5 +4,8 @@ You must have boost in local and add its path to:
  
   - jni/LuabindX/Luabind/Android.mk
   - jni/Framework/Android.mk
+  - jni/Android.mk
 
 Boost: 1.54.0 is what we used. 
+
+Also move files in assets to application project's asset folder.
