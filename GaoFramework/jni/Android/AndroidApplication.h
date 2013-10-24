@@ -12,6 +12,7 @@
 #include <Framework/LuaScriptManager.hpp>
 #include <android/asset_manager.h>
 #include <jni.h>
+#include "Resource.h"
 
 static const char SCRIPT_ROUTINE_INIT[] = "OnInitialize";
 static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";

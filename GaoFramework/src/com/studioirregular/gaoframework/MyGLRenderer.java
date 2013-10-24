@@ -3,6 +3,7 @@ package com.studioirregular.gaoframework;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
@@ -10,6 +11,10 @@ import android.opengl.Matrix;
 public class MyGLRenderer implements Renderer {
 
 //	private static final String TAG = "my-glrenderer";
+	
+	public MyGLRenderer(AssetManager am) {
+		this.am = am;
+	}
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -27,6 +32,15 @@ public class MyGLRenderer implements Renderer {
 				-width/2, width/2, -height/2, height/2, 3, 7);
 		
 		RendererOnSurfaceChanged(width, height);
+		
+		final float[] textureCoordinateValues = {
+				0.0f, 0.0f,
+				0.0f, 1.0f,
+				1.0f, 1.0f,
+				1.0f, 0.0f,
+		};
+		testingTexture = new GLTexture(am, textureCoordinateValues);
+		testingTexture.load("JadeNinja.png");
 	}
 	
 	@Override
@@ -48,6 +62,7 @@ public class MyGLRenderer implements Renderer {
 //		Log.d(TAG, "drawRectangle left:" + left + ",top:" + top + ",right:" + right + ",bottom:" + bottom + ",red:" + red + ",green:" + green + ",blue:" + blue + ",alpha:" + alpha);
 		
 		Rectangle rect = new Rectangle(left, top, right, bottom, red, green, blue, alpha);
+		rect.setTexture(testingTexture);
 		rect.draw(mMVPMatrix);
 	}
 	
@@ -59,4 +74,7 @@ public class MyGLRenderer implements Renderer {
 	
 	private native void RendererOnSurfaceChanged(int w, int h);
 	private native void RendererOnDrawFrame();
+	
+	private AssetManager am;
+	private GLTexture testingTexture;
 }

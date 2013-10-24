@@ -9,7 +9,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		super(context);
 		
 		setEGLContextClientVersion(2);
-		setRenderer(new MyGLRenderer());
+		setRenderer(new MyGLRenderer(context.getAssets()));
 	}
 
 }

@@ -9,7 +9,7 @@
 #include <android/log.h>
 #include <Framework/LuaFunction.hpp>
 #include "AndroidLuaScripts.h"
-#include "AssetHelper.h"
+#include "Resource.h"
 
 using namespace Gao::Framework;
 
@@ -25,7 +25,6 @@ AndroidApplication::AndroidApplication() :
 
 AndroidApplication::~AndroidApplication() {
 	SAFE_DELETE(luaManager);
-	assetManager = NULL;
 	jniEnv = NULL;
 	glRenderer = NULL;
 	SAFE_DELETE(coreLuaName);
@@ -76,9 +75,9 @@ GaoBool AndroidApplication::OnInitialize() {
 	AndroidLuaScripts::RegisterAndroidClasses(luaManager->GetLuaState());
 	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "RegisterAndroidClasses done!");
 
-	AssetHelper* helper = new AssetHelper(assetManager);
+	Resource* res = new Resource(assetManager);
 
-	char* lua = helper->readAsTextFile(coreLuaName);
+	char* lua = res->readAsTextFile(coreLuaName);
 	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "core lua:%s", lua);
 	if (!luaManager->RunFromString(lua)) {
 		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run luaCore");
@@ -88,7 +87,7 @@ GaoBool AndroidApplication::OnInitialize() {
 
 	CallLua(SCRIPT_ROUTINE_INIT);
 
-	lua = helper->readAsTextFile(updateLuaName);
+	lua = res->readAsTextFile(updateLuaName);
 	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "update lua:%s", lua);
 
 	if (!luaManager->RunFromString(lua)) {
@@ -97,15 +96,13 @@ GaoBool AndroidApplication::OnInitialize() {
 	}
 	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "lua luaUpdate done!");
 
-	lua = helper->readAsTextFile(renderLuaName);
+	lua = res->readAsTextFile(renderLuaName);
 	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "update lua:%s", lua);
 
 	if (!luaManager->RunFromString(lua)) {
 		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run luaRender");
 		return FALSE;
 	}
-
-	SAFE_DELETE(helper);
 
 	return TRUE;
 }
