@@ -20,15 +20,25 @@ public class GLTexture {
 	
 	private static final String TAG = "gltexture";
 	
-	public GLTexture(AssetManager am, final float[] coordinateValues) {
+	private static final float[] TEXTURE_COORDINATE_VALUES = {
+			0.0f, 0.0f,
+			0.0f, 1.0f,
+			1.0f, 1.0f,
+			1.0f, 0.0f,
+	};
+	private static final int COORDINATE_VALUE_BYTES = 4;
+	
+	private static final int COORDS_PER_VERTEX = 2;
+	
+	public GLTexture(AssetManager am) {
 		this.am = am;
 		this.name = INVALID_TEXTURE_NAME;
 		
 		textureCoordinates = ByteBuffer
-				.allocateDirect(coordinateValues.length * 4)
+				.allocateDirect(TEXTURE_COORDINATE_VALUES.length * COORDINATE_VALUE_BYTES)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
-		textureCoordinates.put(coordinateValues);
+		textureCoordinates.put(TEXTURE_COORDINATE_VALUES);
 		textureCoordinates.position(0);
 	}
 	
@@ -145,6 +155,4 @@ public class GLTexture {
 	protected int textureHandle;
 	protected int coordinateHandle;
 	private FloatBuffer textureCoordinates;
-	
-	static final int COORDS_PER_VERTEX = 2;
 }

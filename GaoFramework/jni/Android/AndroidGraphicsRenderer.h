@@ -18,6 +18,8 @@ public:
 
 	GaoVoid OnSurfaceChanged(GaoInt32 width, GaoInt32 height);
 
+	virtual Gao::Framework::Texture* CreateTexture(GaoString& fileName);
+
 	virtual GaoVoid DrawRectangle(GaoInt16 startX, GaoInt16 startY, GaoInt16 endX, GaoInt16 endY, GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
 
 protected:

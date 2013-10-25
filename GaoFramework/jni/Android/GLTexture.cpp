@@ -1,12 +1,7 @@
 #include "GLTexture.h"
 
-GLTexture::currentTextureId = 0;
 
-GLTexture::GLTexture() :
-	m_Width (0),
-	m_Height (0),
-	textureId (0),
-	pixels (NULL) {
+GLTexture::GLTexture() {
 }
 
 GLTexture::~GLTexture() {
@@ -14,13 +9,12 @@ GLTexture::~GLTexture() {
 }
 
 GaoBool GLTexture::Create(GaoString& fileName) {
+	return FALSE;
 }
 
 GaoBool GLTexture::Reload() {
+	return FALSE;
 }
 
 GaoVoid GLTexture::Unload() {
-}
-
-GaoVoid GLTexture::Bind() {
 }

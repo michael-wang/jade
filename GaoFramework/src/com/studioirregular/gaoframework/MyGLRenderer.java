@@ -33,13 +33,7 @@ public class MyGLRenderer implements Renderer {
 		
 		RendererOnSurfaceChanged(width, height);
 		
-		final float[] textureCoordinateValues = {
-				0.0f, 0.0f,
-				0.0f, 1.0f,
-				1.0f, 1.0f,
-				1.0f, 0.0f,
-		};
-		testingTexture = new GLTexture(am, textureCoordinateValues);
+		testingTexture = new GLTexture(am);
 		testingTexture.load("JadeNinja.png");
 	}
 	

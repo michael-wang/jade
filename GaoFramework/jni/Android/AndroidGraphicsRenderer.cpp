@@ -7,11 +7,14 @@
 
 #include <Android/AndroidGraphicsRenderer.h>
 #include <Android/AndroidApplication.h>
+#include <Android/GLTexture.h>
 #include <android/log.h>
 
 static const char JAVA_RENDERER_PATH[]      = "com/studioirregular/gaoframework/MyGLRenderer";
 static const char RENDERER_DRAW_RECT_NAME[] = "drawRectangle";
 static const char RENDERER_DRAW_RECT_DESCRIPTOR[] = "(IIIIFFFF)V";
+
+using namespace Gao::Framework;
 
 AndroidGraphicsRenderer::AndroidGraphicsRenderer() :
 	width(0), height(0), drawRectID(NULL) {
@@ -25,6 +28,20 @@ GaoVoid AndroidGraphicsRenderer::OnSurfaceChanged(GaoInt32 w, GaoInt32 h) {
 
 	width = w;
 	height = h;
+}
+
+Texture* AndroidGraphicsRenderer::CreateTexture(GaoString& fileName) {
+	__android_log_print(ANDROID_LOG_INFO, "AndroidGraphicsRenderer", "CreateTexture fileName:%s", fileName.c_str());
+
+	GLTexture* texture = new GLTexture();
+
+	if (!texture->Create(fileName)) {
+		delete texture;
+		texture = NULL;
+		__android_log_print(ANDROID_LOG_ERROR, "AndroidGraphicsRenderer", "CreateTexture texture->Create failed.");
+	}
+
+	return texture;
 }
 
 GaoVoid AndroidGraphicsRenderer::DrawRectangle (

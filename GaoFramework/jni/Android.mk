@@ -12,6 +12,7 @@ LOCAL_SRC_FILES += Android/AndroidGraphicsRenderer.cpp
 LOCAL_SRC_FILES += Android/AndroidApplication.cpp
 LOCAL_SRC_FILES += Android/AndroidLogger.cpp
 LOCAL_SRC_FILES += Android/Resource.cpp
+LOCAL_SRC_FILES += Android/GLTexture.cpp
 
 LOCAL_C_INCLUDES += $(MY_BOOST_PATH)
 
