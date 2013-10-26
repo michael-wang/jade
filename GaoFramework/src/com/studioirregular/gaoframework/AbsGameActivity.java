@@ -28,7 +28,14 @@ public abstract class AbsGameActivity extends Activity {
 			delegateUpdateLua(),
 			delegateRenderLua());
 		
-		surfaceView = new MyGLSurfaceView(AbsGameActivity.this);
+		surfaceView = new GLSurfaceView(AbsGameActivity.this);
+		surfaceView.setEGLContextClientVersion(2);
+		
+		MyGLRenderer renderer = new MyGLRenderer();
+		surfaceView.setRenderer(renderer);
+		
+		JavaInterface.getInstance().setContext(getAssets(), renderer);
+		
 		setContentView(surfaceView);
 	}
 

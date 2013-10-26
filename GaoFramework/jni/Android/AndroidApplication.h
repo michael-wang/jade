@@ -22,6 +22,9 @@ static const char SCRIPT_ROUTINE_RENDER[] = "OnRender";
 
 class AndroidApplication : public Gao::Framework::Application {
 public:
+	static AndroidApplication* Singleton;
+	
+public:
 	AndroidApplication();
 	virtual ~AndroidApplication();
 
@@ -31,17 +34,17 @@ public:
 	GaoVoid RunOnePass();
 
 	GaoVoid OnSurfaceChanged(int width, int height);
-	GaoVoid SetGLContext(JNIEnv* jni, jobject* renderer) {
+	GaoVoid SetJavaInterface(JNIEnv* jni, jobject ji) {
 		jniEnv = jni;
-		glRenderer = renderer;
+		jInterface = ji;
 	}
 
 	JNIEnv* GetJniEnv() {
 		return jniEnv;
 	}
 
-	jobject* GetRenderer() {
-		return glRenderer;
+	jobject GetJavaInterface() {
+		return jInterface;
 	}
 
 protected:
@@ -54,8 +57,8 @@ protected:
 	Gao::Framework::LuaScriptManager* luaManager;
 	AAssetManager* assetManager;
 
-	JNIEnv*  jniEnv;
-	jobject* glRenderer;
+	JNIEnv* jniEnv;
+	jobject jInterface;
 
 private:
 	GaoBool CallLua(GaoConstCharPtr func);

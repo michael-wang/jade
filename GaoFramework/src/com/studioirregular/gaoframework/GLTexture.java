@@ -30,8 +30,7 @@ public class GLTexture {
 	
 	private static final int COORDS_PER_VERTEX = 2;
 	
-	public GLTexture(AssetManager am) {
-		this.am = am;
+	public GLTexture() {
 		this.name = INVALID_TEXTURE_NAME;
 		
 		textureCoordinates = ByteBuffer
@@ -43,7 +42,7 @@ public class GLTexture {
 	}
 	
 	// return texture name.
-	public boolean load(String fileName) {
+	public boolean load(AssetManager am, String fileName) {
 		Log.w(TAG, "load:" + fileName);
 		
 		final int[] nameBuf = new int[1];
@@ -60,7 +59,7 @@ public class GLTexture {
 		
 		this.name = nameBuf[0];
 		
-		Bitmap bmp = loadAssetImage(fileName);
+		Bitmap bmp = loadAssetImage(am, fileName);
 		
 		if (bmp == null) {
 			Log.e(TAG, "loadAssetImage failed");
@@ -120,7 +119,7 @@ public class GLTexture {
 		checkIfNoGLError("glUniform1i");
 	}
 	
-	private Bitmap loadAssetImage(String fileName) {
+	private Bitmap loadAssetImage(AssetManager am, String fileName) {
 		InputStream is = null;
 		try {
 			is = am.open(fileName);
@@ -149,7 +148,6 @@ public class GLTexture {
 		return true;
 	}
 	
-	protected AssetManager am;
 	protected int name;
 	
 	protected int textureHandle;

@@ -67,10 +67,12 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
 /*
  * Class:     com_studioirregular_gaoframework_NativeInterface
  * Method:    RendererOnDrawFrame
- * Signature: ()V
+ * Signature: ("Lcom/studioirregular/gaoframework/JavaInterface;")V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnDrawFrame
-  (JNIEnv *env, jobject obj) {
-  	app->SetGLContext(env, &obj);
+  (JNIEnv *env, jobject obj, jobject javaInterface) {
+  	app->SetJavaInterface(env, javaInterface);
   	app->RunOnePass();
+    // clear local references to prevent miss used.
+    app->SetJavaInterface(NULL, NULL);
 }

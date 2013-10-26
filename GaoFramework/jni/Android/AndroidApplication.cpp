@@ -13,20 +13,24 @@
 
 using namespace Gao::Framework;
 
+AndroidApplication* AndroidApplication::Singleton = NULL;
+
 AndroidApplication::AndroidApplication() :
 	luaManager (new LuaScriptManager()),
 	assetManager (NULL),
 	jniEnv (NULL),
-	glRenderer (NULL),
+	jInterface (NULL),
 	coreLuaName (NULL),
 	updateLuaName (NULL),
 	renderLuaName (NULL) {
+
+	AndroidApplication::Singleton = dynamic_cast<AndroidApplication*>(g_Application);
 }
 
 AndroidApplication::~AndroidApplication() {
 	SAFE_DELETE(luaManager);
 	jniEnv = NULL;
-	glRenderer = NULL;
+	jInterface = NULL;
 	SAFE_DELETE(coreLuaName);
 	SAFE_DELETE(updateLuaName);
 	SAFE_DELETE(renderLuaName);

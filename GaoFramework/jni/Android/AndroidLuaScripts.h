@@ -8,8 +8,9 @@
 
 #include <lua.h>
 #include <Framework/LuaFunction.hpp>
-#include "AndroidGraphicsRenderer.h"
-#include "AndroidLogger.h"
+#include <Android/AndroidGraphicsRenderer.h>
+#include <Android/GLTexture.h>
+#include <Android/AndroidLogger.h>
 
 namespace AndroidLuaScripts {
 
@@ -25,9 +26,16 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 
 	module(state)
 	[
+		class_<GLTexture, Gao::Framework::Texture>("GLTexture")
+			.def(constructor<>())
+	];
+
+	module(state)
+	[
 		class_<AndroidGraphicsRenderer, Gao::Framework::GraphicsRenderer>("AndroidGraphicsRenderer")
 			.def(constructor<>())
 			.def("OnSurfaceChanged", &AndroidGraphicsRenderer::OnSurfaceChanged)
+			.def("DrawRectangle", &AndroidGraphicsRenderer::DrawRectangle)
 	];
 
 }

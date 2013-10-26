@@ -12,10 +12,6 @@ public class MyGLRenderer implements Renderer {
 
 //	private static final String TAG = "my-glrenderer";
 	
-	public MyGLRenderer(AssetManager am) {
-		this.am = am;
-	}
-	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -32,9 +28,6 @@ public class MyGLRenderer implements Renderer {
 				-width/2, width/2, -height/2, height/2, 3, 7);
 		
 		RendererOnSurfaceChanged(width, height);
-		
-		testingTexture = new GLTexture(am);
-		testingTexture.load("JadeNinja.png");
 	}
 	
 	@Override
@@ -48,15 +41,15 @@ public class MyGLRenderer implements Renderer {
 		
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
 		
-		RendererOnDrawFrame();
+		RendererOnDrawFrame(JavaInterface.getInstance());
 	}
 
-	public void drawRectangle(int left, int top, int right, int bottom, 
-		float red, float green, float blue, float alpha) {
+	void drawRectangle(int left, int top, int right, int bottom, 
+		float red, float green, float blue, float alpha, GLTexture texture) {
 //		Log.d(TAG, "drawRectangle left:" + left + ",top:" + top + ",right:" + right + ",bottom:" + bottom + ",red:" + red + ",green:" + green + ",blue:" + blue + ",alpha:" + alpha);
 		
 		Rectangle rect = new Rectangle(left, top, right, bottom, red, green, blue, alpha);
-		rect.setTexture(testingTexture);
+		rect.setTexture(texture);
 		rect.draw(mMVPMatrix);
 	}
 	
@@ -67,8 +60,5 @@ public class MyGLRenderer implements Renderer {
 	private int viewportWidth, viewportHeight;
 	
 	private native void RendererOnSurfaceChanged(int w, int h);
-	private native void RendererOnDrawFrame();
-	
-	private AssetManager am;
-	private GLTexture testingTexture;
+	private native void RendererOnDrawFrame(JavaInterface jInterface);
 }
