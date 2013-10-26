@@ -3,7 +3,6 @@ package com.studioirregular.gaoframework;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.content.res.AssetManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
@@ -50,6 +49,10 @@ public class MyGLRenderer implements Renderer {
 		
 		Rectangle rect = new Rectangle(left, top, right, bottom, red, green, blue, alpha);
 		rect.setTexture(texture);
+		rect.draw(mMVPMatrix);
+	}
+	
+	void draw(Rectangle rect) {
 		rect.draw(mMVPMatrix);
 	}
 	

@@ -64,41 +64,34 @@ public class Rectangle {
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer drawListBuffer;
 
-	static final int COORDS_PER_VERTEX = 3;
+	private static final int COORDS_PER_VERTEX = 3;
+	private static final int BYTES_PER_VERTEX = 4;
+	private static final int BYTES_OF_SHORT = 2;
 	
-	private float[] rectCoords;
 	private int positionHandle;
 	private int colorHandle;
 	private int MVPMatrixHandle;
 	
 	private final short drawOrder[] = { 0, 1, 2, 0, 2, 3 };
-	private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
+	private final int vertexStride = COORDS_PER_VERTEX * BYTES_PER_VERTEX;
 	
-	private float color[];
+	private static final int COLOR_ELEMENTS = 4;
+	private float[] color = new float[COLOR_ELEMENTS];
 	
 	public Rectangle(float left, float top, float right, float bottom, 
 			float red, float green, float blue, float alpha) {
+		Log.d(TAG, "Rectangle left:" + left + ",top:" + top + ",right:" + right
+				+ ",bottom:" + bottom + "red:" + red + ",green:" + green
+				+ ",blue:" + blue + ",alpha:" + alpha);
 		
-		rectCoords = new float[] {
-				left,  top,    0.0f, 
-				left,  bottom, 0.0f,
-				right, bottom, 0.0f,
-				right, top,    0.0f
-		};
+		setBound(left, top, right, bottom);
+		setColor(red, green, blue, alpha);
 		
-		ByteBuffer bb = ByteBuffer.allocateDirect(rectCoords.length * 4);
-		bb.order(ByteOrder.nativeOrder());
-		vertexBuffer = bb.asFloatBuffer();
-		vertexBuffer.put(rectCoords);
-		vertexBuffer.position(0);
-		
-		ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * 2);
+		ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * BYTES_OF_SHORT);
 		dlb.order(ByteOrder.nativeOrder());
 		drawListBuffer = dlb.asShortBuffer();
 		drawListBuffer.put(drawOrder);
 		drawListBuffer.position(0);
-		
-		color = new float[] {red, green, blue, alpha};
 		
 		int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
 		int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
@@ -119,6 +112,34 @@ public class Rectangle {
 		if (!linked) {
 			Log.e(TAG, "Link failed:" + GLES20.glGetProgramInfoLog(program));
 		}
+	}
+	
+	public void setBound(float left, float top, float right, float bottom) {
+		Log.d(TAG, "setBound left:" + left + ",top:" + top + ",right:" + right
+				+ ",bottom:" + bottom);
+		
+		final float[] rectCoords = new float[] {
+				left,  top,    0.0f, 
+				left,  bottom, 0.0f,
+				right, bottom, 0.0f,
+				right, top,    0.0f
+		};
+		
+		ByteBuffer bb = ByteBuffer.allocateDirect(rectCoords.length * BYTES_PER_VERTEX);
+		bb.order(ByteOrder.nativeOrder());
+		vertexBuffer = bb.asFloatBuffer();
+		vertexBuffer.put(rectCoords);
+		vertexBuffer.position(0);
+	}
+	
+	public void setColor(float red, float green, float blue, float alpha) {
+		Log.d(TAG, "setColor red:" + red + ",green:" + green + ",blue:" + blue
+				+ ",alpha:" + alpha);
+		
+		color[0] = red;
+		color[1] = green;
+		color[2] = blue;
+		color[3] = alpha;
 	}
 	
 	public void setTexture(GLTexture t) {

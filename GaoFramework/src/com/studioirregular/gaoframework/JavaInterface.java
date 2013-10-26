@@ -38,6 +38,14 @@ public class JavaInterface {
 		}
 	}
 	
+	public void draw(Rectangle rect) {
+//		Log.d(TAG, "draw rect:" + rect);
+		
+		if (renderer != null) {
+			renderer.draw(rect);
+		}
+	}
+	
 	public boolean loadTexture(GLTexture texture, String fileName) {
 		Log.d(TAG, "loadTexture fileName:" + fileName);
 		

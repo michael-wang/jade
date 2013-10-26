@@ -31,7 +31,7 @@ GLTexture::GLTexture() :
 	}
 
 	jobject obj = env->NewObject(clazz, ctor);
-	javaRef = env->NewGlobalRef(obj); 
+	javaRef = env->NewGlobalRef(obj);
 }
 
 GLTexture::~GLTexture() {

@@ -12,6 +12,9 @@
 static const char JAVA_INTERFACE_PATH[]			= "com/studioirregular/gaoframework/JavaInterface";
 static const char JAVA_DRAW_RECT_NAME[] 		= "drawRectangle";
 static const char JAVA_DRAW_RECT_DESCRIPTOR[]	= "(IIIIFFFFLcom/studioirregular/gaoframework/GLTexture;)V";
+static const char JAVA_DRAW_NAME[]		 		= "draw";
+static const char JAVA_DRAW_DESCRIPTOR[]		= "(Lcom/studioirregular/gaoframework/Rectangle;)V";
+
 
 using namespace Gao::Framework;
 
@@ -79,4 +82,33 @@ GaoVoid AndroidGraphicsRenderer::DrawRectangle (
 	GLTexture* gltexture = dynamic_cast<GLTexture*>(texture);
 	jni->CallVoidMethod(javaInterface, drawRectID, startX, startY, endX, endY, 
 		red, green, blue, alpha, gltexture->GetJavaReference());
+}
+
+GaoVoid AndroidGraphicsRenderer::Draw(Rectangle* rect) {
+	AndroidApplication* app = AndroidApplication::Singleton;
+	if (app == NULL) {
+		__android_log_print(ANDROID_LOG_ERROR, "AndroidGraphicsRenderer", 
+			"DrawRectangle: AndroidApplication::Singleton == NULL");
+	}
+
+	JNIEnv* jni  = app->GetJniEnv();
+	if (jni == NULL) {
+		// Show error msg;
+		return;
+	}
+
+	jobject javaInterface = app->GetJavaInterface();
+	if (javaInterface == NULL) {
+		return;
+	}
+
+	jclass clazz = jni->FindClass(JAVA_INTERFACE_PATH);
+
+	jmethodID draw = jni->GetMethodID(clazz, JAVA_DRAW_NAME, JAVA_DRAW_DESCRIPTOR);
+
+	if (draw == NULL) {
+		// Show error msg;
+	}
+
+	jni->CallVoidMethod(javaInterface, draw, rect->GetJavaReference());
 }
