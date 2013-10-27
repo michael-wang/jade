@@ -41,6 +41,15 @@ public class MyGLRenderer implements Renderer {
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
 		
 		RendererOnDrawFrame(JavaInterface.getInstance());
+		
+		if (fps != null) {
+			fps.addFrame();
+		}
+	}
+	
+	void calculateFrameRate(FrameRateCalculator fps) {
+		this.fps = fps;
+		fps.start();
 	}
 
 	void drawRectangle(int left, int top, int right, int bottom, 
@@ -56,12 +65,13 @@ public class MyGLRenderer implements Renderer {
 		rect.draw(mMVPMatrix);
 	}
 	
+	private native void RendererOnSurfaceChanged(int w, int h);
+	private native void RendererOnDrawFrame(JavaInterface jInterface);
+	
 	private final float[] mMVPMatrix = new float[16];
 	private final float[] mProjMatrix = new float[16];
 	private final float[] mVMatrix = new float[16];
 	
 	private int viewportWidth, viewportHeight;
-	
-	private native void RendererOnSurfaceChanged(int w, int h);
-	private native void RendererOnDrawFrame(JavaInterface jInterface);
+	private FrameRateCalculator fps;
 }
