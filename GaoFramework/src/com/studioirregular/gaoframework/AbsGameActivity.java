@@ -8,6 +8,7 @@ import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -82,6 +83,17 @@ public abstract class AbsGameActivity extends Activity {
 		}
 	}
 	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		final float x = event.getRawX();
+		final float y = event.getRawY();
+		final int action = event.getAction();
+		
+		OnTouchEvent(x, y, action);
+		
+		return true;
+	}
+	
 	private AssetManager am;
 	private GLSurfaceView surfaceView;
 	
@@ -122,6 +134,8 @@ public abstract class AbsGameActivity extends Activity {
 	
 	private native void ActivityOnCreate(AssetManager am, String luaCore, String luaUpdate, String luaRender);
 	private native void ActivityOnDestroy();
+	private native void OnTouchEvent(float x, float y, int action);
+	
 	static {
 		System.loadLibrary("gaoframework");
 	}

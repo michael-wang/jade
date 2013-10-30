@@ -76,3 +76,14 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
     // clear local references to prevent miss used.
     app->SetJavaInterface(NULL, NULL);
 }
+
+/*
+ * Class:     com_studioirregular_gaoframework_AbsGameActivity
+ * Method:    OnTouchEvent
+ * Signature: (FFI)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_OnTouchEvent
+  (JNIEnv *env, jobject obj, jfloat x, jfloat y, jint action) {
+
+    app->OnTouchEvent(x, y, action);
+}

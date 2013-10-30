@@ -23,6 +23,14 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnDestroy
   (JNIEnv *, jobject);
 
+/*
+ * Class:     com_studioirregular_gaoframework_AbsGameActivity
+ * Method:    OnTouchEvent
+ * Signature: (FFI)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_OnTouchEvent
+  (JNIEnv *, jobject, jfloat, jfloat, jint);
+
 #ifdef __cplusplus
 }
 #endif

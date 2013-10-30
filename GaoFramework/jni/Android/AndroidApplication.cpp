@@ -64,6 +64,10 @@ GaoVoid AndroidApplication::RunOnePass() {
 	}
 }
 
+GaoVoid AndroidApplication::OnTouchEvent(GaoReal32 x, GaoReal32 y, GaoInt32 action) {
+	__android_log_print(ANDROID_LOG_INFO, "OnTouchEvent", "x:%f, y:%f, action:%d", x, y, action);
+}
+
 GaoBool AndroidApplication::OnInitialize() {
 	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "OnInitialize()");
 
