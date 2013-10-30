@@ -15,6 +15,8 @@ using namespace Gao::Framework;
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
+static char TAG[] = "native::framework::AndroidApplication";
+
 AndroidApplication::AndroidApplication() :
 	luaManager (new LuaScriptManager()),
 	assetManager (NULL),
@@ -38,13 +40,13 @@ AndroidApplication::~AndroidApplication() {
 
 GaoBool AndroidApplication::Initialize(AAssetManager* am, 
 	char* core, char* update, char* render) {
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", 
+	__android_log_print(ANDROID_LOG_INFO, TAG, 
 		"Initialize core:%s, update:%s, render:%s", core, update, render);
 
 	assetManager = am;
 
 	if (core == NULL || update == NULL || render == NULL) {
-		__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", 
+		__android_log_print(ANDROID_LOG_INFO, TAG, 
 			"Invalid arguments core:%p, update:%p, render:%p", 
 			core, update, render);
 		return FALSE;
@@ -65,50 +67,62 @@ GaoVoid AndroidApplication::RunOnePass() {
 }
 
 GaoVoid AndroidApplication::OnTouchEvent(GaoReal32 x, GaoReal32 y, GaoInt32 action) {
-	__android_log_print(ANDROID_LOG_INFO, "OnTouchEvent", "x:%f, y:%f, action:%d", x, y, action);
+	__android_log_print(ANDROID_LOG_INFO, TAG, "OnTouchEvent x:%f, y:%f, action:%d", x, y, action);
+
+	if (!luaManager->GetFunction(SCRIPT_ROUTINE_TOUCH)) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to get lua function: %s", SCRIPT_ROUTINE_TOUCH);
+	}
+
+	luaManager->PushValue(x);
+	luaManager->PushValue(y);
+	luaManager->PushValue(action);
+
+	if (!luaManager->CallFunction()) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run lua function: %s", SCRIPT_ROUTINE_TOUCH);
+	}
 }
 
 GaoBool AndroidApplication::OnInitialize() {
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "OnInitialize()");
+	__android_log_print(ANDROID_LOG_INFO, TAG, "OnInitialize()");
 
 	luaManager->Create();
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "luaManager Create done!");
+	__android_log_print(ANDROID_LOG_INFO, TAG, "luaManager Create done!");
 
 	if (!Gao::Framework::RegisterLuaFunctions(luaManager->GetLuaState())) {
-		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to RegisterLuaFunctions");
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to RegisterLuaFunctions");
 		return FALSE;
 	}
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "RegisterLuaFunctions done!");
+	__android_log_print(ANDROID_LOG_INFO, TAG, "RegisterLuaFunctions done!");
 
 	AndroidLuaScripts::RegisterAndroidClasses(luaManager->GetLuaState());
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "RegisterAndroidClasses done!");
+	__android_log_print(ANDROID_LOG_INFO, TAG, "RegisterAndroidClasses done!");
 
 	Resource* res = new Resource(assetManager);
 
 	char* lua = res->readAsTextFile(coreLuaName);
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "core lua:%s", lua);
+	__android_log_print(ANDROID_LOG_INFO, TAG, "core lua:%s", lua);
 	if (!luaManager->RunFromString(lua)) {
-		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run luaCore");
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", coreLuaName);
 		return FALSE;
 	}
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "lua luaCore done!");
+	__android_log_print(ANDROID_LOG_INFO, TAG, "lua luaCore done!");
 
 	CallLua(SCRIPT_ROUTINE_INIT);
 
 	lua = res->readAsTextFile(updateLuaName);
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "update lua:%s", lua);
+	__android_log_print(ANDROID_LOG_INFO, TAG, "update lua:%s", lua);
 
 	if (!luaManager->RunFromString(lua)) {
-		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run luaUpdate");
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", updateLuaName);
 		return FALSE;
 	}
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "lua luaUpdate done!");
+	__android_log_print(ANDROID_LOG_INFO, TAG, "lua luaUpdate done!");
 
 	lua = res->readAsTextFile(renderLuaName);
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "update lua:%s", lua);
+	__android_log_print(ANDROID_LOG_INFO, TAG, "update lua:%s", lua);
 
 	if (!luaManager->RunFromString(lua)) {
-		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run luaRender");
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", renderLuaName);
 		return FALSE;
 	}
 
@@ -119,17 +133,17 @@ GaoVoid AndroidApplication::OnTerminate() {
 }
 
 GaoVoid AndroidApplication::OnSurfaceChanged(int width, int height) {
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "OnSurfaceChanged w:%d, h:%d", width, height);
+	__android_log_print(ANDROID_LOG_INFO, TAG, "OnSurfaceChanged w:%d, h:%d", width, height);
 
 	if (!luaManager->GetFunction(SCRIPT_ROUTINE_SURFACE_CHANGED)) {
-		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to get lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED);
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to get lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED);
 	}
 
 	luaManager->PushValue(width);
 	luaManager->PushValue(height);
 
 	if (!luaManager->CallFunction()) {
-		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED);
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED);
 	}
 }
 
@@ -142,10 +156,10 @@ GaoVoid AndroidApplication::OnRender() {
 }
 
 GaoBool AndroidApplication::CallLua(GaoConstCharPtr func) {
-//	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "CallLua: %s", func);
+//	__android_log_print(ANDROID_LOG_INFO, TAG, "CallLua: %s", func);
 
 	if (!luaManager->CallFunction(func)) {
-		__android_log_print(ANDROID_LOG_ERROR, "AndroidApplication", "failed to run lua function: %s", func);
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run lua function: %s", func);
 	}
 
 	return TRUE;

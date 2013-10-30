@@ -132,7 +132,8 @@ public abstract class AbsGameActivity extends Activity {
 	};
 	private ShowFPS showFPS = new ShowFPS();
 	
-	private native void ActivityOnCreate(AssetManager am, String luaCore, String luaUpdate, String luaRender);
+	private native void ActivityOnCreate(AssetManager am, String luaCore,
+			String luaUpdate, String luaRender);
 	private native void ActivityOnDestroy();
 	private native void OnTouchEvent(float x, float y, int action);
 	

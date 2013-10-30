@@ -1,10 +1,12 @@
+-- delegate functions
+g_UpdateDelegate = nil;
+g_RenderDelegate = nil;
+
 -- global variables
 g_Logger = nil;
 g_GraphicsRenderer = nil;
 g_GraphicsEngine = nil;
--- delegate functions
-g_UpdateDelegate = nil;
-g_RenderDelegate = nil;
+g_TouchEventsPool = {};
 
 function OnInitialize()
     g_Logger = AndroidLogger();
@@ -31,4 +33,15 @@ function OnRender()
     else
         g_Logger:Show('g_RenderDelegate is nil');
     end
+end
+
+function OnTouch(x, y, action)
+    g_Logger:Show("native::lua::OnTouch x:" .. x .. ",y:" .. y .. ",action:" .. action);
+    
+    touch = {};
+    touch["x"] = x;
+    touch["y"] = y;
+    touch["action"] = action;
+
+    g_TouchEventsPool[#g_TouchEventsPool + 1] = touch;
 end

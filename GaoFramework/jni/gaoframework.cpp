@@ -25,10 +25,11 @@ static char* getJniString(JNIEnv* env, jstring jstr) {
 /*
  * Class:     com_studioirregular_gaoframework_NativeInterface
  * Method:    ActivityOnCreate
- * Signature: ()V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *env, jobject obj, jobject am, jstring jLuaCore, jstring jLuaUpdate, jstring jLuaRender) {
+  (JNIEnv *env, jobject obj, jobject am, jstring jLuaCore, jstring jLuaUpdate, 
+    jstring jLuaRender) {
 	__android_log_print(ANDROID_LOG_INFO, "gaoframework", "ActivityOnCreate");
 
 	app = new AndroidApplication();

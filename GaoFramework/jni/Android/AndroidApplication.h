@@ -18,6 +18,7 @@ static const char SCRIPT_ROUTINE_INIT[] = "OnInitialize";
 static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
 static const char SCRIPT_ROUTINE_UPDATE[] = "OnUpdate";
 static const char SCRIPT_ROUTINE_RENDER[] = "OnRender";
+static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
 
 
 class AndroidApplication : public Gao::Framework::Application {
