@@ -3,12 +3,14 @@ g_UpdateDelegate = nil;
 g_RenderDelegate = nil;
 
 -- global variables
+g_JavaInterface = nil;
 g_Logger = nil;
 g_GraphicsRenderer = nil;
 g_GraphicsEngine = nil;
-g_TouchEventsPool = {};
+-- g_TouchEventsPool = {};
 
 function OnInitialize()
+    g_JavaInterface = JavaInterface();
     g_Logger = AndroidLogger();
     g_Logger:Create();
     g_GraphicsRenderer = AndroidGraphicsRenderer();

@@ -10,10 +10,14 @@ extern "C" {
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
  * Method:    ActivityOnCreate
- * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Lcom/studioirregular/gaoframework/JavaInterface;
+ *             Landroid/content/res/AssetManager;
+ *             Ljava/lang/String;
+ *             Ljava/lang/String;
+ *             Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *, jobject, jobject, jstring, jstring, jstring);
+  (JNIEnv *, jobject, jobject, jobject, jstring, jstring, jstring);
 
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
@@ -22,14 +26,6 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnDestroy
   (JNIEnv *, jobject);
-
-/*
- * Class:     com_studioirregular_gaoframework_AbsGameActivity
- * Method:    OnTouchEvent
- * Signature: (FFI)V
- */
-JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_OnTouchEvent
-  (JNIEnv *, jobject, jfloat, jfloat, jint);
 
 #ifdef __cplusplus
 }

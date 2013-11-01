@@ -8,16 +8,29 @@
 
 #include <lua.h>
 #include <Framework/LuaFunction.hpp>
+#include <Android/AndroidApplication.h>
 #include <Android/AndroidGraphicsRenderer.h>
 #include <Android/AndroidLogger.h>
 #include <Android/GLTexture.h>
+#include <Android/JavaInterface.h>
 #include <Android/Rectangle.h>
+#include <Android/TouchEvent.h>
+#include <jni.h>
 
 namespace AndroidLuaScripts {
 
+static const char TAG[] = "native::framework::AndroidLuaScripts";
+
 GaoVoid RegisterAndroidClasses(LuaState state) {
-	__android_log_print(ANDROID_LOG_INFO, "AndroidApplication", "RegisterAndroidClasses");
+	__android_log_print(ANDROID_LOG_INFO, TAG, "RegisterAndroidClasses");
 	using namespace luabind;
+
+	module(state)
+	[
+		class_<JavaInterface>("JavaInterface")
+			.def(constructor<>())
+			.def("GetTouchEvents", &JavaInterface::GetTouchEvents)
+	];
 
 	module(state)
 	[
@@ -48,6 +61,23 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def("SetBound", &Rectangle::SetBound)
 			.def("SetColor", &Rectangle::SetColor)
 			.def("SetTexture", &Rectangle::SetTexture)
+	];
+
+	module(state)
+	[
+		class_<TouchEvent>("TouchEvent")
+			.def("GetX", &TouchEvent::GetX)
+			.def("GetY", &TouchEvent::GetY)
+			.def("GetAction", &TouchEvent::GetAction)
+	];
+
+	module(state)
+	[
+		class_<TouchEventArray>("TouchEventArray")
+			.def(constructor<>())
+			.def("GetSize",   &TouchEventArray::GetSize)
+			.def("GetAt",     &TouchEventArray::GetAt)
+			.def("RemoveAll", (void(TouchEventArray::*)())&TouchEventArray::RemoveAll)
 	];
 }
 

@@ -29,6 +29,7 @@ public abstract class AbsGameActivity extends Activity {
 		am = getAssets();
 		
 		ActivityOnCreate(
+			JavaInterface.getInstance(),
 			am,
 			"Core.lua",
 			delegateUpdateLua(),
@@ -85,11 +86,8 @@ public abstract class AbsGameActivity extends Activity {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		final float x = event.getRawX();
-		final float y = event.getRawY();
-		final int action = event.getAction();
 		
-		OnTouchEvent(x, y, action);
+		JavaInterface.getInstance().onTouch(event);
 		
 		return true;
 	}
@@ -132,10 +130,9 @@ public abstract class AbsGameActivity extends Activity {
 	};
 	private ShowFPS showFPS = new ShowFPS();
 	
-	private native void ActivityOnCreate(AssetManager am, String luaCore,
+	private native void ActivityOnCreate(JavaInterface ji, AssetManager am, String luaCore,
 			String luaUpdate, String luaRender);
 	private native void ActivityOnDestroy();
-	private native void OnTouchEvent(float x, float y, int action);
 	
 	static {
 		System.loadLibrary("gaoframework");

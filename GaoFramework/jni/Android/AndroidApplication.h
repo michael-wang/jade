@@ -48,9 +48,6 @@ public:
 		return jInterface;
 	}
 
-	// touch events
-	GaoVoid OnTouchEvent(GaoReal32 x, GaoReal32 y, GaoInt32 action);
-
 protected:
 	GaoBool OnInitialize();
 	GaoVoid OnTerminate();

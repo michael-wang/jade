@@ -5,9 +5,9 @@
  *      Author: michael
  */
 
-#include <Android/AndroidApplication.h>
 #include <android/log.h>
 #include <Framework/LuaFunction.hpp>
+#include "AndroidApplication.h"
 #include "AndroidLuaScripts.h"
 #include "Resource.h"
 
@@ -63,22 +63,6 @@ GaoVoid AndroidApplication::RunOnePass() {
 	if (IsAppRunning()) {
 		OnUpdate();
 		OnRender();
-	}
-}
-
-GaoVoid AndroidApplication::OnTouchEvent(GaoReal32 x, GaoReal32 y, GaoInt32 action) {
-	__android_log_print(ANDROID_LOG_INFO, TAG, "OnTouchEvent x:%f, y:%f, action:%d", x, y, action);
-
-	if (!luaManager->GetFunction(SCRIPT_ROUTINE_TOUCH)) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to get lua function: %s", SCRIPT_ROUTINE_TOUCH);
-	}
-
-	luaManager->PushValue(x);
-	luaManager->PushValue(y);
-	luaManager->PushValue(action);
-
-	if (!luaManager->CallFunction()) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run lua function: %s", SCRIPT_ROUTINE_TOUCH);
 	}
 }
 

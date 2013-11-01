@@ -1,7 +1,11 @@
 package com.studioirregular.gaoframework;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.res.AssetManager;
 import android.util.Log;
+import android.view.MotionEvent;
 
 
 public class JavaInterface {
@@ -19,6 +23,7 @@ public class JavaInterface {
 	
 	private JavaInterface() {
 		Log.d(TAG, "JavaInterface()");
+		touchEvents = new ArrayList<TouchEvent>();
 	}
 	
 	// Java APIs for native code.
@@ -56,12 +61,39 @@ public class JavaInterface {
 		return texture.load(assetManager, fileName);
 	}
 	
+	public TouchEvent[] popTouchEvents() {
+		TouchEvent[] result = null;
+		
+		synchronized (touchEvents) {
+			if (!touchEvents.isEmpty()) {
+				result = new TouchEvent[touchEvents.size()];
+				result = touchEvents.toArray(result);
+				
+				touchEvents.clear();
+				Log.d(TAG, "popTouchEvents #events:" + result.length);
+			} else {
+				result = new TouchEvent[0];
+			}
+		}
+		
+		return result;
+	}
+	
 	// For java layer, native code should not use.
 	/* package */ void setContext(AssetManager am, MyGLRenderer r) {
 		this.assetManager = am;
 		this.renderer = r;
 	}
 	
+	/* package */ void onTouch(MotionEvent event) {
+//		Log.d(TAG, "popTouchEvents event:" + event);
+		
+		synchronized (touchEvents) {
+			touchEvents.add(new TouchEvent(event));
+		}
+	}
+	
 	private AssetManager assetManager;
 	private MyGLRenderer renderer;
+	private List<TouchEvent> touchEvents;
 }
