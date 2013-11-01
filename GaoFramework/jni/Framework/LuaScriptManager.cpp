@@ -517,7 +517,7 @@ namespace Gao
 		{
 			g_Logger->Log(
 				GAO_SCRIPT, "Failed to run from %s: %s\n  => %s",
-				errorSource.c_str(), errorName.c_str(), luaL_checkstring(m_MasterState, lua_gettop(m_MasterState)));
+				errorSource.c_str(), /*errorName.c_str()*/"...", luaL_checkstring(m_MasterState, lua_gettop(m_MasterState)));
 		}
 
 #endif // End of GAO_SCRIPT_LUA_IMPLEMENTATION

@@ -9,6 +9,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public abstract class AbsGameActivity extends Activity {
 		
 		surfaceView = new GLSurfaceView(AbsGameActivity.this);
 		surfaceView.setEGLContextClientVersion(2);
+		surfaceView.setOnTouchListener(surfaaceViewTouchListener);
 		
 		MyGLRenderer renderer = new MyGLRenderer();
 		surfaceView.setRenderer(renderer);
@@ -84,13 +86,22 @@ public abstract class AbsGameActivity extends Activity {
 		}
 	}
 	
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
+//	@Override
+//	public boolean onTouchEvent(MotionEvent event) {
+//		
+//		JavaInterface.getInstance().onTouch(surfaceView, event);
+//		
+//		return true;
+//	}
+	
+	private View.OnTouchListener surfaaceViewTouchListener = new View.OnTouchListener() {
 		
-		JavaInterface.getInstance().onTouch(event);
-		
-		return true;
-	}
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			JavaInterface.getInstance().onTouch(event);
+			return true;
+		}
+	};
 	
 	private AssetManager am;
 	private GLSurfaceView surfaceView;

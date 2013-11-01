@@ -15,6 +15,8 @@ public:
 	GaoVoid SetColor(GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
 	GaoVoid SetTexture(Gao::Framework::Texture* texture);
 
+	GaoBool IsHit(GaoReal32 x, GaoReal32 y);
+
 	jobject GetJavaReference() {
 		return javaRef;
 	}
@@ -25,6 +27,7 @@ private:
 
 private:
 	jobject javaRef;
+	GaoReal32 left, top, right, bottom;
 };
 
 #endif // RECTANGLE_H_

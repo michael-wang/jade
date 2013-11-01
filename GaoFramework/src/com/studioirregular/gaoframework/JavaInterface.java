@@ -85,11 +85,11 @@ public class JavaInterface {
 		this.renderer = r;
 	}
 	
-	/* package */ void onTouch(MotionEvent event) {
+	/* package */ void onTouch(MotionEvent motion) {
 //		Log.d(TAG, "popTouchEvents event:" + event);
 		
 		synchronized (touchEvents) {
-			touchEvents.add(new TouchEvent(event));
+			touchEvents.add(new TouchEvent(motion));
 		}
 	}
 	

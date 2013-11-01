@@ -1,5 +1,6 @@
 #include "Rectangle.h"
 #include <Android/AndroidApplication.h>
+#include <android/log.h>
 
 static const char JAVA_CLASS_PATH[]				= "com/studioirregular/gaoframework/Rectangle";
 static const char JAVA_CONSTRUCTOR[]			= "(FFFFFFFF)V";
@@ -10,15 +11,26 @@ static const char JAVA_METHOD_SET_COLOR_DESC[]	= "(FFFF)V";
 static const char JAVA_METHOD_SET_TEXTURE[]		= "setTexture";
 static const char JAVA_METHOD_SET_TEXTURE_DESC[]= "(Lcom/studioirregular/gaoframework/GLTexture;)V";
 
+static char TAG[] = "native::framework::Rectangle";
 
 Rectangle::Rectangle() :
-	javaRef (NULL) {
+	javaRef (NULL),
+	left (0),
+	top (0),
+	right (0),
+	bottom (0) {
+
 	init(0, 0, 0, 0, 0, 0, 0, 0);
 }
 
 Rectangle::Rectangle(GaoReal32 left, GaoReal32 top, GaoReal32 right, GaoReal32 bottom, 
 	GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha) :
-	javaRef (NULL) {
+	javaRef (NULL),
+	left (left),
+	top (top),
+	right (right),
+	bottom (bottom) {
+
 	init(left, top, right, bottom, red, green, blue, alpha);
 }
 
@@ -62,7 +74,13 @@ void Rectangle::init(GaoReal32 left, GaoReal32 top, GaoReal32 right, GaoReal32 b
 	javaRef = env->NewGlobalRef(obj);
 }
 
-GaoVoid Rectangle::SetBound(GaoReal32 left, GaoReal32 top, GaoReal32 right, GaoReal32 bottom) {
+GaoVoid Rectangle::SetBound(GaoReal32 l, GaoReal32 t, GaoReal32 r, GaoReal32 b) {
+
+	left = l;
+	top = t;
+	right = r;
+	bottom = b;
+
 	if (AndroidApplication::Singleton == NULL) {
 		// Show error msg;
 		return;
@@ -86,7 +104,7 @@ GaoVoid Rectangle::SetBound(GaoReal32 left, GaoReal32 top, GaoReal32 right, GaoR
 		return;
 	}
 
-	env->CallVoidMethod(javaRef, setBound, left, top, right, bottom);
+	env->CallVoidMethod(javaRef, setBound, l, t, r, b);
 }
 
 GaoVoid Rectangle::SetColor(GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha) {
@@ -143,4 +161,13 @@ GaoVoid Rectangle::SetTexture(Gao::Framework::Texture* texture) {
 	GLTexture* gltexture = dynamic_cast<GLTexture*>(texture);
 	jobject javaGLTexture = gltexture->GetJavaReference();
 	env->CallVoidMethod(javaRef, setTexture, javaGLTexture);
+}
+
+GaoBool Rectangle::IsHit(GaoReal32 x, GaoReal32 y) {
+
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, 
+		"IsHit x:%f, y:%f, left:%f, top:%f, right:%f, bottom:%f", 
+		x, y, left, top, right, bottom);
+	
+	return (left <= x) && (x <= right) && (bottom <= y) && (y <= top);
 }

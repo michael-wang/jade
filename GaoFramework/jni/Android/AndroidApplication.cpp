@@ -70,40 +70,32 @@ GaoBool AndroidApplication::OnInitialize() {
 	__android_log_print(ANDROID_LOG_INFO, TAG, "OnInitialize()");
 
 	luaManager->Create();
-	__android_log_print(ANDROID_LOG_INFO, TAG, "luaManager Create done!");
 
 	if (!Gao::Framework::RegisterLuaFunctions(luaManager->GetLuaState())) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to RegisterLuaFunctions");
 		return FALSE;
 	}
-	__android_log_print(ANDROID_LOG_INFO, TAG, "RegisterLuaFunctions done!");
 
 	AndroidLuaScripts::RegisterAndroidClasses(luaManager->GetLuaState());
-	__android_log_print(ANDROID_LOG_INFO, TAG, "RegisterAndroidClasses done!");
 
 	Resource* res = new Resource(assetManager);
 
 	char* lua = res->readAsTextFile(coreLuaName);
-	__android_log_print(ANDROID_LOG_INFO, TAG, "core lua:%s", lua);
 	if (!luaManager->RunFromString(lua)) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", coreLuaName);
 		return FALSE;
 	}
-	__android_log_print(ANDROID_LOG_INFO, TAG, "lua luaCore done!");
 
 	CallLua(SCRIPT_ROUTINE_INIT);
 
 	lua = res->readAsTextFile(updateLuaName);
-	__android_log_print(ANDROID_LOG_INFO, TAG, "update lua:%s", lua);
 
 	if (!luaManager->RunFromString(lua)) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", updateLuaName);
 		return FALSE;
 	}
-	__android_log_print(ANDROID_LOG_INFO, TAG, "lua luaUpdate done!");
 
 	lua = res->readAsTextFile(renderLuaName);
-	__android_log_print(ANDROID_LOG_INFO, TAG, "update lua:%s", lua);
 
 	if (!luaManager->RunFromString(lua)) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", renderLuaName);

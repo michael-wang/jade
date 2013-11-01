@@ -8,9 +8,9 @@ public class TouchEvent {
 	public float y;
 	public int action;
 	
-	public TouchEvent(MotionEvent ev) {
-		x = ev.getRawX();
-		y = ev.getRawY();
-		action = ev.getAction();
+	public TouchEvent(MotionEvent motion) {
+		this.x = motion.getX();
+		this.y = motion.getY();
+		this.action = motion.getAction();
 	}
 }

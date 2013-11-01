@@ -22,10 +22,17 @@ public:
 		return action;
 	}
 
-public:
-	static const int ACTION_DOWN = 0x00;
-	static const int ACTION_MOVE = 0x02;
-	static const int ACTION_UP   = 0x01;
+	GaoBool IS_ACTION_DOWN() {
+		return action == 0x00;
+	}
+
+	GaoBool IS_ACTION_MOVE() {
+		return action == 0x02;
+	}
+
+	GaoBool IS_ACTION_UP() {
+		return action == 0x01;
+	}
 
 private:
 	float x;

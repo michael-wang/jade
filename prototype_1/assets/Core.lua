@@ -7,7 +7,13 @@ g_JavaInterface = nil;
 g_Logger = nil;
 g_GraphicsRenderer = nil;
 g_GraphicsEngine = nil;
--- g_TouchEventsPool = {};
+
+g_SurfaceWidth = 0;
+g_SurfaceHeight = 0;
+
+-- drawing objects
+g_ObjectPool = {};
+g_DraggingObject = nil;
 
 function OnInitialize()
     g_JavaInterface = JavaInterface();
@@ -18,6 +24,9 @@ function OnInitialize()
 end
 
 function OnSurfaceChanged(w, h)
+    g_SurfaceWidth = w;
+    g_SurfaceHeight = h;
+
     g_GraphicsRenderer:OnSurfaceChanged(w, h);
 end
 

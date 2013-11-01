@@ -61,6 +61,7 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def("SetBound", &Rectangle::SetBound)
 			.def("SetColor", &Rectangle::SetColor)
 			.def("SetTexture", &Rectangle::SetTexture)
+			.def("IsHit", &Rectangle::IsHit)
 	];
 
 	module(state)
@@ -69,6 +70,9 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def("GetX", &TouchEvent::GetX)
 			.def("GetY", &TouchEvent::GetY)
 			.def("GetAction", &TouchEvent::GetAction)
+			.def("IS_ACTION_DOWN", &TouchEvent::IS_ACTION_DOWN)
+			.def("IS_ACTION_MOVE", &TouchEvent::IS_ACTION_MOVE)
+			.def("IS_ACTION_UP", &TouchEvent::IS_ACTION_UP)
 	];
 
 	module(state)
