@@ -165,9 +165,15 @@ GaoVoid Rectangle::SetTexture(Gao::Framework::Texture* texture) {
 
 GaoBool Rectangle::IsHit(GaoReal32 x, GaoReal32 y) {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, 
-		"IsHit x:%f, y:%f, left:%f, top:%f, right:%f, bottom:%f", 
-		x, y, left, top, right, bottom);
+	// __android_log_print(ANDROID_LOG_DEBUG, TAG, 
+	// 	"IsHit x:%f, y:%f, left:%f, top:%f, right:%f, bottom:%f", 
+	// 	x, y, left, top, right, bottom);
 	
 	return (left <= x) && (x <= right) && (bottom <= y) && (y <= top);
+}
+
+GaoVoid Rectangle::MoveTo(GaoReal32 x, GaoReal32 y) {
+	GaoReal32 newRight = x + right - left;
+	GaoReal32 newBottom = y + bottom - top;
+	SetBound(x, y, newRight, newBottom);
 }

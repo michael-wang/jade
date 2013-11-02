@@ -62,6 +62,11 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def("SetColor", &Rectangle::SetColor)
 			.def("SetTexture", &Rectangle::SetTexture)
 			.def("IsHit", &Rectangle::IsHit)
+			.def("MoveTo", &Rectangle::MoveTo)
+			.def("GetLeft", &Rectangle::GetLeft)
+			.def("GetTop", &Rectangle::GetTop)
+			.def("GetRight", &Rectangle::GetRight)
+			.def("GetBottom", &Rectangle::GetBottom)
 	];
 
 	module(state)

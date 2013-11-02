@@ -61,9 +61,11 @@ public class Rectangle {
 	
 	private static int program = 0;
 	
+	private float[] coordsValues;
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer drawListBuffer;
 
+	private static final int VERTEXT_COUNT = 4;
 	private static final int COORDS_PER_VERTEX = 3;
 	private static final int BYTES_PER_VERTEX = 4;
 	private static final int BYTES_OF_SHORT = 2;
@@ -118,17 +120,20 @@ public class Rectangle {
 		Log.d(TAG, "setBound left:" + left + ",top:" + top + ",right:" + right
 				+ ",bottom:" + bottom);
 		
-		final float[] rectCoords = new float[] {
-				left,  top,    0.0f, 
-				left,  bottom, 0.0f,
-				right, bottom, 0.0f,
-				right, top,    0.0f
-		};
+		if (coordsValues == null) {
+			coordsValues = new float[VERTEXT_COUNT * COORDS_PER_VERTEX];
+		}
 		
-		ByteBuffer bb = ByteBuffer.allocateDirect(rectCoords.length * BYTES_PER_VERTEX);
+		float[] coords = coordsValues;
+		coords[0] = left;  coords[1] = top;    coords[2] = 0.0f;
+		coords[3] = left;  coords[4] = bottom; coords[5] = 0.0f;
+		coords[6] = right; coords[7] = bottom; coords[8] = 0.0f;
+		coords[9] = right; coords[10] = top;   coords[11] = 0.0f;
+		
+		ByteBuffer bb = ByteBuffer.allocateDirect(coords.length * BYTES_PER_VERTEX);
 		bb.order(ByteOrder.nativeOrder());
 		vertexBuffer = bb.asFloatBuffer();
-		vertexBuffer.put(rectCoords);
+		vertexBuffer.put(coords);
 		vertexBuffer.position(0);
 	}
 	

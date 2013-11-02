@@ -13,7 +13,10 @@ g_SurfaceHeight = 0;
 
 -- drawing objects
 g_ObjectPool = {};
-g_DraggingObject = nil;
+g_Dragging = {};
+g_Dragging.object = nil;
+g_Dragging.offsetX = 0; -- touch point relative to upper left of rect.
+g_Dragging.offsetY = 0;
 
 function OnInitialize()
     g_JavaInterface = JavaInterface();

@@ -16,9 +16,26 @@ public:
 	GaoVoid SetTexture(Gao::Framework::Texture* texture);
 
 	GaoBool IsHit(GaoReal32 x, GaoReal32 y);
+	GaoVoid MoveTo(GaoReal32 x, GaoReal32 y);
 
 	jobject GetJavaReference() {
 		return javaRef;
+	}
+
+	GaoReal32 GetLeft() {
+		return left;
+	}
+
+	GaoReal32 GetTop() {
+		return top;
+	}
+
+	GaoReal32 GetRight() {
+		return right;
+	}
+
+	GaoReal32 GetBottom() {
+		return bottom;
 	}
 
 private:
