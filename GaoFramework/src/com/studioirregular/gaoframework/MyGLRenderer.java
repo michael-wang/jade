@@ -23,8 +23,13 @@ public class MyGLRenderer implements Renderer {
 		
 		GLES20.glViewport(0, 0, width, height);
 		
-		Matrix.frustumM(mProjMatrix, 0, 
-				-width/2, width/2, -height/2, height/2, 3, 7);
+		Matrix.orthoM(mProjMatrix, 0, 
+				-width/2, width/2, -height/2, height/2, 1, 0);
+		
+		Matrix.setLookAtM(mVMatrix, 0, 
+				0, 0, 1, 
+				0, 0, 0, 
+				0, 1, 0);
 		
 		RendererOnSurfaceChanged(width, height);
 	}
@@ -32,11 +37,6 @@ public class MyGLRenderer implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-		
-		Matrix.setLookAtM(mVMatrix, 0, 
-				0, 0, -3, 
-				0f, 0f, 0f, 
-				0f, 1.0f, 0.0f);
 		
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
 		

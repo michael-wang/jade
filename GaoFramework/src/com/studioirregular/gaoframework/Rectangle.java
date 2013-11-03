@@ -11,7 +11,7 @@ import android.util.Log;
 
 public class Rectangle {
 
-	private static final String TAG = "rectangle";
+	private static final String TAG = "java-rectangle";
 	
 	private static int loadShader(int type, String shaderCode){
 //		Log.d(TAG, "loadShader type:" + type + ",code:" + shaderCode);
@@ -83,7 +83,7 @@ public class Rectangle {
 	public Rectangle(float left, float top, float right, float bottom, 
 			float red, float green, float blue, float alpha) {
 		Log.d(TAG, "Rectangle left:" + left + ",top:" + top + ",right:" + right
-				+ ",bottom:" + bottom + "red:" + red + ",green:" + green
+				+ ",bottom:" + bottom + ",red:" + red + ",green:" + green
 				+ ",blue:" + blue + ",alpha:" + alpha);
 		
 		setBound(left, top, right, bottom);
