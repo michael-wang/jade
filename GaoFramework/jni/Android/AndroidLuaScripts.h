@@ -9,6 +9,8 @@
 #include <lua.h>
 #include <Framework/LuaFunction.hpp>
 #include <Android/AndroidApplication.h>
+ #include <Android/AndroidAudioRenderer.h>
+ #include <Android/AndroidAudioResource.h>
 #include <Android/AndroidGraphicsRenderer.h>
 #include <Android/AndroidLogger.h>
 #include <Android/GLTexture.h>
@@ -87,6 +89,18 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def("GetSize",   &TouchEventArray::GetSize)
 			.def("GetAt",     &TouchEventArray::GetAt)
 			.def("RemoveAll", (void(TouchEventArray::*)())&TouchEventArray::RemoveAll)
+	];
+
+	module(state)
+	[
+		class_<AndroidAudioRenderer, Gao::Framework::AudioRenderer>("AndroidAudioRenderer")
+			.def(constructor<>())
+	];
+
+	module(state)
+	[
+		class_<AndroidAudioResource, Gao::Framework::AudioResource>("AndroidAudioResource")
+			.def(constructor<>())
 	];
 }
 

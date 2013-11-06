@@ -80,7 +80,7 @@ public class JavaInterface {
 	}
 	
 	// For java layer, native code should not use.
-	/* package */ void setContext(AssetManager am, MyGLRenderer r) {
+	/* package */ void init(AssetManager am, MyGLRenderer r) {
 		this.assetManager = am;
 		this.renderer = r;
 	}

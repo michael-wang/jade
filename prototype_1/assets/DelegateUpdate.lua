@@ -1,3 +1,8 @@
+music_playing = false;
+-- waiting for audio loading.
+music_delay = 0;
+DELAY_IN_MS = 60; -- wait for 60 frames.
+
 g_UpdateDelegate = function()
 
 	-- generate rectangle object
@@ -18,6 +23,14 @@ g_UpdateDelegate = function()
 			-- 	",y:" .. touch:GetY() .. ",action:" .. touch:GetAction());
 
 			process_touch(touch);
+		end
+	end
+
+	if music_playing == false then
+		music_delay = music_delay + 1;
+		if music_delay >= DELAY_IN_MS then
+			g_AudioEngine:Play(g_AudioPool["guest_01_sound_s1.wav"]);
+			music_playing = true;
 		end
 	end
 	

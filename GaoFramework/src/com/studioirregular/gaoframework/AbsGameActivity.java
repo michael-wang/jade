@@ -27,6 +27,7 @@ public abstract class AbsGameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.w(TAG, "onCreate");
 		
+		SoundSystem.getInstance().init(AbsGameActivity.this);
 		am = getAssets();
 		
 		ActivityOnCreate(
@@ -47,7 +48,7 @@ public abstract class AbsGameActivity extends Activity {
 		fps.addObserver(frameRateObserver);
 		renderer.calculateFrameRate(fps);
 		
-		JavaInterface.getInstance().setContext(getAssets(), renderer);
+		JavaInterface.getInstance().init(getAssets(), renderer);
 		
 		setContentView(R.layout.activity_main);
 		fpsTextView = (TextView)findViewById(R.id.textview);

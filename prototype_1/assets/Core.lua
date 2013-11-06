@@ -7,6 +7,8 @@ g_JavaInterface = nil;
 g_Logger = nil;
 g_GraphicsRenderer = nil;
 g_GraphicsEngine = nil;
+g_AudioRenderer = nil;
+g_AudioEngine = nil;
 
 g_SurfaceWidth = 0;
 g_SurfaceHeight = 0;
@@ -18,12 +20,19 @@ g_Dragging.object = nil;
 g_Dragging.offsetX = 0; -- touch point relative to upper left of rect.
 g_Dragging.offsetY = 0;
 
+-- audio object
+g_AudioPool = {};
+
 function OnInitialize()
     g_JavaInterface = JavaInterface();
     g_Logger = AndroidLogger();
     g_Logger:Create();
     g_GraphicsRenderer = AndroidGraphicsRenderer();
     g_GraphicsEngine = GraphicsEngine(g_GraphicsRenderer);
+    g_AudioRenderer = AndroidAudioRenderer();
+    g_AudioEngine = AudioEngine(g_AudioRenderer);
+
+    g_AudioPool["guest_01_sound_s1.wav"] = g_AudioEngine:CreateAudio(0, "guest_01_sound_s1.wav", true);
 end
 
 function OnSurfaceChanged(w, h)
