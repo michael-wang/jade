@@ -27,7 +27,7 @@ public abstract class AbsGameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.w(TAG, "onCreate");
 		
-		SoundSystem.getInstance().init(AbsGameActivity.this);
+		SoundSystem.getInstance().open(AbsGameActivity.this);
 		am = getAssets();
 		
 		ActivityOnCreate(
@@ -66,7 +66,9 @@ public abstract class AbsGameActivity extends Activity {
 		super.onDestroy();
 		
 		ActivityOnDestroy();
+		
 		am = null;
+		SoundSystem.getInstance().close();
 	}
 	
 	@Override
@@ -76,6 +78,8 @@ public abstract class AbsGameActivity extends Activity {
 		if (surfaceView != null) {
 			surfaceView.onResume();
 		}
+		
+		ActivityOnResume();
 	}
 	
 	@Override
@@ -85,6 +89,8 @@ public abstract class AbsGameActivity extends Activity {
 		if (surfaceView != null) {
 			surfaceView.onPause();
 		}
+		
+		ActivityOnPause();
 	}
 	
 //	@Override
@@ -145,6 +151,8 @@ public abstract class AbsGameActivity extends Activity {
 	private native void ActivityOnCreate(JavaInterface ji, AssetManager am, String luaCore,
 			String luaUpdate, String luaRender);
 	private native void ActivityOnDestroy();
+	private native void ActivityOnPause();
+	private native void ActivityOnResume();
 	
 	static {
 		System.loadLibrary("gaoframework");

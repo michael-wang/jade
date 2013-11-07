@@ -13,6 +13,15 @@
 
 using namespace Gao::Framework;
 
+static const char SCRIPT_ROUTINE_INIT[] = "OnInitialize";
+static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
+static const char SCRIPT_ROUTINE_UPDATE[] = "OnUpdate";
+static const char SCRIPT_ROUTINE_RENDER[] = "OnRender";
+static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
+static const char SCRIPT_ROUTINE_ONPAUSE[] = "OnPause";
+static const char SCRIPT_ROUTINE_ONRESUME[]= "OnResume";
+static const char SCRIPT_ROUTINE_ONTERMINATE[]= "OnTerminate";
+
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
 static char TAG[] = "native::framework::AndroidApplication";
@@ -24,7 +33,8 @@ AndroidApplication::AndroidApplication() :
 	jInterface (NULL),
 	coreLuaName (NULL),
 	updateLuaName (NULL),
-	renderLuaName (NULL) {
+	renderLuaName (NULL),
+	running (TRUE) {
 
 	AndroidApplication::Singleton = dynamic_cast<AndroidApplication*>(g_Application);
 }
@@ -57,6 +67,18 @@ GaoBool AndroidApplication::Initialize(AAssetManager* am,
 	renderLuaName = render;
 
 	return OnInitialize();
+}
+
+GaoVoid AndroidApplication::Pause() {
+
+	running = FALSE;
+	OnPause(TRUE);
+}
+
+GaoVoid AndroidApplication::Resume() {
+
+	running = TRUE;
+	OnPause(FALSE);
 }
 
 GaoVoid AndroidApplication::RunOnePass() {
@@ -106,6 +128,7 @@ GaoBool AndroidApplication::OnInitialize() {
 }
 
 GaoVoid AndroidApplication::OnTerminate() {
+	CallLua(SCRIPT_ROUTINE_ONTERMINATE);
 }
 
 GaoVoid AndroidApplication::OnSurfaceChanged(int width, int height) {
@@ -129,6 +152,20 @@ GaoVoid AndroidApplication::OnUpdate() {
 
 GaoVoid AndroidApplication::OnRender() {
 	CallLua(SCRIPT_ROUTINE_RENDER);
+}
+
+GaoVoid AndroidApplication::OnPause(GaoBool onPause) {
+	__android_log_print(ANDROID_LOG_INFO, TAG, "OnPause %d", onPause);
+
+	if (onPause) {
+		CallLua(SCRIPT_ROUTINE_ONPAUSE);
+	} else {
+		CallLua(SCRIPT_ROUTINE_ONRESUME);
+	}
+}
+
+GaoBool AndroidApplication::IsAppRunning() {
+	return running;
 }
 
 GaoBool AndroidApplication::CallLua(GaoConstCharPtr func) {

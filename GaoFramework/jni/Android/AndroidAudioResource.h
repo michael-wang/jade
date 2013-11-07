@@ -9,7 +9,7 @@ using namespace Gao::Framework;
 class AndroidAudioResource : public AudioResource {
 
 public:
-	AndroidAudioResource();
+	AndroidAudioResource(AudioType type);
 
 	virtual ~AndroidAudioResource();
 

@@ -21,7 +21,8 @@ g_Dragging.offsetX = 0; -- touch point relative to upper left of rect.
 g_Dragging.offsetY = 0;
 
 -- audio object
-g_AudioPool = {};
+g_Sounds = {};
+g_Music = {};
 
 function OnInitialize()
     g_JavaInterface = JavaInterface();
@@ -32,7 +33,9 @@ function OnInitialize()
     g_AudioRenderer = AndroidAudioRenderer();
     g_AudioEngine = AudioEngine(g_AudioRenderer);
 
-    g_AudioPool["guest_01_sound_s1.wav"] = g_AudioEngine:CreateAudio(0, "guest_01_sound_s1.wav", true);
+    g_Sounds["guest_01_sound_s1.wav"] = g_AudioEngine:CreateAudio(AudioEngine.AUDIO_NORMAL, "guest_01_sound_s1.wav", true);
+    g_Music["bgm_game.mp3"] = g_AudioEngine:CreateAudio(AudioEngine.AUDIO_STREAMING, "bgm_game.mp3", true);
+    g_Music["bgm_game.mp3"]:Play();
 end
 
 function OnSurfaceChanged(w, h)
@@ -67,4 +70,28 @@ function OnTouch(x, y, action)
     touch["action"] = action;
 
     g_TouchEventsPool[#g_TouchEventsPool + 1] = touch;
+end
+
+function OnPause()
+    g_Logger:Show("native::lua::OnPause");
+
+    for k, v in pairs(g_Music) do
+        g_AudioEngine:Pause(v);
+    end
+end
+
+function OnResume()
+    g_Logger:Show("native::lua::OnResume");
+
+    for k, v in pairs(g_Music) do
+        g_AudioEngine:Play(v);
+    end
+end
+
+function OnTerminate()
+    g_Logger:Show("native::lua::OnTerminate");
+
+    for k, v in pairs(g_Music) do
+        g_AudioEngine:Stop(v);
+    end
 end

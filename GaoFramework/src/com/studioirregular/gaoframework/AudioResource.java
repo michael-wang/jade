@@ -2,48 +2,70 @@ package com.studioirregular.gaoframework;
 
 import android.util.Log;
 
-public class AudioResource {
 
-	private static final String TAG = "java-audioresource";
+public class AudioResource implements AbsAudioResource {
+
+	private static final String TAG = "java-AudioResource";
 	
-	public AudioResource() {
-		this.soundID = SoundSystem.INVALID_SOUND_ID;
-		this.streamID = SoundSystem.INVALID_STREAM_ID;
+	public AudioResource(int type) {
+		
+		Log.d(TAG, "AudioResource type:" + type);
+		
+		this.type = type == 0 ? Type.NonStreaming : Type.Streaming;
+		
+		if (this.type == Type.NonStreaming) {
+			impl = new NonStreamingAudio();
+		} else if (this.type == Type.Streaming) {
+			impl = new StreamingAudio();
+		}
 	}
 	
-	// Java API for native code.
+	@Override
 	public boolean Create(String assetFile, boolean loop) {
-		Log.d(TAG, "Create: assetFile:" + assetFile + ",loop:" + loop);
 		
-		this.assetFile = assetFile;
-		this.loop = loop;
-		
-		soundID = SoundSystem.getInstance().load(assetFile);
-		
-		final boolean success = (soundID != SoundSystem.INVALID_SOUND_ID);
-		if (!success) {
-			Log.e(TAG, "Create: failed to laod sound file:" + assetFile);
+		if (impl != null) {
+			return impl.Create(assetFile, loop);
 		}
 		
-		return success;
+		return false;
 	}
 	
-	// Java API for native code.
+	@Override
 	public boolean Play() {
-		Log.d(TAG, "Play");
 		
-		streamID = SoundSystem.getInstance().play(soundID, loop);
-		
-		final boolean success = (streamID != SoundSystem.INVALID_STREAM_ID);
-		if (!success) {
-			Log.e(TAG, "Play: failed to play sound file:" + assetFile);
+		if (impl != null) {
+			return impl.Play();
 		}
 		
-		return success;
+		return false;
 	}
 	
-	private String assetFile;
-	private int soundID;
-	private int streamID;
-	private boolean loop;
+	@Override
+	public void Stop() {
+		
+		if (impl != null) {
+			impl.Stop();
+		}
+	}
+
+	@Override
+	public void Pause() {
+		
+		if (impl != null) {
+			impl.Pause();
+		}
+	}
+
+	@Override
+	public boolean IsPlaying() {
+		
+		if (impl != null) {
+			return impl.IsPlaying();
+		}
+		
+		return false;
+	}
+
+	private Type type;
+	private AbsAudioResource impl;
 }

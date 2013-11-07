@@ -1,6 +1,6 @@
-music_playing = false;
+sound_playing = false;
 -- waiting for audio loading.
-music_delay = 0;
+sound_delay = 0;
 DELAY_IN_MS = 60; -- wait for 60 frames.
 
 g_UpdateDelegate = function()
@@ -26,11 +26,11 @@ g_UpdateDelegate = function()
 		end
 	end
 
-	if music_playing == false then
-		music_delay = music_delay + 1;
-		if music_delay >= DELAY_IN_MS then
-			g_AudioEngine:Play(g_AudioPool["guest_01_sound_s1.wav"]);
-			music_playing = true;
+	if sound_playing == false then
+		sound_delay = sound_delay + 1;
+		if sound_delay >= DELAY_IN_MS then
+			g_AudioEngine:Play(g_Sounds["guest_01_sound_s1.wav"]);
+			sound_playing = true;
 		end
 	end
 	

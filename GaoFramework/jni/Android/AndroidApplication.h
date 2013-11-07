@@ -14,12 +14,6 @@
 #include <jni.h>
 #include "Resource.h"
 
-static const char SCRIPT_ROUTINE_INIT[] = "OnInitialize";
-static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
-static const char SCRIPT_ROUTINE_UPDATE[] = "OnUpdate";
-static const char SCRIPT_ROUTINE_RENDER[] = "OnRender";
-static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
-
 
 class AndroidApplication : public Gao::Framework::Application {
 public:
@@ -31,6 +25,9 @@ public:
 
 	GaoBool Initialize(AAssetManager* am, char* coreLuaName, 
 		char* updateLuaName, char* renderLuaName);
+
+	GaoVoid Pause();
+	GaoVoid Resume();
 
 	GaoVoid RunOnePass();
 
@@ -49,10 +46,12 @@ public:
 	}
 
 protected:
-	GaoBool OnInitialize();
-	GaoVoid OnTerminate();
-	GaoVoid OnUpdate();
-	GaoVoid OnRender();
+	virtual GaoBool OnInitialize();
+	virtual GaoVoid OnTerminate();
+	virtual GaoVoid OnUpdate();
+	virtual GaoVoid OnRender();
+	virtual GaoVoid OnPause(GaoBool onPause);
+	virtual GaoBool IsAppRunning();
 
 protected:
 	Gao::Framework::LuaScriptManager* luaManager;
@@ -61,12 +60,13 @@ protected:
 	JNIEnv* jniEnv;
 	jobject jInterface;
 
-private:
 	GaoBool CallLua(GaoConstCharPtr func);
 
 	char* coreLuaName;
 	char* updateLuaName;
 	char* renderLuaName;
+
+	GaoBool running;
 };
 
 #endif /* ANDROIDAPPLICATION_H_ */

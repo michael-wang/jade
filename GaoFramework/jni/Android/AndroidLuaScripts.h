@@ -100,7 +100,7 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 	module(state)
 	[
 		class_<AndroidAudioResource, Gao::Framework::AudioResource>("AndroidAudioResource")
-			.def(constructor<>())
+			.def(constructor<AudioType>())
 	];
 }
 

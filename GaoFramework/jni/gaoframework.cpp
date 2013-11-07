@@ -6,6 +6,8 @@
 #include <string>
 
 
+static const char TAG[] = "native::gaoframework";
+
 AndroidApplication* app;
 
 // NOTICE: do not handle non-ascii code.
@@ -35,7 +37,7 @@ static char* getJniString(JNIEnv* env, jstring jstr) {
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
   (JNIEnv *env, jobject obj, jobject javaInterface, jobject am, jstring jLuaCore, jstring jLuaUpdate, 
     jstring jLuaRender) {    
-    __android_log_print(ANDROID_LOG_INFO, "gaoframework", "ActivityOnCreate");
+    __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnCreate");
 
     app = new AndroidApplication();
 
@@ -57,7 +59,7 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnDestroy
   (JNIEnv *env, jobject obj) {
-    __android_log_print(ANDROID_LOG_INFO, "gaoframework", "ActivityOnDestroy");
+    __android_log_print(ANDROID_LOG_INFO,TAG, "ActivityOnDestroy");
 
     app->Terminate();
     SAFE_DELETE(app);
@@ -70,7 +72,8 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnSurfaceChanged
   (JNIEnv *env, jobject obj, jint width, jint height) {
-    __android_log_print(ANDROID_LOG_INFO, "gaoframework", "RendererOnSurfaceChanged w:%d, h:%d", width, height);
+    __android_log_print(ANDROID_LOG_INFO, TAG, 
+      "RendererOnSurfaceChanged w:%d, h:%d", width, height);
 
     app->OnSurfaceChanged(width, height);
 }
@@ -88,4 +91,38 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
     app->RunOnePass();
     
     app->SetJavaInterface(NULL, NULL);
+}
+
+/*
+ * Class:     com_studioirregular_gaoframework_AbsGameActivity
+ * Method:    ActivityOnResume
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnResume
+  (JNIEnv *env, jobject obj) {
+
+    __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnResume");
+
+    if (app != NULL) {
+        app->SetJavaInterface(env, NULL);
+        app->Resume();
+        app->SetJavaInterface(NULL, NULL);
+    }
+}
+
+/*
+ * Class:     com_studioirregular_gaoframework_AbsGameActivity
+ * Method:    ActivityOnPause
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnPause
+  (JNIEnv *env, jobject obj) {
+
+    __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnPause");
+    
+    if (app != NULL) {
+        app->SetJavaInterface(env, NULL);
+        app->Pause();
+        app->SetJavaInterface(NULL, NULL);
+    }
 }

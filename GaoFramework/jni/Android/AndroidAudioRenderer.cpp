@@ -4,7 +4,7 @@
 #include <android/log.h>
 
 
-static char TAG[] = "native::framework::AndroidAudioRenderer";
+static const char TAG[] = "native::framework::AndroidAudioRenderer";
 
 AndroidAudioRenderer::AndroidAudioRenderer() {
 }
@@ -16,11 +16,11 @@ AudioResource* AndroidAudioRenderer::CreateAudio(AudioType type, GaoString& file
 	GaoBool looping) {
 
 	__android_log_print(ANDROID_LOG_DEBUG, TAG, 
-		"CreateAudio type:%d, fileName:%s, render:%d", type, fileName.c_str(), looping);
+		"CreateAudio type:%d, fileName:%s, looping:%d", type, fileName.c_str(), looping);
 	
-	AndroidAudioResource* audio = new AndroidAudioResource();
+	AndroidAudioResource* audio = new AndroidAudioResource(type);
 
-	bool success = audio->Create(Gao::Framework::Audio_Normal, fileName, looping);
+	bool success = audio->Create(type, fileName, looping);
 
 	if (!success) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, 
