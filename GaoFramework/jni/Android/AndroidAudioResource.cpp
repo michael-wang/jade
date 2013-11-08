@@ -4,7 +4,7 @@
 static const char TAG[] = "native::framework::AndroidAudioResource";
 
 static const char JAVA_CLASS_PATH[]				= "com/studioirregular/gaoframework/AudioResource";
-static const char JAVA_CONSTRUCTOR[]			= "(I)V";
+static const char JAVA_METHOD_CONSTRUCTOR_DESC[]= "(I)V";
 static const char JAVA_METHOD_CREATE[]			= "Create";
 static const char JAVA_METHOD_CREATE_DESC[]		= "(Ljava/lang/String;Z)Z";
 static const char JAVA_METHOD_PLAY[]			= "Play";
@@ -15,28 +15,22 @@ static const char JAVA_METHOD_STOP[]			= "Stop";
 static const char JAVA_METHOD_STOP_DESC[]		= "()V";
 
 
-AndroidAudioResource::AndroidAudioResource(AudioType type) {
+AndroidAudioResource::AndroidAudioResource(AudioType type) :
+	jniHelper (JAVA_CLASS_PATH) {
 
 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "AndroidAudioResource type:%d", type);
 
 	JNIEnv* env = AndroidApplication::Singleton->GetJniEnv();
 
-	jclass clazz = env->FindClass(JAVA_CLASS_PATH);
-	if (clazz == NULL) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, 
-			"AndroidAudioResource cannot find class:%s", JAVA_CLASS_PATH);
-		return;
+	jobject obj = jniHelper.NewObject(env, JAVA_METHOD_CONSTRUCTOR_DESC, type);
+	if (obj != NULL) {
+		javaRef = env->NewGlobalRef(obj);
 	}
 
-	jmethodID ctor = env->GetMethodID(clazz, "<init>", JAVA_CONSTRUCTOR);
-	if (ctor == NULL) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, 
-			"AndroidAudioResource cannot find constructor:%s", JAVA_CONSTRUCTOR);
-		return;
-	}
-
-	jobject obj = env->NewObject(clazz, ctor, type);
-	javaRef = env->NewGlobalRef(obj);
+	jniHelper.AddMethod(env, JMETHOD_CREATE, JAVA_METHOD_CREATE, JAVA_METHOD_CREATE_DESC);
+	jniHelper.AddMethod(env, JMETHOD_PLAY,   JAVA_METHOD_PLAY,   JAVA_METHOD_PLAY_DESC);
+	jniHelper.AddMethod(env, JMETHOD_PAUSE,  JAVA_METHOD_PAUSE,  JAVA_METHOD_PAUSE_DESC);
+	jniHelper.AddMethod(env, JMETHOD_STOP,   JAVA_METHOD_STOP,   JAVA_METHOD_STOP_DESC);
 }
 
 AndroidAudioResource::~AndroidAudioResource() {
@@ -70,21 +64,9 @@ GaoBool AndroidAudioResource::Create(AudioType type, GaoString& fileName, GaoBoo
 		return FALSE;
 	}
 
-	jclass clazz = env->FindClass(JAVA_CLASS_PATH);
-	if (clazz == NULL) {
-		// Show error msg;
-		return FALSE;
-	}
-
-	jmethodID create = env->GetMethodID(clazz, JAVA_METHOD_CREATE, JAVA_METHOD_CREATE_DESC);
-	if (create == NULL) {
-		// Show error msg;
-		return FALSE;
-	}
-
 	jstring jstrFileName = env->NewStringUTF(fileName.c_str());
-
-	return env->CallBooleanMethod(javaRef, create, jstrFileName);
+	return env->CallBooleanMethod(javaRef, jniHelper.GetMethod(JMETHOD_CREATE), 
+		jstrFileName);
 }
 
 GaoVoid AndroidAudioResource::Play() {
@@ -101,19 +83,7 @@ GaoVoid AndroidAudioResource::Play() {
 		return;
 	}
 
-	jclass clazz = env->FindClass(JAVA_CLASS_PATH);
-	if (clazz == NULL) {
-		// Show error msg;
-		return;
-	}
-
-	jmethodID play = env->GetMethodID(clazz, JAVA_METHOD_PLAY, JAVA_METHOD_PLAY_DESC);
-	if (play == NULL) {
-		// Show error msg;
-		return;
-	}
-
-	jboolean success = env->CallBooleanMethod(javaRef, play);
+	env->CallBooleanMethod(javaRef, jniHelper.GetMethod(JMETHOD_PLAY));
 }
 
 GaoVoid AndroidAudioResource::Stop() {
@@ -130,19 +100,7 @@ GaoVoid AndroidAudioResource::Stop() {
 		return;
 	}
 
-	jclass clazz = env->FindClass(JAVA_CLASS_PATH);
-	if (clazz == NULL) {
-		// Show error msg;
-		return;
-	}
-
-	jmethodID stop = env->GetMethodID(clazz, JAVA_METHOD_STOP, JAVA_METHOD_STOP_DESC);
-	if (stop == NULL) {
-		// Show error msg;
-		return;
-	}
-
-	env->CallVoidMethod(javaRef, stop);
+	env->CallVoidMethod(javaRef, jniHelper.GetMethod(JMETHOD_STOP));
 }
 
 GaoVoid AndroidAudioResource::Pause() {
@@ -159,19 +117,7 @@ GaoVoid AndroidAudioResource::Pause() {
 		return;
 	}
 
-	jclass clazz = env->FindClass(JAVA_CLASS_PATH);
-	if (clazz == NULL) {
-		// Show error msg;
-		return;
-	}
-
-	jmethodID pause = env->GetMethodID(clazz, JAVA_METHOD_PAUSE, JAVA_METHOD_PAUSE_DESC);
-	if (pause == NULL) {
-		// Show error msg;
-		return;
-	}
-
-	env->CallVoidMethod(javaRef, pause);
+	env->CallVoidMethod(javaRef, jniHelper.GetMethod(JMETHOD_PAUSE));
 }
 
 GaoVoid AndroidAudioResource::SetLoop(GaoBool looping) {

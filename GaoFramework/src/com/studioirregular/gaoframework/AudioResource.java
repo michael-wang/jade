@@ -11,12 +11,12 @@ public class AudioResource implements AbsAudioResource {
 		
 		Log.d(TAG, "AudioResource type:" + type);
 		
-		this.type = type == 0 ? Type.NonStreaming : Type.Streaming;
-		
-		if (this.type == Type.NonStreaming) {
+		if (type == NON_STREAMING) {
 			impl = new NonStreamingAudio();
-		} else if (this.type == Type.Streaming) {
+		} else if (type == STREAMING) {
 			impl = new StreamingAudio();
+		} else {
+			Log.e(TAG, "Invalid type:" + type);
 		}
 	}
 	
@@ -66,6 +66,5 @@ public class AudioResource implements AbsAudioResource {
 		return false;
 	}
 
-	private Type type;
 	private AbsAudioResource impl;
 }

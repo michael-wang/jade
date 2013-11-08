@@ -15,6 +15,7 @@ LOCAL_SRC_FILES += Android/AndroidAudioResource.cpp
 LOCAL_SRC_FILES += Android/AndroidLogger.cpp
 LOCAL_SRC_FILES += Android/GLTexture.cpp
 LOCAL_SRC_FILES += Android/JavaInterface.cpp
+LOCAL_SRC_FILES += Android/JniHelper.cpp
 LOCAL_SRC_FILES += Android/Rectangle.cpp
 LOCAL_SRC_FILES += Android/Resource.cpp
 LOCAL_SRC_FILES += Android/TouchEvent.cpp

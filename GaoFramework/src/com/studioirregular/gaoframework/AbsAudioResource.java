@@ -2,10 +2,8 @@ package com.studioirregular.gaoframework;
 
 public interface AbsAudioResource {
 
-	public static enum Type {
-		NonStreaming,
-		Streaming
-	}
+	public static final int NON_STREAMING = 0;
+	public static final int STREAMING = 1;
 	
 	public boolean Create(String assetFile, boolean loop);
 	public boolean Play();

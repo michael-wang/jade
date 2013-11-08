@@ -3,6 +3,7 @@
 
 #include <Framework/AudioResource.hpp>
 #include <jni.h>
+#include "JniHelper.h"
 
 using namespace Gao::Framework;
 
@@ -28,6 +29,12 @@ public:
 	virtual GaoBool IsPlaying() const;
 
 private:
+	static const int JMETHOD_CREATE      = 1;
+	static const int JMETHOD_PLAY        = 2;
+	static const int JMETHOD_PAUSE       = 3;
+	static const int JMETHOD_STOP        = 4;
+
+	JniHelper jniHelper;
 	jobject javaRef;
 };
 
