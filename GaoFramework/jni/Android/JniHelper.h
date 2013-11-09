@@ -5,28 +5,40 @@
 #include <map>
 #include <string>
 
+/*
+ * Designed to be use as: one C++ class with one JniHelper instance.
+ *
+ * Notice: *NOT* thread safe.
+ */
 class JniHelper {
 
 public:
 	JniHelper(const char* classPath);
 	virtual ~JniHelper();
 
-	jobject NewObject(JNIEnv* env, const char* ctorDescriptor, ...);
-	bool AddMethod(JNIEnv* env, int id, const char* name, const char* descriptor);
-	jmethodID GetMethod(int id);
+	JNIEnv* GetJniEnv(const char* caller);
+
+	bool CacheMethod(int id, const char* name, const char* descriptor);
+
+	jobject NewObject(const char* ctorDescriptor, ...);
+	jobject NewGlobalRef(jobject obj);
+	void    DeleteGlobalRef(jobject obj);
+
+	void     CallVoidMethod(jobject obj, int id, ...);
+	jboolean CallBooleanMethod(jobject obj, int id, ...);
+
+	jstring NewStringUTF(const char* str);
+
+private:
+	jmethodID GetMethod(const char* caller, int id);
 
 private:
 	struct JMethod {
 		int id;
-		const std::string name;
-		const std::string descriptor;
 		jmethodID jid;
 
-		JMethod(int userDefinedId, const char* methodName, const char* methodDescriptor, 
-			jmethodID jniId) :
+		JMethod(int userDefinedId, jmethodID jniId) :
 			id (userDefinedId),
-			name (methodName),
-			descriptor (methodDescriptor),
 			jid (jniId) {}
 	};
 	typedef std::map<int, JMethod*> MethodMap;
