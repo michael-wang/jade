@@ -21,10 +21,12 @@ public class AudioResource implements AbsAudioResource {
 	}
 	
 	@Override
-	public boolean Create(String assetFile, boolean loop) {
+	public boolean Create(String assetFile, boolean looping) {
+		
+		Log.d(TAG, "Create file:" + assetFile + ",looping:" + looping);
 		
 		if (impl != null) {
-			return impl.Create(assetFile, loop);
+			return impl.Create(assetFile, looping);
 		}
 		
 		return false;

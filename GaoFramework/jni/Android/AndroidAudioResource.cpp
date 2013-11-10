@@ -1,5 +1,6 @@
 #include "AndroidAudioResource.h"
 #include "AndroidApplication.h"
+#include "Java/JniEnv.h"
 
 static const char TAG[] = "native::framework::AndroidAudioResource";
 
@@ -16,58 +17,40 @@ static const char JAVA_METHOD_STOP_DESC[]		= "()V";
 
 
 AndroidAudioResource::AndroidAudioResource(AudioType type) :
-	jni (JAVA_CLASS_PATH) {
+	jobj (JAVA_CLASS_PATH, JAVA_METHOD_CONSTRUCTOR_DESC, type) {
 
 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "AndroidAudioResource type:%d", type);
-
-	jobject obj = jni.NewObject(JAVA_METHOD_CONSTRUCTOR_DESC, type);
-
-	if (obj != NULL) {
-
-		javaRef = jni.NewGlobalRef(obj);
-	}
-
-	jni.CacheMethod(JMETHOD_CREATE, JAVA_METHOD_CREATE, JAVA_METHOD_CREATE_DESC);
-	jni.CacheMethod(JMETHOD_PLAY,   JAVA_METHOD_PLAY,   JAVA_METHOD_PLAY_DESC);
-	jni.CacheMethod(JMETHOD_PAUSE,  JAVA_METHOD_PAUSE,  JAVA_METHOD_PAUSE_DESC);
-	jni.CacheMethod(JMETHOD_STOP,   JAVA_METHOD_STOP,   JAVA_METHOD_STOP_DESC);
 }
 
 AndroidAudioResource::~AndroidAudioResource() {
-	if (javaRef != NULL) {
-
-		jni.DeleteGlobalRef(javaRef);
-	} else {
-		// Show error msg;
-	}
 }
 
 GaoBool AndroidAudioResource::Create(AudioType type, GaoString& fileName, GaoBool loop) {
 
-	jstring jstrFileName = jni.NewStringUTF(fileName.c_str());
+	jstring jstrFileName = g_JniEnv->NewStringUTF(fileName.c_str());
 	if (jstrFileName == NULL) {
 		return false;
 	}
 
-	return jni.CallBooleanMethod(javaRef, JMETHOD_CREATE, jstrFileName);
+	return jobj.CallBooleanMethod(JAVA_METHOD_CREATE, JAVA_METHOD_CREATE_DESC, jstrFileName, loop);
 }
 
 GaoVoid AndroidAudioResource::Play() {
 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Play");
 
-	jni.CallBooleanMethod(javaRef, JMETHOD_PLAY);
+	jobj.CallBooleanMethod(JAVA_METHOD_PLAY, JAVA_METHOD_PLAY_DESC);
 }
 
 GaoVoid AndroidAudioResource::Stop() {
 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Stop");
 
-	jni.CallVoidMethod(javaRef, JMETHOD_STOP);
+	jobj.CallVoidMethod(JAVA_METHOD_STOP, JAVA_METHOD_STOP_DESC);
 }
 
 GaoVoid AndroidAudioResource::Pause() {
 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Pause");
 
-	jni.CallVoidMethod(javaRef, JMETHOD_PAUSE);
+	jobj.CallVoidMethod(JAVA_METHOD_PAUSE, JAVA_METHOD_PAUSE_DESC);
 }
 
 GaoVoid AndroidAudioResource::SetLoop(GaoBool looping) {

@@ -2,7 +2,7 @@
 #define ANDROIDAUDIORESOURCE_H_
 
 #include <Framework/AudioResource.hpp>
-#include "JniHelper.h"
+#include "Java/JavaObject.h"
 
 using namespace Gao::Framework;
 
@@ -33,8 +33,7 @@ private:
 	static const int JMETHOD_PAUSE       = 3;
 	static const int JMETHOD_STOP        = 4;
 
-	JniHelper jni;
-	jobject javaRef;
+	JavaObject jobj;
 };
 
 #endif /* ANDROIDAUDIORESOURCE_H_ */

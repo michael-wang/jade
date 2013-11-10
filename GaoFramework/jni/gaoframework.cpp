@@ -3,12 +3,14 @@
 #include <android/asset_manager_jni.h>
 #include <android/log.h>
 #include <Android/AndroidApplication.h>
+#include <Android/Java/JniEnv.h>
 #include <string>
 
 
 static const char TAG[] = "native::gaoframework";
 
-AndroidApplication* app;
+static AndroidApplication* app;
+static JniEnv* jni;
 
 // NOTICE: do not handle non-ascii code.
 static char* getJniString(JNIEnv* env, jstring jstr) {
@@ -40,8 +42,10 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
     __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnCreate");
 
     app = new AndroidApplication();
+    jni = new JniEnv();
 
     app->SetJavaInterface(env, javaInterface);
+    g_JniEnv->Set(env);
 
     app->Initialize(
       AAssetManager_fromJava(env, am),
@@ -50,6 +54,7 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
       getJniString(env, jLuaRender));
 
     app->SetJavaInterface(NULL, NULL);
+    g_JniEnv->Set(NULL);
 }
 
 /*
@@ -61,8 +66,16 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
   (JNIEnv *env, jobject obj) {
     __android_log_print(ANDROID_LOG_INFO,TAG, "ActivityOnDestroy");
 
+    app->SetJavaInterface(env, NULL);
+    g_JniEnv->Set(env);
+
     app->Terminate();
+
+    app->SetJavaInterface(NULL, NULL);
+    g_JniEnv->Set(NULL);
+
     SAFE_DELETE(app);
+    app = NULL;
 }
 
 /*
@@ -75,7 +88,13 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
     __android_log_print(ANDROID_LOG_INFO, TAG, 
       "RendererOnSurfaceChanged w:%d, h:%d", width, height);
 
+    app->SetJavaInterface(env, NULL);
+    g_JniEnv->Set(env);
+
     app->OnSurfaceChanged(width, height);
+
+    app->SetJavaInterface(NULL, NULL);
+    g_JniEnv->Set(NULL);
 }
 
 /*
@@ -87,10 +106,12 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
   (JNIEnv *env, jobject obj, jobject javaInterface) {
 
     app->SetJavaInterface(env, javaInterface);
+    g_JniEnv->Set(env);
 
     app->RunOnePass();
     
     app->SetJavaInterface(NULL, NULL);
+    g_JniEnv->Set(NULL);
 }
 
 /*
@@ -103,11 +124,13 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
     __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnResume");
 
-    if (app != NULL) {
-        app->SetJavaInterface(env, NULL);
-        app->Resume();
-        app->SetJavaInterface(NULL, NULL);
-    }
+    app->SetJavaInterface(env, NULL);
+    g_JniEnv->Set(env);
+
+    app->Resume();
+
+    app->SetJavaInterface(NULL, NULL);
+    g_JniEnv->Set(NULL);
 }
 
 /*
@@ -120,9 +143,11 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
     __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnPause");
     
-    if (app != NULL) {
-        app->SetJavaInterface(env, NULL);
-        app->Pause();
-        app->SetJavaInterface(NULL, NULL);
-    }
+    app->SetJavaInterface(env, NULL);
+    g_JniEnv->Set(env);
+
+    app->Pause();
+
+    app->SetJavaInterface(NULL, NULL);
+    g_JniEnv->Set(NULL);
 }
