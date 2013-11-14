@@ -33,7 +33,7 @@ public abstract class AbsGameActivity extends Activity {
 		ActivityOnCreate(
 			JavaInterface.getInstance(),
 			am,
-			"Core.lua",
+			"lua/Core.lua",
 			delegateUpdateLua(),
 			delegateRenderLua());
 		
