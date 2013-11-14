@@ -33,7 +33,7 @@ function OnInitialize()
     g_AudioRenderer = AndroidAudioRenderer();
     g_AudioEngine = AudioEngine(g_AudioRenderer);
 
-    g_Sounds["guest_01_sound_s1.wav"] = g_AudioEngine:CreateAudio(AudioEngine.AUDIO_NORMAL, "guest_01_sound_s1.wav", true);
+    g_Sounds["guest_01_sound_s1.wav"] = g_AudioEngine:CreateAudio(AudioEngine.AUDIO_NORMAL, "sound/guest_01_sound_s1.wav", true);
     g_Music["bgm_game.mp3"] = g_AudioEngine:CreateAudio(AudioEngine.AUDIO_STREAMING, "bgm_game.mp3", true);
     g_Music["bgm_game.mp3"]:Play();
 end

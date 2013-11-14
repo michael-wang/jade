@@ -167,7 +167,7 @@ public class Rectangle {
 	    GLES20.glUniform4fv(colorHandle, 1, color, 0);
 	    
 	    if (texture != null) {
-	    	texture.draw(program);
+	    	texture.draw(program, 0.0f, 0.0f, 1.0f, 1.0f);
 	    }
 	    
 	    MVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");

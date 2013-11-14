@@ -20,13 +20,14 @@ public class GLTexture {
 	
 	private static final String TAG = "gltexture";
 	
-	private static final float[] TEXTURE_COORDINATE_VALUES = {
-			0.0f, 0.0f,
-			0.0f, 1.0f,
-			1.0f, 1.0f,
-			1.0f, 0.0f,
-	};
-	private static final int COORDINATE_VALUE_BYTES = 4;
+	/* texture coordinates:
+	 * (left, upper) ---> (right, upper)
+	 *       ^                   |
+	 *       |                   v
+	 * (left, lower)      (right, lower)
+	 */
+	private static final int COORDINATE_COMPONENTS = 4 * 2;	// 4 points, each has 2 items.
+	private static final int COORDINATE_VALUE_IN_BYTES = 4;
 	
 	private static final int COORDS_PER_VERTEX = 2;
 	
@@ -34,11 +35,9 @@ public class GLTexture {
 		this.name = INVALID_TEXTURE_NAME;
 		
 		textureCoordinates = ByteBuffer
-				.allocateDirect(TEXTURE_COORDINATE_VALUES.length * COORDINATE_VALUE_BYTES)
+				.allocateDirect(COORDINATE_COMPONENTS * COORDINATE_VALUE_IN_BYTES)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
-		textureCoordinates.put(TEXTURE_COORDINATE_VALUES);
-		textureCoordinates.position(0);
 	}
 	
 	// return texture name.
@@ -96,12 +95,23 @@ public class GLTexture {
 		}
 	}
 	
-	public void draw(int shaderProgram) {
+	/**
+	 * 
+	 * @param shaderProgram
+	 * @param lower, left, upper, right: texture coordinates.
+	 */
+	public void draw(int shaderProgram, float lower, float left, float upper,
+			float right) {
 		textureHandle = GLES20.glGetUniformLocation(shaderProgram, "u_Texture");
 		checkIfNoGLError("glGetUniformLocation");
 		coordinateHandle = GLES20.glGetAttribLocation(shaderProgram, "a_TexCoordinate");
 		checkIfNoGLError("glGetAttribLocation");
 		
+		textureCoordinates.position(0);
+		textureCoordinates.put(left).put(lower);
+		textureCoordinates.put(left).put(upper);
+		textureCoordinates.put(right).put(upper);
+		textureCoordinates.put(right).put(lower);
 		textureCoordinates.position(0);
 		GLES20.glVertexAttribPointer(coordinateHandle, COORDS_PER_VERTEX,
 				GLES20.GL_FLOAT, false, 0, textureCoordinates);

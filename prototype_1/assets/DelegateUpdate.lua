@@ -8,7 +8,7 @@ g_UpdateDelegate = function()
 	-- generate rectangle object
 	if #g_ObjectPool == 0 then
 		g_ObjectPool[1] = Rectangle(-256, 255, 255, -256, 0.63671875, 0.76953125, 0.22265625, 1.0);
-		g_ObjectPool[1]:SetTexture(g_GraphicsEngine:CreateTexture("JadeNinja.png"));
+		g_ObjectPool[1]:SetTexture(g_GraphicsEngine:CreateTexture("image/JadeNinja.png"));
 	end
 
 	local arrEvents = g_JavaInterface:GetTouchEvents();
