@@ -21,6 +21,8 @@ public:
 
 	jmethodID GetMethodID(const char* name, const char* descriptor);
 
+	jobject CallStaticObjectMethod(const char* name, const char* descriptor, ...);
+
 public:
 	static const char* CONSTRUCTOR_METHOD_NAME;
 

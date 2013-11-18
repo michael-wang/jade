@@ -1,31 +1,49 @@
 #include "AndroidApplication.h"
 #include "JavaInterface.h"
+#include "Java/JniEnv.h"
+#include <string>
 
 static const char TAG[]                                = "native::framework::JavaInterface";
+
+static const char JAVA_CLASS_PATH[]                    = "com/studioirregular/gaoframework/JavaInterface";
+static const char METHOD_NAME_GET_INSTANCE[]           = "getInstance";
+static const char METHOD_DESCRIPTOR_GET_INSTANCE[]     = "()Lcom/studioirregular/gaoframework/JavaInterface;";
 static const char METHOD_NAME_POP_TOUCH_EVENTS[]       = "popTouchEvents";
 static const char METHOD_DESCRIPTOR_POP_TOUCH_EVENTS[] = "()[Lcom/studioirregular/gaoframework/TouchEvent;";
+static const char METHOD_NAME_GET_LOG_FILE_PATH[]      = "getLogFilePath";
+static const char METHOD_DESCRIPTOR_GET_LOG_FILE_PATH[]= "()Ljava/lang/String;";
 
 JavaInterface::JavaInterface() {
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "JavaInterface");
 
-	JNIEnv* env = AndroidApplication::Singleton->GetJniEnv();
-	jobject obj = AndroidApplication::Singleton->GetJavaInterface();
-
-	if (env != NULL && obj != NULL) {
-		javaRef = env->NewGlobalRef(obj);
-	} else {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "constructor invalid env:%p, obj:%p", env, obj);
-		javaRef = NULL;
+	JavaClass* jclass = g_JniEnv->FindClass(JAVA_CLASS_PATH);
+	if (jclass == NULL) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, 
+			"JavaInterface cannot find class:%s", JAVA_CLASS_PATH);
+		jobj = NULL;
+		return;
 	}
+
+	jobject obj = jclass->CallStaticObjectMethod(METHOD_NAME_GET_INSTANCE, 
+		METHOD_DESCRIPTOR_GET_INSTANCE);
+
+	if (obj == NULL) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, 
+			"JavaInterface got NULL return from method:%s, descriptor:%s", 
+			METHOD_NAME_GET_INSTANCE, METHOD_DESCRIPTOR_GET_INSTANCE);
+		jobj = NULL;
+		return;
+	}
+
+	jobj = new JavaObject(jclass, obj);
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "JavaInterface jobj:%p", jobj);
 }
 
 JavaInterface::~JavaInterface() {
-	if (javaRef != NULL) {
-		JNIEnv* env = AndroidApplication::Singleton->GetJniEnv();
 
-		if (env != NULL) {
-			env->DeleteGlobalRef(javaRef);
-			javaRef = NULL;
-		}
+	if (jobj != NULL) {
+		delete jobj;
+		jobj = NULL;
 	}
 }
 
@@ -33,27 +51,10 @@ TouchEventArray* JavaInterface::GetTouchEvents() {
 
 	TouchEventArray* result = new TouchEventArray();
 
-	JNIEnv* env = AndroidApplication::Singleton->GetJniEnv();
+	jobjectArray jarr = (jobjectArray)jobj->CallObjectMethod(
+		METHOD_NAME_POP_TOUCH_EVENTS, METHOD_DESCRIPTOR_POP_TOUCH_EVENTS);
 
-	if (env == NULL) {
-		// show error msg;
-		return result;
-	}
-
-	jclass clazz = env->GetObjectClass(javaRef);
-
-	jmethodID popTouchEvents = env->GetMethodID(clazz, METHOD_NAME_POP_TOUCH_EVENTS, 
-		METHOD_DESCRIPTOR_POP_TOUCH_EVENTS);
-
-	env->DeleteLocalRef(clazz);
-
-	if (popTouchEvents == NULL) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, 
-			"GetTouchEvents cannot find method ID for popTouchEvents.");
-		return result;
-	}
-
-	jobjectArray jarr = (jobjectArray)env->CallObjectMethod(javaRef, popTouchEvents);
+	JNIEnv* env = g_JniEnv->Get();
 
 	const jsize SIZE = env->GetArrayLength(jarr);
 	for (jsize i = 0; i < SIZE; i++) {
@@ -66,6 +67,29 @@ TouchEventArray* JavaInterface::GetTouchEvents() {
 
 		result->Add(event);
 	}
+
+	return result;
+}
+
+char* JavaInterface::GetLogFilePath() {
+
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "GetLogFilePath");
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jstrPath = (jstring)jobj->CallObjectMethod(METHOD_NAME_GET_LOG_FILE_PATH, 
+		METHOD_DESCRIPTOR_GET_LOG_FILE_PATH);
+	if (jstrPath == NULL) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "CallObjectMethod return NULL");
+		return NULL;
+	}
+	const char* cstrPath = env->GetStringUTFChars(jstrPath, NULL);
+
+	char* result = new char[std::strlen(cstrPath) + 1];
+	std::strcpy(result, cstrPath);
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "GetLogFilePath path:%s", result);
+
+	env->ReleaseStringUTFChars(jstrPath, cstrPath);
 
 	return result;
 }

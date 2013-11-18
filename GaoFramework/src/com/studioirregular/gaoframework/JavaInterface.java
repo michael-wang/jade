@@ -1,9 +1,12 @@
 package com.studioirregular.gaoframework;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.res.AssetManager;
+import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -58,7 +61,26 @@ public class JavaInterface {
 			return false;
 		}
 		
-		return texture.load(assetManager, fileName);
+		return texture.load(context.getAssets(), fileName);
+	}
+	
+	public String getLogFilePath() {
+		
+		File DOWNLOAD_FOLDER = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+		
+		File log = new File(DOWNLOAD_FOLDER, "log.txt");
+		
+		if (!log.exists()) {
+			try {
+				log.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+		return log.getAbsolutePath();
 	}
 	
 	public TouchEvent[] popTouchEvents() {
@@ -80,8 +102,8 @@ public class JavaInterface {
 	}
 	
 	// For java layer, native code should not use.
-	/* package */ void init(AssetManager am, MyGLRenderer r) {
-		this.assetManager = am;
+	/* package */ void init(Context context, MyGLRenderer r) {
+		this.context = context;
 		this.renderer = r;
 	}
 	
@@ -93,7 +115,7 @@ public class JavaInterface {
 		}
 	}
 	
-	private AssetManager assetManager;
+	private Context context;
 	private MyGLRenderer renderer;
 	private List<TouchEvent> touchEvents;
 }

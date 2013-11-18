@@ -25,9 +25,14 @@ g_Sounds = {};
 g_Music = {};
 
 function OnInitialize()
-    g_JavaInterface = JavaInterface();
     g_Logger = AndroidLogger();
-    g_Logger:Create();
+    
+    g_JavaInterface = JavaInterface();
+    local logFilePath = g_JavaInterface:GetLogFilePath();
+
+    g_Logger:Show(logFilePath);
+    g_Logger:Create(logFilePath);
+    
     g_GraphicsRenderer = AndroidGraphicsRenderer();
     g_GraphicsEngine = GraphicsEngine(g_GraphicsRenderer);
     g_AudioRenderer = AndroidAudioRenderer();
@@ -36,6 +41,10 @@ function OnInitialize()
     g_Sounds["guest_01_sound_s1.wav"] = g_AudioEngine:CreateAudio(AudioEngine.AUDIO_NORMAL, "sound/guest_01_sound_s1.wav", true);
     g_Music["bgm_game.mp3"] = g_AudioEngine:CreateAudio(AudioEngine.AUDIO_STREAMING, "bgm_game.mp3", true);
     g_Music["bgm_game.mp3"]:Play();
+
+    -- g_Logger:Show([[before dofile: "./GameData.lua"]]);
+    -- local result = dofile("./GameData.lua");
+    -- g_Logger:Show([[after dofile("GameData.lua"):]] .. result);
 end
 
 function OnSurfaceChanged(w, h)

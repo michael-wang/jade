@@ -10,6 +10,8 @@
 #include "AndroidApplication.h"
 #include "AndroidLuaScripts.h"
 #include "Resource.h"
+#include "JavaInterface.h"
+#include "AndroidLogger.h"
 
 using namespace Gao::Framework;
 
@@ -31,9 +33,6 @@ AndroidApplication::AndroidApplication() :
 	assetManager (NULL),
 	jniEnv (NULL),
 	jInterface (NULL),
-	coreLuaName (NULL),
-	updateLuaName (NULL),
-	renderLuaName (NULL),
 	running (TRUE) {
 
 	AndroidApplication::Singleton = dynamic_cast<AndroidApplication*>(g_Application);
@@ -43,9 +42,6 @@ AndroidApplication::~AndroidApplication() {
 	SAFE_DELETE(luaManager);
 	jniEnv = NULL;
 	jInterface = NULL;
-	SAFE_DELETE(coreLuaName);
-	SAFE_DELETE(updateLuaName);
-	SAFE_DELETE(renderLuaName);
 }
 
 GaoBool AndroidApplication::Initialize(AAssetManager* am, 
@@ -100,27 +96,33 @@ GaoBool AndroidApplication::OnInitialize() {
 
 	AndroidLuaScripts::RegisterAndroidClasses(luaManager->GetLuaState());
 
-	Resource* res = new Resource(assetManager);
-
-	char* lua = res->readAsTextFile(coreLuaName);
-	if (!luaManager->RunFromString(lua)) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", coreLuaName);
+	if (!luaManager->RunFromFullPathFile(coreLuaName)) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", coreLuaName.c_str());
 		return FALSE;
 	}
+
+	// LuaState L = luaManager->GetLuaState();
+	// if (luaL_loadfile(L, coreLuaName.c_str()) != 0) {
+	// 	__android_log_print(ANDROID_LOG_ERROR, TAG, "FAILED to luaL_loadfile, msg:%s", luaL_checkstring(L, lua_gettop(L)));
+	// } else {
+	// 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "SUCCESS to luaL_loadfile(%s)", coreLuaName.c_str());
+	// }
+
+	// if (lua_pcall(L, 0, LUA_MULTRET, 0) != 0) {
+	// 	__android_log_print(ANDROID_LOG_ERROR, TAG, "FAILED to lua_pcall, msg:%s", luaL_checkstring(L, lua_gettop(L)));
+	// } else {
+	// 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "SUCCESS to lua_pcall");
+	// }
 
 	CallLua(SCRIPT_ROUTINE_INIT);
 
-	lua = res->readAsTextFile(updateLuaName);
-
-	if (!luaManager->RunFromString(lua)) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", updateLuaName);
+	if (!luaManager->RunFromFullPathFile(updateLuaName)) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", updateLuaName.c_str());
 		return FALSE;
 	}
 
-	lua = res->readAsTextFile(renderLuaName);
-
-	if (!luaManager->RunFromString(lua)) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", renderLuaName);
+	if (!luaManager->RunFromFullPathFile(renderLuaName)) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", renderLuaName.c_str());
 		return FALSE;
 	}
 

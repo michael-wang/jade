@@ -62,9 +62,9 @@ protected:
 
 	GaoBool CallLua(GaoConstCharPtr func);
 
-	char* coreLuaName;
-	char* updateLuaName;
-	char* renderLuaName;
+	GaoString coreLuaName;
+	GaoString updateLuaName;
+	GaoString renderLuaName;
 
 	GaoBool running;
 };

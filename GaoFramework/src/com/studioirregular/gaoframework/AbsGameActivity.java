@@ -1,9 +1,13 @@
 package com.studioirregular.gaoframework;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -27,16 +31,6 @@ public abstract class AbsGameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.w(TAG, "onCreate");
 		
-		SoundSystem.getInstance().open(AbsGameActivity.this);
-		am = getAssets();
-		
-		ActivityOnCreate(
-			JavaInterface.getInstance(),
-			am,
-			"lua/Core.lua",
-			delegateUpdateLua(),
-			delegateRenderLua());
-		
 		surfaceView = new GLSurfaceView(AbsGameActivity.this);
 		surfaceView.setEGLContextClientVersion(2);
 		surfaceView.setOnTouchListener(surfaaceViewTouchListener);
@@ -48,7 +42,20 @@ public abstract class AbsGameActivity extends Activity {
 		fps.addObserver(frameRateObserver);
 		renderer.calculateFrameRate(fps);
 		
-		JavaInterface.getInstance().init(getAssets(), renderer);
+		JavaInterface.getInstance().init(AbsGameActivity.this, renderer);
+		
+		copyAssetLuaFilesToStorageIfNecessary();
+		
+		SoundSystem.getInstance().open(AbsGameActivity.this);
+		am = getAssets();
+		
+		final File FILES_DIR = getFilesDir();
+		ActivityOnCreate(
+			JavaInterface.getInstance(),
+			am,
+			buildPath(FILES_DIR, "lua/Core.lua"),
+			buildPath(FILES_DIR, delegateUpdateLua()),
+			buildPath(FILES_DIR, delegateRenderLua()));
 		
 		setContentView(R.layout.activity_main);
 		fpsTextView = (TextView)findViewById(R.id.textview);
@@ -60,7 +67,79 @@ public abstract class AbsGameActivity extends Activity {
 		// add surface view to bottom so text view can be seen.
 		contentView.addView(surfaceView, 0, lp);
 	}
-
+	
+	private static final String LUA_FILES_COPY_STATE = "lua_copied";
+	
+	private boolean isFilesCopiedToStorage(String whichFiles) {
+		
+		SharedPreferences pref = getSharedPreferences(
+				Global.PREF_ASSET_FILE_COPY_STATE, MODE_PRIVATE);
+		if (pref != null) {
+			return pref.getBoolean(whichFiles, false);
+		}
+		return false;
+	}
+	
+	private void setFilesCopiedToStorage(String whichFiles) {
+		
+		SharedPreferences pref = getSharedPreferences(
+				Global.PREF_ASSET_FILE_COPY_STATE, MODE_PRIVATE);
+		
+		if (pref != null) {
+			SharedPreferences.Editor editor = pref.edit();
+			
+			if (editor != null) {
+				editor.putBoolean(whichFiles, true);
+				editor.commit();
+			}
+		}
+	}
+	
+	private boolean copyLuaToStorage(File to) {
+		Log.w(TAG, "copyLuaToStorage to:" + to.getAbsolutePath());
+		
+		AssetHelper helper = new AssetHelper();
+		
+		try {
+			helper.copyAssetsToStorage(getAssets(), "lua", to);
+		} catch (IOException e) {
+			//e.printStackTrace();
+			Log.e(TAG, "copyLuaToStorage exception:" + e);
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private String buildPath(File folder, String fileName) {
+		return folder.getAbsolutePath() + File.separator + fileName;
+	}
+	
+	private void copyAssetLuaFilesToStorageIfNecessary() {
+		
+		final boolean IS_DEBUG_BUILD = 
+				(getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+		
+		boolean needCopy = false;
+		if (IS_DEBUG_BUILD) {
+			// always copy for debug build.
+			needCopy = true;
+		} else {
+			needCopy = !isFilesCopiedToStorage(LUA_FILES_COPY_STATE);
+		}
+		
+		if (needCopy) {
+			
+			final File copyToPath = getFilesDir();
+			
+			if (copyLuaToStorage(copyToPath)) {
+				setFilesCopiedToStorage(LUA_FILES_COPY_STATE);
+			} else {
+				Log.e(TAG, "copyAssetLuaFilesIfNecessary: failed to copy asset lua files.");
+			}
+		}
+	}
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

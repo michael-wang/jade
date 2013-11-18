@@ -32,6 +32,7 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 		class_<JavaInterface>("JavaInterface")
 			.def(constructor<>())
 			.def("GetTouchEvents", &JavaInterface::GetTouchEvents)
+			.def("GetLogFilePath", &JavaInterface::GetLogFilePath)
 	];
 
 	module(state)

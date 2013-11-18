@@ -1,6 +1,7 @@
 #include "JavaClass.h"
-#include <android/log.h>
 #include "JniEnv.h"
+#include <android/log.h>
+#include <stdarg.h>
 
 
 static const char TAG[] = "native::framework::JavaClass";
@@ -15,11 +16,16 @@ JavaClass::JavaClass(const char* path) :
 	JNIEnv* env = g_JniEnv->Get();
 
 	if (env != NULL) {
-		jclass classObject = env->FindClass(path);
+		jclass clazz = env->FindClass(path);
 
-		if (classObject != NULL) {
-			classRef = (jclass)env->NewGlobalRef(classObject);
+		if (clazz != NULL) {
+			classRef = (jclass)env->NewGlobalRef(clazz);
+		} else {
+			__android_log_print(ANDROID_LOG_ERROR, TAG, 
+				"Constructor: cannot FindClass: %s", path);
 		}
+	} else {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, "Constructor: cannot find JNIEnv*");
 	}
 }
 
@@ -50,3 +56,32 @@ jmethodID JavaClass::GetMethodID(const char* name, const char* descriptor) {
 
 	return env->GetMethodID(classRef, name, descriptor);
 }
+
+jobject JavaClass::CallStaticObjectMethod(const char* name, const char* descriptor, ...) {
+
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, 
+		"CallStaticObjectMethod: name:%s, descriptor:%s", name, descriptor);
+
+	JNIEnv* env = g_JniEnv->Get();
+	if (env == NULL) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, 
+			"CallStaticObjectMethod: cannot find JNIEnv*");
+		return NULL;
+	}
+
+	jmethodID method = env->GetStaticMethodID(classRef, name, descriptor);
+	if (method == NULL) {
+		__android_log_print(ANDROID_LOG_ERROR, TAG, 
+			"CallStaticObjectMethod: cannot find method with name:%s, descriptor:%s", 
+			name, descriptor);
+		return NULL;
+	}
+
+	va_list args;
+	va_start(args, descriptor);
+	jobject result = env->CallStaticObjectMethodV(classRef, method, args);
+	va_end(args);
+
+	return result;
+}
+
