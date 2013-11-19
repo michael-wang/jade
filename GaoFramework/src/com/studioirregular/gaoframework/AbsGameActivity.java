@@ -47,12 +47,10 @@ public abstract class AbsGameActivity extends Activity {
 		copyAssetLuaFilesToStorageIfNecessary();
 		
 		SoundSystem.getInstance().open(AbsGameActivity.this);
-		am = getAssets();
 		
 		final File FILES_DIR = getFilesDir();
 		ActivityOnCreate(
 			JavaInterface.getInstance(),
-			am,
 			buildPath(FILES_DIR, "lua/Core.lua"),
 			buildPath(FILES_DIR, delegateUpdateLua()),
 			buildPath(FILES_DIR, delegateRenderLua()));
@@ -146,7 +144,6 @@ public abstract class AbsGameActivity extends Activity {
 		
 		ActivityOnDestroy();
 		
-		am = null;
 		SoundSystem.getInstance().close();
 	}
 	
@@ -189,7 +186,6 @@ public abstract class AbsGameActivity extends Activity {
 		}
 	};
 	
-	private AssetManager am;
 	private GLSurfaceView surfaceView;
 	
 	private FrameRateCalculator fps;
@@ -227,7 +223,7 @@ public abstract class AbsGameActivity extends Activity {
 	};
 	private ShowFPS showFPS = new ShowFPS();
 	
-	private native void ActivityOnCreate(JavaInterface ji, AssetManager am, String luaCore,
+	private native void ActivityOnCreate(JavaInterface ji, String luaCore,
 			String luaUpdate, String luaRender);
 	private native void ActivityOnDestroy();
 	private native void ActivityOnPause();

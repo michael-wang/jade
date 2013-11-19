@@ -7,9 +7,11 @@
 static const char TAG[] = "native::framework::JavaObject";
 
 JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
-	clazz (g_JniEnv->FindClass(classPath)) {
+	clazz (g_JniEnv->FindClass(classPath)),
+	javaRef (NULL) {
 	
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "JavaObject");
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, 
+		"JavaObject classPath:%s, constructor:%s", classPath, constructor);
 
 	jmethodID ctor = NULL;
 	if (clazz != NULL) {
@@ -25,7 +27,7 @@ JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
 		jobject obj = g_JniEnv->NewObject(clazz, ctor, args);
 		va_end(args);
 
-		javaRef = g_JniEnv->NewGlobalRef(obj);
+		SetJavaRef(obj);
 	} else {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, 
 			"JavaObject cannot find constructor with name:%s, descriptor:%s", 
@@ -33,20 +35,33 @@ JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
 	}
 }
 
-JavaObject::JavaObject(JavaClass* cls, jobject obj) :
-	clazz (cls) {
+JavaObject::JavaObject(const char* classPath) :
+	clazz (g_JniEnv->FindClass(classPath)),
+	javaRef (NULL) {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "JavaObject");
-	
-	javaRef = g_JniEnv->NewGlobalRef(obj);
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "JavaObject classPath:%s", classPath);
 }
 
 JavaObject::~JavaObject() {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "~JavaObject");
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "~JavaObject path:%s", 
+		clazz->GetClassPath().c_str());
+
+	SetJavaRef(NULL);
+}
+
+void JavaObject::SetJavaRef(jobject ref) {
+
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "SetJavaRef: ref:%p, old ref:%p", 
+		ref, javaRef);
 
 	if (javaRef != NULL) {
 		g_JniEnv->DeleteGlobalRef(javaRef);
+	}
+
+	if (ref != NULL) {
+		javaRef = g_JniEnv->NewGlobalRef(ref);
+	} else {
 		javaRef = NULL;
 	}
 }

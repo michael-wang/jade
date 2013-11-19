@@ -10,7 +10,6 @@
 
 #include <Framework/Application.hpp>
 #include <Framework/LuaScriptManager.hpp>
-#include <android/asset_manager.h>
 #include <jni.h>
 #include "Resource.h"
 
@@ -23,8 +22,7 @@ public:
 	AndroidApplication();
 	virtual ~AndroidApplication();
 
-	GaoBool Initialize(AAssetManager* am, char* coreLuaName, 
-		char* updateLuaName, char* renderLuaName);
+	GaoBool Initialize(char* coreLuaName, char* updateLuaName, char* renderLuaName);
 
 	GaoVoid Pause();
 	GaoVoid Resume();
@@ -55,7 +53,6 @@ protected:
 
 protected:
 	Gao::Framework::LuaScriptManager* luaManager;
-	AAssetManager* assetManager;
 
 	JNIEnv* jniEnv;
 	jobject jInterface;

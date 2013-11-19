@@ -19,6 +19,10 @@ public:
 		return classRef;
 	}
 
+	const std::string& GetClassPath() {
+		return CLASS_PATH;
+	}
+
 	jmethodID GetMethodID(const char* name, const char* descriptor);
 
 	jobject CallStaticObjectMethod(const char* name, const char* descriptor, ...);

@@ -12,15 +12,17 @@ static const char METHOD_NAME_POP_TOUCH_EVENTS[]       = "popTouchEvents";
 static const char METHOD_DESCRIPTOR_POP_TOUCH_EVENTS[] = "()[Lcom/studioirregular/gaoframework/TouchEvent;";
 static const char METHOD_NAME_GET_LOG_FILE_PATH[]      = "getLogFilePath";
 static const char METHOD_DESCRIPTOR_GET_LOG_FILE_PATH[]= "()Ljava/lang/String;";
+static const char METHOD_NAME_DRAW[]                   = "draw";
+static const char METHOD_DESCRIPTOR_DRAW[]             = "(Lcom/studioirregular/gaoframework/Rectangle;)V";
 
-JavaInterface::JavaInterface() {
+JavaInterface::JavaInterface() :
+	jobj (JAVA_CLASS_PATH) {
 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "JavaInterface");
 
-	JavaClass* jclass = g_JniEnv->FindClass(JAVA_CLASS_PATH);
+	JavaClass* jclass = jobj.GetClass();
 	if (jclass == NULL) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, 
 			"JavaInterface cannot find class:%s", JAVA_CLASS_PATH);
-		jobj = NULL;
 		return;
 	}
 
@@ -31,27 +33,20 @@ JavaInterface::JavaInterface() {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, 
 			"JavaInterface got NULL return from method:%s, descriptor:%s", 
 			METHOD_NAME_GET_INSTANCE, METHOD_DESCRIPTOR_GET_INSTANCE);
-		jobj = NULL;
 		return;
 	}
 
-	jobj = new JavaObject(jclass, obj);
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "JavaInterface jobj:%p", jobj);
+	jobj.SetJavaRef(obj);
 }
 
 JavaInterface::~JavaInterface() {
-
-	if (jobj != NULL) {
-		delete jobj;
-		jobj = NULL;
-	}
 }
 
 TouchEventArray* JavaInterface::GetTouchEvents() {
 
 	TouchEventArray* result = new TouchEventArray();
 
-	jobjectArray jarr = (jobjectArray)jobj->CallObjectMethod(
+	jobjectArray jarr = (jobjectArray)jobj.CallObjectMethod(
 		METHOD_NAME_POP_TOUCH_EVENTS, METHOD_DESCRIPTOR_POP_TOUCH_EVENTS);
 
 	JNIEnv* env = g_JniEnv->Get();
@@ -77,7 +72,7 @@ char* JavaInterface::GetLogFilePath() {
 
 	JNIEnv* env = g_JniEnv->Get();
 
-	jstring jstrPath = (jstring)jobj->CallObjectMethod(METHOD_NAME_GET_LOG_FILE_PATH, 
+	jstring jstrPath = (jstring)jobj.CallObjectMethod(METHOD_NAME_GET_LOG_FILE_PATH, 
 		METHOD_DESCRIPTOR_GET_LOG_FILE_PATH);
 	if (jstrPath == NULL) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, "CallObjectMethod return NULL");
@@ -92,4 +87,8 @@ char* JavaInterface::GetLogFilePath() {
 	env->ReleaseStringUTFChars(jstrPath, cstrPath);
 
 	return result;
+}
+
+void JavaInterface::Draw(Rectangle* rect) {
+	jobj.CallVoidMethod(METHOD_NAME_DRAW, METHOD_DESCRIPTOR_DRAW, rect->GetJavaRef());
 }

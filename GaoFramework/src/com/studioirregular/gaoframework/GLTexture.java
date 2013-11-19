@@ -40,9 +40,8 @@ public class GLTexture {
 				.asFloatBuffer();
 	}
 	
-	// return texture name.
-	public boolean load(AssetManager am, String fileName) {
-		Log.w(TAG, "load:" + fileName);
+	public boolean Create(String fileName) {
+		Log.w(TAG, "Create:" + fileName);
 		
 		final int[] nameBuf = new int[1];
 		GLES20.glGenTextures(1, nameBuf, 0);
@@ -58,6 +57,7 @@ public class GLTexture {
 		
 		this.name = nameBuf[0];
 		
+		AssetManager am = JavaInterface.getInstance().getContext().getAssets();
 		Bitmap bmp = loadAssetImage(am, fileName);
 		
 		if (bmp == null) {

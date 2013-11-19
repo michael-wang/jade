@@ -1,19 +1,15 @@
-#include "AndroidApplication.h"
 #include "TouchEvent.h"
-//#include <android/log.h>
+#include "Java/JniEnv.h"
+#include <android/log.h>
+
 
 static const char TAG[] = "native::framework::TouchEvent";
 
 TouchEvent::TouchEvent(jobject obj) {
 
-	AndroidApplication* app = AndroidApplication::Singleton;
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Constructor");
 
-	if (app == NULL) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "TouchEvent app == NULL");
-		return;
-	}
-
-	JNIEnv* env = app->GetJniEnv();
+	JNIEnv* env = g_JniEnv->Get();
 	if (env == NULL) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, "TouchEvent env == NULL");
 		return;
@@ -32,4 +28,5 @@ TouchEvent::TouchEvent(jobject obj) {
 }
 
 TouchEvent::~TouchEvent() {
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Destructor");
 }

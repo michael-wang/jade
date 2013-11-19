@@ -30,38 +30,12 @@ public class JavaInterface {
 	}
 	
 	// Java APIs for native code.
-	public void drawRectangle(int left, int top, int right, int bottom,
-			float red, float green, float blue, float alpha) {
-		if (renderer != null) {
-			renderer.drawRectangle(left, top, right, bottom, red, green, blue, alpha, null);
-		}
-	}
-	
-	public void drawRectangle(int left, int top, int right, int bottom,
-			float red, float green, float blue, float alpha, GLTexture texture) {
-//		Log.d(TAG, "drawRectangle texture:" + texture);
-		
-		if (renderer != null) {
-			renderer.drawRectangle(left, top, right, bottom, red, green, blue, alpha, texture);
-		}
-	}
-	
 	public void draw(Rectangle rect) {
 //		Log.d(TAG, "draw rect:" + rect);
 		
 		if (renderer != null) {
 			renderer.draw(rect);
 		}
-	}
-	
-	public boolean loadTexture(GLTexture texture, String fileName) {
-		Log.d(TAG, "loadTexture fileName:" + fileName);
-		
-		if (texture == null || fileName == null) {
-			return false;
-		}
-		
-		return texture.load(context.getAssets(), fileName);
 	}
 	
 	public String getLogFilePath() {
@@ -113,6 +87,10 @@ public class JavaInterface {
 		synchronized (touchEvents) {
 			touchEvents.add(new TouchEvent(motion));
 		}
+	}
+	
+	/* package */ Context getContext() {
+		return context;
 	}
 	
 	private Context context;

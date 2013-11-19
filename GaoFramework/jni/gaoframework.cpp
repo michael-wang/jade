@@ -31,13 +31,12 @@ static char* getJniString(JNIEnv* env, jstring jstr) {
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
  * Method:    ActivityOnCreate
  * Signature: (Lcom/studioirregular/gaoframework/JavaInterface;
- *             Landroid/content/res/AssetManager;
  *             Ljava/lang/String;
  *             Ljava/lang/String;
  *             Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *env, jobject obj, jobject javaInterface, jobject am, jstring jLuaCore, jstring jLuaUpdate, 
+  (JNIEnv *env, jobject obj, jobject javaInterface, jstring jLuaCore, jstring jLuaUpdate, 
     jstring jLuaRender) {    
     __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnCreate");
 
@@ -48,7 +47,6 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
     g_JniEnv->Set(env);
 
     app->Initialize(
-      AAssetManager_fromJava(env, am),
       getJniString(env, jLuaCore),
       getJniString(env, jLuaUpdate),
       getJniString(env, jLuaRender));
@@ -71,11 +69,11 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
     app->Terminate();
 
-    app->SetJavaInterface(NULL, NULL);
-    g_JniEnv->Set(NULL);
+    // app->SetJavaInterface(NULL, NULL);
+    // g_JniEnv->Set(NULL);
 
     SAFE_DELETE(app);
-    app = NULL;
+    SAFE_DELETE(jni);
 }
 
 /*

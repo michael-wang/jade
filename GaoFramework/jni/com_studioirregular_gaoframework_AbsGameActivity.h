@@ -11,13 +11,12 @@ extern "C" {
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
  * Method:    ActivityOnCreate
  * Signature: (Lcom/studioirregular/gaoframework/JavaInterface;
- *             Landroid/content/res/AssetManager;
  *             Ljava/lang/String;
  *             Ljava/lang/String;
  *             Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *, jobject, jobject, jobject, jstring, jstring, jstring);
+  (JNIEnv *, jobject, jobject, jstring, jstring, jstring);
 
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity

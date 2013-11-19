@@ -1,6 +1,7 @@
 #include "AndroidAudioResource.h"
-#include "AndroidApplication.h"
 #include "Java/JniEnv.h"
+#include <android/log.h>
+
 
 static const char TAG[] = "native::framework::AndroidAudioResource";
 
@@ -19,10 +20,12 @@ static const char JAVA_METHOD_STOP_DESC[]		= "()V";
 AndroidAudioResource::AndroidAudioResource(AudioType type) :
 	jobj (JAVA_CLASS_PATH, JAVA_METHOD_CONSTRUCTOR_DESC, type) {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "AndroidAudioResource type:%d", type);
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Constructor type:%d", type);
 }
 
 AndroidAudioResource::~AndroidAudioResource() {
+
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Destructor");
 }
 
 GaoBool AndroidAudioResource::Create(AudioType type, GaoString& fileName, GaoBool loop) {

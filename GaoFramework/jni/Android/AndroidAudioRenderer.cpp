@@ -1,4 +1,3 @@
-#include "AndroidApplication.h"
 #include "AndroidAudioRenderer.h"
 #include "AndroidAudioResource.h"
 #include <android/log.h>

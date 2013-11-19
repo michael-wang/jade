@@ -28,11 +28,6 @@ public:
 	virtual GaoBool IsPlaying() const;
 
 private:
-	static const int JMETHOD_CREATE      = 1;
-	static const int JMETHOD_PLAY        = 2;
-	static const int JMETHOD_PAUSE       = 3;
-	static const int JMETHOD_STOP        = 4;
-
 	JavaObject jobj;
 };
 

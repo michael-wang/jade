@@ -13,12 +13,18 @@ public:
 	 * ...: constructor parameters.
 	 */
 	JavaObject(const char* classPath, const char* constructor, ...);
-	JavaObject(JavaClass* cls, jobject obj);
+	JavaObject(const char* classPath);
 
 	virtual ~JavaObject();
 
 	jobject GetJavaRef() {
 		return javaRef;
+	}
+
+	void SetJavaRef(jobject ref);
+
+	JavaClass* GetClass() {
+		return clazz;
 	}
 
 	void CallVoidMethod(const char* name, const char* descriptor, ...);

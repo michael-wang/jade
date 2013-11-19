@@ -51,6 +51,8 @@ public class StreamingAudio implements AbsAudioResource {
 	@Override
 	public void Stop() {
 		
+		Log.d(TAG, "Stop");
+		
 		if (mplayer != null) {
 			if (mplayer.isPlaying()) {
 				mplayer.stop();
@@ -63,6 +65,8 @@ public class StreamingAudio implements AbsAudioResource {
 
 	@Override
 	public void Pause() {
+		
+		Log.d(TAG, "Pause");
 		
 		if (mplayer != null && mplayer.isPlaying()) {
 			mplayer.pause();

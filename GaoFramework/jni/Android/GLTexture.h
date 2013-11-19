@@ -4,6 +4,7 @@
 #include <Framework/Texture.hpp>
 #include <jni.h>
 #include <string>
+#include "Java/JavaObject.h"
 
 
 class GLTexture : public Gao::Framework::Texture {
@@ -17,11 +18,11 @@ public:
 	virtual GaoVoid Unload();
 
 	jobject GetJavaReference() {
-		return javaRef;
+		return jobj.GetJavaRef();
 	}
 
 private:
-	jobject javaRef;
+	JavaObject jobj;
 };
 
 #endif // ANDROIDTEXTURE_H_

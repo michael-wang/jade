@@ -30,29 +30,29 @@ static char TAG[] = "native::framework::AndroidApplication";
 
 AndroidApplication::AndroidApplication() :
 	luaManager (new LuaScriptManager()),
-	assetManager (NULL),
 	jniEnv (NULL),
 	jInterface (NULL),
 	running (TRUE) {
 
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Constructor");
 	AndroidApplication::Singleton = dynamic_cast<AndroidApplication*>(g_Application);
 }
 
 AndroidApplication::~AndroidApplication() {
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Descructor");
+
 	SAFE_DELETE(luaManager);
 	jniEnv = NULL;
 	jInterface = NULL;
 }
 
-GaoBool AndroidApplication::Initialize(AAssetManager* am, 
-	char* core, char* update, char* render) {
-	__android_log_print(ANDROID_LOG_INFO, TAG, 
+GaoBool AndroidApplication::Initialize(char* core, char* update, char* render) {
+
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, 
 		"Initialize core:%s, update:%s, render:%s", core, update, render);
 
-	assetManager = am;
-
 	if (core == NULL || update == NULL || render == NULL) {
-		__android_log_print(ANDROID_LOG_INFO, TAG, 
+		__android_log_print(ANDROID_LOG_DEBUG, TAG, 
 			"Invalid arguments core:%p, update:%p, render:%p", 
 			core, update, render);
 		return FALSE;
@@ -85,7 +85,7 @@ GaoVoid AndroidApplication::RunOnePass() {
 }
 
 GaoBool AndroidApplication::OnInitialize() {
-	__android_log_print(ANDROID_LOG_INFO, TAG, "OnInitialize()");
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "OnInitialize()");
 
 	luaManager->Create();
 
@@ -130,11 +130,14 @@ GaoBool AndroidApplication::OnInitialize() {
 }
 
 GaoVoid AndroidApplication::OnTerminate() {
+
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "OnTerminate");
+
 	CallLua(SCRIPT_ROUTINE_ONTERMINATE);
 }
 
 GaoVoid AndroidApplication::OnSurfaceChanged(int width, int height) {
-	__android_log_print(ANDROID_LOG_INFO, TAG, "OnSurfaceChanged w:%d, h:%d", width, height);
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "OnSurfaceChanged w:%d, h:%d", width, height);
 
 	if (!luaManager->GetFunction(SCRIPT_ROUTINE_SURFACE_CHANGED)) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to get lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED);
@@ -157,7 +160,7 @@ GaoVoid AndroidApplication::OnRender() {
 }
 
 GaoVoid AndroidApplication::OnPause(GaoBool onPause) {
-	__android_log_print(ANDROID_LOG_INFO, TAG, "OnPause %d", onPause);
+	__android_log_print(ANDROID_LOG_DEBUG, TAG, "OnPause %d", onPause);
 
 	if (onPause) {
 		CallLua(SCRIPT_ROUTINE_ONPAUSE);
@@ -171,7 +174,7 @@ GaoBool AndroidApplication::IsAppRunning() {
 }
 
 GaoBool AndroidApplication::CallLua(GaoConstCharPtr func) {
-//	__android_log_print(ANDROID_LOG_INFO, TAG, "CallLua: %s", func);
+//	__android_log_print(ANDROID_LOG_DEBUG, TAG, "CallLua: %s", func);
 
 	if (!luaManager->CallFunction(func)) {
 		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run lua function: %s", func);

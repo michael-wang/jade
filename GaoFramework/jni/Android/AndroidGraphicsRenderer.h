@@ -22,9 +22,6 @@ public:
 
 	virtual Gao::Framework::Texture* CreateTexture(GaoString& fileName);
 
-	GaoVoid DrawRectangle(GaoInt16 startX, GaoInt16 startY, GaoInt16 endX, GaoInt16 endY, 
-		GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha, Gao::Framework::Texture* texture);
-
 	GaoVoid Draw(Rectangle* rect);
 
 protected:

@@ -7,6 +7,7 @@
 #include <string>
 #include "JavaClass.h"
 #include <stdarg.h>
+#include <android/log.h>
 
 
 #define g_JniEnv JniEnv::GetSingletonPointer()
@@ -19,6 +20,9 @@ public:
 	}
 
 	virtual ~JniEnv() {
+
+		__android_log_print(ANDROID_LOG_DEBUG, "JniEnv", "~JniEnv");
+
 		for (ClassMap::iterator i = classMap.begin(); i != classMap.end(); ++i) {
 			if (i->second != NULL) {
 				delete i->second;
