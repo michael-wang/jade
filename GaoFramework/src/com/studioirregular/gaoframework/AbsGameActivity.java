@@ -8,7 +8,6 @@ import java.util.Observer;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
-import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,7 +49,6 @@ public abstract class AbsGameActivity extends Activity {
 		
 		final File FILES_DIR = getFilesDir();
 		ActivityOnCreate(
-			JavaInterface.getInstance(),
 			buildPath(FILES_DIR, "lua/Core.lua"),
 			buildPath(FILES_DIR, delegateUpdateLua()),
 			buildPath(FILES_DIR, delegateRenderLua()));
@@ -223,8 +221,8 @@ public abstract class AbsGameActivity extends Activity {
 	};
 	private ShowFPS showFPS = new ShowFPS();
 	
-	private native void ActivityOnCreate(JavaInterface ji, String luaCore,
-			String luaUpdate, String luaRender);
+	private native void ActivityOnCreate(
+			String luaCore, String luaUpdate, String luaRender);
 	private native void ActivityOnDestroy();
 	private native void ActivityOnPause();
 	private native void ActivityOnResume();

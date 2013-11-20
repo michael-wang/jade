@@ -30,18 +30,6 @@ public:
 	GaoVoid RunOnePass();
 
 	GaoVoid OnSurfaceChanged(int width, int height);
-	GaoVoid SetJavaInterface(JNIEnv* jni, jobject ji) {
-		jniEnv = jni;
-		jInterface = ji;
-	}
-
-	JNIEnv* GetJniEnv() {
-		return jniEnv;
-	}
-
-	jobject GetJavaInterface() {
-		return jInterface;
-	}
 
 protected:
 	virtual GaoBool OnInitialize();
@@ -53,9 +41,6 @@ protected:
 
 protected:
 	Gao::Framework::LuaScriptManager* luaManager;
-
-	JNIEnv* jniEnv;
-	jobject jInterface;
 
 	GaoBool CallLua(GaoConstCharPtr func);
 

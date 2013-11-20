@@ -19,10 +19,10 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
 /*
  * Class:     com_studioirregular_gaoframework_MyGLRenderer
  * Method:    RendererOnDrawFrame
- * Signature: ("Lcom/studioirregular/gaoframework/JavaInterface;")V
+ * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnDrawFrame
-  (JNIEnv *, jobject, jobject);
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

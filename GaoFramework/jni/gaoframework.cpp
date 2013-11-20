@@ -30,20 +30,18 @@ static char* getJniString(JNIEnv* env, jstring jstr) {
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
  * Method:    ActivityOnCreate
- * Signature: (Lcom/studioirregular/gaoframework/JavaInterface;
  *             Ljava/lang/String;
  *             Ljava/lang/String;
  *             Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *env, jobject obj, jobject javaInterface, jstring jLuaCore, jstring jLuaUpdate, 
+  (JNIEnv *env, jobject obj, jstring jLuaCore, jstring jLuaUpdate, 
     jstring jLuaRender) {    
     __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnCreate");
 
     app = new AndroidApplication();
     jni = new JniEnv();
 
-    app->SetJavaInterface(env, javaInterface);
     g_JniEnv->Set(env);
 
     app->Initialize(
@@ -51,7 +49,6 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
       getJniString(env, jLuaUpdate),
       getJniString(env, jLuaRender));
 
-    app->SetJavaInterface(NULL, NULL);
     g_JniEnv->Set(NULL);
 }
 
@@ -64,12 +61,10 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
   (JNIEnv *env, jobject obj) {
     __android_log_print(ANDROID_LOG_INFO,TAG, "ActivityOnDestroy");
 
-    app->SetJavaInterface(env, NULL);
     g_JniEnv->Set(env);
 
     app->Terminate();
 
-    // app->SetJavaInterface(NULL, NULL);
     // g_JniEnv->Set(NULL);
 
     SAFE_DELETE(app);
@@ -86,12 +81,10 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
     __android_log_print(ANDROID_LOG_INFO, TAG, 
       "RendererOnSurfaceChanged w:%d, h:%d", width, height);
 
-    app->SetJavaInterface(env, NULL);
     g_JniEnv->Set(env);
 
     app->OnSurfaceChanged(width, height);
 
-    app->SetJavaInterface(NULL, NULL);
     g_JniEnv->Set(NULL);
 }
 
@@ -101,14 +94,12 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
  * Signature: ("Lcom/studioirregular/gaoframework/JavaInterface;")V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnDrawFrame
-  (JNIEnv *env, jobject obj, jobject javaInterface) {
+  (JNIEnv *env, jobject obj) {
 
-    app->SetJavaInterface(env, javaInterface);
     g_JniEnv->Set(env);
 
     app->RunOnePass();
     
-    app->SetJavaInterface(NULL, NULL);
     g_JniEnv->Set(NULL);
 }
 
@@ -122,12 +113,10 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
     __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnResume");
 
-    app->SetJavaInterface(env, NULL);
     g_JniEnv->Set(env);
 
     app->Resume();
 
-    app->SetJavaInterface(NULL, NULL);
     g_JniEnv->Set(NULL);
 }
 
@@ -141,11 +130,9 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
     __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnPause");
     
-    app->SetJavaInterface(env, NULL);
     g_JniEnv->Set(env);
 
     app->Pause();
 
-    app->SetJavaInterface(NULL, NULL);
     g_JniEnv->Set(NULL);
 }

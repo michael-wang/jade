@@ -40,7 +40,7 @@ public class MyGLRenderer implements Renderer {
 		
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
 		
-		RendererOnDrawFrame(JavaInterface.getInstance());
+		RendererOnDrawFrame();
 		
 		if (fps != null) {
 			fps.addFrame();
@@ -66,7 +66,7 @@ public class MyGLRenderer implements Renderer {
 	}
 	
 	private native void RendererOnSurfaceChanged(int w, int h);
-	private native void RendererOnDrawFrame(JavaInterface jInterface);
+	private native void RendererOnDrawFrame();
 	
 	private final float[] mMVPMatrix = new float[16];
 	private final float[] mProjMatrix = new float[16];

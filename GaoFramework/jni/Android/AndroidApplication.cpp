@@ -30,8 +30,6 @@ static char TAG[] = "native::framework::AndroidApplication";
 
 AndroidApplication::AndroidApplication() :
 	luaManager (new LuaScriptManager()),
-	jniEnv (NULL),
-	jInterface (NULL),
 	running (TRUE) {
 
 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Constructor");
@@ -42,8 +40,6 @@ AndroidApplication::~AndroidApplication() {
 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Descructor");
 
 	SAFE_DELETE(luaManager);
-	jniEnv = NULL;
-	jInterface = NULL;
 }
 
 GaoBool AndroidApplication::Initialize(char* core, char* update, char* render) {
