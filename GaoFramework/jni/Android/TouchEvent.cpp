@@ -4,10 +4,13 @@
 
 
 static const char TAG[] = "native::framework::TouchEvent";
+static const bool DEBUG_LOG = false;
 
 TouchEvent::TouchEvent(jobject obj) {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Constructor");
+	if (DEBUG_LOG) {
+		__android_log_print(ANDROID_LOG_DEBUG, TAG, "Constructor");
+	}
 
 	JNIEnv* env = g_JniEnv->Get();
 	if (env == NULL) {
@@ -28,5 +31,7 @@ TouchEvent::TouchEvent(jobject obj) {
 }
 
 TouchEvent::~TouchEvent() {
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Destructor");
+	if (DEBUG_LOG) {
+		__android_log_print(ANDROID_LOG_DEBUG, TAG, "Destructor");
+	}
 }

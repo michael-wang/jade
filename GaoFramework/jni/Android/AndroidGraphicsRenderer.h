@@ -11,6 +11,7 @@
 #include <Framework/GraphicsRenderer.hpp>
 #include <Android/GLTexture.h>
 #include <Android/Rectangle.h>
+#include "AndroidLogger.h"
 #include <jni.h>
 
 class AndroidGraphicsRenderer : public Gao::Framework::GraphicsRenderer {
@@ -25,6 +26,7 @@ public:
 	GaoVoid Draw(Rectangle* rect);
 
 protected:
+	AndroidLogger log;
 	GaoInt32 width, height;
 	jmethodID drawRectID;
 };

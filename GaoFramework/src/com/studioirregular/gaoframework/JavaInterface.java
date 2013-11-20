@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 public class JavaInterface {
 
 	private static final String TAG = "java-interface";
+	private static final boolean DEBUG_LOG = false;
 	
 	// Singleton.
 	public static JavaInterface getInstance() {
@@ -25,7 +26,10 @@ public class JavaInterface {
 	}
 	
 	private JavaInterface() {
-		Log.d(TAG, "JavaInterface()");
+		if (DEBUG_LOG) {
+			Log.d(TAG, "JavaInterface()");
+		}
+		
 		touchEvents = new ArrayList<TouchEvent>();
 	}
 	
@@ -66,7 +70,9 @@ public class JavaInterface {
 				result = touchEvents.toArray(result);
 				
 				touchEvents.clear();
-				Log.d(TAG, "popTouchEvents #events:" + result.length);
+				if (DEBUG_LOG) {
+					Log.d(TAG, "popTouchEvents #events:" + result.length);
+				}
 			} else {
 				result = new TouchEvent[0];
 			}

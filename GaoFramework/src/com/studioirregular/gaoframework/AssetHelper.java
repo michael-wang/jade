@@ -15,6 +15,7 @@ import android.util.Log;
 public class AssetHelper {
 
 	private static final String TAG = "java-AssetHelper";
+	private static final boolean DEBUG_LOG = false;
 	
 	public String getFileContent(Context context, String filename) {
 		
@@ -49,12 +50,13 @@ public class AssetHelper {
 	// A temporary solution is to move asset files into storage.
 	public void copyAssetsToStorage(AssetManager am, String fromAssetFolder,
 			File toPath) throws IOException {
-		Log.d(TAG, "copyAssetsToStorage fromAssetFolder:" + fromAssetFolder
-				+ ", toPath:" + toPath.getAbsolutePath());
+		if (DEBUG_LOG) {
+			Log.d(TAG, "copyAssetsToStorage fromAssetFolder:" + fromAssetFolder
+					+ ", toPath:" + toPath.getAbsolutePath());
+		}
 		
 		File toFolder = new File(toPath, fromAssetFolder);
 		toFolder.mkdir();
-		Log.d(TAG, "mkdir done");
 		
 		final String[] files = am.list(fromAssetFolder);
 		if (files == null) {
@@ -62,7 +64,9 @@ public class AssetHelper {
 		}
 		
 		for (final String fileName : files) {
-			Log.d(TAG, "try to copy asset file:" + fileName);
+			if (DEBUG_LOG) {
+				Log.d(TAG, "try to copy asset file:" + fileName);
+			}
 			
 			final String from = fromAssetFolder + File.separator + fileName;
 			File to = new File(toFolder, fileName);
@@ -73,13 +77,17 @@ public class AssetHelper {
 	private void copyFile(AssetManager am, String assetFile,
 			File toFile) throws IOException {
 		
-		Log.d(TAG, "copyfile assetFile:" + assetFile + ",toFile:"
+		if (DEBUG_LOG) {
+			Log.d(TAG, "copyfile assetFile:" + assetFile + ",toFile:"
 				+ toFile.getAbsolutePath());
+		}
 
 		InputStream is = am.open(assetFile, AssetManager.ACCESS_BUFFER);
 		copy(is, toFile);
 		
-		Log.w(TAG, "#" + toFile.getName() + ":" + toFile.length());
+		if (DEBUG_LOG) {
+			Log.d(TAG, "#" + toFile.getName() + ":" + toFile.length());
+		}
 	}
 	
 	private void copy(InputStream is, File to) throws IOException {

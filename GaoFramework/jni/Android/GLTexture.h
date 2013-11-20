@@ -5,6 +5,7 @@
 #include <jni.h>
 #include <string>
 #include "Java/JavaObject.h"
+#include "AndroidLogger.h"
 
 
 class GLTexture : public Gao::Framework::Texture {
@@ -23,6 +24,7 @@ public:
 
 private:
 	JavaObject jobj;
+	AndroidLogger log;
 };
 
 #endif // ANDROIDTEXTURE_H_

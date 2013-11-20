@@ -12,6 +12,7 @@ import android.util.Log;
 public class NonStreamingAudio implements AbsAudioResource {
 
 	private static final String TAG = "java-NonStreamingAudio";
+	private static final boolean DEBUG_LOG = false;
 	
 	private static SoundPool soundPool = null;
 	static void open() {
@@ -33,7 +34,9 @@ public class NonStreamingAudio implements AbsAudioResource {
 	
 	@Override
 	public boolean Create(String assetFile, boolean loop) {
-		Log.d(TAG, "Create: assetFile:" + assetFile + ",loop:" + loop);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Create: assetFile:" + assetFile + ",loop:" + loop);
+		}
 		
 		this.assetFile = assetFile;
 		this.loop = loop;
@@ -50,7 +53,9 @@ public class NonStreamingAudio implements AbsAudioResource {
 
 	@Override
 	public boolean Play() {
-		Log.d(TAG, "Play");
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Play");
+		}
 		
 		final int loopMode = loop ? LOOP_FOREVER : NO_LOOP;
 		
@@ -79,7 +84,9 @@ public class NonStreamingAudio implements AbsAudioResource {
 	}
 
 	private int load(String assetFile) {
-		Log.d(TAG, "load assetFile:" + assetFile);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "load assetFile:" + assetFile);
+		}
 		
 		Context ctx = SoundSystem.getInstance().getContext();
 		if (ctx == null) {

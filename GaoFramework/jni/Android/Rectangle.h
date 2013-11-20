@@ -3,6 +3,7 @@
 
 #include <Framework/Texture.hpp>
 #include "Java/JavaObject.h"
+#include "AndroidLogger.h"
 
 
 class Rectangle {
@@ -47,6 +48,7 @@ private:
 private:
 	JavaObject jobj;
 	GaoReal32 left, top, right, bottom;
+	AndroidLogger log;
 };
 
 #endif // RECTANGLE_H_

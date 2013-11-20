@@ -19,6 +19,7 @@ import android.widget.TextView;
 public abstract class AbsGameActivity extends Activity {
 
 	private static final String TAG = "abs-game-activity";
+	private static final boolean DEBUG_LOG = false;
 	
 	// provide your lua script (in string for now) to be called on update game
 	// logic.
@@ -28,7 +29,9 @@ public abstract class AbsGameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.w(TAG, "onCreate");
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onCreate");
+		}
 		
 		surfaceView = new GLSurfaceView(AbsGameActivity.this);
 		surfaceView.setEGLContextClientVersion(2);
@@ -92,7 +95,9 @@ public abstract class AbsGameActivity extends Activity {
 	}
 	
 	private boolean copyLuaToStorage(File to) {
-		Log.w(TAG, "copyLuaToStorage to:" + to.getAbsolutePath());
+		if (DEBUG_LOG) {
+			Log.w(TAG, "copyLuaToStorage to:" + to.getAbsolutePath());
+		}
 		
 		AssetHelper helper = new AssetHelper();
 		
@@ -167,14 +172,6 @@ public abstract class AbsGameActivity extends Activity {
 		ActivityOnPause();
 	}
 	
-//	@Override
-//	public boolean onTouchEvent(MotionEvent event) {
-//		
-//		JavaInterface.getInstance().onTouch(surfaceView, event);
-//		
-//		return true;
-//	}
-	
 	private View.OnTouchListener surfaaceViewTouchListener = new View.OnTouchListener() {
 		
 		@Override
@@ -195,7 +192,9 @@ public abstract class AbsGameActivity extends Activity {
 			
 			if (observable == fps) {
 				final Float value = (Float)data;
-				Log.w(TAG, "fps:" + value);
+				if (DEBUG_LOG) {
+					Log.w(TAG, "fps:" + value);
+				}
 				
 				showFPS.setFPS(value);
 				AbsGameActivity.this.runOnUiThread(showFPS);

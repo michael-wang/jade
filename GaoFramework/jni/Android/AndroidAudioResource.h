@@ -3,6 +3,7 @@
 
 #include <Framework/AudioResource.hpp>
 #include "Java/JavaObject.h"
+#include "AndroidLogger.h"
 
 using namespace Gao::Framework;
 
@@ -29,6 +30,7 @@ public:
 
 private:
 	JavaObject jobj;
+	AndroidLogger log;
 };
 
 #endif /* ANDROIDAUDIORESOURCE_H_ */

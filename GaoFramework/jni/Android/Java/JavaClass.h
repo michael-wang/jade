@@ -1,6 +1,7 @@
 #ifndef JAVACLASS_H_
 #define JAVACLASS_H_
 
+#include <Android/AndroidLogger.h>
 #include <jni.h>
 #include <string>
 
@@ -33,6 +34,7 @@ public:
 private:
 	const std::string CLASS_PATH;
 	jclass classRef;
+	AndroidLogger log;
 };
 
 #endif /* JAVACLASS_H_ */

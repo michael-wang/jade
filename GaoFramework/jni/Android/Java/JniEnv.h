@@ -3,11 +3,11 @@
 
 #include <jni.h>
 #include <Framework/Singleton.hpp>
+#include <Android/AndroidLogger.h>
+#include "JavaClass.h"
 #include <map>
 #include <string>
-#include "JavaClass.h"
 #include <stdarg.h>
-#include <android/log.h>
 
 
 #define g_JniEnv JniEnv::GetSingletonPointer()
@@ -15,13 +15,16 @@
 class JniEnv : public Gao::Framework::Singleton<JniEnv> {
 
 public:
-	JniEnv() {
-		env = NULL;
+	JniEnv() : 
+		env (NULL), 
+		log ("JniEnv") {
+		
+		LOGD(log, "Constructor")
 	}
 
 	virtual ~JniEnv() {
 
-		__android_log_print(ANDROID_LOG_DEBUG, "JniEnv", "~JniEnv");
+		LOGD(log, "Destructor")
 
 		for (ClassMap::iterator i = classMap.begin(); i != classMap.end(); ++i) {
 			if (i->second != NULL) {
@@ -120,6 +123,7 @@ private:
 
 	JNIEnv* env;
 	ClassMap classMap;
+	AndroidLogger log;
 };
 
 #endif /* JNIENV_H_ */

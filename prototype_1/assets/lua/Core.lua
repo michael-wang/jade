@@ -25,7 +25,7 @@ g_Sounds = {};
 g_Music = {};
 
 function OnInitialize()
-    g_Logger = AndroidLogger();
+    g_Logger = LuaLogger();
     
     g_JavaInterface = JavaInterface();
     local logFilePath = g_JavaInterface:GetLogFilePath();

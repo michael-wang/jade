@@ -12,9 +12,12 @@ import android.util.Log;
 public class Rectangle {
 
 	private static final String TAG = "java-rectangle";
+	private static final boolean DEBUG_LOG = false;
 	
 	private static int loadShader(int type, String shaderCode){
-//		Log.d(TAG, "loadShader type:" + type + ",code:" + shaderCode);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "loadShader type:" + type + ",code:" + shaderCode);
+		}
 
 	    // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
 	    // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
@@ -82,9 +85,12 @@ public class Rectangle {
 	
 	public Rectangle(float left, float top, float right, float bottom, 
 			float red, float green, float blue, float alpha) {
-		Log.d(TAG, "Rectangle left:" + left + ",top:" + top + ",right:" + right
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Rectangle left:" + left + ",top:" + top + ",right:" + right
 				+ ",bottom:" + bottom + ",red:" + red + ",green:" + green
 				+ ",blue:" + blue + ",alpha:" + alpha);
+		}
 		
 		setBound(left, top, right, bottom);
 		setColor(red, green, blue, alpha);
@@ -117,8 +123,10 @@ public class Rectangle {
 	}
 	
 	public void setBound(float left, float top, float right, float bottom) {
-		Log.d(TAG, "setBound left:" + left + ",top:" + top + ",right:" + right
+		if (DEBUG_LOG) {
+			Log.d(TAG, "setBound left:" + left + ",top:" + top + ",right:" + right
 				+ ",bottom:" + bottom);
+		}
 		
 		if (coordsValues == null) {
 			coordsValues = new float[VERTEXT_COUNT * COORDS_PER_VERTEX];
@@ -138,8 +146,10 @@ public class Rectangle {
 	}
 	
 	public void setColor(float red, float green, float blue, float alpha) {
-		Log.d(TAG, "setColor red:" + red + ",green:" + green + ",blue:" + blue
-				+ ",alpha:" + alpha);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "setColor red:" + red + ",green:" + green + ",blue:" + blue
+					+ ",alpha:" + alpha);
+		}
 		
 		color[0] = red;
 		color[1] = green;

@@ -8,11 +8,14 @@ import android.util.Log;
 public class StreamingAudio implements AbsAudioResource {
 
 	private static final String TAG = "java-StreamingAudio";
+	private static final boolean DEBUG_LOG = false;
 	
 	@Override
 	public boolean Create(String assetFile, boolean loop) {
 		
-		Log.d(TAG, "Create assetFile:" + assetFile + ",loop:" + loop);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Create assetFile:" + assetFile + ",loop:" + loop);
+		}
 		
 		this.loop = loop;
 		
@@ -21,7 +24,9 @@ public class StreamingAudio implements AbsAudioResource {
 		final String resName = assetFile.substring(0, assetFile.lastIndexOf("."));
 		final String path = ctx.getPackageName() + RAW_RESOURCE_PREFIX + resName;
 		int resid = res.getIdentifier(path, null, null);
-		Log.w(TAG, "path:" + path + ",resid:" + resid);
+		if (DEBUG_LOG) {
+			Log.w(TAG, "path:" + path + ",resid:" + resid);
+		}
 		
 		mplayer = MediaPlayer.create(ctx, resid);
 		
@@ -36,7 +41,9 @@ public class StreamingAudio implements AbsAudioResource {
 	@Override
 	public boolean Play() {
 		
-		Log.d(TAG, "Play");
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Play");
+		}
 		
 		if (mplayer == null) {
 			Log.e(TAG, "Play: call Create first.");
@@ -51,7 +58,9 @@ public class StreamingAudio implements AbsAudioResource {
 	@Override
 	public void Stop() {
 		
-		Log.d(TAG, "Stop");
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Stop");
+		}
 		
 		if (mplayer != null) {
 			if (mplayer.isPlaying()) {
@@ -66,7 +75,9 @@ public class StreamingAudio implements AbsAudioResource {
 	@Override
 	public void Pause() {
 		
-		Log.d(TAG, "Pause");
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Pause");
+		}
 		
 		if (mplayer != null && mplayer.isPlaying()) {
 			mplayer.pause();

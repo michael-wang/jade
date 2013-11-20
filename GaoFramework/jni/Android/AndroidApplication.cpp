@@ -5,7 +5,6 @@
  *      Author: michael
  */
 
-#include <android/log.h>
 #include <Framework/LuaFunction.hpp>
 #include "AndroidApplication.h"
 #include "AndroidLuaScripts.h"
@@ -26,31 +25,31 @@ static const char SCRIPT_ROUTINE_ONTERMINATE[]= "OnTerminate";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
-static char TAG[] = "native::framework::AndroidApplication";
 
 AndroidApplication::AndroidApplication() :
 	luaManager (new LuaScriptManager()),
-	running (TRUE) {
+	running (TRUE),
+	log ("native::framework::AndroidApplication", false) {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Constructor");
+	LOGD(log, "Constructor")
+
 	AndroidApplication::Singleton = dynamic_cast<AndroidApplication*>(g_Application);
 }
 
 AndroidApplication::~AndroidApplication() {
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Descructor");
+
+	LOGD(log, "Descructor")
 
 	SAFE_DELETE(luaManager);
 }
 
 GaoBool AndroidApplication::Initialize(char* core, char* update, char* render) {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, 
-		"Initialize core:%s, update:%s, render:%s", core, update, render);
+	LOGD(log, "Initialize core:%s, update:%s, render:%s", core, update, render)
 
 	if (core == NULL || update == NULL || render == NULL) {
-		__android_log_print(ANDROID_LOG_DEBUG, TAG, 
-			"Invalid arguments core:%p, update:%p, render:%p", 
-			core, update, render);
+		LOGE(log, "Invalid arguments core:%p, update:%p, render:%p", 
+			core, update, render)
 		return FALSE;
 	}
 
@@ -81,19 +80,20 @@ GaoVoid AndroidApplication::RunOnePass() {
 }
 
 GaoBool AndroidApplication::OnInitialize() {
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "OnInitialize()");
+	
+	LOGD(log, "OnInitialize()")
 
 	luaManager->Create();
 
 	if (!Gao::Framework::RegisterLuaFunctions(luaManager->GetLuaState())) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to RegisterLuaFunctions");
+		LOGE(log, "failed to RegisterLuaFunctions")
 		return FALSE;
 	}
 
 	AndroidLuaScripts::RegisterAndroidClasses(luaManager->GetLuaState());
 
 	if (!luaManager->RunFromFullPathFile(coreLuaName)) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", coreLuaName.c_str());
+		LOGE(log, "failed to run %s", coreLuaName.c_str())
 		return FALSE;
 	}
 
@@ -113,12 +113,12 @@ GaoBool AndroidApplication::OnInitialize() {
 	CallLua(SCRIPT_ROUTINE_INIT);
 
 	if (!luaManager->RunFromFullPathFile(updateLuaName)) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", updateLuaName.c_str());
+		LOGE(log, "failed to run %s", updateLuaName.c_str())
 		return FALSE;
 	}
 
 	if (!luaManager->RunFromFullPathFile(renderLuaName)) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run %s", renderLuaName.c_str());
+		LOGE(log, "failed to run %s", renderLuaName.c_str())
 		return FALSE;
 	}
 
@@ -127,23 +127,23 @@ GaoBool AndroidApplication::OnInitialize() {
 
 GaoVoid AndroidApplication::OnTerminate() {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "OnTerminate");
+	LOGD(log, "OnTerminate")
 
 	CallLua(SCRIPT_ROUTINE_ONTERMINATE);
 }
 
 GaoVoid AndroidApplication::OnSurfaceChanged(int width, int height) {
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "OnSurfaceChanged w:%d, h:%d", width, height);
+	LOGD(log, "OnSurfaceChanged w:%d, h:%d", width, height)
 
 	if (!luaManager->GetFunction(SCRIPT_ROUTINE_SURFACE_CHANGED)) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to get lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED);
+		LOGE(log, "failed to get lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED)
 	}
 
 	luaManager->PushValue(width);
 	luaManager->PushValue(height);
 
 	if (!luaManager->CallFunction()) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED);
+		LOGE(log, "failed to run lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED)
 	}
 }
 
@@ -156,7 +156,7 @@ GaoVoid AndroidApplication::OnRender() {
 }
 
 GaoVoid AndroidApplication::OnPause(GaoBool onPause) {
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "OnPause %d", onPause);
+	LOGD(log, "OnPause %d", onPause)
 
 	if (onPause) {
 		CallLua(SCRIPT_ROUTINE_ONPAUSE);
@@ -173,7 +173,7 @@ GaoBool AndroidApplication::CallLua(GaoConstCharPtr func) {
 //	__android_log_print(ANDROID_LOG_DEBUG, TAG, "CallLua: %s", func);
 
 	if (!luaManager->CallFunction(func)) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "failed to run lua function: %s", func);
+		LOGE(log, "failed to run lua function: %s", func)
 	}
 
 	return TRUE;

@@ -1,9 +1,6 @@
-#include "AndroidApplication.h"
 #include "JavaInterface.h"
 #include "Java/JniEnv.h"
 #include <string>
-
-static const char TAG[]                                = "native::framework::JavaInterface";
 
 static const char JAVA_CLASS_PATH[]                    = "com/studioirregular/gaoframework/JavaInterface";
 static const char METHOD_NAME_GET_INSTANCE[]           = "getInstance";
@@ -16,13 +13,14 @@ static const char METHOD_NAME_DRAW[]                   = "draw";
 static const char METHOD_DESCRIPTOR_DRAW[]             = "(Lcom/studioirregular/gaoframework/Rectangle;)V";
 
 JavaInterface::JavaInterface() :
-	jobj (JAVA_CLASS_PATH) {
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "JavaInterface");
+	jobj (JAVA_CLASS_PATH),
+	log ("native::framework::JavaInterface", false) {
+
+	LOGD(log, "JavaInterface")
 
 	JavaClass* jclass = jobj.GetClass();
 	if (jclass == NULL) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, 
-			"JavaInterface cannot find class:%s", JAVA_CLASS_PATH);
+		LOGE(log, "JavaInterface cannot find class:%s", JAVA_CLASS_PATH)
 		return;
 	}
 
@@ -30,9 +28,8 @@ JavaInterface::JavaInterface() :
 		METHOD_DESCRIPTOR_GET_INSTANCE);
 
 	if (obj == NULL) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, 
-			"JavaInterface got NULL return from method:%s, descriptor:%s", 
-			METHOD_NAME_GET_INSTANCE, METHOD_DESCRIPTOR_GET_INSTANCE);
+		LOGE(log, "JavaInterface got NULL return from method:%s, descriptor:%s", 
+			METHOD_NAME_GET_INSTANCE, METHOD_DESCRIPTOR_GET_INSTANCE)
 		return;
 	}
 
@@ -68,21 +65,21 @@ TouchEventArray* JavaInterface::GetTouchEvents() {
 
 char* JavaInterface::GetLogFilePath() {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "GetLogFilePath");
+	LOGD(log, "GetLogFilePath")
 
 	JNIEnv* env = g_JniEnv->Get();
 
 	jstring jstrPath = (jstring)jobj.CallObjectMethod(METHOD_NAME_GET_LOG_FILE_PATH, 
 		METHOD_DESCRIPTOR_GET_LOG_FILE_PATH);
 	if (jstrPath == NULL) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, "CallObjectMethod return NULL");
+		LOGE(log, "CallObjectMethod return NULL")
 		return NULL;
 	}
 	const char* cstrPath = env->GetStringUTFChars(jstrPath, NULL);
 
 	char* result = new char[std::strlen(cstrPath) + 1];
 	std::strcpy(result, cstrPath);
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "GetLogFilePath path:%s", result);
+	LOGD(log, "GetLogFilePath path:%s", result)
 
 	env->ReleaseStringUTFChars(jstrPath, cstrPath);
 

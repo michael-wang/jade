@@ -2,6 +2,7 @@
 #define JAVAOBJECT_H_
 
 #include "JavaClass.h"
+#include <Android/AndroidLogger.h>
 
 
 class JavaObject {
@@ -34,6 +35,7 @@ public:
 private:
 	JavaClass* const clazz;
 	jobject javaRef;
+	AndroidLogger log;
 };
 
 #endif /* JAVAOBJECT_H_ */

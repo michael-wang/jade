@@ -6,10 +6,13 @@ import android.util.Log;
 public class AudioResource implements AbsAudioResource {
 
 	private static final String TAG = "java-AudioResource";
+	private static final boolean DEBUG_LOG = false;
 	
 	public AudioResource(int type) {
 		
-		Log.d(TAG, "AudioResource type:" + type);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "AudioResource type:" + type);
+		}
 		
 		if (type == NON_STREAMING) {
 			impl = new NonStreamingAudio();
@@ -23,7 +26,9 @@ public class AudioResource implements AbsAudioResource {
 	@Override
 	public boolean Create(String assetFile, boolean looping) {
 		
-		Log.d(TAG, "Create file:" + assetFile + ",looping:" + looping);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Create file:" + assetFile + ",looping:" + looping);
+		}
 		
 		if (impl != null) {
 			return impl.Create(assetFile, looping);

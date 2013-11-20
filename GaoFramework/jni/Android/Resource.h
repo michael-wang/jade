@@ -2,8 +2,9 @@
 #define RESOURCE_H_
 
 #include <android/asset_manager.h>
-#include <android/log.h>
 #include <png.h>
+#include "AndroidLogger.h"
+
 
 class Resource {
 
@@ -23,6 +24,7 @@ private:
 private:
 	AAssetManager* am;
 	AAsset*        asset;
+	AndroidLogger log;
 };
 
 #endif // RESOURCE_H_

@@ -5,6 +5,7 @@
 #include <Framework/AudioDefine.hpp>
 #include <Framework/AudioRenderer.hpp>
 #include <Framework/AudioResource.hpp>
+#include "AndroidLogger.h"
 
 using namespace Gao::Framework;
 
@@ -26,6 +27,9 @@ public:
 	virtual GaoVoid Pause(AudioResource* audio);
 
 	virtual GaoVoid SetVolume(AudioResource* audio, GaoReal32 volume);
+
+private:
+	AndroidLogger log;
 };
 
 #endif /* ANDROIDAUDIORENDERER_H_ */

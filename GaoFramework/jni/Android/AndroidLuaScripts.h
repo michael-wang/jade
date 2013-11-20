@@ -9,22 +9,22 @@
 #include <lua.h>
 #include <Framework/LuaFunction.hpp>
 #include <Android/AndroidApplication.h>
- #include <Android/AndroidAudioRenderer.h>
- #include <Android/AndroidAudioResource.h>
+#include <Android/AndroidAudioRenderer.h>
+#include <Android/AndroidAudioResource.h>
 #include <Android/AndroidGraphicsRenderer.h>
-#include <Android/AndroidLogger.h>
 #include <Android/GLTexture.h>
 #include <Android/JavaInterface.h>
+#include <Android/LuaLogger.h>
 #include <Android/Rectangle.h>
 #include <Android/TouchEvent.h>
 #include <jni.h>
 
 namespace AndroidLuaScripts {
 
-static const char TAG[] = "native::framework::AndroidLuaScripts";
-
 GaoVoid RegisterAndroidClasses(LuaState state) {
-	__android_log_print(ANDROID_LOG_INFO, TAG, "RegisterAndroidClasses");
+	AndroidLogger log ("native::framework::AndroidLuaScripts", false);
+	LOGD(log, "RegisterAndroidClasses")
+	
 	using namespace luabind;
 
 	module(state)
@@ -37,7 +37,7 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 
 	module(state)
 	[
-		class_<AndroidLogger, Gao::Framework::Logger>("AndroidLogger")
+		class_<LuaLogger, Gao::Framework::Logger>("LuaLogger")
 			.def(constructor<>())
 	];
 

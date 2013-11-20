@@ -18,7 +18,8 @@ public class GLTexture {
 
 	public static final int INVALID_TEXTURE_NAME = 0;
 	
-	private static final String TAG = "gltexture";
+	private static final String TAG = "java-gltexture";
+	private static final boolean DEBUG_LOG = false;
 	
 	/* texture coordinates:
 	 * (left, upper) ---> (right, upper)
@@ -41,11 +42,15 @@ public class GLTexture {
 	}
 	
 	public boolean Create(String fileName) {
-		Log.w(TAG, "Create:" + fileName);
+		if (DEBUG_LOG) {
+			Log.w(TAG, "Create:" + fileName);
+		}
 		
 		final int[] nameBuf = new int[1];
 		GLES20.glGenTextures(1, nameBuf, 0);
-		Log.w(TAG, "texture name:" + nameBuf[0]);
+		if (DEBUG_LOG) {
+			Log.w(TAG, "texture name:" + nameBuf[0]);
+		}
 		
 		if (nameBuf[0] == 0) {
 			final int error = GLES20.glGetError();
@@ -66,7 +71,9 @@ public class GLTexture {
 			this.name = INVALID_TEXTURE_NAME;
 			return false;
 		}
-		Log.w(TAG, "bmp w:" + bmp.getWidth() + ",h:" + bmp.getHeight());
+		if (DEBUG_LOG) {
+			Log.w(TAG, "bmp w:" + bmp.getWidth() + ",h:" + bmp.getHeight());
+		}
 		
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, name);
 		

@@ -8,15 +8,31 @@
 #ifndef ANDROIDLOGGER_H_
 #define ANDROIDLOGGER_H_
 
-#include <Framework/Logger.hpp>
+#include <Framework/DataType.hpp>
+#include <android/log.h>
 
 
-class AndroidLogger : public Gao::Framework::Logger {
+#define LOGD(logger, ...) if (logger.DO_LOG()) {__android_log_print(ANDROID_LOG_DEBUG, logger.TAG(), __VA_ARGS__);}
+#define LOGW(logger, ...) if (logger.DO_LOG()) {__android_log_print(ANDROID_LOG_WARN,  logger.TAG(), __VA_ARGS__);}
+#define LOGE(logger, ...) if (logger.DO_LOG()) {__android_log_print(ANDROID_LOG_ERROR, logger.TAG(), __VA_ARGS__);}
+
+class AndroidLogger {
 public:
-	AndroidLogger();
+	AndroidLogger(GaoConstCharPtr TAG);
+	AndroidLogger(GaoConstCharPtr TAG, GaoBool DO_LOG);
 	virtual ~AndroidLogger();
 
-	virtual GaoVoid Show(GaoConstCharPtr text);
+	GaoConstCharPtr TAG() {
+		return _TAG;
+	}
+
+	GaoBool DO_LOG() {
+		return _DO_LOG;
+	}
+
+protected:
+	GaoConstCharPtr _TAG;
+	GaoBool _DO_LOG;
 };
 
 #endif /* ANDROIDLOGGER_H_ */

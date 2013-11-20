@@ -1,8 +1,6 @@
 #include "Rectangle.h"
 #include "GLTexture.h"
-#include <android/log.h>
 
-static const char TAG[] = "native::framework::Rectangle";
 
 static const char JAVA_CLASS_PATH[]				= "com/studioirregular/gaoframework/Rectangle";
 static const char JAVA_CONSTRUCTOR[]			= "(FFFFFFFF)V";
@@ -19,7 +17,8 @@ Rectangle::Rectangle() :
 	left (0),
 	top (0),
 	right (0),
-	bottom (0) {
+	bottom (0),
+	log ("native::framework::Rectangle", false) {
 }
 
 Rectangle::Rectangle(GaoReal32 left, GaoReal32 top, GaoReal32 right, GaoReal32 bottom, 
@@ -28,7 +27,8 @@ Rectangle::Rectangle(GaoReal32 left, GaoReal32 top, GaoReal32 right, GaoReal32 b
 	left (left),
 	top (top),
 	right (right),
-	bottom (bottom) {
+	bottom (bottom),
+	log("native::framework::Rectangle") {
 }
 
 Rectangle::~Rectangle() {
@@ -58,16 +58,14 @@ GaoVoid Rectangle::SetTexture(Gao::Framework::Texture* texture) {
 		jobj.CallVoidMethod(JAVA_METHOD_SET_TEXTURE, JAVA_METHOD_SET_TEXTURE_DESC, 
 			javaGLTexture);
 	} else {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, 
-			"SetTexture: cannot find java reference for texture.");
+		LOGE(log, "SetTexture: cannot find java reference for texture.")
 	}
 }
 
 GaoBool Rectangle::IsHit(GaoReal32 x, GaoReal32 y) {
 
-	// __android_log_print(ANDROID_LOG_DEBUG, TAG, 
-	// 	"IsHit x:%f, y:%f, left:%f, top:%f, right:%f, bottom:%f", 
-	// 	x, y, left, top, right, bottom);
+	// LOGD(log, "IsHit x:%f, y:%f, left:%f, top:%f, right:%f, bottom:%f", 
+	// 	x, y, left, top, right, bottom)
 	
 	return (left <= x) && (x <= right) && (bottom <= y) && (y <= top);
 }

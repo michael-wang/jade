@@ -15,7 +15,7 @@ g_UpdateDelegate = function()
 	local SIZE = arrEvents:GetSize();
 
 	if SIZE > 0 then
-		g_Logger:Show("native::lua::g_UpdateDelegate #events:" .. SIZE);
+		--g_Logger:Show("native::lua::g_UpdateDelegate #events:" .. SIZE);
 
 		for i = 0, (SIZE - 1) do
 			local touch = arrEvents:GetAt(i);
@@ -68,7 +68,7 @@ function detect_hit(x, y)
 			g_Dragging.offsetX = rect:GetLeft() - glX;
 			g_Dragging.offsetY = rect:GetTop() - glY;
 
-			g_Logger:Show("native::lua::g_UpdateDelegate HIT left:" .. rect:GetLeft() .. ",glX:" .. glX .. ",offsetX:" .. g_Dragging.offsetX);
+			--g_Logger:Show("native::lua::g_UpdateDelegate HIT left:" .. rect:GetLeft() .. ",glX:" .. glX .. ",offsetX:" .. g_Dragging.offsetX);
 		end
 	end
 end
@@ -84,7 +84,7 @@ function drag_object(x, y)
 
 	local newLeft = glX + g_Dragging.offsetX;
 	local newTop = glY + g_Dragging.offsetY;
-	g_Logger:Show("native::lua::g_UpdateDelegate drag_object left:" .. g_Dragging.object:GetLeft() .. ",glX:" .. glX .. ",newLeft:" .. newLeft);
+	--g_Logger:Show("native::lua::g_UpdateDelegate drag_object left:" .. g_Dragging.object:GetLeft() .. ",glX:" .. glX .. ",newLeft:" .. newLeft);
 
 	g_Dragging.object:MoveTo(newLeft, newTop);
 end
@@ -92,7 +92,7 @@ end
 function release_hit(x, y)
 
 	if g_DraggingObject ~= nil then
-		g_Logger:Show("native::lua::g_UpdateDelegate TOUCH UP on rectangle.");
+		--g_Logger:Show("native::lua::g_UpdateDelegate TOUCH UP on rectangle.");
 		g_Dragging.object = nil;
 	end
 end

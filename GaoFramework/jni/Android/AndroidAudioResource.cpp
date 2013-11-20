@@ -1,9 +1,6 @@
 #include "AndroidAudioResource.h"
 #include "Java/JniEnv.h"
-#include <android/log.h>
 
-
-static const char TAG[] = "native::framework::AndroidAudioResource";
 
 static const char JAVA_CLASS_PATH[]				= "com/studioirregular/gaoframework/AudioResource";
 static const char JAVA_METHOD_CONSTRUCTOR_DESC[]= "(I)V";
@@ -18,14 +15,15 @@ static const char JAVA_METHOD_STOP_DESC[]		= "()V";
 
 
 AndroidAudioResource::AndroidAudioResource(AudioType type) :
-	jobj (JAVA_CLASS_PATH, JAVA_METHOD_CONSTRUCTOR_DESC, type) {
+	jobj (JAVA_CLASS_PATH, JAVA_METHOD_CONSTRUCTOR_DESC, type),
+	log ("native::framework::AndroidAudioResource", false) {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Constructor type:%d", type);
+	LOGD(log, "Constructor type:%d", type)
 }
 
 AndroidAudioResource::~AndroidAudioResource() {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Destructor");
+	LOGD(log, "Destructor")
 }
 
 GaoBool AndroidAudioResource::Create(AudioType type, GaoString& fileName, GaoBool loop) {
@@ -39,19 +37,19 @@ GaoBool AndroidAudioResource::Create(AudioType type, GaoString& fileName, GaoBoo
 }
 
 GaoVoid AndroidAudioResource::Play() {
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Play");
+	LOGD(log, "Play")
 
 	jobj.CallBooleanMethod(JAVA_METHOD_PLAY, JAVA_METHOD_PLAY_DESC);
 }
 
 GaoVoid AndroidAudioResource::Stop() {
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Stop");
+	LOGD(log, "Stop")
 
 	jobj.CallVoidMethod(JAVA_METHOD_STOP, JAVA_METHOD_STOP_DESC);
 }
 
 GaoVoid AndroidAudioResource::Pause() {
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, "Pause");
+	LOGD(log, "Pause")
 
 	jobj.CallVoidMethod(JAVA_METHOD_PAUSE, JAVA_METHOD_PAUSE_DESC);
 }

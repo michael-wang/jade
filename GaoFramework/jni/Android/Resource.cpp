@@ -2,9 +2,11 @@
 #include <GLES/gl.h>
 #include <android/asset_manager.h>
 
+
 Resource::Resource(AAssetManager* assetManager) :
 	am (assetManager),
-	asset (NULL) {
+	asset (NULL),
+    log ("native::framework::Resource", false) {
 }
 
 Resource::~Resource() {
@@ -13,8 +15,9 @@ Resource::~Resource() {
 }
 
 char* Resource::readAsTextFile(const char* filename) {
+
 	asset = AAssetManager_open(am, filename, AASSET_MODE_BUFFER);
-	__android_log_print(ANDROID_LOG_DEBUG, "Resource", "asset:%p", asset);
+	LOGD(log, "asset:%p", asset)
 	if (asset == NULL) {
 		return NULL;
 	}
@@ -22,13 +25,12 @@ char* Resource::readAsTextFile(const char* filename) {
 	const int FILE_LEN = AAsset_getLength(asset);
 	const int RESULT_SIZE = FILE_LEN + 1;
 	const int RESULT_LAST = RESULT_SIZE - 1;
-	__android_log_print(ANDROID_LOG_DEBUG, "Resource", "FILE_LEN:%d", FILE_LEN);
+	LOGD(log, "FILE_LEN:%d", FILE_LEN)
 	char* result = new char[RESULT_SIZE];
 
 	int readCount = AAsset_read(asset, result, FILE_LEN);
 	if (readCount != FILE_LEN) {
-		__android_log_print(ANDROID_LOG_ERROR, "Resource", "readCount:%d != FILE_LEN:%d",
-			readCount, FILE_LEN);
+		LOGE(log, "readCount:%d != FILE_LEN:%d", readCount, FILE_LEN)
 		return NULL;
 	}
 
@@ -43,7 +45,8 @@ char* Resource::readAsTextFile(const char* filename) {
 }
 
 unsigned char* Resource::loadPngImage(const char* path) {
-    __android_log_print(ANDROID_LOG_DEBUG, "Resource", "loadPngImage path:%s", path);
+
+    LOGD(log, "loadPngImage path:%s", path)
 
     png_byte lHeader[8];
     png_structp lPngPtr = NULL; png_infop lInfoPtr = NULL;
@@ -54,7 +57,7 @@ unsigned char* Resource::loadPngImage(const char* path) {
     // Opens and checks image signature (first 8 bytes).
     asset = AAssetManager_open(am, path, AASSET_MODE_UNKNOWN);
     if (asset == NULL) goto ERROR;
-    __android_log_print(ANDROID_LOG_DEBUG, "Resource", "Checking signature.");
+    LOGD(log, "Checking signature.")
     bufSize = sizeof(lHeader);
     lReadCount = AAsset_read(asset, lHeader, bufSize);
     if (lReadCount != bufSize) {
@@ -63,7 +66,7 @@ unsigned char* Resource::loadPngImage(const char* path) {
     if (png_sig_cmp(lHeader, 0, 8) != 0) goto ERROR;
 
     // Creates required structures.
-    __android_log_print(ANDROID_LOG_DEBUG, "Resource", "Creating required structures.");
+    LOGD(log, "Creating required structures.")
     lPngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
         NULL, NULL, NULL);
     if (!lPngPtr) goto ERROR;
@@ -84,7 +87,7 @@ unsigned char* Resource::loadPngImage(const char* path) {
     png_uint_32 lWidth, lHeight;
     png_get_IHDR(lPngPtr, lInfoPtr, &lWidth, &lHeight,
         &lDepth, &lColorType, NULL, NULL, NULL);
-    __android_log_print(ANDROID_LOG_DEBUG, "Resource", "png width:%d, height:%d.", lWidth, lHeight);
+    LOGD(log, "png width:%d, height:%d.", lWidth, lHeight)
 
     // Creates a full alpha channel if transparency is encoded as
     // an array of palette entries or a single transparent color.
@@ -150,7 +153,7 @@ unsigned char* Resource::loadPngImage(const char* path) {
     return lImageBuffer;
 
 ERROR:
-	__android_log_print(ANDROID_LOG_ERROR, "Resource", "Error while reading PNG file");
+	LOGE(log, "Error while reading PNG file")
 	if (asset != NULL) {
 		AAsset_close(asset);
 	}
@@ -164,7 +167,6 @@ ERROR:
 
 void Resource::callback_read(png_structp pStruct,
     png_bytep pData, png_size_t pSize) {
-	__android_log_print(ANDROID_LOG_DEBUG, "Resource", "callback_read");
 
     Resource* res = ((Resource*) png_get_io_ptr(pStruct));
     int32_t lReadCount = AAsset_read(res->asset, pData, pSize);

@@ -11,6 +11,7 @@
 #include <Framework/Application.hpp>
 #include <Framework/LuaScriptManager.hpp>
 #include <jni.h>
+#include "AndroidLogger.h"
 #include "Resource.h"
 
 
@@ -49,6 +50,7 @@ protected:
 	GaoString renderLuaName;
 
 	GaoBool running;
+	AndroidLogger log;
 };
 
 #endif /* ANDROIDAPPLICATION_H_ */

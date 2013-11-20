@@ -3,6 +3,7 @@
 #include <android/asset_manager_jni.h>
 #include <android/log.h>
 #include <Android/AndroidApplication.h>
+#include <Android/AndroidLogger.h>
 #include <Android/Java/JniEnv.h>
 #include <string>
 
@@ -11,6 +12,7 @@ static const char TAG[] = "native::gaoframework";
 
 static AndroidApplication* app;
 static JniEnv* jni;
+static AndroidLogger logger(TAG, false);
 
 // NOTICE: do not handle non-ascii code.
 static char* getJniString(JNIEnv* env, jstring jstr) {
@@ -37,7 +39,7 @@ static char* getJniString(JNIEnv* env, jstring jstr) {
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
   (JNIEnv *env, jobject obj, jstring jLuaCore, jstring jLuaUpdate, 
     jstring jLuaRender) {    
-    __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnCreate");
+    LOGD(logger, "ActivityOnCreate")
 
     app = new AndroidApplication();
     jni = new JniEnv();
@@ -59,7 +61,7 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnDestroy
   (JNIEnv *env, jobject obj) {
-    __android_log_print(ANDROID_LOG_INFO,TAG, "ActivityOnDestroy");
+    LOGD(logger, "ActivityOnDestroy")
 
     g_JniEnv->Set(env);
 
@@ -78,8 +80,7 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnSurfaceChanged
   (JNIEnv *env, jobject obj, jint width, jint height) {
-    __android_log_print(ANDROID_LOG_INFO, TAG, 
-      "RendererOnSurfaceChanged w:%d, h:%d", width, height);
+    LOGD(logger, "RendererOnSurfaceChanged w:%d, h:%d", width, height)
 
     g_JniEnv->Set(env);
 
@@ -111,7 +112,7 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnResume
   (JNIEnv *env, jobject obj) {
 
-    __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnResume");
+    LOGD(logger, "ActivityOnResume");
 
     g_JniEnv->Set(env);
 
@@ -128,7 +129,7 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnPause
   (JNIEnv *env, jobject obj) {
 
-    __android_log_print(ANDROID_LOG_INFO, TAG, "ActivityOnPause");
+    LOGD(logger, "ActivityOnPause");
     
     g_JniEnv->Set(env);
 

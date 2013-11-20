@@ -1,11 +1,9 @@
 #include "AndroidAudioRenderer.h"
 #include "AndroidAudioResource.h"
-#include <android/log.h>
 
 
-static const char TAG[] = "native::framework::AndroidAudioRenderer";
-
-AndroidAudioRenderer::AndroidAudioRenderer() {
+AndroidAudioRenderer::AndroidAudioRenderer() :
+	log ("native::framework::AndroidAudioRenderer", false) {
 }
 
 AndroidAudioRenderer::~AndroidAudioRenderer() {
@@ -14,16 +12,15 @@ AndroidAudioRenderer::~AndroidAudioRenderer() {
 AudioResource* AndroidAudioRenderer::CreateAudio(AudioType type, GaoString& fileName, 
 	GaoBool looping) {
 
-	__android_log_print(ANDROID_LOG_DEBUG, TAG, 
-		"CreateAudio type:%d, fileName:%s, looping:%d", type, fileName.c_str(), looping);
+	LOGD(log, "CreateAudio type:%d, fileName:%s, looping:%d", 
+		type, fileName.c_str(), looping)
 	
 	AndroidAudioResource* audio = new AndroidAudioResource(type);
 
 	bool success = audio->Create(type, fileName, looping);
 
 	if (!success) {
-		__android_log_print(ANDROID_LOG_ERROR, TAG, 
-			"CreateAudio failed to create audio file:%s.", fileName.c_str());
+		LOGE(log, "CreateAudio failed to create audio file:%s.", fileName.c_str())
 		return NULL;
 	}
 
