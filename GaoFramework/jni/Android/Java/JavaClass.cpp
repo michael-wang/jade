@@ -7,7 +7,7 @@ const char* JavaClass::CONSTRUCTOR_METHOD_NAME = "<init>";
 
 JavaClass::JavaClass(const char* path) :
 	CLASS_PATH (path),
-	log ("native::framework::JavaClass", false) {
+	log ("native::framework::JavaClass", true) {
 	
 	LOGD(log, "Constructor: for class path:%s", path)
 

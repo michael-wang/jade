@@ -6,7 +6,7 @@
 JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
 	clazz (g_JniEnv->FindClass(classPath)),
 	javaRef (NULL),
-	log ("native::framework::JavaObject", false) {
+	log ("native::framework::JavaObject", true) {
 	
 	LOGD(log, "JavaObject classPath:%s, constructor:%s", classPath, constructor)
 
@@ -33,7 +33,7 @@ JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
 JavaObject::JavaObject(const char* classPath) :
 	clazz (g_JniEnv->FindClass(classPath)),
 	javaRef (NULL),
-	log ("native::framework::JavaObject", false) {
+	log ("native::framework::JavaObject", true) {
 
 	LOGD(log, "Constructor classPath:%s", classPath)
 }

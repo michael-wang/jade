@@ -10,14 +10,6 @@ public class MainActivity extends AbsGameActivity {
 
 	private static final String TAG = "main-activity";
 	
-	protected String delegateUpdateLua() {
-		return "lua/DelegateUpdate.lua";
-	}
-	
-	protected String delegateRenderLua() {
-		return "lua/DelegateRender.lua";
-	}
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

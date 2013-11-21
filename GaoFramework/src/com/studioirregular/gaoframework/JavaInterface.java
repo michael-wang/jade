@@ -42,6 +42,14 @@ public class JavaInterface {
 		}
 	}
 	
+	public String GetAssetFileFolder() {
+		
+		if (context != null) {
+			return context.getFilesDir().getAbsolutePath();
+		}
+		return "";
+	}
+	
 	public String getLogFilePath() {
 		
 		File DOWNLOAD_FOLDER = Environment

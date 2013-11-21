@@ -11,6 +11,9 @@ static const char METHOD_NAME_GET_LOG_FILE_PATH[]      = "getLogFilePath";
 static const char METHOD_DESCRIPTOR_GET_LOG_FILE_PATH[]= "()Ljava/lang/String;";
 static const char METHOD_NAME_DRAW[]                   = "draw";
 static const char METHOD_DESCRIPTOR_DRAW[]             = "(Lcom/studioirregular/gaoframework/Rectangle;)V";
+static const char METHOD_NAME_GET_ASSET_FILE_FOLDER[]  = "GetAssetFileFolder";
+static const char METHOD_DESCRIPTOR_GET_ASSET_FILE_FOLDER[]= "()Ljava/lang/String;";
+
 
 JavaInterface::JavaInterface() :
 	jobj (JAVA_CLASS_PATH),
@@ -72,7 +75,7 @@ char* JavaInterface::GetLogFilePath() {
 	jstring jstrPath = (jstring)jobj.CallObjectMethod(METHOD_NAME_GET_LOG_FILE_PATH, 
 		METHOD_DESCRIPTOR_GET_LOG_FILE_PATH);
 	if (jstrPath == NULL) {
-		LOGE(log, "CallObjectMethod return NULL")
+		LOGE(log, "GetLogFilePath: CallObjectMethod return NULL")
 		return NULL;
 	}
 	const char* cstrPath = env->GetStringUTFChars(jstrPath, NULL);
@@ -80,6 +83,29 @@ char* JavaInterface::GetLogFilePath() {
 	char* result = new char[std::strlen(cstrPath) + 1];
 	std::strcpy(result, cstrPath);
 	LOGD(log, "GetLogFilePath path:%s", result)
+
+	env->ReleaseStringUTFChars(jstrPath, cstrPath);
+
+	return result;
+}
+
+char* JavaInterface::GetAssetFileFolder() {
+
+	LOGD(log, "GetAssetFileFolder")
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jstrPath = (jstring)jobj.CallObjectMethod(
+		METHOD_NAME_GET_ASSET_FILE_FOLDER, METHOD_DESCRIPTOR_GET_ASSET_FILE_FOLDER);
+	if (jstrPath == NULL) {
+		LOGE(log, "GetAssetFileFolder: CallObjectMethod return NULL")
+		return NULL;
+	}
+	const char* cstrPath = env->GetStringUTFChars(jstrPath, NULL);
+
+	char* result = new char[std::strlen(cstrPath) + 1];
+	std::strcpy(result, cstrPath);
+	LOGD(log, "GetAssetFileFolder path:%s", result)
 
 	env->ReleaseStringUTFChars(jstrPath, cstrPath);
 

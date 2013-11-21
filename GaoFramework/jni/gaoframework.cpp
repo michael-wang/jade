@@ -32,13 +32,10 @@ static char* getJniString(JNIEnv* env, jstring jstr) {
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
  * Method:    ActivityOnCreate
- *             Ljava/lang/String;
- *             Ljava/lang/String;
  *             Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *env, jobject obj, jstring jLuaCore, jstring jLuaUpdate, 
-    jstring jLuaRender) {    
+  (JNIEnv *env, jobject obj, jstring assetFolder) {    
     LOGD(logger, "ActivityOnCreate")
 
     app = new AndroidApplication();
@@ -46,10 +43,7 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
     g_JniEnv->Set(env);
 
-    app->Initialize(
-      getJniString(env, jLuaCore),
-      getJniString(env, jLuaUpdate),
-      getJniString(env, jLuaRender));
+    app->Initialize(getJniString(env, assetFolder));
 
     g_JniEnv->Set(NULL);
 }

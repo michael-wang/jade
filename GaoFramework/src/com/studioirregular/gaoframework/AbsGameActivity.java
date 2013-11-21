@@ -21,11 +21,6 @@ public abstract class AbsGameActivity extends Activity {
 	private static final String TAG = "abs-game-activity";
 	private static final boolean DEBUG_LOG = false;
 	
-	// provide your lua script (in string for now) to be called on update game
-	// logic.
-	protected abstract String delegateUpdateLua();
-	protected abstract String delegateRenderLua();
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,11 +45,7 @@ public abstract class AbsGameActivity extends Activity {
 		
 		SoundSystem.getInstance().open(AbsGameActivity.this);
 		
-		final File FILES_DIR = getFilesDir();
-		ActivityOnCreate(
-			buildPath(FILES_DIR, "lua/Core.lua"),
-			buildPath(FILES_DIR, delegateUpdateLua()),
-			buildPath(FILES_DIR, delegateRenderLua()));
+		ActivityOnCreate(JavaInterface.getInstance().GetAssetFileFolder());
 		
 		setContentView(R.layout.activity_main);
 		fpsTextView = (TextView)findViewById(R.id.textview);
@@ -131,7 +122,7 @@ public abstract class AbsGameActivity extends Activity {
 		
 		if (needCopy) {
 			
-			final File copyToPath = getFilesDir();
+			final File copyToPath = new File(JavaInterface.getInstance().GetAssetFileFolder());
 			
 			if (copyLuaToStorage(copyToPath)) {
 				setFilesCopiedToStorage(LUA_FILES_COPY_STATE);
@@ -220,8 +211,7 @@ public abstract class AbsGameActivity extends Activity {
 	};
 	private ShowFPS showFPS = new ShowFPS();
 	
-	private native void ActivityOnCreate(
-			String luaCore, String luaUpdate, String luaRender);
+	private native void ActivityOnCreate(String assetFolder);
 	private native void ActivityOnDestroy();
 	private native void ActivityOnPause();
 	private native void ActivityOnResume();

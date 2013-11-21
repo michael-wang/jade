@@ -23,7 +23,7 @@ public:
 	AndroidApplication();
 	virtual ~AndroidApplication();
 
-	GaoBool Initialize(char* coreLuaName, char* updateLuaName, char* renderLuaName);
+	GaoBool Initialize(char* assetPath);
 
 	GaoVoid Pause();
 	GaoVoid Resume();
@@ -45,9 +45,7 @@ protected:
 
 	GaoBool CallLua(GaoConstCharPtr func);
 
-	GaoString coreLuaName;
-	GaoString updateLuaName;
-	GaoString renderLuaName;
+	GaoString assetPath;
 
 	GaoBool running;
 	AndroidLogger log;
