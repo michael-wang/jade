@@ -22,11 +22,11 @@ public:
 	AndroidLogger(GaoConstCharPtr TAG, GaoBool DO_LOG);
 	virtual ~AndroidLogger();
 
-	GaoConstCharPtr TAG() {
+	GaoConstCharPtr TAG() const {
 		return _TAG;
 	}
 
-	GaoBool DO_LOG() {
+	GaoBool DO_LOG() const {
 		return _DO_LOG;
 	}
 

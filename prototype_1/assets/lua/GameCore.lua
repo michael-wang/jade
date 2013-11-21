@@ -12,11 +12,12 @@ GAME_FUNC_FILES =
 {	
     "GameLogic",
  --    "GameState",
-	"GameStage",
+	-- "GameStage",
 };
 
 GAME_DATA_FILES =
 {	
+    "GameGlobal",
 	"GamePuzzle",
     "GameObject",
 	-- "GameUI",
@@ -31,10 +32,10 @@ GAME_DATA_FILES =
 -------------------------------------------------------------------------
 function InitializeDelegate()
     -- Create essential managers
-    g_RenderManager = RoutineManager:Create("Render");
-    g_UpdateManager = RoutineManager:Create("Update");
-    g_TaskManager = TaskManager:Create();
-    g_UIManager = UIManager:Create();
+    -- g_RenderManager = RoutineManager:Create("Render");
+    -- g_UpdateManager = RoutineManager:Create("Update");
+    -- g_TaskManager = TaskManager:Create();
+    -- g_UIManager = UIManager:Create();
 
     -- Do game related initialization
     InitializeGame();
@@ -55,19 +56,27 @@ end
 
 -------------------------------------------------------------------------
 function UpdateDelegate()
-    g_TaskManager:Update();
-    g_UpdateManager:Execute();
+    -- g_TaskManager:Update();
+    -- g_UpdateManager:Execute();
     
-    StageManager:Update();
-    UIManager:Update();
+    -- StageManager:Update();
+    -- UIManager:Update();
+
+    for _, obj in pairs(objPool) do
+        obj:Update();
+    end
 end
 
 -------------------------------------------------------------------------
 function RenderDelegate()
-    g_RenderManager:Execute();
+    -- g_RenderManager:Execute();
     
-    StageManager:Render();
-    UIManager:Render();
+    -- StageManager:Render();
+    -- UIManager:Render();
+
+    for _, obj in pairs(objPool) do
+        obj:Render();
+    end
 end
 
 -------------------------------------------------------------------------

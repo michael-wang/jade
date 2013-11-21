@@ -31,7 +31,8 @@ public class MyGLRenderer implements Renderer {
 				0, 0, 0, 
 				0, 1, 0);
 		
-		RendererOnSurfaceChanged(width, height);
+		RendererOnSurfaceChanged(width, height, 
+				JavaInterface.getInstance().GetAssetFileFolder());
 	}
 	
 	@Override
@@ -65,7 +66,7 @@ public class MyGLRenderer implements Renderer {
 		rect.draw(mMVPMatrix);
 	}
 	
-	private native void RendererOnSurfaceChanged(int w, int h);
+	private native void RendererOnSurfaceChanged(int w, int h, String assetFolder);
 	private native void RendererOnDrawFrame();
 	
 	private final float[] mMVPMatrix = new float[16];

@@ -141,16 +141,13 @@ function InitializeLuaAndroid()
     else
 		-- NOTE: Must called before other scripts
         LoadScript(GAME_CORE_FILE, SCRIPT_FUNC_PATH);
-        g_Logger:Show("LoadScript GAME_CORE_FILE.");
 		-- LoadScriptList(PLAIN_DEVICE_SCRIPT_LIST, SCRIPT_DATA_PATH);
 
         InitializeAppDataDelegate();
         g_Logger:Show("InitializeAppDataDelegate done.");
         
         LoadScriptList(GAME_FUNC_FILES, SCRIPT_FUNC_PATH);
-        g_Logger:Show("LoadScriptList GAME_FUNC_FILES done.");
         LoadScriptList(GAME_DATA_FILES, SCRIPT_DATA_PATH);
-        g_Logger:Show("LoadScriptList GAME_DATA_FILES done.");
 	end
     
     -- Post-initialize
@@ -159,12 +156,12 @@ end
 
 -------------------------------------------------------------------------
 function PreInitialize()
-
 	g_JavaInterface = JavaInterface();
 
 	-- Create Logger
     g_Logger = LuaLogger();
     local logFilePath = g_JavaInterface:GetLogFilePath();
+    g_Logger:Show("native::lua::PreInitialize");
 	g_Logger:Create(logFilePath);
 
     -- Create Window
@@ -198,7 +195,7 @@ function PreInitialize()
 	end
     
     -- Create Timer
-    g_Timer = Timer();
+    g_Timer = AndroidTimer();
     g_Timer:Start();
 
 	return true;
@@ -206,7 +203,9 @@ end
 
 -------------------------------------------------------------------------
 function PostInitialize()
-    ShowMemoryUsage("Core");
+    g_Logger:Show("native::lua::PostInitialize");
+
+    -- ShowMemoryUsage("Core");
 
 	if (InitializeDelegate() ~= false) then        
 		g_AppIsRunning = true;
@@ -219,7 +218,7 @@ function PostInitialize()
     -- g_AppData:SetData("RandomSeed", seed);
     --log("RandomSeed: " .. seed);
     
-    ShowMemoryUsage("Game");
+    -- ShowMemoryUsage("Game");
     
     -- if (g_AppData:GetData("MWDebug")) then
     --     InitializeMWCounter();
@@ -234,6 +233,7 @@ end
 
 -------------------------------------------------------------------------
 function InitializeConfigAndroid()
+    g_Logger:Show("native::lua::InitializeConfigAndroid");
 	-- Determine app configuration
 	-- if (g_Window:GetAppConfig() ~= Window.CONFIG_DEBUG) then
 	-- 	APP_DEBUG_MODE = false;
@@ -376,6 +376,7 @@ end
 
 -------------------------------------------------------------------------
 function LoadScript(name, path)
+    g_Logger:Show("native::lua::LoadScript:" .. string.format("%s%s%s", path, name, SCRIPT_FILE_EXT));
     assert(name);
     assert(path);
     dofile(string.format("%s%s%s", path, name, SCRIPT_FILE_EXT));    

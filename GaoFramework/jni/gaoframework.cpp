@@ -38,14 +38,14 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
   (JNIEnv *env, jobject obj, jstring assetFolder) {    
     LOGD(logger, "ActivityOnCreate")
 
-    app = new AndroidApplication();
-    jni = new JniEnv();
+    // app = new AndroidApplication();
+    // jni = new JniEnv();
 
-    g_JniEnv->Set(env);
+    // g_JniEnv->Set(env);
 
-    app->Initialize(getJniString(env, assetFolder));
+    // app->Initialize(getJniString(env, assetFolder));
 
-    g_JniEnv->Set(NULL);
+    // g_JniEnv->Set(NULL);
 }
 
 /*
@@ -70,15 +70,24 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 /*
  * Class:     com_studioirregular_gaoframework_NativeInterface
  * Method:    RendererOnSurfaceChanged
- * Signature: (II)V
+ * Signature: (IILjava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnSurfaceChanged
-  (JNIEnv *env, jobject obj, jint width, jint height) {
+  (JNIEnv *env, jobject obj, jint width, jint height, jstring assetFolder) {
     LOGD(logger, "RendererOnSurfaceChanged w:%d, h:%d", width, height)
+
+    // g_JniEnv->Set(env);
+
+    // app->OnSurfaceChanged(width, height);
+
+    // g_JniEnv->Set(NULL);
+
+    app = new AndroidApplication();
+    jni = new JniEnv();
 
     g_JniEnv->Set(env);
 
-    app->OnSurfaceChanged(width, height);
+    app->Initialize(getJniString(env, assetFolder));
 
     g_JniEnv->Set(NULL);
 }
@@ -108,11 +117,13 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
     LOGD(logger, "ActivityOnResume");
 
-    g_JniEnv->Set(env);
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
 
-    app->Resume();
+        app->Resume();
 
-    g_JniEnv->Set(NULL);
+        jni->Set(NULL);
+    }
 }
 
 /*
@@ -125,9 +136,11 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
     LOGD(logger, "ActivityOnPause");
     
-    g_JniEnv->Set(env);
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
 
-    app->Pause();
+        app->Pause();
 
-    g_JniEnv->Set(NULL);
+        jni->Set(NULL);
+    }
 }

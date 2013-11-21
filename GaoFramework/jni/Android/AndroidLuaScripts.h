@@ -12,6 +12,7 @@
 #include <Android/AndroidAudioRenderer.h>
 #include <Android/AndroidAudioResource.h>
 #include <Android/AndroidGraphicsRenderer.h>
+ #include <Android/AndroidTimer.h>
 #include <Android/GLTexture.h>
 #include <Android/JavaInterface.h>
 #include <Android/LuaLogger.h>
@@ -40,6 +41,13 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 	[
 		class_<LuaLogger, Gao::Framework::Logger>("LuaLogger")
 			.def(constructor<>())
+	];
+
+	module(state)
+	[
+		class_<AndroidTimer, Gao::Framework::Timer>("AndroidTimer")
+			.def(constructor<>())
+			.def("Start", &AndroidTimer::Start)
 	];
 
 	module(state)

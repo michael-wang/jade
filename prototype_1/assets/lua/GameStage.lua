@@ -6,7 +6,7 @@
 GameStageTemplate
 {
     id = "MainEntry",
----[[	
+--[[	
     ui = "MainEntry",
 --]]	
 	OnEnter = function()
