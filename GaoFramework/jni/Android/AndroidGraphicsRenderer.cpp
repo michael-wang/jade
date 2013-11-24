@@ -5,8 +5,9 @@
  *      Author: michael
  */
 
-#include <Android/AndroidGraphicsRenderer.h>
 #include <Android/AndroidApplication.h>
+#include <Android/AndroidGraphicsRenderer.h>
+#include <Android/AndroidSprite.h>
 #include "JavaInterface.h"
 
 
@@ -43,6 +44,21 @@ Texture* AndroidGraphicsRenderer::CreateTexture(GaoString& fileName) {
 
 	LOGD(log, "CreateTexture texture:%p", texture)
 	return texture;
+}
+
+Sprite* AndroidGraphicsRenderer::CreateSprite(Transform* transform, 
+	Texture* texture) {
+	
+	LOGD(log, "CreateSprite transform:%p, texture:%p", transform, texture)
+
+	Sprite* sprite = new AndroidSprite();
+
+	if (!sprite->Create(transform, texture)) {
+		SAFE_DELETE(sprite);
+		LOGE(log, "CreateSprite: failed to create sprite.");
+	}
+
+	return sprite;
 }
 
 GaoVoid AndroidGraphicsRenderer::Draw(Rectangle* rect) {

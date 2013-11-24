@@ -23,14 +23,12 @@ public:
 	AndroidApplication();
 	virtual ~AndroidApplication();
 
-	GaoBool Initialize(char* assetPath);
+	GaoBool Initialize(char* assetPath, int width, int height);
 
 	GaoVoid Pause();
 	GaoVoid Resume();
 
 	GaoVoid RunOnePass();
-
-	GaoVoid OnSurfaceChanged(int width, int height);
 
 protected:
 	virtual GaoBool OnInitialize();
@@ -46,6 +44,7 @@ protected:
 	GaoBool CallLua(GaoConstCharPtr func);
 
 	GaoString assetPath;
+	int surfaceWidth, surfaceHeight;
 
 	GaoBool running;
 	AndroidLogger log;

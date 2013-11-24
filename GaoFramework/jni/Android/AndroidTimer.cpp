@@ -3,7 +3,7 @@
 
 
 AndroidTimer::AndroidTimer() :
-	log ("native::framework::AndroidTimer", true) {
+	log ("native::framework::AndroidTimer", false) {
 	LOGD(log, "Constructor");
 }
 

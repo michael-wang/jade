@@ -87,7 +87,7 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
 
     g_JniEnv->Set(env);
 
-    app->Initialize(getJniString(env, assetFolder));
+    app->Initialize(getJniString(env, assetFolder), width, height);
 
     g_JniEnv->Set(NULL);
 }

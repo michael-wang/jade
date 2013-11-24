@@ -92,17 +92,34 @@ g_GraphicsEngine = nil;
 g_AudioRenderer = nil;
 g_AudioEngine = nil;
 g_Timer = nil;
--- g_AppData = nil;
 g_AppIsRunning = false;
+
+g_AppData = 
+{
+	SetData = function (self, key, value)
+		self[key] = value;
+	end,
+
+	GetData = function (self, key)
+		return self[key];
+	end,
+
+	Dump = function (self)
+		g_Logger:Show("g_AddData:");
+		for k, _ in pairs(self) do
+			g_Logger:Show(k);
+		end
+	end,
+};
 
 
 
 --=======================================================================
--- Core routines (iPhone)
+-- Core routines (Android)
 --=======================================================================
 
 -------------------------------------------------------------------------
-function InitializeLuaAndroid()
+function InitializeLuaAndroid(width, height)
     
 	device = APP_DEVICE_ANDROID_PHONE;
 	-- PLAIN_DEVICE_SCRIPT_LIST = PLAIN_DEVICE_SCRIPT_POOL[device];
@@ -110,9 +127,10 @@ function InitializeLuaAndroid()
 	-- PREBUILD_DEVICE_SCRIPT_NAME = PREBUILD_DEVICE_SCRIPT_POOL[device];
 	-- assert(PREBUILD_DEVICE_SCRIPT_NAME);
 
-	-- if (useCompiledScript) then
-	-- 	APP_USE_COMPILED_SCRIPT = true;
-	-- end
+	APP_WIDTH = width;
+	APP_HEIGHT = height;
+	APP_UNIT_X = 1.0;
+	APP_UNIT_Y = 1.0;
     
     -- Pre-initialize
 	local preInitResult = PreInitialize();
@@ -156,13 +174,9 @@ end
 
 -------------------------------------------------------------------------
 function PreInitialize()
+	g_Logger = LuaLogger();
 	g_JavaInterface = JavaInterface();
-
-	-- Create Logger
-    g_Logger = LuaLogger();
-    local logFilePath = g_JavaInterface:GetLogFilePath();
-    g_Logger:Show("native::lua::PreInitialize");
-	g_Logger:Create(logFilePath);
+	g_Logger:Create(g_JavaInterface:GetLogFilePath());
 
     -- Create Window
 	-- g_Window = Window();
@@ -188,7 +202,7 @@ function PreInitialize()
 	if (APP_DEBUG_MODE) then
 		-- g_FontRenderer = GlyphFontRenderer();
 		-- g_FontRenderer:Create(APP_ASSET_PATH .. "/Asset/Font/Font.FontInfo", g_GraphicsEngine:CreateSprite("Font.png"));
-		log("FontRenderer creation done")
+		-- log("FontRenderer creation done")
 	else
 		log = function() end
 		logp = function() end
@@ -215,7 +229,7 @@ function PostInitialize()
 
     local seed = os.time();
     math.randomseed(seed);
-    -- g_AppData:SetData("RandomSeed", seed);
+    g_AppData:SetData("RandomSeed", seed);
     --log("RandomSeed: " .. seed);
     
     -- ShowMemoryUsage("Game");
@@ -263,24 +277,24 @@ function InitializeAppData()
 	-- 	g_Window:SetTitle(APP_TITLE);
 	-- end
     
- --    g_AppData:SetData("Width", APP_WIDTH);
- --    g_AppData:SetData("Height", APP_HEIGHT);
- --    g_AppData:SetData("UnitX", APP_UNIT_X);
- --    g_AppData:SetData("UnitY", APP_UNIT_Y);
+    g_AppData:SetData("Width", APP_WIDTH);
+    g_AppData:SetData("Height", APP_HEIGHT);
+    g_AppData:SetData("UnitX", APP_UNIT_X);
+    g_AppData:SetData("UnitY", APP_UNIT_Y);
     
- --    g_AppData:SetData("UseCompiledScript", APP_USE_COMPILED_SCRIPT);
- --    g_AppData:SetData("DebugMode", APP_DEBUG_MODE);
- --    g_AppData:SetData("ResourcePath", APP_ASSET_PATH);
- --    g_AppData:SetData("IsIpodPlaying", APP_IPOD_PLAYING);
+    g_AppData:SetData("UseCompiledScript", APP_USE_COMPILED_SCRIPT);
+    g_AppData:SetData("DebugMode", APP_DEBUG_MODE);
+    -- g_AppData:SetData("ResourcePath", APP_ASSET_PATH);
+    -- g_AppData:SetData("IsIpodPlaying", APP_IPOD_PLAYING);
 
- --    g_AppData:SetData("WorldTranslateX", 0);
- --    g_AppData:SetData("WorldTranslateY", 0);
+    g_AppData:SetData("WorldTranslateX", 0);
+    g_AppData:SetData("WorldTranslateY", 0);
 
-    --g_AppData:Dump();
+    -- g_AppData:Dump();
 end
 
 -------------------------------------------------------------------------
-function TerminateLuaIphone()
+function TerminateLuaAndroid()
 end
 
 -------------------------------------------------------------------------
@@ -326,8 +340,12 @@ end
 -- end
 
 -------------------------------------------------------------------------
-function Pause(onPause)
-	PauseDelegate(onPause);
+function OnResume()
+	PauseDelegate(false);
+end
+
+function OnPause()
+	PauseDelegate(true);
 end
 
 --=======================================================================

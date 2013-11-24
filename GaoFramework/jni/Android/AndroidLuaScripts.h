@@ -12,7 +12,8 @@
 #include <Android/AndroidAudioRenderer.h>
 #include <Android/AndroidAudioResource.h>
 #include <Android/AndroidGraphicsRenderer.h>
- #include <Android/AndroidTimer.h>
+#include <Android/AndroidSprite.h>
+#include <Android/AndroidTimer.h>
 #include <Android/GLTexture.h>
 #include <Android/JavaInterface.h>
 #include <Android/LuaLogger.h>
@@ -79,6 +80,12 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def("GetTop", &Rectangle::GetTop)
 			.def("GetRight", &Rectangle::GetRight)
 			.def("GetBottom", &Rectangle::GetBottom)
+	];
+
+	module(state)
+	[
+		class_<AndroidSprite, Gao::Framework::Sprite>("AndroidSprite")
+			.def(constructor<>())
 	];
 
 	module(state)

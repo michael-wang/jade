@@ -2,11 +2,12 @@
 #include "JniEnv.h"
 #include <stdarg.h>
 
+static const bool DO_LOG = false;
 
 JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
 	clazz (g_JniEnv->FindClass(classPath)),
 	javaRef (NULL),
-	log ("native::framework::JavaObject", true) {
+	log ("native::framework::JavaObject", DO_LOG) {
 	
 	LOGD(log, "JavaObject classPath:%s, constructor:%s", classPath, constructor)
 
@@ -33,7 +34,7 @@ JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
 JavaObject::JavaObject(const char* classPath) :
 	clazz (g_JniEnv->FindClass(classPath)),
 	javaRef (NULL),
-	log ("native::framework::JavaObject", true) {
+	log ("native::framework::JavaObject", DO_LOG) {
 
 	LOGD(log, "Constructor classPath:%s", classPath)
 }

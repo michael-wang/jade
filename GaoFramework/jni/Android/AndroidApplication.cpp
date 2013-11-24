@@ -22,7 +22,7 @@ static const char SCRIPT_ROUTINE_RENDER[] = "RenderMain";
 static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
 static const char SCRIPT_ROUTINE_ONPAUSE[] = "OnPause";
 static const char SCRIPT_ROUTINE_ONRESUME[]= "OnResume";
-static const char SCRIPT_ROUTINE_ONTERMINATE[]= "OnTerminate";
+static const char SCRIPT_ROUTINE_ONTERMINATE[]= "TerminateLuaAndroid";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
@@ -30,7 +30,9 @@ AndroidApplication* AndroidApplication::Singleton = NULL;
 AndroidApplication::AndroidApplication() :
 	luaManager (new LuaScriptManager()),
 	running (TRUE),
-	log ("native::framework::AndroidApplication", true) {
+	log ("native::framework::AndroidApplication", false),
+	surfaceWidth (0),
+	surfaceHeight (0) {
 
 	LOGD(log, "Constructor")
 
@@ -44,16 +46,18 @@ AndroidApplication::~AndroidApplication() {
 	SAFE_DELETE(luaManager);
 }
 
-GaoBool AndroidApplication::Initialize(char* asset) {
+GaoBool AndroidApplication::Initialize(char* asset, int width, int height) {
 
 	if (asset == NULL) {
 		LOGE(log, "Initialize: invalid argument asset: NULL")
 		return FALSE;
 	}
 
-	LOGD(log, "Initialize asset:%s", asset)
+	LOGD(log, "Initialize asset:%s, width:%d, height:%d", asset, width, height)
 
 	assetPath = asset;
+	surfaceWidth = width;
+	surfaceHeight = height;
 
 	return OnInitialize();
 }
@@ -98,20 +102,16 @@ GaoBool AndroidApplication::OnInitialize() {
 		return FALSE;
 	}
 
-	// LuaState L = luaManager->GetLuaState();
-	// if (luaL_loadfile(L, coreLuaName.c_str()) != 0) {
-	// 	__android_log_print(ANDROID_LOG_ERROR, TAG, "FAILED to luaL_loadfile, msg:%s", luaL_checkstring(L, lua_gettop(L)));
-	// } else {
-	// 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "SUCCESS to luaL_loadfile(%s)", coreLuaName.c_str());
-	// }
-
-	// if (lua_pcall(L, 0, LUA_MULTRET, 0) != 0) {
-	// 	__android_log_print(ANDROID_LOG_ERROR, TAG, "FAILED to lua_pcall, msg:%s", luaL_checkstring(L, lua_gettop(L)));
-	// } else {
-	// 	__android_log_print(ANDROID_LOG_DEBUG, TAG, "SUCCESS to lua_pcall");
-	// }
-
-	CallLua(SCRIPT_ROUTINE_INIT);
+	if (!luaManager->GetFunction(SCRIPT_ROUTINE_INIT)) {
+		LOGE(log, "Cannot find lua function: %s", SCRIPT_ROUTINE_INIT)
+		return false;
+	}
+	luaManager->PushValue(surfaceWidth);
+	luaManager->PushValue(surfaceHeight);
+	LOGD(log, "before call function: %s", SCRIPT_ROUTINE_INIT);
+	if (!luaManager->CallFunction()) {
+		LOGE(log, "Failed to run lua function: %s", SCRIPT_ROUTINE_INIT);
+	}
 
 	return TRUE;
 }
@@ -121,21 +121,6 @@ GaoVoid AndroidApplication::OnTerminate() {
 	LOGD(log, "OnTerminate")
 
 	CallLua(SCRIPT_ROUTINE_ONTERMINATE);
-}
-
-GaoVoid AndroidApplication::OnSurfaceChanged(int width, int height) {
-	LOGD(log, "OnSurfaceChanged w:%d, h:%d", width, height)
-
-	// if (!luaManager->GetFunction(SCRIPT_ROUTINE_SURFACE_CHANGED)) {
-	// 	LOGE(log, "failed to get lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED)
-	// }
-
-	// luaManager->PushValue(width);
-	// luaManager->PushValue(height);
-
-	// if (!luaManager->CallFunction()) {
-	// 	LOGE(log, "failed to run lua function: %s", SCRIPT_ROUTINE_SURFACE_CHANGED)
-	// }
 }
 
 GaoVoid AndroidApplication::OnUpdate() {
@@ -161,8 +146,7 @@ GaoBool AndroidApplication::IsAppRunning() {
 }
 
 GaoBool AndroidApplication::CallLua(GaoConstCharPtr func) {
-//	__android_log_print(ANDROID_LOG_DEBUG, TAG, "CallLua: %s", func);
-	LOGD(log, "CallLua: %s", func);
+	// LOGD(log, "CallLua: %s", func);
 
 	if (!luaManager->CallFunction(func)) {
 		LOGE(log, "failed to run lua function: %s", func)

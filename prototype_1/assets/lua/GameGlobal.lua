@@ -9,4 +9,8 @@ UI_POS = { 50, 50 };
 
 ANIM_OBJECT = "hammer_on";
 
+ALPHA_QUARTER = 0.25;
+
+COLOR_ORANGE = {1.0, 0.647, 0}
+
 log("GameGlobal.lua Loaded!")

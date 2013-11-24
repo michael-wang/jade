@@ -9,6 +9,7 @@
 #define ANDROIDGRAPHICSRENDERER_H_
 
 #include <Framework/GraphicsRenderer.hpp>
+#include <Framework/Sprite.hpp>
 #include <Android/GLTexture.h>
 #include <Android/Rectangle.h>
 #include "AndroidLogger.h"
@@ -22,6 +23,9 @@ public:
 	GaoVoid OnSurfaceChanged(GaoInt32 width, GaoInt32 height);
 
 	virtual Gao::Framework::Texture* CreateTexture(GaoString& fileName);
+
+	virtual Gao::Framework::Sprite* CreateSprite(Gao::Framework::Transform* transform, 
+		Gao::Framework::Texture* texture);
 
 	GaoVoid Draw(Rectangle* rect);
 

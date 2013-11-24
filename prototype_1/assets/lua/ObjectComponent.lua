@@ -1172,7 +1172,7 @@ RectangleBoundComponent =
 		if (self.m_Debug or g_AppData:GetData("GOShowPick")) then
 			local x = (self.m_TransformGC:GetTranslateX() + self.m_OffsetX) * APP_UNIT_X;
 			local y = (self.m_TransformGC:GetTranslateY() + self.m_OffsetY) * APP_UNIT_Y;
-			DrawRectangle(x, y, self.m_SizeX, self.m_SizeY, COLOR_PINK[1], COLOR_PINK[2], COLOR_PINK[3], ALPHA_HALF);
+			g_GraphicsEngine:DrawRectangle(x, y, self.m_SizeX, self.m_SizeY, COLOR_PINK[1], COLOR_PINK[2], COLOR_PINK[3], ALPHA_HALF);
 		end
 	end,
 };
@@ -1466,7 +1466,7 @@ CircleBoundComponent =
 		if (self.m_Debug or g_AppData:GetData("GOShowPick")) then
 	        local x = self.m_TransformGC:GetTranslateX() + self.m_CenterX + self.m_OffsetX;
 			local y = self.m_TransformGC:GetTranslateY() + self.m_CenterY + self.m_OffsetY;
-			DrawCircle(x, y, self.m_Radius, COLOR_ORANGE[1], COLOR_ORANGE[2], COLOR_ORANGE[3], ALPHA_QUARTER);
+			g_GraphicsEngine:DrawCircle(x, y, self.m_Radius, COLOR_ORANGE[1], COLOR_ORANGE[2], COLOR_ORANGE[3], ALPHA_QUARTER);
 		end
 	end,
     ---------------------------------------------------------------
@@ -1577,13 +1577,13 @@ RectangleShapeComponent =
         local x, y = self.m_TransformGC:GetTranslate();
 		x = x + self.m_OffsetX;
 		y = y + self.m_OffsetY;
-        DrawRectangle(x, y, self.m_Width, self.m_Height, self.m_ColorR, self.m_ColorG, self.m_ColorB, self.m_Alpha);
+        g_GraphicsEngine:DrawRectangle(x, y, self.m_Width, self.m_Height, self.m_ColorR, self.m_ColorG, self.m_ColorB, self.m_Alpha);
 	end,
     ---------------------------------------------------------------
     OnRenderOffset = function(self, x, y)
         local ox = self.m_TransformGC:GetTranslateX() + x;
         local oy = self.m_TransformGC:GetTranslateY() + y;
-        DrawRectangle(ox, oy, self.m_Width, self.m_Height, self.m_ColorR, self.m_ColorG, self.m_ColorB, self.m_Alpha);
+        g_GraphicsEngine:DrawRectangle(ox, oy, self.m_Width, self.m_Height, self.m_ColorR, self.m_ColorG, self.m_ColorB, self.m_Alpha);
 	end,
 };
 
@@ -1672,13 +1672,13 @@ CircleShapeComponent =
     ---------------------------------------------------------------
     OnRender = function(self)
         local x, y = self.m_TransformGC:GetTranslate();
-        DrawCircle(x, y, self.m_Radius, self.m_ColorR, self.m_ColorG, self.m_ColorB, self.m_Alpha);
+        g_GraphicsEngine:DrawCircle(x, y, self.m_Radius, self.m_ColorR, self.m_ColorG, self.m_ColorB, self.m_Alpha);
 	end,
     ---------------------------------------------------------------
     OnRenderOffset = function(self, x, y)
         local ox = self.m_TransformGC:GetTranslateX() + x;
         local oy = self.m_TransformGC:GetTranslateY() + y;
-        DrawCircle(ox, oy, self.m_Radius, self.m_ColorR, self.m_ColorG, self.m_ColorB, self.m_Alpha);
+        g_GraphicsEngine:DrawCircle(ox, oy, self.m_Radius, self.m_ColorR, self.m_ColorG, self.m_ColorB, self.m_Alpha);
 	end,
 };
 
@@ -1799,9 +1799,9 @@ CompositeShapeComponent =
         for _, shape in ipairs(self.m_Shapes) do
             if (shape[10]) then
                 if (shape[1] == COMPOSITESHAPE_RECT) then
-                    DrawRectangle(x + shape[8], y + shape[9], shape[2], shape[3], shape[4], shape[5], shape[6], shape[7]);
+                    g_GraphicsEngine:DrawRectangle(x + shape[8], y + shape[9], shape[2], shape[3], shape[4], shape[5], shape[6], shape[7]);
                 else  -- COMPOSITESHAPE_CIRCLE
-                    DrawCircle(x + shape[8], y + shape[9], shape[2], shape[4], shape[5], shape[6], shape[7]);
+                    g_GraphicsEngine:DrawCircle(x + shape[8], y + shape[9], shape[2], shape[4], shape[5], shape[6], shape[7]);
                 end
             end
         end
@@ -1815,9 +1815,9 @@ CompositeShapeComponent =
         for _, shape in ipairs(self.m_Shapes) do
             if (shape[10]) then
                 if (shape[1] == COMPOSITESHAPE_RECT) then
-                    DrawIndieRectangle(x + shape[8], y + shape[9], shape[2], shape[3], shape[4], shape[5], shape[6], shape[7]);
+                    g_GraphicsEngine:DrawIndieRectangle(x + shape[8], y + shape[9], shape[2], shape[3], shape[4], shape[5], shape[6], shape[7]);
                 else  -- COMPOSITESHAPE_CIRCLE
-                    DrawIndieCircle(x + shape[8], y + shape[9], shape[2], shape[4], shape[5], shape[6], shape[7]);
+                    g_GraphicsEngine:DrawIndieCircle(x + shape[8], y + shape[9], shape[2], shape[4], shape[5], shape[6], shape[7]);
                 end
             end
         end
