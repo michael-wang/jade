@@ -8,6 +8,7 @@
 #include <Android/AndroidApplication.h>
 #include <Android/AndroidGraphicsRenderer.h>
 #include <Android/AndroidSprite.h>
+#include <Android/AndroidTransform.h>
 #include "JavaInterface.h"
 
 
@@ -29,6 +30,13 @@ GaoVoid AndroidGraphicsRenderer::OnSurfaceChanged(GaoInt32 w, GaoInt32 h) {
 
 	width = w;
 	height = h;
+}
+
+Transform* AndroidGraphicsRenderer::CreateTransform() {
+
+	LOGD(log, "CreateTransform")
+
+	return new AndroidTransform();
 }
 
 Texture* AndroidGraphicsRenderer::CreateTexture(GaoString& fileName) {
@@ -71,4 +79,18 @@ GaoVoid AndroidGraphicsRenderer::Draw(Rectangle* rect) {
 	}
 
 	ji->Draw(rect);
+}
+
+GaoVoid AndroidGraphicsRenderer::DrawRectangle(
+	GaoInt16 left, GaoInt16 top, GaoInt16 right, GaoInt16 bottom, 
+	GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha) {
+
+	LOGD(log, "DrawRectangle left:%d, top:%d, right:%d, bottom:%d", 
+		left, top, right, bottom)
+	
+	JavaInterface* ji = JavaInterface::GetSingletonPointer();
+
+	if (ji != NULL) {
+		ji->DrawRectangle(left, top, right, bottom, red, green, blue, alpha);
+	}
 }

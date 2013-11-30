@@ -14,6 +14,7 @@
 #include <Android/AndroidGraphicsRenderer.h>
 #include <Android/AndroidSprite.h>
 #include <Android/AndroidTimer.h>
+#include <Android/AndroidTransform.h>
 #include <Android/GLTexture.h>
 #include <Android/JavaInterface.h>
 #include <Android/LuaLogger.h>
@@ -118,6 +119,12 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 	[
 		class_<AndroidAudioResource, Gao::Framework::AudioResource>("AndroidAudioResource")
 			.def(constructor<AudioType>())
+	];
+
+	module(state)
+	[
+		class_<AndroidTransform, Gao::Framework::Transform>("AndroidTransform")
+			.def(constructor<>())
 	];
 }
 

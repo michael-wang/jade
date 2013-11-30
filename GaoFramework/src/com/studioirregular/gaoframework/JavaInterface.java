@@ -42,6 +42,22 @@ public class JavaInterface {
 		}
 	}
 	
+	public void DrawRectangle(int left, int top, int right, int bottom, 
+			float red, float green, float blue, float alpha) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "DrawRectangle left:" + left + ",top:" + top + 
+					",right:" + right + ",bottom:" + bottom + 
+					",red:" + red + ",green:" + green + ",blue:" + blue + 
+					",alpha:" + alpha);
+		}
+		
+		if (renderer != null) {
+			renderer.draw(
+					new Rectangle(left, top, right, bottom, red, green, blue, alpha));
+		}
+	}
+	
 	public String GetAssetFileFolder() {
 		
 		if (context != null) {
@@ -105,6 +121,10 @@ public class JavaInterface {
 	
 	/* package */ Context getContext() {
 		return context;
+	}
+	
+	/* package */ MyGLRenderer getRenderer() {
+		return renderer;
 	}
 	
 	private Context context;

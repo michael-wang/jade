@@ -116,6 +116,15 @@ public:
 		return env->CallObjectMethodV(obj, method, args);
 	}
 
+	jfloat CallFloatMethod(jobject obj, jmethodID method, va_list args) {
+
+		if (env == NULL) {
+			return NULL;
+		}
+
+		return env->CallFloatMethodV(obj, method, args);
+	}
+
 private:
 	// class path maps to java class pointer.
 	typedef std::map<std::string, JavaClass*> ClassMap;

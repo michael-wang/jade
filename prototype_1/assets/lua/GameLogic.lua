@@ -37,6 +37,7 @@ function InitializeGame()
     objPool[6]["SpriteGroup"]:SetOffset(2, 0, 50);
     objPool[6]["SpriteGroup"]:SetOffset(3, 0, 100);
     objPool[6]["SpriteGroup"]:SetOffset(4, 0, 150);
+
 --[[
     g_RenderManager:AddGroupObjects(objPool, ROUTINE_GROUP_01);
     g_UpdateManager:AddGroupObjects(objPool, ROUTINE_GROUP_01);
@@ -59,10 +60,10 @@ end
 
 -------------------------------------------------------------------------
 function UpdateRectPosition(x, y)
-    for i = 1, 3 do
-        if (objPool[i]["Bound"]:IsPicked(x, y)) then
-            objPool[i]["Transform"]:ModifyTranslate(x - g_TouchBeganPos[1], y - g_TouchBeganPos[2]);
-            return;
-        end
-    end
+    -- for i = 1, 3 do
+    --     if (objPool[i]["Bound"]:IsPicked(x, y)) then
+    --         objPool[i]["Transform"]:ModifyTranslate(x - g_TouchBeganPos[1], y - g_TouchBeganPos[2]);
+    --         return;
+    --     end
+    -- end
 end

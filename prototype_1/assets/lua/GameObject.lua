@@ -25,7 +25,7 @@ GameObjectTemplate
 			debug = true,
 		},
 --]]
----[[
+--[[
 		{
 			class = "CircleBound",
             autoSize = true,

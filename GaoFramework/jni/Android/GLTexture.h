@@ -18,7 +18,7 @@ public:
 	virtual GaoBool Reload();
 	virtual GaoVoid Unload();
 
-	jobject GetJavaReference() {
+	jobject GetJavaRef() {
 		return jobj.GetJavaRef();
 	}
 

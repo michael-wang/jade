@@ -20,7 +20,10 @@ public:
 	char* GetAssetFileFolder();
 
 	void Draw(Rectangle* rect);
-	
+	void DrawRectangle(
+		GaoInt16 left, GaoInt16 top, GaoInt16 right, GaoInt16 bottom, 
+		float red, float green, float blue, float alpha);
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;

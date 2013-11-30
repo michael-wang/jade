@@ -42,9 +42,12 @@ public class GLTexture {
 	}
 	
 	public boolean Create(String fileName) {
+		
 		if (DEBUG_LOG) {
 			Log.w(TAG, "Create:" + fileName);
 		}
+		
+		filename = fileName;
 		
 		final int[] nameBuf = new int[1];
 		GLES20.glGenTextures(1, nameBuf, 0);
@@ -80,6 +83,9 @@ public class GLTexture {
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
 		
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+		
 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
 		final int error = GLES20.glGetError();
 		if (error != GLES20.GL_NO_ERROR) {
@@ -109,6 +115,12 @@ public class GLTexture {
 	 */
 	public void draw(int shaderProgram, float lower, float left, float upper,
 			float right) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "draw filename:" + filename);
+			Log.d(TAG, "lower:" + lower + ",left:" + left + ",upper:" + upper + ",right:" + right);
+		}
+		
 		textureHandle = GLES20.glGetUniformLocation(shaderProgram, "u_Texture");
 		checkIfNoGLError("glGetUniformLocation");
 		coordinateHandle = GLES20.glGetAttribLocation(shaderProgram, "a_TexCoordinate");
@@ -170,4 +182,7 @@ public class GLTexture {
 	protected int textureHandle;
 	protected int coordinateHandle;
 	private FloatBuffer textureCoordinates;
+	
+	// for debug
+	private String filename;
 }

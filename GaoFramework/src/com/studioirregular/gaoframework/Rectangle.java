@@ -59,25 +59,24 @@ public class Rectangle {
 		    "varying vec2 v_TexCoordinate;" +
 		    "uniform sampler2D u_Texture;" +
 		    "void main() {" +
-		    "  gl_FragColor = texture2D(u_Texture,v_TexCoordinate);" +
+		    "  gl_FragColor = vColor + texture2D(u_Texture,v_TexCoordinate);" +
 		    "}";
 	
 	private static int program = 0;
 	
-	private float[] coordsValues;
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer drawListBuffer;
 
 	private static final int VERTEXT_COUNT = 4;
 	private static final int COORDS_PER_VERTEX = 3;
 	private static final int BYTES_PER_VERTEX = 4;
+	private static final int DRAW_ORDER_VERTEX_COUNT = 6;
 	private static final int BYTES_OF_SHORT = 2;
 	
 	private int positionHandle;
 	private int colorHandle;
 	private int MVPMatrixHandle;
 	
-	private final short drawOrder[] = { 0, 1, 2, 0, 2, 3 };
 	private final int vertexStride = COORDS_PER_VERTEX * BYTES_PER_VERTEX;
 	
 	private static final int COLOR_ELEMENTS = 4;
@@ -95,10 +94,15 @@ public class Rectangle {
 		setBound(left, top, right, bottom);
 		setColor(red, green, blue, alpha);
 		
-		ByteBuffer dlb = ByteBuffer.allocateDirect(drawOrder.length * BYTES_OF_SHORT);
+		ByteBuffer dlb = ByteBuffer.allocateDirect(DRAW_ORDER_VERTEX_COUNT * BYTES_OF_SHORT);
 		dlb.order(ByteOrder.nativeOrder());
 		drawListBuffer = dlb.asShortBuffer();
-		drawListBuffer.put(drawOrder);
+		drawListBuffer.put(0, (short)0);
+		drawListBuffer.put(1, (short)1);
+		drawListBuffer.put(2, (short)2);
+		drawListBuffer.put(3, (short)0);
+		drawListBuffer.put(4, (short)2);
+		drawListBuffer.put(5, (short)3);
 		drawListBuffer.position(0);
 		
 		int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
@@ -128,21 +132,18 @@ public class Rectangle {
 				+ ",bottom:" + bottom);
 		}
 		
-		if (coordsValues == null) {
-			coordsValues = new float[VERTEXT_COUNT * COORDS_PER_VERTEX];
-		}
+		FloatBuffer buf = ByteBuffer
+				.allocateDirect(VERTEXT_COUNT * COORDS_PER_VERTEX * BYTES_PER_VERTEX)
+				.order(ByteOrder.nativeOrder())
+				.asFloatBuffer();
 		
-		float[] coords = coordsValues;
-		coords[0] = left;  coords[1] = top;    coords[2] = 0.0f;
-		coords[3] = left;  coords[4] = bottom; coords[5] = 0.0f;
-		coords[6] = right; coords[7] = bottom; coords[8] = 0.0f;
-		coords[9] = right; coords[10] = top;   coords[11] = 0.0f;
+		buf.put(0, left).put(  1,  top).put(   2, 0);
+		buf.put(3, left).put(  4,  bottom).put(5, 0);
+		buf.put(6, right).put( 7,  bottom).put(8, 0);
+		buf.put(9, right).put(10,  top).put(  11, 0);
+		buf.position(0);
 		
-		ByteBuffer bb = ByteBuffer.allocateDirect(coords.length * BYTES_PER_VERTEX);
-		bb.order(ByteOrder.nativeOrder());
-		vertexBuffer = bb.asFloatBuffer();
-		vertexBuffer.put(coords);
-		vertexBuffer.position(0);
+		vertexBuffer = buf;
 	}
 	
 	public void setColor(float red, float green, float blue, float alpha) {
@@ -162,6 +163,10 @@ public class Rectangle {
 	}
 	
 	public void draw(float[] mvpMatrix) {
+		if (DEBUG_LOG) {
+			Util.log(TAG, "draw: mvpMatrix:", mvpMatrix, 4, 4);
+		}
+		
 		GLES20.glUseProgram(program);
 		
 		positionHandle = GLES20.glGetAttribLocation(program, "vPosition");
@@ -184,7 +189,7 @@ public class Rectangle {
 	    
 	    GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, mvpMatrix, 0);
 	    
-	    GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length,
+	    GLES20.glDrawElements(GLES20.GL_TRIANGLES, DRAW_ORDER_VERTEX_COUNT,
 	    		GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
 	    
 	    GLES20.glDisableVertexAttribArray(positionHandle);

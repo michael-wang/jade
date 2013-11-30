@@ -61,7 +61,7 @@ void JavaObject::SetJavaRef(jobject ref) {
 	}
 }
 
-void JavaObject::CallVoidMethod(const char* name, const char* descriptor, ...) {
+void JavaObject::CallVoidMethod(const char* name, const char* descriptor, ...) const {
 	
 	LOGD(log, "CallVoidMethod name:%s, descriptor:%s", name, descriptor)
 
@@ -77,7 +77,7 @@ void JavaObject::CallVoidMethod(const char* name, const char* descriptor, ...) {
 	va_end(args);
 }
 
-bool JavaObject::CallBooleanMethod(const char* name, const char* descriptor, ...) {
+bool JavaObject::CallBooleanMethod(const char* name, const char* descriptor, ...) const {
 
 	LOGD(log, "CallBooleanMethod name:%s, descriptor:%s", name, descriptor)
 
@@ -96,7 +96,8 @@ bool JavaObject::CallBooleanMethod(const char* name, const char* descriptor, ...
 	return result;
 }
 
-jobject JavaObject::CallObjectMethod(const char* name, const char* descriptor, ...) {
+jobject JavaObject::CallObjectMethod(const char* name, 
+	const char* descriptor, ...) const {
 	
 	LOGD(log, "CallObjectMethod name:%s, descriptor:%s", name, descriptor)
 
@@ -110,6 +111,25 @@ jobject JavaObject::CallObjectMethod(const char* name, const char* descriptor, .
 	va_list args;
 	va_start(args, descriptor);
 	jobject result = g_JniEnv->CallObjectMethod(javaRef, method, args);
+	va_end(args);
+
+	return result;
+}
+
+jfloat JavaObject::CallFloatMethod(const char* name, const char* descriptor, ...) const {
+
+	LOGD(log, "CallFloatMethod name:%s, descriptor:%s", name, descriptor)
+
+	jmethodID method = clazz->GetMethodID(name, descriptor);
+	if (method == NULL) {
+		LOGE(log, "CallObjectMethod cannot find method with name:%s, descriptor:%s", 
+			name, descriptor)
+		return NULL;
+	}
+
+	va_list args;
+	va_start(args, descriptor);
+	jfloat result = g_JniEnv->CallFloatMethod(javaRef, method, args);
 	va_end(args);
 
 	return result;

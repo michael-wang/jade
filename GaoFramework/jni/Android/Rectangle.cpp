@@ -53,7 +53,7 @@ GaoVoid Rectangle::SetColor(GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoR
 GaoVoid Rectangle::SetTexture(Gao::Framework::Texture* texture) {
 
 	GLTexture* gltexture = dynamic_cast<GLTexture*>(texture);
-	jobject javaGLTexture = gltexture->GetJavaReference();
+	jobject javaGLTexture = gltexture->GetJavaRef();
 	if (javaGLTexture != NULL) {
 		jobj.CallVoidMethod(JAVA_METHOD_SET_TEXTURE, JAVA_METHOD_SET_TEXTURE_DESC, 
 			javaGLTexture);

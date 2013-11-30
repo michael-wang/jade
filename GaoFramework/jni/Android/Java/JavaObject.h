@@ -28,9 +28,10 @@ public:
 		return clazz;
 	}
 
-	void CallVoidMethod(const char* name, const char* descriptor, ...);
-	bool CallBooleanMethod(const char* name, const char* descriptor, ...);
-	jobject CallObjectMethod(const char* name, const char* descriptor, ...);
+	void CallVoidMethod(const char* name, const char* descriptor, ...) const;
+	bool CallBooleanMethod(const char* name, const char* descriptor, ...) const;
+	jobject CallObjectMethod(const char* name, const char* descriptor, ...) const;
+	jfloat CallFloatMethod(const char* name, const char* descriptor, ...) const;
 
 private:
 	JavaClass* const clazz;

@@ -115,3 +115,11 @@ char* JavaInterface::GetAssetFileFolder() {
 void JavaInterface::Draw(Rectangle* rect) {
 	jobj.CallVoidMethod(METHOD_NAME_DRAW, METHOD_DESCRIPTOR_DRAW, rect->GetJavaRef());
 }
+
+void JavaInterface::DrawRectangle(
+	GaoInt16 left, GaoInt16 top, GaoInt16 right, GaoInt16 bottom, 
+	float red, float green, float blue, float alpha) {
+	
+	jobj.CallVoidMethod("DrawRectangle", "(IIIIFFFF)V", 
+		left, top, right, bottom, red, green, blue, alpha);
+}

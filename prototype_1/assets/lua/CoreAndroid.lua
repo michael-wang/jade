@@ -129,12 +129,12 @@ function InitializeLuaAndroid(width, height)
 
 	APP_WIDTH = width;
 	APP_HEIGHT = height;
-	APP_UNIT_X = 1.0;
-	APP_UNIT_Y = 1.0;
+	APP_UNIT_X = width / APP_BASE_X;
+	APP_UNIT_Y = height / APP_BASE_Y;
     
     -- Pre-initialize
 	local preInitResult = PreInitialize();
-    g_Logger:Show("PreInitialize done.");
+	g_Logger:Show("PreInitialize done. APP_UNIT_X:" .. APP_UNIT_X .. ",APP_UNIT_Y:" .. APP_UNIT_Y);
     assert(preInitResult, "App PreInitialize Failed");
 	
 	-- NOTE: Only plain scripts need to load CORE SCRIPTS

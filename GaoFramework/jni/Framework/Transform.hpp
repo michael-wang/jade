@@ -34,43 +34,43 @@ namespace Gao
             // Translation
             //==========================================================
 
-            inline GaoVoid SetTranslate(GaoReal32 x, GaoReal32 y);
+            inline virtual GaoVoid SetTranslate(GaoReal32 x, GaoReal32 y);
 
-            inline GaoVoid SetTranslate(Vector2D& coord);
+            inline virtual GaoVoid SetTranslate(Vector2D& coord);
 
-            inline GaoVoid ModifyTranslate(GaoReal32 x, GaoReal32 y);
+            inline virtual GaoVoid ModifyTranslate(GaoReal32 x, GaoReal32 y);
 
-            inline GaoVoid ModifyTranslate(Vector2D& coord);
+            inline virtual GaoVoid ModifyTranslate(Vector2D& coord);
 
-            inline GaoReal32 GetTranslateX() const;
+            inline virtual GaoReal32 GetTranslateX() const;
 
-            inline GaoReal32 GetTranslateY() const;
+            inline virtual GaoReal32 GetTranslateY() const;
 
             //==========================================================
             // Rotation
             //==========================================================
 
-            inline GaoVoid SetRotateByRadian(GaoReal32 radian);
+            inline virtual GaoVoid SetRotateByRadian(GaoReal32 radian);
 
-            inline GaoVoid SetRotateByDegree(GaoUInt32 degree);
+            inline virtual GaoVoid SetRotateByDegree(GaoUInt32 degree);
 
-            inline GaoVoid ModifyRotateByRadian(GaoReal32 radian);
+            inline virtual GaoVoid ModifyRotateByRadian(GaoReal32 radian);
             
-            inline GaoVoid ModifyRotateByDegree(GaoUInt32 degree);
+            inline virtual GaoVoid ModifyRotateByDegree(GaoUInt32 degree);
 
-            inline GaoReal32 GetRotateByRadian() const;
+            inline virtual GaoReal32 GetRotateByRadian() const;
 
-            inline GaoReal32 GetRotateByDegree() const;
+            inline virtual GaoReal32 GetRotateByDegree() const;
 
             //==========================================================
             // Scale
             //==========================================================
             
-            inline GaoVoid SetScale(GaoReal32 scale);
+            inline virtual GaoVoid SetScale(GaoReal32 scale);
 
-            inline GaoVoid ModifyScale(GaoReal32 scale);
+            inline virtual GaoVoid ModifyScale(GaoReal32 scale);
 
-            inline GaoReal32 GetScale() const;
+            inline virtual GaoReal32 GetScale() const;
 
 //            inline GaoBool IsRotatedOrScaled() const;
             

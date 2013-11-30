@@ -12,7 +12,7 @@ GAME_FUNC_FILES =
 {	
     "GameLogic",
  --    "GameState",
-	-- "GameStage",
+	"GameStage",
 };
 
 GAME_DATA_FILES =
@@ -55,12 +55,22 @@ function InitializeAppDataDelegate()
 end
 
 -------------------------------------------------------------------------
+bootstrap = false;
 function UpdateDelegate()
     -- g_TaskManager:Update();
     -- g_UpdateManager:Execute();
     
     -- StageManager:Update();
     -- UIManager:Update();
+
+    local arrEvents = g_JavaInterface:GetTouchEvents();
+    local SIZE = arrEvents:GetSize();
+    if SIZE > 0 then
+        for i = 0, (SIZE - 1) do
+            local touch = arrEvents:GetAt(i);
+            ProcessTouch(touch);
+        end
+    end
 
     for _, obj in pairs(objPool) do
         obj:Update();
@@ -74,9 +84,12 @@ function RenderDelegate()
     -- StageManager:Render();
     -- UIManager:Render();
 
+    -- g_GraphicsEngine:DrawRectangle(0, 0, 256, -256, 0.63671875, 0.76953125, 0.22265625, 1.0);
+
     for _, obj in pairs(objPool) do
         obj:Render();
     end
+
 end
 
 -------------------------------------------------------------------------
@@ -89,22 +102,56 @@ end
 
 -------------------------------------------------------------------------
 function TouchBegan(x, y)
-    if (not UIManager:TouchBegan(x, y)) then
-        StageManager:TouchBegan(x, y);
-    end
+    -- if (not UIManager:TouchBegan(x, y)) then
+    --     StageManager:TouchBegan(x, y);
+    -- end
+
+    g_TouchBeganPos[1] = x;
+    g_TouchBeganPos[2] = y;
+    
+    objPool[4]["Transform"]:SetTranslate(x, y);
+    objPool[4]["Sprite"]:Animate();
+
+    objPool[6]["SpriteGroup"]:SetOffset(1, 0, 0);
+    objPool[6]["SpriteGroup"]:SetOffset(2, 50, 0);
+    objPool[6]["SpriteGroup"]:SetOffset(3, 100, 0);
+    objPool[6]["SpriteGroup"]:SetOffset(4, 150, 0);
 end
 
 -------------------------------------------------------------------------
 function TouchMoved(x, y)
-    StageManager:TouchMoved(x, y);
-    UIManager:TouchMoved(x, y);
+    -- StageManager:TouchMoved(x, y);
+    -- UIManager:TouchMoved(x, y);
+
+    UpdateRectPosition(x, y);
+    
+    g_TouchBeganPos[1] = x;
+    g_TouchBeganPos[2] = y;
 end
 
 -------------------------------------------------------------------------
 function TouchEnded(x, y)
-    if (not UIManager:TouchEnded(x, y)) then
-        StageManager:TouchEnded(x, y);
-    end
+    -- if (not UIManager:TouchEnded(x, y)) then
+    --     StageManager:TouchEnded(x, y);
+    -- end
 end
 
+function ProcessTouch(touch)
+    local x = touch:GetX();
+    local y = touch:GetY();
 
+    if touch:IS_ACTION_DOWN() then
+
+        TouchBegan(x, y);
+
+    elseif touch:IS_ACTION_MOVE() then
+
+        TouchMoved(x, y);
+
+    elseif touch:IS_ACTION_UP() then
+
+        TouchEnded(x, y);
+
+    else
+    end
+end
