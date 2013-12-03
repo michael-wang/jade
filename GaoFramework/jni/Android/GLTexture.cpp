@@ -30,8 +30,13 @@ GaoBool GLTexture::Create(GaoString& fileName) {
 }
 
 GaoBool GLTexture::Reload() {
-	return FALSE;
+	LOGD(log, "Reload")
+
+	return jobj.CallBooleanMethod("Reload", "()Z");
 }
 
 GaoVoid GLTexture::Unload() {
+	LOGD(log, "Unload")
+
+	jobj.CallVoidMethod("Unload", "()V");
 }

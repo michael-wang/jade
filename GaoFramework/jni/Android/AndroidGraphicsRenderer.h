@@ -25,11 +25,24 @@ public:
 
 	virtual Gao::Framework::Transform* CreateTransform();
 
+    /**
+     * Texture APIs.
+     */
 	virtual Gao::Framework::Texture* CreateTexture(GaoString& fileName);
 
+	virtual GaoBool ReloadTexture(Gao::Framework::Texture* texture);
+
+	virtual GaoVoid UnloadTexture(Gao::Framework::Texture* texture);
+
+    /**
+     * Sprite APIs.
+     */
 	virtual Gao::Framework::Sprite* CreateSprite(Gao::Framework::Transform* transform, 
 		Gao::Framework::Texture* texture);
 
+    /**
+     * Drawing APIs.
+     */
 	GaoVoid Draw(Rectangle* rect);
 
 	virtual GaoVoid DrawRectangle(GaoInt16 startX, GaoInt16 startY, GaoInt16 endX, GaoInt16 endY, 

@@ -97,7 +97,25 @@ public class GLTexture {
 		return true;
 	}
 	
-	public void unload() {
+	public boolean Reload() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Reload:" + filename);
+		}
+		
+		if (filename == null) {
+			return false;
+		}
+		
+		return Create(filename);
+	}
+	
+	public void Unload() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Unload:" + filename);
+		}
+		
 		if (name != INVALID_TEXTURE_NAME) {
 			IntBuffer nameBuf = IntBuffer.allocate(1);
 			nameBuf.position(0);
@@ -116,10 +134,10 @@ public class GLTexture {
 	public void draw(int shaderProgram, float lower, float left, float upper,
 			float right) {
 		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "draw filename:" + filename);
-			Log.d(TAG, "lower:" + lower + ",left:" + left + ",upper:" + upper + ",right:" + right);
-		}
+//		if (DEBUG_LOG) {
+//			Log.d(TAG, "draw filename:" + filename);
+//			Log.d(TAG, "lower:" + lower + ",left:" + left + ",upper:" + upper + ",right:" + right);
+//		}
 		
 		textureHandle = GLES20.glGetUniformLocation(shaderProgram, "u_Texture");
 		checkIfNoGLError("glGetUniformLocation");
@@ -178,11 +196,9 @@ public class GLTexture {
 	}
 	
 	protected int name;
+	private String filename;	// need this to reload texture.
 	
 	protected int textureHandle;
 	protected int coordinateHandle;
 	private FloatBuffer textureCoordinates;
-	
-	// for debug
-	private String filename;
 }

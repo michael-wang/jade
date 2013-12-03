@@ -54,6 +54,28 @@ Texture* AndroidGraphicsRenderer::CreateTexture(GaoString& fileName) {
 	return texture;
 }
 
+GaoBool AndroidGraphicsRenderer::ReloadTexture(Texture* texture) {
+	LOGD(log, "ReloadTexture")
+
+	GaoBool result = false;
+
+	GLTexture* gltex = dynamic_cast<GLTexture*>(texture);
+	if (gltex != NULL) {
+		result = gltex->Reload();
+	}
+
+	return result;
+}
+
+GaoVoid AndroidGraphicsRenderer::UnloadTexture(Texture* texture) {
+	LOGD(log, "UnloadTexture")
+
+	GLTexture* glt = dynamic_cast<GLTexture*>(texture);
+	if (glt != NULL) {
+		glt->Unload();
+	}
+}
+
 Sprite* AndroidGraphicsRenderer::CreateSprite(Transform* transform, 
 	Texture* texture) {
 	
