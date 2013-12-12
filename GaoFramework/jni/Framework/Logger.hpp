@@ -30,7 +30,7 @@ namespace Gao
 
 			GaoBool Create();
 
-            GaoBool Create(GaoString& fileName);
+            virtual GaoBool Create(GaoString& fileName);
 
             GaoBool Create(GaoConstCharPtr fileName);
 
