@@ -15,7 +15,7 @@ import android.util.Log;
 public class AssetHelper {
 
 	private static final String TAG = "java-AssetHelper";
-	private static final boolean DEBUG_LOG = false;
+	private static final boolean DEBUG_LOG = true;
 	
 	public String getFileContent(Context context, String filename) {
 		
@@ -48,54 +48,81 @@ public class AssetHelper {
 	
 	// Asset files are in APK which cannot be use by native code as regular file.
 	// A temporary solution is to move asset files into storage.
+	// This function copy files from
+	//   "asset://fromAssetFolder/*"
+	// to
+	//   "toFolder/fromAssetFolder/*"
+	// Recursively.
 	public void copyAssetsToStorage(AssetManager am, String fromAssetFolder,
-			File toPath) throws IOException {
+			File toFolder) throws IOException {
 		if (DEBUG_LOG) {
 			Log.d(TAG, "copyAssetsToStorage fromAssetFolder:" + fromAssetFolder
-					+ ", toPath:" + toPath.getAbsolutePath());
+					+ ",toFolder:" + toFolder.getAbsolutePath());
 		}
 		
-		File toFolder = new File(toPath, fromAssetFolder);
-		toFolder.mkdir();
+		File from = new File(fromAssetFolder);
+		File to = new File(toFolder, fromAssetFolder);
 		
-		final String[] files = am.list(fromAssetFolder);
-		if (files == null) {
-			return;
+		copyFolder(am, from, to);
+	}
+	
+	private void copyFolder(AssetManager am, File from, File to) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "copyFolder from:" + from.getAbsolutePath() + ",to:"
+					+ to.getAbsolutePath());
 		}
 		
-		for (final String fileName : files) {
-			if (DEBUG_LOG) {
-				Log.d(TAG, "try to copy asset file:" + fileName);
+		String[] assetList = listFilesUnderFolder(am, from);
+		final boolean isFolder = assetList != null && (assetList.length > 0);
+		
+		if (isFolder) {
+			if (!to.exists()) {
+				to.mkdir();
 			}
 			
-			final String from = fromAssetFolder + File.separator + fileName;
-			File to = new File(toFolder, fileName);
-			copyFile(am, from, to);
+			for (String asset : assetList) {
+				File nextFrom = new File(from, asset);
+				File nextTo = new File(to, asset);
+				
+				copyFolder(am, nextFrom, nextTo);
+			}
+		} else {
+			try {
+				copyFile(am, from, to);
+			} catch (IOException e) {
+				if (DEBUG_LOG) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
-	private void copyFile(AssetManager am, String assetFile,
-			File toFile) throws IOException {
+	private String[] listFilesUnderFolder(AssetManager am, File absolutePath) {
 		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "copyfile assetFile:" + assetFile + ",toFile:"
-				+ toFile.getAbsolutePath());
+		final String relativePath = absolutePath.getAbsolutePath().substring(1);
+		try {
+			return am.list(relativePath);
+		} catch (IOException e) {
+			if (DEBUG_LOG) {
+				e.printStackTrace();
+			}
 		}
-
-		InputStream is = am.open(assetFile, AssetManager.ACCESS_BUFFER);
-		copy(is, toFile);
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "#" + toFile.getName() + ":" + toFile.length());
-		}
+		return new String[0];
 	}
 	
-	private void copy(InputStream is, File to) throws IOException {
+	private void copyFile(AssetManager am, File from, File to) throws IOException {
 		
-		if (!to.exists()) {
-			to.createNewFile();
+		if (DEBUG_LOG) {
+			Log.d(TAG, "copyFile from:" + from.getAbsolutePath() + ",to:" + to.getAbsolutePath());
 		}
 		
+//		if (!to.exists()) {
+//			to.createNewFile();
+//		}
+		
+		final String relativePath = from.getAbsolutePath().substring(1);
+		InputStream is = am.open(relativePath, AssetManager.ACCESS_BUFFER);
 		OutputStream os = null;
 		
 		try {

@@ -14,7 +14,8 @@
 
 using namespace Gao::Framework;
 
-static const char CORE_SCRIPT[]         = "/lua/CoreAndroid.lua";
+static const char INIT_LOGGER_SCRIPT[]  = "/LuaScript/Core/init_logger.lua";
+static const char CORE_SCRIPT[]         = "/LuaScript/Core/Core.lua";
 static const char SCRIPT_ROUTINE_INIT[] = "InitializeLuaAndroid";
 static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
 static const char SCRIPT_ROUTINE_UPDATE[] = "UpdateMain";
@@ -22,7 +23,7 @@ static const char SCRIPT_ROUTINE_RENDER[] = "RenderMain";
 static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
 static const char SCRIPT_ROUTINE_ONPAUSE[] = "OnPause";
 static const char SCRIPT_ROUTINE_ONRESUME[]= "OnResume";
-static const char SCRIPT_ROUTINE_ONTERMINATE[]= "TerminateLuaAndroid";
+static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
@@ -94,6 +95,11 @@ GaoBool AndroidApplication::OnInitialize() {
 
 	AndroidLuaScripts::RegisterAndroidClasses(luaManager->GetLuaState());
 
+	std::string luaScript(assetPath);
+	luaScript += INIT_LOGGER_SCRIPT;
+	LOGD(log, "luaScript:%s", luaScript.c_str());
+	luaManager->RunFromFullPathFile(luaScript);
+
 	std::string core(assetPath);
 	core += CORE_SCRIPT;
 	LOGD(log, "core:%s", core.c_str());
@@ -108,6 +114,7 @@ GaoBool AndroidApplication::OnInitialize() {
 	}
 	luaManager->PushValue(surfaceWidth);
 	luaManager->PushValue(surfaceHeight);
+	luaManager->PushValue(assetPath);
 	LOGD(log, "before call function: %s", SCRIPT_ROUTINE_INIT);
 	if (!luaManager->CallFunction()) {
 		LOGE(log, "Failed to run lua function: %s", SCRIPT_ROUTINE_INIT);
@@ -134,11 +141,11 @@ GaoVoid AndroidApplication::OnRender() {
 GaoVoid AndroidApplication::OnPause(GaoBool onPause) {
 	LOGD(log, "OnPause %d", onPause)
 
-	if (onPause) {
-		CallLua(SCRIPT_ROUTINE_ONPAUSE);
-	} else {
-		CallLua(SCRIPT_ROUTINE_ONRESUME);
-	}
+	// if (onPause) {
+	// 	CallLua(SCRIPT_ROUTINE_ONPAUSE);
+	// } else {
+	// 	CallLua(SCRIPT_ROUTINE_ONRESUME);
+	// }
 }
 
 GaoBool AndroidApplication::IsAppRunning() {

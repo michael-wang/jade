@@ -16,6 +16,7 @@
 #include <Android/AndroidTimer.h>
 #include <Android/AndroidTransform.h>
 #include <Android/GLTexture.h>
+#include <Android/GlyphFontRenderer.h>
 #include <Android/JavaInterface.h>
 #include <Android/LuaLogger.h>
 #include <Android/Rectangle.h>
@@ -125,6 +126,14 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 	[
 		class_<AndroidTransform, Gao::Framework::Transform>("AndroidTransform")
 			.def(constructor<>())
+	];
+
+	module(state)
+	[
+		class_<GlyphFontRenderer>("GlyphFontRenderer")
+			.def(constructor<>())
+			.def("Create", &GlyphFontRenderer::Create)
+			.def("Draw", &GlyphFontRenderer::Draw)
 	];
 }
 

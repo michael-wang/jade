@@ -10,7 +10,7 @@ class LuaLogger : public Gao::Framework::Logger {
 
 public:
 	LuaLogger() :
-		log ("native::framework::LuaLogger", true) {
+		log ("native::framework::LuaLogger", false) {
 		LOGD(log, "Constructor")
 	}
 

@@ -21,6 +21,8 @@ public abstract class AbsGameActivity extends Activity {
 	private static final String TAG = "abs-game-activity";
 	private static final boolean DEBUG_LOG = false;
 	
+	private static final String LUA_SCRIPT_ASSET = "LuaScript";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -93,7 +95,7 @@ public abstract class AbsGameActivity extends Activity {
 		AssetHelper helper = new AssetHelper();
 		
 		try {
-			helper.copyAssetsToStorage(getAssets(), "lua", to);
+			helper.copyAssetsToStorage(getAssets(), LUA_SCRIPT_ASSET, to);
 		} catch (IOException e) {
 			//e.printStackTrace();
 			Log.e(TAG, "copyLuaToStorage exception:" + e);
