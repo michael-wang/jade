@@ -21,8 +21,7 @@ static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
 static const char SCRIPT_ROUTINE_UPDATE[] = "UpdateMain";
 static const char SCRIPT_ROUTINE_RENDER[] = "RenderMain";
 static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
-static const char SCRIPT_ROUTINE_ONPAUSE[] = "OnPause";
-static const char SCRIPT_ROUTINE_ONRESUME[]= "OnResume";
+static const char SCRIPT_ROUTINE_PAUSE[]  = "Pause";
 static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
@@ -141,11 +140,13 @@ GaoVoid AndroidApplication::OnRender() {
 GaoVoid AndroidApplication::OnPause(GaoBool onPause) {
 	LOGD(log, "OnPause %d", onPause)
 
-	// if (onPause) {
-	// 	CallLua(SCRIPT_ROUTINE_ONPAUSE);
-	// } else {
-	// 	CallLua(SCRIPT_ROUTINE_ONRESUME);
-	// }
+	if (!luaManager->GetFunction(SCRIPT_ROUTINE_PAUSE)) {
+		LOGE(log, "Cannot find lua function:%s", SCRIPT_ROUTINE_PAUSE)
+		return;
+	}
+
+	luaManager->PushValue(onPause);
+	luaManager->CallFunction();
 }
 
 GaoBool AndroidApplication::IsAppRunning() {
