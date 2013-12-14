@@ -356,6 +356,39 @@ function UpdateMain()
 	g_Timer:Update();
 
 	UpdateDelegate();
+
+    -- try to handle touch events here.
+    local arrEvents = g_JavaInterface:GetTouchEvents();
+    local SIZE = arrEvents:GetSize();
+    if SIZE > 0 then
+        for i = 0, (SIZE - 1) do
+            local touch = arrEvents:GetAt(i);
+            ProcessTouch(touch);
+        end
+    end
+end
+
+function ProcessTouch(touch)
+
+    -- g_Logger:Show("process_touch event:" .. touch:GetAction() .. ",x:" .. touch:GetX() .. ",y:" .. touch:GetY());
+
+    if touch:IS_ACTION_DOWN() then
+
+        TouchBegan(touch:GetX(), touch:GetY());
+
+    elseif touch:IS_ACTION_MOVE() then
+
+        TouchMoved(touch:GetX(), touch:GetY());
+
+    elseif touch:IS_ACTION_UP() then
+
+        TouchEnded(touch:GetX(), touch:GetY());
+
+    else
+
+        g_Logger:Show("process_touch: unknown touch event:" .. touch:GetAction());
+
+    end
 end
 
 -------------------------------------------------------------------------
