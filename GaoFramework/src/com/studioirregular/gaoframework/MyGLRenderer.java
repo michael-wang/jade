@@ -27,7 +27,6 @@ public class MyGLRenderer implements Renderer {
 		
 		Matrix.orthoM(mMVPMatrix, 0, 
 				0, width, height, 0, 1, -1);
-		Util.fixTranslation(mMVPMatrix);
 //		Util.log(TAG, "mProjMatrix", mProjMatrix, 4, 4);
 		
 		RendererOnSurfaceChanged(width, height, 

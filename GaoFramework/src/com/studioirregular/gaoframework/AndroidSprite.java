@@ -30,7 +30,7 @@ public class AndroidSprite {
 			"varying vec2 v_TexCoordinate;" +
 			"void main() {" +
 			"  v_TexCoordinate = a_TexCoordinate;" +
-			"  gl_Position = vPosition * uMVPMatrix;" +
+			"  gl_Position = uMVPMatrix * vPosition;" +
 			"}";
 	
 	private static final String FRAGMENT_SHADER_CODE =
@@ -148,18 +148,16 @@ public class AndroidSprite {
 	    GLES20.glUniform4fv(colorHandle, 1, color, 0);
 	    
 	    Matrix.setIdentityM(modelMatrix, 0);
+	    Matrix.scaleM(modelMatrix, 0, transform.GetScale(), transform.GetScale(), 1);
+	    Matrix.rotateM(modelMatrix, 0, transform.GetRotateByRadian(), 0, 0, 1);
 	    Matrix.translateM(modelMatrix, 0, transform.GetTranslateX() + halfWidth, 
 	    		transform.GetTranslateY() + halfHeight, 0);
-	    Matrix.rotateM(modelMatrix, 0, transform.GetRotateByRadian(), 0, 0, 1);
-	    Matrix.scaleM(modelMatrix, 0, transform.GetScale(), transform.GetScale(), 1);
-	    Util.fixTranslation(modelMatrix);
 	    if (DEBUG_LOG) Util.log(TAG, "model", modelMatrix, 4, 4);
 	    
 	    float[] mvp = JavaInterface.getInstance().getRenderer().GetMVPMatrix();
-//	    if (DEBUG_LOG) Util.log(TAG, "view-projection", mvp, 4, 4);
+	    if (DEBUG_LOG) Util.log(TAG, "view-projection", mvp, 4, 4);
 	    
-	    Matrix.multiplyMM(mMVPMatrix, 0, modelMatrix, 0, mvp, 0);
-	    
+	    Matrix.multiplyMM(mMVPMatrix, 0, mvp, 0, modelMatrix, 0);
 	    if (DEBUG_LOG) Util.log(TAG, "MVP:", mMVPMatrix, 4, 4);
 	    
 	    MVPMatrixHandle = GLES20.glGetUniformLocation(shaderProgram, "uMVPMatrix");

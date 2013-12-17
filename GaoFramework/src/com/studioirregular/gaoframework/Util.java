@@ -33,24 +33,4 @@ public class Util {
 		
 		Log.d(tag, msg.toString());
 	}
-	
-	/*
-	 * Switch row with column of a matrix.
-	 * When I GLES20.glUniformMatrix4fv with this matrix:
-	 *   [ 1 0 0 dx ]
-	 *   [ 0 1 0 dy ]
-	 *   [ 0 0 1 0  ]
-	 *   [ 0 0 0 1  ]
-	 * There is a rotation effect. 
-	 * And I found if I swith row/column of dx, dy, it works:
-	 *   [ 1  0 0 0 ]
-	 *   [ 0  1 0 0 ]
-	 *   [ 0  0 1 0 ]
-	 *   [dx dy 0 1 ]
-	 * TODO: do the math to find out what happened.
-	 */
-	public static void fixTranslation(float[] matrix) {
-	    float tmp = matrix[3]; matrix[3] = matrix[12]; matrix[12] = tmp;
-	    tmp = matrix[7]; matrix[7] = matrix[13]; matrix[13] = tmp;
-	}
 }
