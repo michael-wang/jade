@@ -428,7 +428,8 @@ PuzzleSpriteComponent =
 	end,
     ---------------------------------------------------------------
     SetTranslate = function(self, x, y)
-        y = g_AppData:GetData("Height") - self.m_PuzzleImage.size[2] - y;
+        -- Waiting for HalfLucifer to review why this function is called, comment out for now.
+        -- y = g_AppData:GetData("Height") - self.m_PuzzleImage.size[2] - y;
         self.m_Sprite:SetTransform(x, y);
     end,
     ---------------------------------------------------------------

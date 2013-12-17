@@ -42,7 +42,18 @@ function InitializeGame()
     g_UpdateManager:AddGroupObjects(objPool, ROUTINE_GROUP_01);
 --]]
     g_RenderManager:AddObject(objPool[1], ROUTINE_GROUP_01);
+    g_RenderManager:AddObject(objPool[2], ROUTINE_GROUP_01);
+    g_RenderManager:AddObject(objPool[3], ROUTINE_GROUP_01);
+    g_RenderManager:AddObject(objPool[4], ROUTINE_GROUP_01);
+    g_RenderManager:AddObject(objPool[5], ROUTINE_GROUP_01);
+    g_RenderManager:AddObject(objPool[6], ROUTINE_GROUP_01);
+
     g_UpdateManager:AddObject(objPool[1], ROUTINE_GROUP_01);
+    g_UpdateManager:AddObject(objPool[2], ROUTINE_GROUP_01);
+    g_UpdateManager:AddObject(objPool[3], ROUTINE_GROUP_01);
+    g_UpdateManager:AddObject(objPool[4], ROUTINE_GROUP_01);
+    g_UpdateManager:AddObject(objPool[5], ROUTINE_GROUP_01);
+    g_UpdateManager:AddObject(objPool[6], ROUTINE_GROUP_01);
 
     --###########
     -- Stage

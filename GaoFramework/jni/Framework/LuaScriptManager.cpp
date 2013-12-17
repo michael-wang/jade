@@ -520,6 +520,18 @@ namespace Gao
 				errorSource.c_str(), /*errorName.c_str()*/"...", luaL_checkstring(m_MasterState, lua_gettop(m_MasterState)));
 		}
 
+        GaoVoid LuaScriptManager::LogStackTrace() {
+            lua_Debug entry;
+            int depth = 0;
+            while (lua_getstack(m_MasterState, depth, &entry)) {
+                int status = lua_getinfo(m_MasterState, "Sln", &entry);
+                assert(status);
+
+                g_Logger->Show("LogStackTrace", "%s # %d : %s", entry.source, entry.currentline, entry.name);
+                depth++;
+            }
+        }
+
 #endif // End of GAO_SCRIPT_LUA_IMPLEMENTATION
 
     }

@@ -133,6 +133,8 @@ namespace Gao
 
             GaoVoid GetValueFromTable(GaoConstCharPtr tableName, GaoConstCharPtr variableName, GaoVoidPtr& value);
 
+            GaoVoid LogStackTrace();
+
 
 		private:
 

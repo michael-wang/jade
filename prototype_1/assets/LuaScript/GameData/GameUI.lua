@@ -22,6 +22,7 @@ GameUITemplate
 --]]
 	widgets =
 	{
+--[[
         {
 			--class = "PuzzlePicture",
 			class = "PuzzleButton",
@@ -49,7 +50,6 @@ GameUITemplate
 				},
 			},			
 		},
-
         {
 			class = "PuzzlePicture",
 			name = "Char2",
@@ -83,6 +83,7 @@ GameUITemplate
 				},
 			},			
 		},
+--]]
 --[[			
         {
 			class = "PuzzleButton",

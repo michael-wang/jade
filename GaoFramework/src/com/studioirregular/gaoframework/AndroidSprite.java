@@ -95,10 +95,10 @@ public class AndroidSprite {
 			Log.d(TAG, "SetRenderSize: hw:" + halfWidth + ",hh:" + halfHeight);
 		}
 		
-		vertexBuffer.put(0, -hw).put(1,  hh).put(2, 0);
-		vertexBuffer.put(3, -hw).put(4, -hh).put(5, 0);
-		vertexBuffer.put(6,  hw).put(7, -hh).put(8, 0);
-		vertexBuffer.put(9,  hw).put(10, hh).put(11, 0);
+		vertexBuffer.put(0, -hw).put(1, -hh).put(2, 0);
+		vertexBuffer.put(3, -hw).put(4,  hh).put(5, 0);
+		vertexBuffer.put(6,  hw).put(7,  hh).put(8, 0);
+		vertexBuffer.put(9,  hw).put(10,-hh).put(11, 0);
 		
 		vertexBuffer.position(0);
 	}

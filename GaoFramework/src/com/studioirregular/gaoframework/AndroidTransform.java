@@ -42,7 +42,7 @@ public class AndroidTransform {
 	public float GetTranslateX() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "GetTranslateX");
+			Log.d(TAG, "GetTranslateX:" + translateX);
 		}
 		
 		return translateX;
@@ -51,7 +51,7 @@ public class AndroidTransform {
 	public float GetTranslateY() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "GetTranslateY");
+			Log.d(TAG, "GetTranslateY:" + translateY);
 		}
 		
 		return translateY;
@@ -95,7 +95,7 @@ public class AndroidTransform {
 	public float GetRotateByRadian() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "GetRotateByRadian");
+			Log.d(TAG, "GetRotateByRadian:" + rotation);
 		}
 		
 		return rotation;
@@ -103,11 +103,13 @@ public class AndroidTransform {
 	
 	public float GetRotateByDegree() {
 		
+		final float result = (float) ((double) rotation * 180.0 / Math.PI);
+		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "GetRotateByDegree");
+			Log.d(TAG, "GetRotateByDegree:" + result);
 		}
 		
-		return (float) ((double)rotation * 180.0 / Math.PI);
+		return result;
 	}
 	
 	public void SetScale(float value) {
@@ -131,7 +133,7 @@ public class AndroidTransform {
 	public float GetScale() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "GetScale");
+			Log.d(TAG, "GetScale:" + scale);
 		}
 		
 		return this.scale;

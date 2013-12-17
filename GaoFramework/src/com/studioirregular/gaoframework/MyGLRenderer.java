@@ -26,7 +26,7 @@ public class MyGLRenderer implements Renderer {
 		GLES20.glViewport(0, 0, width, height);
 		
 		Matrix.orthoM(mMVPMatrix, 0, 
-				0, width, 0, height, 1, -1);
+				0, width, height, 0, 1, -1);
 		Util.fixTranslation(mMVPMatrix);
 //		Util.log(TAG, "mProjMatrix", mProjMatrix, 4, 4);
 		
