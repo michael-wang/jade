@@ -6,7 +6,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
-import android.util.Log;
 
 public class MyGLRenderer implements Renderer {
 
@@ -53,20 +52,6 @@ public class MyGLRenderer implements Renderer {
 		fps.start();
 	}
 
-	void drawRectangle(int left, int top, int right, int bottom, 
-		float red, float green, float blue, float alpha, GLTexture texture) {
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "drawRectangle left:" + left + ",top:" + top + 
-					",right:" + right + ",bottom:" + bottom + ",red:" + red + 
-					",green:" + green + ",blue:" + blue + ",alpha:" + alpha);
-		}
-		
-		Rectangle rect = new Rectangle(left, top, right, bottom, red, green, blue, alpha);
-		rect.setTexture(texture);
-		rect.draw(mMVPMatrix);
-	}
-	
 	void draw(Rectangle rect) {
 		rect.draw(mMVPMatrix);
 	}
