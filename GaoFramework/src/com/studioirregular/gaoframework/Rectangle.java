@@ -3,45 +3,18 @@ package com.studioirregular.gaoframework;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import android.opengl.GLES20;
 import android.util.Log;
 
+import com.studioirregular.gaoframework.gles.ShaderProgram;
+import com.studioirregular.gaoframework.gles.ShaderSource;
+
 public class Rectangle {
 
 	private static final String TAG = "java-rectangle";
 	private static final boolean DEBUG_LOG = false;
-	
-	private static int loadShader(int type, String shaderCode){
-		if (DEBUG_LOG) {
-			Log.d(TAG, "loadShader type:" + type + ",code:" + shaderCode);
-		}
-
-	    // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
-	    // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
-	    int shader = GLES20.glCreateShader(type);
-
-	    // add the source code to the shader and compile it
-	    GLES20.glShaderSource(shader, shaderCode);
-	    GLES20.glCompileShader(shader);
-
-	    IntBuffer intBuf = IntBuffer.allocate(1);
-	    GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, intBuf);
-	    final boolean compiled = (intBuf.get(0) == GLES20.GL_TRUE);
-//	    Log.d(TAG, "loadShader compiled:" + compiled);
-	    
-	    if (!compiled) {
-	    	String info = GLES20.glGetShaderInfoLog(shader);
-	    	Log.e(TAG, "loadShader compile failed:" + info);
-
-	    	GLES20.glDeleteShader(shader);
-	    	return 0;
-	    }
-
-	    return shader;
-	}
 	
 	private static final String vertexShaderCode =
 			"uniform mat4 uMVPMatrix;" +
@@ -50,7 +23,7 @@ public class Rectangle {
 			"varying vec2 v_TexCoordinate;" +
 			"void main() {" +
 			"  v_TexCoordinate = a_TexCoordinate;" +
-			"  gl_Position = vPosition * uMVPMatrix;" +
+			"  gl_Position = uMVPMatrix * vPosition;" +
 			"}";
 	
 	private static final String fragmentShaderCode =
@@ -62,7 +35,7 @@ public class Rectangle {
 		    "  gl_FragColor = vColor + texture2D(u_Texture,v_TexCoordinate);" +
 		    "}";
 	
-	private static int program = 0;
+	private static ShaderProgram shaderProgram = null;
 	
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer drawListBuffer;
@@ -105,24 +78,23 @@ public class Rectangle {
 		drawListBuffer.put(5, (short)3);
 		drawListBuffer.position(0);
 		
-		int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-		int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
 		
-		program = GLES20.glCreateProgram();
-		GLES20.glAttachShader(program, vertexShader);
-		GLES20.glAttachShader(program, fragmentShader);
-		
-		GLES20.glBindAttribLocation(program, 0, "vPosition");
-		GLES20.glBindAttribLocation(program, 1, "a_TexCoordinate");
-		
-		GLES20.glLinkProgram(program);
-		
-		IntBuffer intBuf = IntBuffer.allocate(1);
-		GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, intBuf);
-		
-		final boolean linked = intBuf.get(0) == GLES20.GL_TRUE;
-		if (!linked) {
-			Log.e(TAG, "Link failed:" + GLES20.glGetProgramInfoLog(program));
+		if (shaderProgram == null) {
+			ShaderSource vertexShader = new ShaderSource(
+					GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+			ShaderSource fragmentShader = new ShaderSource(
+					GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+
+			shaderProgram = new ShaderProgram();
+
+			shaderProgram.attach(vertexShader);
+			shaderProgram.attach(fragmentShader);
+
+			GLES20.glBindAttribLocation(shaderProgram.getName(), 0, "vPosition");
+			GLES20.glBindAttribLocation(shaderProgram.getName(), 1,
+					"a_TexCoordinate");
+
+			shaderProgram.link();
 		}
 	}
 	
@@ -166,6 +138,8 @@ public class Rectangle {
 		if (DEBUG_LOG) {
 			Util.log(TAG, "draw: mvpMatrix:", mvpMatrix, 4, 4);
 		}
+		
+		final int program = shaderProgram.getName();
 		
 		GLES20.glUseProgram(program);
 		

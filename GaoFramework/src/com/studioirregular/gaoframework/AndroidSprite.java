@@ -3,12 +3,14 @@ package com.studioirregular.gaoframework;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
+
+import com.studioirregular.gaoframework.gles.ShaderProgram;
+import com.studioirregular.gaoframework.gles.ShaderSource;
 
 public class AndroidSprite {
 
@@ -48,7 +50,7 @@ public class AndroidSprite {
 	private float halfWidth, halfHeight;
 	private float texU1, texV1, texU2, texV2;
 	
-	private int shaderProgram;
+	private ShaderProgram shaderProgram;
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer drawOrderBuffer;
 	
@@ -63,7 +65,12 @@ public class AndroidSprite {
 		
 		setupVertexBuffer();
 		setupDrawOrder();
-		setupShaderProgram();
+		try {
+			shaderProgram = setupShaderProgram();
+		} catch (RuntimeException e) {
+			Log.e(TAG, "setupShaderProgram exception:" + e);
+			e.printStackTrace();
+		}
 		
 		color[0] = 0;
 		color[1] = 0;
@@ -130,9 +137,11 @@ public class AndroidSprite {
 			Log.d(TAG, "transform:" + transform);
 		}
 		
-		GLES20.glUseProgram(shaderProgram);
+		final int program = shaderProgram.getName();
 		
-		positionHandle = GLES20.glGetAttribLocation(shaderProgram, "vPosition");
+		GLES20.glUseProgram(program);
+		
+		positionHandle = GLES20.glGetAttribLocation(program, "vPosition");
 		
 		GLES20.glEnableVertexAttribArray(positionHandle);
 		
@@ -141,10 +150,10 @@ public class AndroidSprite {
                 VERTEX_STRIDE, vertexBuffer);
 	    
 	    if (texture != null) {
-	    	texture.draw(shaderProgram, texV1, texU1, texV2, texU2);
+	    	texture.draw(program, texV1, texU1, texV2, texU2);
 	    }
 	    
-	    colorHandle = GLES20.glGetUniformLocation(shaderProgram, "vColor");
+	    colorHandle = GLES20.glGetUniformLocation(program, "vColor");
 	    GLES20.glUniform4fv(colorHandle, 1, color, 0);
 	    
 	    Matrix.setIdentityM(modelMatrix, 0);
@@ -160,7 +169,7 @@ public class AndroidSprite {
 	    Matrix.multiplyMM(mMVPMatrix, 0, mvp, 0, modelMatrix, 0);
 	    if (DEBUG_LOG) Util.log(TAG, "MVP:", mMVPMatrix, 4, 4);
 	    
-	    MVPMatrixHandle = GLES20.glGetUniformLocation(shaderProgram, "uMVPMatrix");
+	    MVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
 	    GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, mMVPMatrix, 0);
 	    
 	    GLES20.glDrawElements(GLES20.GL_TRIANGLES, DRAW_ORDER_LENGTH,
@@ -196,67 +205,23 @@ public class AndroidSprite {
 		drawOrderBuffer = buf;
 	}
 	
-	private void setupShaderProgram() {
+	private ShaderProgram setupShaderProgram() throws RuntimeException {
 		
-		final int vertexShader = loadShader(
-				GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_CODE);
-		final int fragmentShader = loadShader(
+		ShaderSource vertexShader = new ShaderSource(GLES20.GL_VERTEX_SHADER,
+				VERTEX_SHADER_CODE);
+		ShaderSource fragmentShader = new ShaderSource(
 				GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER_CODE);
 		
-		if (vertexShader != 0 && fragmentShader != 0) {
-			
-			shaderProgram = GLES20.glCreateProgram();
-			
-			GLES20.glAttachShader(shaderProgram, vertexShader);
-			GLES20.glAttachShader(shaderProgram, fragmentShader);
-			
-			GLES20.glBindAttribLocation(shaderProgram, 0, "vPosition");
-			GLES20.glBindAttribLocation(shaderProgram, 1, "a_TexCoordinate");
-			
-			GLES20.glLinkProgram(shaderProgram);
-			
-			IntBuffer intBuf = IntBuffer.allocate(1);
-			GLES20.glGetProgramiv(shaderProgram, GLES20.GL_LINK_STATUS, intBuf);
-			
-			final boolean linked = intBuf.get(0) == GLES20.GL_TRUE;
-			if (!linked) {
-				Log.e(TAG, "setupShaderProgram: Link failed:" + 
-					GLES20.glGetProgramInfoLog(shaderProgram));
-			}
-		} else {
-			Log.e(TAG, "setupShaderProgram: invalid shader vertexShader:" + 
-				vertexShader + ",fragmentShader:" + fragmentShader);
-		}
-	}
-	
-	private static int loadShader(int type, String shaderCode){
-//		if (DEBUG_LOG) {
-//			Log.d(TAG, "loadShader type:" + type + ",code:" + shaderCode);
-//		}
-
-	    // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
-	    // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
-	    int shader = GLES20.glCreateShader(type);
-
-	    // add the source code to the shader and compile it
-	    GLES20.glShaderSource(shader, shaderCode);
-	    GLES20.glCompileShader(shader);
-
-	    IntBuffer intBuf = IntBuffer.allocate(1);
-	    GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, intBuf);
-	    final boolean compiled = (intBuf.get(0) == GLES20.GL_TRUE);
-//	    if (DEBUG_LOG) {
-//	    	Log.d(TAG, "loadShader compiled:" + compiled);
-//	    }
-	    
-	    if (!compiled) {
-	    	String info = GLES20.glGetShaderInfoLog(shader);
-	    	Log.e(TAG, "loadShader compile failed:" + info);
-
-	    	GLES20.glDeleteShader(shader);
-	    	return 0;
-	    }
-
-	    return shader;
+		ShaderProgram program = new ShaderProgram();
+		
+		program.attach(vertexShader);
+		program.attach(fragmentShader);
+		
+		GLES20.glBindAttribLocation(program.getName(), 0, "vPosition");
+		GLES20.glBindAttribLocation(program.getName(), 1, "a_TexCoordinate");
+		
+		program.link();
+		
+		return program;
 	}
 }
