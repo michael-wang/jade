@@ -42,7 +42,6 @@ GameStageTemplate
 	end,
 
 	Render = function()
---[[	
 		g_GraphicsEngine:DrawRectangle(0, 0, 100, 200, 1, 0, 0, 0.25);
 		g_GraphicsEngine:DrawRectangle(50, 0, 150, 100, 0, 1, 0, 1);
 		g_GraphicsEngine:DrawRectangle(100, 100, 150, 150, 0, 0, 1, 1);
@@ -52,6 +51,5 @@ GameStageTemplate
 		if (APP_DEBUG_MODE) then
 			g_FontRenderer:Draw(0, 0, "Monkey Potion");
 		end
---]]		
 	end,
 };

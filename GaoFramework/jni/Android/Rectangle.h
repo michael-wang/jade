@@ -20,7 +20,6 @@ public:
 
 	GaoVoid SetBound(GaoReal32 left, GaoReal32 top, GaoReal32 right, GaoReal32 bottom);
 	GaoVoid SetColor(GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
-	GaoVoid SetTexture(Gao::Framework::Texture* texture);
 
 	GaoBool IsHit(GaoReal32 x, GaoReal32 y);
 	GaoVoid MoveTo(GaoReal32 x, GaoReal32 y);

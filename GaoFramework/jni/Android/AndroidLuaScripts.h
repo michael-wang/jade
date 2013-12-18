@@ -75,7 +75,6 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def(constructor<GaoReal32,GaoReal32,GaoReal32,GaoReal32,GaoReal32,GaoReal32,GaoReal32,GaoReal32>())
 			.def("SetBound", &Rectangle::SetBound)
 			.def("SetColor", &Rectangle::SetColor)
-			.def("SetTexture", &Rectangle::SetTexture)
 			.def("IsHit", &Rectangle::IsHit)
 			.def("MoveTo", &Rectangle::MoveTo)
 			.def("GetLeft", &Rectangle::GetLeft)

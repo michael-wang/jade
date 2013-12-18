@@ -8,8 +8,6 @@ static const char JAVA_METHOD_SET_BOUND[]		= "setBound";
 static const char JAVA_METHOD_SET_BOUND_DESC[]	= "(FFFF)V";
 static const char JAVA_METHOD_SET_COLOR[]		= "setColor";
 static const char JAVA_METHOD_SET_COLOR_DESC[]	= "(FFFF)V";
-static const char JAVA_METHOD_SET_TEXTURE[]		= "setTexture";
-static const char JAVA_METHOD_SET_TEXTURE_DESC[]= "(Lcom/studioirregular/gaoframework/GLTexture;)V";
 
 
 Rectangle::Rectangle() :
@@ -48,18 +46,6 @@ GaoVoid Rectangle::SetColor(GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoR
 
 	jobj.CallVoidMethod(JAVA_METHOD_SET_COLOR, JAVA_METHOD_SET_COLOR_DESC, 
 		red, green, blue, alpha);
-}
-
-GaoVoid Rectangle::SetTexture(Gao::Framework::Texture* texture) {
-
-	GLTexture* gltexture = dynamic_cast<GLTexture*>(texture);
-	jobject javaGLTexture = gltexture->GetJavaRef();
-	if (javaGLTexture != NULL) {
-		jobj.CallVoidMethod(JAVA_METHOD_SET_TEXTURE, JAVA_METHOD_SET_TEXTURE_DESC, 
-			javaGLTexture);
-	} else {
-		LOGE(log, "SetTexture: cannot find java reference for texture.")
-	}
 }
 
 GaoBool Rectangle::IsHit(GaoReal32 x, GaoReal32 y) {

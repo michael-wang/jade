@@ -19,20 +19,15 @@ public class Rectangle {
 	private static final String vertexShaderCode =
 			"uniform mat4 uMVPMatrix;" +
 			"attribute vec4 vPosition;" +
-			"attribute vec2 a_TexCoordinate;" +
-			"varying vec2 v_TexCoordinate;" +
 			"void main() {" +
-			"  v_TexCoordinate = a_TexCoordinate;" +
 			"  gl_Position = uMVPMatrix * vPosition;" +
 			"}";
 	
 	private static final String fragmentShaderCode =
 		    "precision mediump float;" +
 		    "uniform vec4 vColor;" +
-		    "varying vec2 v_TexCoordinate;" +
-		    "uniform sampler2D u_Texture;" +
 		    "void main() {" +
-		    "  gl_FragColor = vColor + texture2D(u_Texture,v_TexCoordinate);" +
+		    "  gl_FragColor = vColor;" +
 		    "}";
 	
 	private static ShaderProgram shaderProgram = null;
@@ -91,8 +86,6 @@ public class Rectangle {
 			shaderProgram.attach(fragmentShader);
 
 			GLES20.glBindAttribLocation(shaderProgram.getName(), 0, "vPosition");
-			GLES20.glBindAttribLocation(shaderProgram.getName(), 1,
-					"a_TexCoordinate");
 
 			shaderProgram.link();
 		}
@@ -130,10 +123,6 @@ public class Rectangle {
 		color[3] = alpha;
 	}
 	
-	public void setTexture(GLTexture t) {
-		this.texture = t;
-	}
-	
 	public void draw(float[] mvpMatrix) {
 		if (DEBUG_LOG) {
 			Util.log(TAG, "draw: mvpMatrix:", mvpMatrix, 4, 4);
@@ -155,10 +144,6 @@ public class Rectangle {
 	    
 	    GLES20.glUniform4fv(colorHandle, 1, color, 0);
 	    
-	    if (texture != null) {
-	    	texture.draw(program, 0.0f, 0.0f, 1.0f, 1.0f);
-	    }
-	    
 	    MVPMatrixHandle = GLES20.glGetUniformLocation(program, "uMVPMatrix");
 	    
 	    GLES20.glUniformMatrix4fv(MVPMatrixHandle, 1, false, mvpMatrix, 0);
@@ -168,6 +153,4 @@ public class Rectangle {
 	    
 	    GLES20.glDisableVertexAttribArray(positionHandle);
 	}
-	
-	private GLTexture texture;
 }
