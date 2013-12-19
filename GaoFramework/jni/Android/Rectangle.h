@@ -1,7 +1,6 @@
 #ifndef RECTANGLE_H_
 #define RECTANGLE_H_
 
-#include <Framework/Texture.hpp>
 #include "Java/JavaObject.h"
 #include "AndroidLogger.h"
 

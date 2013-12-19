@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import com.studioirregular.gaoframework.gles.Circle;
+
 
 public class JavaInterface {
 
@@ -55,6 +57,18 @@ public class JavaInterface {
 		if (renderer != null) {
 			renderer.draw(
 					new Rectangle(left, top, right, bottom, red, green, blue, alpha));
+		}
+	}
+	
+	public void DrawCircle(float x, float y, float radius,
+			float red, float green, float blue, float alpha) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "DrawCircle x:" + x + ",y:" + y + ",radius:" + radius);
+		}
+		
+		if (renderer != null) {
+			renderer.draw(new Circle(x, y, radius, red, green, blue, alpha));
 		}
 	}
 	

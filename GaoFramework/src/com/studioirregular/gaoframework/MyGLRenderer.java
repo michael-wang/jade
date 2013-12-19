@@ -3,6 +3,8 @@ package com.studioirregular.gaoframework;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import com.studioirregular.gaoframework.gles.Circle;
+
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
@@ -54,6 +56,10 @@ public class MyGLRenderer implements Renderer {
 
 	void draw(Rectangle rect) {
 		rect.draw(mMVPMatrix);
+	}
+	
+	void draw(Circle circle) {
+		circle.draw(mMVPMatrix);
 	}
 	
 	private native void RendererOnSurfaceChanged(int w, int h, String assetFolder);

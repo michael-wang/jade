@@ -48,6 +48,9 @@ public:
 	virtual GaoVoid DrawRectangle(GaoInt16 startX, GaoInt16 startY, GaoInt16 endX, GaoInt16 endY, 
 		GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
 
+	virtual GaoVoid DrawCircle(GaoInt16 centerX, GaoInt16 centerY, GaoInt16 radius, 
+		GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
+
 protected:
 	AndroidLogger log;
 	GaoInt32 width, height;

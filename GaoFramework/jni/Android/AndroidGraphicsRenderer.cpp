@@ -116,3 +116,16 @@ GaoVoid AndroidGraphicsRenderer::DrawRectangle(
 		ji->DrawRectangle(left, top, right, bottom, red, green, blue, alpha);
 	}
 }
+
+GaoVoid AndroidGraphicsRenderer::DrawCircle(
+	GaoInt16 centerX, GaoInt16 centerY, GaoInt16 radius, 
+	GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha) {
+
+	LOGD(log, "DrawCircle x:%d, y:%d, radius:%d", centerX, centerY, radius)
+
+	JavaInterface* ji = JavaInterface::GetSingletonPointer();
+
+	if (ji != NULL) {
+		ji->DrawCircle(centerX, centerY, radius, red, green, blue, alpha);
+	}
+}

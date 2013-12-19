@@ -20,9 +20,13 @@ public:
 	char* GetAssetFileFolder();
 
 	void Draw(Rectangle* rect);
+	
 	void DrawRectangle(
 		GaoInt16 left, GaoInt16 top, GaoInt16 right, GaoInt16 bottom, 
-		float red, float green, float blue, float alpha);
+		GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
+
+	void DrawCircle(GaoReal32 x, GaoReal32 y, GaoReal32 radius,
+		GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
 
 private:
 	JavaObject jobj;
