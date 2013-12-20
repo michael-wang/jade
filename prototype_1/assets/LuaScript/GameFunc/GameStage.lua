@@ -18,6 +18,8 @@ GameStageTemplate
 	TouchBegan = function(x, y)
         g_TouchBeganPos[1] = x;
         g_TouchBeganPos[2] = y;
+
+        objPool[1]["Motion"]:AppendFirstTarget(x, y);
 		
 		objPool[4]["Transform"]:SetTranslate(x, y);
 		objPool[4]["Sprite"]:Animate();
