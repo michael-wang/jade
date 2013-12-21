@@ -11,6 +11,7 @@
 #include <Android/AndroidApplication.h>
 #include <Android/AndroidAudioRenderer.h>
 #include <Android/AndroidAudioResource.h>
+#include <Android/AndroidFileSystem.h>
 #include <Android/AndroidGraphicsRenderer.h>
 #include <Android/AndroidSprite.h>
 #include <Android/AndroidTimer.h>
@@ -39,6 +40,11 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def("GetLogFilePath", &JavaInterface::GetLogFilePath)
 			.def("GetAssetFileFolder", &JavaInterface::GetAssetFileFolder)
 	];
+
+    module(state, "GaoApp")
+    [
+        def("MakeDocumentPath", &AndroidFileSystem::MakeDocumentPath)
+    ];
 
 	module(state)
 	[

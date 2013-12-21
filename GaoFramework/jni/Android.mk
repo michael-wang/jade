@@ -13,6 +13,7 @@ LOCAL_SRC_FILES += Android/AndroidApplication.cpp
 LOCAL_SRC_FILES += Android/AndroidTimer.cpp
 LOCAL_SRC_FILES += Android/AndroidAudioRenderer.cpp
 LOCAL_SRC_FILES += Android/AndroidAudioResource.cpp
+LOCAL_SRC_FILES += Android/AndroidFileSystem.cpp
 LOCAL_SRC_FILES += Android/AndroidLogger.cpp
 LOCAL_SRC_FILES += Android/AndroidSprite.cpp
 LOCAL_SRC_FILES += Android/GLTexture.cpp

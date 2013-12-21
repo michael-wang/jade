@@ -89,6 +89,22 @@ public:
 		return env->NewStringUTF(str);
 	}
 
+	const char* GetStringUTFChars(jstring jstr, jboolean* isCopy) {
+		if (env == NULL) {
+			return NULL;
+		}
+
+		return env->GetStringUTFChars(jstr, isCopy);
+	}
+
+	void ReleaseStringUTFChars(jstring jstr, const char* chars) {
+		if (env == NULL) {
+			return;
+		}
+
+		return env->ReleaseStringUTFChars(jstr, chars);
+	}
+
 	void CallVoidMethod(jobject obj, jmethodID method, va_list args) {
 
 		if (env == NULL) {

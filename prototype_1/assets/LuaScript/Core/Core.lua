@@ -122,12 +122,6 @@ g_Timer = nil;
 g_AppData = nil;
 g_AppIsRunning = false;
 
-GaoApp = {
-    MakeDocumentPath = function(fileName)
-        return "/sdcard/Download/" .. fileName;
-    end
-}
-
 
 --=======================================================================
 -- Core routines (iPhone)
