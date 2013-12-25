@@ -84,9 +84,9 @@ public class Circle {
 			
 			float outer_x = (float) (x + radius * Math.cos(radian));
 			float outer_y = (float) (y + radius * Math.sin(radian));
-//			if (DEBUG_LOG) {
-//				Log.d(TAG, "i:" + i + ",outer_x:" + outer_x + ",outer_y:" + outer_y);
-//			}
+			if (DEBUG_LOG) {
+				Log.d(TAG, "i:" + i + ",outer_x:" + outer_x + ",outer_y:" + outer_y);
+			}
 			
 			buf.put(idx++, outer_x).put(idx++, outer_y).put(idx++, 0);
 		}

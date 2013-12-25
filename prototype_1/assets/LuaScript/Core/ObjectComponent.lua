@@ -159,7 +159,7 @@ TransformComponent =
     SetTranslate = function(self, x, y)
 		self.m_X = x;
 		self.m_Y = y;
-        self.m_Transform:SetTranslate(self.m_X, self.m_Y);
+        self.m_Transform:SetTranslate(self.m_X * APP_UNIT_X, self.m_Y * APP_UNIT_Y);
     end,
     ---------------------------------------------------------------
     SetIndieTranslate = function(self, x, y)
@@ -170,7 +170,7 @@ TransformComponent =
     ---------------------------------------------------------------
     SetTranslateX = function(self, x)
 		self.m_X = x;
-        self.m_Transform:SetTranslate(self.m_X, self.m_Y);
+        self.m_Transform:SetTranslate(self.m_X * APP_UNIT_X, self.m_Y * APP_UNIT_Y);
     end,
     ---------------------------------------------------------------
     SetIndieTranslateX = function(self, x)
@@ -180,7 +180,7 @@ TransformComponent =
     ---------------------------------------------------------------
     SetTranslateY = function(self, y)
 		self.m_Y = y;
-        self.m_Transform:SetTranslate(self.m_X, self.m_Y);
+        self.m_Transform:SetTranslate(self.m_X * APP_UNIT_X, self.m_Y * APP_UNIT_Y);
     end,
     ---------------------------------------------------------------
     SetIndieTranslateY = function(self, y)
@@ -191,7 +191,7 @@ TransformComponent =
     SetTranslateEx = function(self, obj)
 		self.m_X = obj[1];
 		self.m_Y = obj[2];
-        self.m_Transform:SetTranslate(self.m_X, self.m_Y);
+        self.m_Transform:SetTranslate(self.m_X * APP_UNIT_X, self.m_Y * APP_UNIT_Y);
     end,
     ---------------------------------------------------------------
     SetIndieTranslateEx = function(self, obj)
@@ -203,7 +203,7 @@ TransformComponent =
     SetTranslateAttached = function(self, x, y)
 		self.m_X = x;
 		self.m_Y = y;
-        self.m_Transform:SetTranslate(self.m_X, self.m_Y);
+        self.m_Transform:SetTranslate(self.m_X * APP_UNIT_X, self.m_Y * APP_UNIT_Y);
 
         for _, obj in ipairs(self.m_AttachedObject) do
             obj.gc:SetTranslate(self.m_X + obj.x, self.m_Y + obj.y);
@@ -223,7 +223,7 @@ TransformComponent =
 	ModifyTranslate = function(self, x, y)
  		self.m_X = self.m_X + x;
 		self.m_Y = self.m_Y + y;
-        self.m_Transform:SetTranslate(self.m_X, self.m_Y);
+        self.m_Transform:SetTranslate(self.m_X * APP_UNIT_X, self.m_Y * APP_UNIT_Y);
 	end,
     ---------------------------------------------------------------
 	ModifyIndieTranslate = function(self, x, y)
@@ -235,7 +235,7 @@ TransformComponent =
 	ModifyTranslateEx = function(self, obj)
  		self.m_X = self.m_X + obj[1];
 		self.m_Y = self.m_Y + obj[2];
-        self.m_Transform:SetTranslate(self.m_X, self.m_Y);
+        self.m_Transform:SetTranslate(self.m_X * APP_UNIT_X, self.m_Y * APP_UNIT_Y);
 	end,
     ---------------------------------------------------------------
 	ModifyIndieTranslateEx = function(self, obj)
@@ -247,7 +247,7 @@ TransformComponent =
     ModifyTranslateAttached = function(self, x, y)
  		self.m_X = self.m_X + x;
 		self.m_Y = self.m_Y + y;
-        self.m_Transform:SetTranslate(self.m_X, self.m_Y);
+        self.m_Transform:SetTranslate(self.m_X * APP_UNIT_X, self.m_Y * APP_UNIT_Y);
 
         for _, obj in ipairs(self.m_AttachedObject) do
             obj.gc:SetTranslate(self.m_X + obj.x, self.m_Y + obj.y);
@@ -1039,8 +1039,8 @@ RectangleBoundComponent =
 	IsPickedNonTransform = function(self, x, y)
 		local ox = self.m_TransformGC:GetTranslateX() + self.m_OffsetX;
 		local oy = self.m_TransformGC:GetTranslateY() + self.m_OffsetY;
-		ox = ox;
-		oy = oy;
+		ox = ox * APP_UNIT_X;
+		oy = oy * APP_UNIT_Y;
 
 		if (x >= ox and x <= ox + self.m_SizeX and
 			y >= oy and y <= oy + self.m_SizeY) then
@@ -1066,8 +1066,8 @@ RectangleBoundComponent =
 	IsPickedWorldTransform = function(self, x, y)
 		local ox = self.m_TransformGC:GetTranslateX() + self.m_OffsetX + g_AppData:GetData("WorldTranslateX");
 		local oy = self.m_TransformGC:GetTranslateY() + self.m_OffsetY + g_AppData:GetData("WorldTranslateY");
-		ox = ox;
-		oy = oy;
+		ox = ox * APP_UNIT_X;
+		oy = oy * APP_UNIT_Y;
 
 		if (x >= ox and x <= ox + self.m_SizeX and y >= oy and y <= oy + self.m_SizeY) then
 			return true;
@@ -1081,8 +1081,8 @@ RectangleBoundComponent =
 		local ox = self.m_TransformGC:GetTranslateX() + self.m_OffsetX;
 		local oy = self.m_TransformGC:GetTranslateY() + self.m_OffsetY;
         local pickGC = go["Bound"];
-		ox = ox;
-		oy = oy;
+		ox = ox * APP_UNIT_X;
+		oy = oy * APP_UNIT_Y;
 
         if (pickGC:GetType() == BOUND_TYPE_CIRCLE) then
         -- Rectangle-Circle collision
@@ -1091,8 +1091,8 @@ RectangleBoundComponent =
         -- Rectangle-Rectangle collision
             local x, y = go["Transform"]:GetTranslate();
             local width, height = pickGC:GetSize();
-			x = x;
-			y = y;
+			x = x * APP_UNIT_X;
+			y = y * APP_UNIT_Y;
             
             if ((ox < x + width) and (ox + self.m_SizeX > x) and (oy < y + height) and (oy + self.m_SizeY > y)) then
                 return true;
@@ -1105,7 +1105,7 @@ RectangleBoundComponent =
 	end,
     ---------------------------------------------------------------
     IsPickedObjectAbove = function(self, go)
-        if (self.m_TransformGC:GetTranslateY() + self.m_SizeY + self.m_OffsetY < go["Bound"]:GetRelativeHeight() and
+        if (self.m_TransformGC:GetTranslateY() * APP_UNIT_Y + self.m_SizeY + self.m_OffsetY < go["Bound"]:GetRelativeHeight() and
             self:IsPickedObject(go)) then
             return true;
         end
@@ -1114,7 +1114,7 @@ RectangleBoundComponent =
     end,
     ---------------------------------------------------------------
     IsAbove = function(self, go)
-        if (self.m_TransformGC:GetTranslateY() + self.m_SizeY + self.m_OffsetY < go["Bound"]:GetRelativeHeight()) then
+        if (self.m_TransformGC:GetTranslateY() * APP_UNIT_Y + self.m_SizeY + self.m_OffsetY < go["Bound"]:GetRelativeHeight()) then
             return true;
         end
 
@@ -1170,8 +1170,8 @@ RectangleBoundComponent =
     ---------------------------------------------------------------
     OnRender = function(self)
 		if (self.m_Debug or g_AppData:GetData("GOShowPick")) then
-			local x = (self.m_TransformGC:GetTranslateX() + self.m_OffsetX);
-			local y = (self.m_TransformGC:GetTranslateY() + self.m_OffsetY);
+			local x = (self.m_TransformGC:GetTranslateX() + self.m_OffsetX) * APP_UNIT_X;
+			local y = (self.m_TransformGC:GetTranslateY() + self.m_OffsetY) * APP_UNIT_Y;
 			DrawRectangle(x, y, self.m_SizeX, self.m_SizeY, COLOR_PINK[1], COLOR_PINK[2], COLOR_PINK[3], ALPHA_HALF);
 		end
 	end,
@@ -1265,8 +1265,8 @@ CircleBoundComponent =
 	IsPickedNonTransform = function(self, x, y)
 		local ox = self.m_TransformGC:GetTranslateX() + self.m_CenterX + self.m_OffsetX;
 		local oy = self.m_TransformGC:GetTranslateY() + self.m_CenterY + self.m_OffsetY;
-		ox = ox;
-		oy = oy;
+		ox = ox * APP_UNIT_X;
+		oy = oy * APP_UNIT_Y;
 
 		if (Square(ox - x, oy - y) <= self.m_Radius * self.m_Radius) then
 			return true;
@@ -1290,8 +1290,8 @@ CircleBoundComponent =
 	IsPickedWorldTransform = function(self, x, y)
 		local ox = self.m_TransformGC:GetTranslateX() + self.m_CenterX + self.m_OffsetX + g_AppData:GetData("WorldTranslateX");
 		local oy = self.m_TransformGC:GetTranslateY() + self.m_CenterY + self.m_OffsetY + g_AppData:GetData("WorldTranslateY");
-		ox = ox;
-		oy = oy;
+		ox = ox * APP_UNIT_X;
+		oy = oy * APP_UNIT_Y;
 
 		if (Square(ox - x, oy - y) <= self.m_Radius * self.m_Radius) then
 			return true;
@@ -1309,10 +1309,10 @@ CircleBoundComponent =
 			local ox = self.m_TransformGC:GetTranslateX() + self.m_CenterX + self.m_OffsetX;
 			local oy = self.m_TransformGC:GetTranslateY() + self.m_CenterY + self.m_OffsetY;
             local x, y = pickGC:GetCenter();
-			ox = ox;
-			oy = oy;
-			x = x;
-			y = y;
+			ox = ox * APP_UNIT_X;
+			oy = oy * APP_UNIT_Y;
+			x = x * APP_UNIT_X;
+			y = y * APP_UNIT_Y;
 
             if (Square(ox  - x, oy - y) < Square(self.m_Radius + pickGC:GetRadius())) then
                 return true;
@@ -1321,8 +1321,8 @@ CircleBoundComponent =
         -- Circle-Rectangle collision
             local x, y = go["Transform"]:GetTranslate();
             local width, height = pickGC:GetSize();
-			x = x;
-			y = y;
+			x = x * APP_UNIT_X;
+			y = y * APP_UNIT_Y;
             return self:IsCircleRectanglePicked(x, y, width, height);
         end
 
@@ -1335,8 +1335,8 @@ CircleBoundComponent =
         if (pickGC:GetType() == BOUND_TYPE_CIRCLE) then
         -- Circle-Circle collision
             local x, y = pickGC:GetCenter();
-			x = x;
-			y = y;
+			x = x * APP_UNIT_X;
+			y = y * APP_UNIT_Y;
             if (Square(self.m_CenterX + self.m_OffsetX - x, self.m_CenterY + self.m_OffsetY - y) < Square(self.m_Radius + pickGC:GetRadius())) then
                 return true;
             end
@@ -1354,8 +1354,8 @@ CircleBoundComponent =
         if (pickGC:GetType() == BOUND_TYPE_CIRCLE) then
         -- Circle-Circle collision
             local x, y = pickGC:GetCenter();
-			x = x;
-			y = y;
+			x = x * APP_UNIT_X;
+			y = y * APP_UNIT_Y;
 			local centerDist = Square(self.m_CenterX + self.m_OffsetX - x, self.m_CenterY + self.m_OffsetY - y);
 			local radiusDist = Square(self.m_Radius + pickGC:GetRadius());
 			
@@ -1375,8 +1375,8 @@ CircleBoundComponent =
     IsCircleRectanglePicked = function(self, rectX, rectY, sizeX, sizeY)
         local centerX = self.m_TransformGC:GetTranslateX() + self.m_CenterX + self.m_OffsetX;
         local centerY = self.m_TransformGC:GetTranslateY() + self.m_CenterY + self.m_OffsetY;
-		centerX = centerX;
-		centerY = centerY;
+		centerX = centerX * APP_UNIT_X;
+		centerY = centerY * APP_UNIT_Y;
 		
         local closestX = centerX;
         local closestY = centerY;
@@ -1397,7 +1397,7 @@ CircleBoundComponent =
     end,
     ---------------------------------------------------------------
     IsPickedObjectAbove = function(self, go)
-        if (self.m_TransformGC:GetTranslateY() + self.m_Size + self.m_OffsetY < go["Bound"]:GetRelativeHeight() and
+        if (self.m_TransformGC:GetTranslateY() * APP_UNIT_Y + self.m_Size + self.m_OffsetY < go["Bound"]:GetRelativeHeight() and
             self:IsPickedObject(go)) then
             return true;
         end
@@ -1406,7 +1406,7 @@ CircleBoundComponent =
     end,
     ---------------------------------------------------------------
     IsAbove = function(self, go)
-        if (self.m_TransformGC:GetTranslateY() + self.m_Size + self.m_OffsetY < go["Bound"]:GetRelativeHeight()) then
+        if (self.m_TransformGC:GetTranslateY() * APP_UNIT_Y + self.m_Size + self.m_OffsetY < go["Bound"]:GetRelativeHeight()) then
             return true;
         end
 
@@ -1820,8 +1820,8 @@ CompositeShapeComponent =
     ---------------------------------------------------------------
 	OnRenderIndie = function(self)
         local x, y = self.m_TransformGC:GetTranslate();
-		x = x;
-		y = y;
+		x = x * APP_UNIT_X;
+		y = y * APP_UNIT_Y;
         
         for _, shape in ipairs(self.m_Shapes) do
             if (shape[10]) then

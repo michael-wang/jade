@@ -19,11 +19,7 @@ GameStageTemplate
         g_TouchBeganPos[1] = x;
         g_TouchBeganPos[2] = y;
 
-        if objPool[1]["Motion"]:IsOnMotion() then
-        	objPool[1]["Motion"]:AppendNextTarget(x, y);
-        else
-        	objPool[1]["Motion"]:AppendFirstTarget(x, y);
-        end
+        objPool[1]["Motion"]:AppendFirstTarget(x, y);
 		
 		objPool[4]["Transform"]:SetTranslate(x, y);
 		objPool[4]["Sprite"]:Animate();

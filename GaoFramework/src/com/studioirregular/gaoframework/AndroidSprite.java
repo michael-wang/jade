@@ -92,15 +92,15 @@ public class AndroidSprite {
 	
 	public void SetRenderSize(int width, int height) {
 		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "SetRenderSize: width:" + width + ",height:" + height);
-		}
-		
 		final float hw = width / 2;
 		final float hh = height / 2;
 		
 		this.halfWidth = hw;
 		this.halfHeight = hh;
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SetRenderSize: hw:" + halfWidth + ",hh:" + halfHeight);
+		}
 		
 		vertexBuffer.put(0, -hw).put(1, -hh).put(2, 0);
 		vertexBuffer.put(3, -hw).put(4,  hh).put(5, 0);
