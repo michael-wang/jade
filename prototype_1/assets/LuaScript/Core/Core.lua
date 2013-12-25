@@ -140,15 +140,15 @@ function InitializeLuaAndroid(width, height, assetPath)
 
     device = APP_DEVICE_ANDROID_PHONE;
     portrait = (width < height) and true or false;
-    unitX = portrait and (width / APP_BASE_X) or (width / APP_BASE_Y);
-    unitY = portrait and (height / APP_BASE_Y) or (height / APP_BASE_X);
+    unitX = 1.0;
+    unitY = 1.0;
     useCompiledScript = false;
     g_Logger:Show("width:" .. width .. ",height:" .. height);
     g_Logger:Show("unitX:" .. unitX .. ",unitY:" .. unitY);
     
 	-- APP_DEVICE = device;
-	SCREEN_UNIT_X = width;
-	SCREEN_UNIT_Y = height;
+	SCREEN_UNIT_X = APP_BASE_X;
+	SCREEN_UNIT_Y = APP_BASE_Y;
 	APP_UNIT_X = unitX;
 	APP_UNIT_Y = unitY;
 
