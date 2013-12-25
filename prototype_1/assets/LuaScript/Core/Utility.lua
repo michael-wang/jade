@@ -470,7 +470,7 @@ end
 
 -------------------------------------------------------------------------
 function DrawCircle(x, y, radius, r, g, b, a)
-	g_GraphicsEngine:DrawCircle(x * APP_UNIT_X, y * APP_UNIT_Y, radius * APP_UNIT_X, r, g, b, a);
+	g_GraphicsEngine:DrawCircle(x, y, radius, r, g, b, a);
 end
 
 -------------------------------------------------------------------------

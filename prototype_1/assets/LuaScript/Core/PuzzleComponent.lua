@@ -232,7 +232,7 @@ function CreateSprite(go, texture, img, blendMode)
     else
 		--log("NON-reloadable texture : "..texture)
         sprite = g_GraphicsEngine:CreateSprite(go["Transform"]:GetObject(), GetTexture(texture));
-        sprite:SetRenderSizeAndTexCoords(img.size[1], img.size[2], img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
+        sprite:SetRenderSizeAndTexCoords(img.size[1] * APP_UNIT_X, img.size[2] * APP_UNIT_Y, img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
     end
 	
 	sprite:SetBlendingMode((blendMode or DEFAULT_BLEND_MODE));
@@ -335,7 +335,7 @@ PuzzleSpriteComponent =
 		if (img ~= nil) then
 			self.m_PuzzleImage = img;
 			self.m_PuzzleImageName = name;
-            self.m_Sprite:SetRenderSizeAndTexCoords(img.size[1], img.size[2], img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
+            self.m_Sprite:SetRenderSizeAndTexCoords(img.size[1] * APP_UNIT_X, img.size[2] * APP_UNIT_Y, img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
 		end
 	end,
     ---------------------------------------------------------------
@@ -351,16 +351,16 @@ PuzzleSpriteComponent =
 			
 			self.m_PuzzleImage = img;
 			self.m_PuzzleImageName = name;
-            self.m_Sprite:SetRenderSizeAndTexCoords(img.size[1], img.size[2], img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
+            self.m_Sprite:SetRenderSizeAndTexCoords(img.size[1] * APP_UNIT_X, img.size[2] * APP_UNIT_Y, img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
 		end
 	end,
     ---------------------------------------------------------------
 	SetRenderSizeAndTexCoords = function(self, width, height, u1, v1, u2, v2)
-        self.m_Sprite:SetRenderSizeAndTexCoords(width, height, u1, v1, u2, v2);
+        self.m_Sprite:SetRenderSizeAndTexCoords(width * APP_UNIT_X, height * APP_UNIT_Y, u1, v1, u2, v2);
 	end,
     ---------------------------------------------------------------
 	SetRenderSize = function(self, width, height)
-		self.m_Sprite:SetRenderSize(width, height);
+		self.m_Sprite:SetRenderSize(width * APP_UNIT_X, height * APP_UNIT_Y);
 	end,
     ---------------------------------------------------------------
 	SetTexCoords = function(self, u1, v1, u2, v2)
@@ -380,7 +380,7 @@ PuzzleSpriteComponent =
 	end,
     ---------------------------------------------------------------
 	GetSize = function(self)
-		return self.m_PuzzleImage.size[1], self.m_PuzzleImage.size[2];
+		return self.m_PuzzleImage.size[1] * APP_UNIT_X, self.m_PuzzleImage.size[2] * APP_UNIT_Y;
 	end,
     ---------------------------------------------------------------
 	GetImageSize = function(self)
@@ -424,7 +424,7 @@ PuzzleSpriteComponent =
     end,
     ---------------------------------------------------------------
 	ResetRenderSizeAndRadius = function(self)
-		self.m_Sprite:SetRenderSizeAndRadius(self.m_PuzzleImage.size[1], self.m_PuzzleImage.size[2]);
+		self.m_Sprite:SetRenderSizeAndRadius(self.m_PuzzleImage.size[1] * APP_UNIT_X, self.m_PuzzleImage.size[2] * APP_UNIT_Y);
 	end,
     ---------------------------------------------------------------
     SetTranslate = function(self, x, y)
@@ -539,7 +539,7 @@ PuzzleAnimationComponent = PuzzleSpriteComponent:Instance
         self.m_Sprite:SetTexture(GetTexture(self.m_TextureName));
         
         local img = self.m_PuzzleImage;
-        self.m_Sprite:SetRenderSizeAndTexCoords(img.size[1], img.size[2], img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
+        self.m_Sprite:SetRenderSizeAndTexCoords(img.size[1] * APP_UNIT_X, img.size[2] * APP_UNIT_Y, img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
     end,
     ---------------------------------------------------------------
 	Animate = function(self)
@@ -636,7 +636,7 @@ PuzzleAnimationComponent = PuzzleSpriteComponent:Instance
 
         local img = self.m_PuzzleImage;
 		assert(img, "Puzzle animation image error: "..name)
-        self.m_Sprite:SetRenderSizeAndTexCoords(img.size[1], img.size[2], img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
+        self.m_Sprite:SetRenderSizeAndTexCoords(img.size[1] * APP_UNIT_X, img.size[2] * APP_UNIT_Y, img.uv[1], img.uv[2], img.uv[3], img.uv[4]);
     end,
     ---------------------------------------------------------------
 	StopAnimation = function(self, name)
