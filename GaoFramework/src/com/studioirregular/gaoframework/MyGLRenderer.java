@@ -3,11 +3,12 @@ package com.studioirregular.gaoframework;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.studioirregular.gaoframework.gles.Circle;
-
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
+import android.util.Log;
+
+import com.studioirregular.gaoframework.gles.Circle;
 
 public class MyGLRenderer implements Renderer {
 
@@ -20,17 +21,29 @@ public class MyGLRenderer implements Renderer {
 	}
 	
 	@Override
-	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		viewportWidth = width;
-		viewportHeight = height;
+	public void onSurfaceChanged(GL10 gl, int surfaceWidth, int surfaceHeight) {
 		
-		GLES20.glViewport(0, 0, width, height);
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onSurfaceChanged surfaceWidth:" + surfaceWidth
+					+ ",surfaceHeight:" + surfaceHeight);
+		}
+		
+		Global.initWorld2ViewMapping(surfaceWidth, surfaceHeight);
+		Global.World2ViewMapping world2View = Global.getWorld2ViewMapping();
 		
 		Matrix.orthoM(mMVPMatrix, 0, 
-				0, width, height, 0, 1, -1);
-//		Util.log(TAG, "mProjMatrix", mProjMatrix, 4, 4);
+				0, world2View.worldWidth, world2View.worldHeight, 0, 1, -1);
+		Util.log(TAG, "after orthoM", mMVPMatrix, 4, 4);
 		
-		RendererOnSurfaceChanged(width, height, 
+		GLES20.glViewport(
+				Math.round(world2View.viewOffsetX), 
+				Math.round(world2View.viewOffsetY),
+				Math.round(world2View.viewWidth), 
+				Math.round(world2View.viewHeight));
+		
+		GLES20.glClearColor(1, 0, 0, 1);
+		
+		RendererOnSurfaceChanged(surfaceWidth, surfaceHeight, 
 				JavaInterface.getInstance().GetAssetFileFolder());
 	}
 	
@@ -71,9 +84,6 @@ public class MyGLRenderer implements Renderer {
 	private native void RendererOnDrawFrame();
 	
 	private final float[] mMVPMatrix = new float[16];
-	private final float[] mProjMatrix = new float[16];
-	private final float[] mVMatrix = new float[16];
 	
-	private int viewportWidth, viewportHeight;
 	private FrameRateCalculator fps;
 }
