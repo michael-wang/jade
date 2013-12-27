@@ -23,7 +23,7 @@ public:
 	AndroidApplication();
 	virtual ~AndroidApplication();
 
-	GaoBool Initialize(char* assetPath, int width, int height);
+	GaoBool Initialize(char* assetPath, int worldWidth, int worldHeight);
 
 	GaoVoid Pause();
 	GaoVoid Resume();
@@ -44,7 +44,7 @@ protected:
 	GaoBool CallLua(GaoConstCharPtr func);
 
 	GaoString assetPath;
-	int surfaceWidth, surfaceHeight;
+	int worldWidth, worldHeight;
 
 	GaoBool running;
 	AndroidLogger log;

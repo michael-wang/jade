@@ -8,9 +8,11 @@ import java.util.Observer;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
+import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +49,17 @@ public abstract class AbsGameActivity extends Activity {
 		
 		SoundSystem.getInstance().open(AbsGameActivity.this);
 		
-		ActivityOnCreate(JavaInterface.getInstance().GetAssetFileFolder());
+		if (isPortraitMode()) {
+			ActivityOnCreate(
+					Config.WORLD_DIMENSION_SHORT_SIDE,
+					Config.WORLD_DIMENSION_LONG_SIDE, 
+					JavaInterface.getInstance().GetAssetFileFolder());
+		} else {
+			ActivityOnCreate(
+					Config.WORLD_DIMENSION_LONG_SIDE,
+					Config.WORLD_DIMENSION_SHORT_SIDE, 
+					JavaInterface.getInstance().GetAssetFileFolder());
+		}
 		
 		setContentView(R.layout.activity_main);
 		fpsTextView = (TextView)findViewById(R.id.textview);
@@ -58,6 +70,14 @@ public abstract class AbsGameActivity extends Activity {
 				ViewGroup.LayoutParams.MATCH_PARENT);
 		// add surface view to bottom so text view can be seen.
 		contentView.addView(surfaceView, 0, lp);
+	}
+	
+	private boolean isPortraitMode() {
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		
+		return size.x <= size.y;
 	}
 	
 	private static final String LUA_FILES_COPY_STATE = "lua_copied";
@@ -213,7 +233,7 @@ public abstract class AbsGameActivity extends Activity {
 	};
 	private ShowFPS showFPS = new ShowFPS();
 	
-	private native void ActivityOnCreate(String assetFolder);
+	private native void ActivityOnCreate(int worldWidth, int worldHeight, String assetFolder);
 	private native void ActivityOnDestroy();
 	private native void ActivityOnPause();
 	private native void ActivityOnResume();

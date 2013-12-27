@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
  * Method:    ActivityOnCreate
- * Signature: (Ljava/lang/String;)V
+ * Signature: (IILjava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *, jobject, jstring);
+  (JNIEnv *, jobject, jint, jint, jstring);
 
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity

@@ -31,8 +31,8 @@ AndroidApplication::AndroidApplication() :
 	luaManager (new LuaScriptManager()),
 	running (TRUE),
 	log ("native::framework::AndroidApplication", false),
-	surfaceWidth (0),
-	surfaceHeight (0) {
+	worldWidth (0),
+	worldHeight (0) {
 
 	LOGD(log, "Constructor")
 
@@ -53,11 +53,11 @@ GaoBool AndroidApplication::Initialize(char* asset, int width, int height) {
 		return FALSE;
 	}
 
-	LOGD(log, "Initialize asset:%s, width:%d, height:%d", asset, width, height)
+	LOGD(log, "Initialize asset:%s, worldWidth:%d, worldHeight:%d", asset, width, height)
 
 	assetPath = asset;
-	surfaceWidth = width;
-	surfaceHeight = height;
+	worldWidth = width;
+	worldHeight = height;
 
 	return OnInitialize();
 }
@@ -111,8 +111,8 @@ GaoBool AndroidApplication::OnInitialize() {
 		LOGE(log, "Cannot find lua function: %s", SCRIPT_ROUTINE_INIT)
 		return false;
 	}
-	luaManager->PushValue(surfaceWidth);
-	luaManager->PushValue(surfaceHeight);
+	luaManager->PushValue(worldWidth);
+	luaManager->PushValue(worldHeight);
 	luaManager->PushValue(assetPath);
 	LOGD(log, "before call function: %s", SCRIPT_ROUTINE_INIT);
 	if (!luaManager->CallFunction()) {

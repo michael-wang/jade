@@ -68,6 +68,7 @@ GameObjectTemplate
 		{
 			class = "RectangleBound",
             autoSize = true,
+            debug = true,
 		},
         
         {
@@ -180,10 +181,8 @@ GameObjectTemplate
 		},
 
 		{
-			class = "RectangleShape",
-            width = 100,
-            height = 100,
-            color = { 1, 1, 1, 1 },
+			class = "PuzzleSprite",
+			image = "ui_logo_background",
 		},
 	},
 };

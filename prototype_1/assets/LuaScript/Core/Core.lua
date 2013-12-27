@@ -68,6 +68,8 @@ APP_USE_COMPILED_SCRIPT = false;
 APP_ASSET_PATH = nil;
 -- APP_IPOD_PLAYING = false;
 
+-- APP_BASE_X/Y represent game world dimension,
+-- they will be given by Java in InitializeLuaAndroid.
 APP_BASE_X = 320;
 APP_BASE_Y = 480;
 APP_UNIT_X = 1.0;
@@ -129,22 +131,23 @@ g_AppIsRunning = false;
 
 -------------------------------------------------------------------------
 -- function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, useCompiledScript)
-function InitializeLuaAndroid(width, height, assetPath)
+function InitializeLuaAndroid(worldWidth, worldHeight, assetPath)
     -- assert(device);
-	assert(width);
-	assert(height);
+	assert(worldWidth);
+	assert(worldHeight);
 	assert(assetPath);
     -- assert(orientation);
     -- assert(unitX);
     -- assert(unitY);
 
     device = APP_DEVICE_ANDROID_PHONE;
-    portrait = (width < height) and true or false;
+    portrait = (worldWidth < worldHeight) and true or false;
+    APP_BASE_X = worldWidth;
+    APP_BASE_Y = worldHeight;
     unitX = 1.0;
     unitY = 1.0;
     useCompiledScript = false;
-    g_Logger:Show("width:" .. width .. ",height:" .. height);
-    g_Logger:Show("unitX:" .. unitX .. ",unitY:" .. unitY);
+    g_Logger:Show("worldWidth:" .. worldWidth .. ",worldHeight:" .. worldHeight);
     
 	-- APP_DEVICE = device;
 	SCREEN_UNIT_X = APP_BASE_X;

@@ -33,7 +33,9 @@ public class MyGLRenderer implements Renderer {
 		
 		Matrix.orthoM(mMVPMatrix, 0, 
 				0, world2View.worldWidth, world2View.worldHeight, 0, 1, -1);
-		Util.log(TAG, "after orthoM", mMVPMatrix, 4, 4);
+		if (DEBUG_LOG) {
+			Util.log(TAG, "after orthoM", mMVPMatrix, 4, 4);
+		}
 		
 		GLES20.glViewport(
 				Math.round(world2View.viewOffsetX), 

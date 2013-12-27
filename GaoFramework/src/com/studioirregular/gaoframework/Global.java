@@ -7,15 +7,9 @@ public class Global {
 	// file name for shared preferences
 	public static final String PREF_ASSET_FILE_COPY_STATE = "asset_file_copy_state";
 	
-//	public static final float WORLD_DIMENSION_LONG_SIDE = 480.0f;
-//	public static final float WORLD_DIMENSION_SHORT_SIDE = 320.0f;
-	
 	public static class World2ViewMapping {
 		private static final String TAG = "java-Global::World2ViewMapping";
 		private static final boolean DEBUG_LOG = false;
-		
-		private static final float WORLD_DIMENSION_LONG_SIDE = 480.0f;
-		private static final float WORLD_DIMENSION_SHORT_SIDE = 320.0f;
 		
 		// Game logic dealing with fixed game world size.
 		public float worldWidth = -1;
@@ -51,10 +45,10 @@ public class Global {
 			
 			final boolean portrait = surfaceWidth <= surfaceHeight;
 			
-			worldWidth = portrait ? WORLD_DIMENSION_SHORT_SIDE
-					: WORLD_DIMENSION_LONG_SIDE;
-			worldHeight = portrait ? WORLD_DIMENSION_LONG_SIDE
-					: WORLD_DIMENSION_SHORT_SIDE;
+			worldWidth = portrait ? Config.WORLD_DIMENSION_SHORT_SIDE
+					: Config.WORLD_DIMENSION_LONG_SIDE;
+			worldHeight = portrait ? Config.WORLD_DIMENSION_LONG_SIDE
+					: Config.WORLD_DIMENSION_SHORT_SIDE;
 			if (DEBUG_LOG) {
 				Log.d(TAG, "onSurfaceChanged worldWidth:" + worldWidth
 						+ ",worldHeight:" + worldHeight);

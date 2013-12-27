@@ -17,8 +17,6 @@ function InitializeGame()
     objPool = {};
 
     objPool[0] = ObjectFactory:CreateGameObject("Background");
-    objPool[0]["Shape"]:SetSize(g_AppData:GetData("Width"), g_AppData:GetData("Height"));
-    objPool[0]["Shape"]:SetColor(COLOR_PINK[0], COLOR_PINK[1], COLOR_PINK[2], ALPHA_HALF);
 
     objPool[1] = ObjectFactory:CreateGameObject("TestObj_00");
     objPool[1]["Sprite"]:SetAlpha(ALPHA_QUARTER);
