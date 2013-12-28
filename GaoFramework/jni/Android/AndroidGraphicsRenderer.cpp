@@ -91,18 +91,6 @@ Sprite* AndroidGraphicsRenderer::CreateSprite(Transform* transform,
 	return sprite;
 }
 
-GaoVoid AndroidGraphicsRenderer::Draw(Rectangle* rect) {
-
-	JavaInterface* ji = JavaInterface::GetSingletonPointer();
-
-	if (ji == NULL) {
-		LOGE(log, "Draw: cannot get JavaInterface::GetSingletonPointer.")
-		return;
-	}
-
-	ji->Draw(rect);
-}
-
 GaoVoid AndroidGraphicsRenderer::DrawRectangle(
 	GaoInt16 left, GaoInt16 top, GaoInt16 right, GaoInt16 bottom, 
 	GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha) {

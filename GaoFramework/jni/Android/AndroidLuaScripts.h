@@ -20,7 +20,6 @@
 #include <Android/GlyphFontRenderer.h>
 #include <Android/JavaInterface.h>
 #include <Android/LuaLogger.h>
-#include <Android/Rectangle.h>
 #include <Android/TouchEvent.h>
 #include <jni.h>
 
@@ -71,22 +70,6 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def(constructor<>())
 			.def("OnSurfaceChanged", &AndroidGraphicsRenderer::OnSurfaceChanged)
 			.def("DrawRectangle", &AndroidGraphicsRenderer::DrawRectangle)
-			.def("Draw", (void(AndroidGraphicsRenderer::*)(Rectangle*))&AndroidGraphicsRenderer::Draw)
-	];
-
-	module(state)
-	[
-		class_<Rectangle>("Rectangle")
-			.def(constructor<>())
-			.def(constructor<GaoReal32,GaoReal32,GaoReal32,GaoReal32,GaoReal32,GaoReal32,GaoReal32,GaoReal32>())
-			.def("SetBound", &Rectangle::SetBound)
-			.def("SetColor", &Rectangle::SetColor)
-			.def("IsHit", &Rectangle::IsHit)
-			.def("MoveTo", &Rectangle::MoveTo)
-			.def("GetLeft", &Rectangle::GetLeft)
-			.def("GetTop", &Rectangle::GetTop)
-			.def("GetRight", &Rectangle::GetRight)
-			.def("GetBottom", &Rectangle::GetBottom)
 	];
 
 	module(state)

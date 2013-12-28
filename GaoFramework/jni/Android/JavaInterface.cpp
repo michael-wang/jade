@@ -9,8 +9,6 @@ static const char METHOD_NAME_POP_TOUCH_EVENTS[]       = "popTouchEvents";
 static const char METHOD_DESCRIPTOR_POP_TOUCH_EVENTS[] = "()[Lcom/studioirregular/gaoframework/TouchEvent;";
 static const char METHOD_NAME_GET_LOG_FILE_PATH[]      = "getLogFilePath";
 static const char METHOD_DESCRIPTOR_GET_LOG_FILE_PATH[]= "()Ljava/lang/String;";
-static const char METHOD_NAME_DRAW[]                   = "draw";
-static const char METHOD_DESCRIPTOR_DRAW[]             = "(Lcom/studioirregular/gaoframework/Rectangle;)V";
 static const char METHOD_NAME_GET_ASSET_FILE_FOLDER[]  = "GetAssetFileFolder";
 static const char METHOD_DESCRIPTOR_GET_ASSET_FILE_FOLDER[]= "()Ljava/lang/String;";
 static const char METHOD_NAME_DRAW_RECTANGLE[]         = "DrawRectangle";
@@ -114,10 +112,6 @@ char* JavaInterface::GetAssetFileFolder() {
 	env->ReleaseStringUTFChars(jstrPath, cstrPath);
 
 	return result;
-}
-
-void JavaInterface::Draw(Rectangle* rect) {
-	jobj.CallVoidMethod(METHOD_NAME_DRAW, METHOD_DESCRIPTOR_DRAW, rect->GetJavaRef());
 }
 
 void JavaInterface::DrawRectangle(

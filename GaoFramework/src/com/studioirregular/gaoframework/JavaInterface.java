@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.studioirregular.gaoframework.gles.Circle;
+import com.studioirregular.gaoframework.gles.Rectangle;
 
 
 public class JavaInterface {
@@ -36,14 +37,6 @@ public class JavaInterface {
 	}
 	
 	// Java APIs for native code.
-	public void draw(Rectangle rect) {
-//		Log.d(TAG, "draw rect:" + rect);
-		
-		if (renderer != null) {
-			renderer.draw(rect);
-		}
-	}
-	
 	public void DrawRectangle(int left, int top, int right, int bottom, 
 			float red, float green, float blue, float alpha) {
 		

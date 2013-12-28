@@ -9,6 +9,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.studioirregular.gaoframework.gles.Circle;
+import com.studioirregular.gaoframework.gles.Rectangle;
 import com.studioirregular.gaoframework.gles.ShaderProgramPool;
 
 public class MyGLRenderer implements Renderer {

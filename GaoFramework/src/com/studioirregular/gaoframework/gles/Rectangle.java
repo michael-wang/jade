@@ -1,4 +1,4 @@
-package com.studioirregular.gaoframework;
+package com.studioirregular.gaoframework.gles;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

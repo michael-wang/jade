@@ -12,7 +12,6 @@
 #include <Framework/Sprite.hpp>
 #include <Framework/Transform.hpp>
 #include <Android/GLTexture.h>
-#include <Android/Rectangle.h>
 #include "AndroidLogger.h"
 #include <jni.h>
 
@@ -43,8 +42,6 @@ public:
     /**
      * Drawing APIs.
      */
-	GaoVoid Draw(Rectangle* rect);
-
 	virtual GaoVoid DrawRectangle(GaoInt16 startX, GaoInt16 startY, GaoInt16 endX, GaoInt16 endY, 
 		GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
 

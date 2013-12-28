@@ -20,7 +20,6 @@ LOCAL_SRC_FILES += Android/GLTexture.cpp
 LOCAL_SRC_FILES += Android/Java/JavaClass.cpp
 LOCAL_SRC_FILES += Android/Java/JavaObject.cpp
 LOCAL_SRC_FILES += Android/JavaInterface.cpp
-LOCAL_SRC_FILES += Android/Rectangle.cpp
 LOCAL_SRC_FILES += Android/Resource.cpp
 LOCAL_SRC_FILES += Android/TouchEvent.cpp
 
