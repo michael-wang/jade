@@ -9,6 +9,7 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import com.studioirregular.gaoframework.gles.ShaderProgram;
+import com.studioirregular.gaoframework.gles.ShaderProgramPool;
 import com.studioirregular.gaoframework.gles.ShaderSource;
 
 public class Rectangle {
@@ -29,8 +30,6 @@ public class Rectangle {
 		    "void main() {" +
 		    "  gl_FragColor = vColor;" +
 		    "}";
-	
-	private static ShaderProgram shaderProgram = null;
 	
 	private FloatBuffer vertexBuffer;
 	private ShortBuffer drawListBuffer;
@@ -74,21 +73,27 @@ public class Rectangle {
 		drawListBuffer.position(0);
 		
 		
-		if (shaderProgram == null) {
-			ShaderSource vertexShader = new ShaderSource(
-					GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-			ShaderSource fragmentShader = new ShaderSource(
-					GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-
-			shaderProgram = new ShaderProgram();
-
-			shaderProgram.attach(vertexShader);
-			shaderProgram.attach(fragmentShader);
-
-			GLES20.glBindAttribLocation(shaderProgram.getName(), 0, "vPosition");
-
-			shaderProgram.link();
+		if (ShaderProgramPool.getInstance().get(this.getClass()) == null) {
+			ShaderProgramPool.getInstance().add(this.getClass(), buildShaderProgram());
 		}
+	}
+	
+	private ShaderProgram buildShaderProgram() {
+		ShaderSource vertexShader = new ShaderSource(
+				GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+		ShaderSource fragmentShader = new ShaderSource(
+				GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+
+		ShaderProgram result = new ShaderProgram();
+
+		result.attach(vertexShader);
+		result.attach(fragmentShader);
+
+		GLES20.glBindAttribLocation(result.getName(), 0, "vPosition");
+
+		result.link();
+		
+		return result;
 	}
 	
 	public void setBound(float left, float top, float right, float bottom) {
@@ -126,6 +131,12 @@ public class Rectangle {
 	public void draw(float[] mvpMatrix) {
 		if (DEBUG_LOG) {
 			Util.log(TAG, "draw: mvpMatrix:", mvpMatrix, 4, 4);
+		}
+		
+		ShaderProgram shaderProgram = ShaderProgramPool.getInstance().get(
+				this.getClass());
+		if (shaderProgram == null) {
+			return;
 		}
 		
 		final int program = shaderProgram.getName();

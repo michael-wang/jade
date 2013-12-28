@@ -9,6 +9,7 @@ import android.opengl.Matrix;
 import android.util.Log;
 
 import com.studioirregular.gaoframework.gles.Circle;
+import com.studioirregular.gaoframework.gles.ShaderProgramPool;
 
 public class MyGLRenderer implements Renderer {
 
@@ -44,6 +45,8 @@ public class MyGLRenderer implements Renderer {
 				Math.round(world2View.viewHeight));
 		
 		GLES20.glClearColor(1, 0, 0, 1);
+		
+		ShaderProgramPool.getInstance().clear();
 		
 		RendererOnSurfaceChanged(surfaceWidth, surfaceHeight, 
 				JavaInterface.getInstance().GetAssetFileFolder());

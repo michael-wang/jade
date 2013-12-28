@@ -20,8 +20,8 @@ public class Circle {
 			Log.d(TAG, "       r:" + red + ",g:" + green + ",b:" + blue + ",a:" + alpha);
 		}
 		
-		if (shaderProgram == null) {
-			shaderProgram = buildShaderProgram();
+		if (ShaderProgramPool.getInstance().get(this.getClass()) == null) {
+			ShaderProgramPool.getInstance().add(this.getClass(), buildShaderProgram());
 		}
 		
 		vertexBuffer = buildVerteces(x, y, radius);
@@ -29,6 +29,12 @@ public class Circle {
 	}
 	
 	public void draw(float[] mvpMatrix) {
+		
+		ShaderProgram shaderProgram = ShaderProgramPool.getInstance().get(
+				this.getClass());
+		if (shaderProgram == null) {
+			return;
+		}
 		
 		final int program = shaderProgram.getName();
 		
@@ -123,7 +129,6 @@ public class Circle {
 		    "  gl_FragColor = vColor;" +
 		    "}";
 	
-	private static ShaderProgram shaderProgram = null;
 	private static ShaderProgram buildShaderProgram() {
 		
 		ShaderSource vertexShader = new ShaderSource(
