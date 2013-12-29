@@ -47,9 +47,14 @@ public class JavaInterface {
 					",alpha:" + alpha);
 		}
 		
+		if (rectangle == null) {
+			rectangle = new Rectangle();
+		}
+		rectangle.setVertex(left, top, right, bottom);
+		rectangle.setColor(red, green, blue, alpha);
+		
 		if (renderer != null) {
-			renderer.draw(
-					new Rectangle(left, top, right, bottom, red, green, blue, alpha));
+			renderer.draw(rectangle);
 		}
 	}
 	
@@ -60,8 +65,14 @@ public class JavaInterface {
 			Log.d(TAG, "DrawCircle x:" + x + ",y:" + y + ",radius:" + radius);
 		}
 		
+		if (circle == null) {
+			circle = new Circle();
+		}
+		circle.setVertex(x, y, radius);
+		circle.setColor(red, green, blue, alpha);
+		
 		if (renderer != null) {
-			renderer.draw(new Circle(x, y, radius, red, green, blue, alpha));
+			renderer.draw(circle);
 		}
 	}
 	
@@ -137,4 +148,7 @@ public class JavaInterface {
 	private Context context;
 	private MyGLRenderer renderer;
 	private List<TouchEvent> touchEvents;
+	
+	private Circle circle;
+	private Rectangle rectangle;
 }

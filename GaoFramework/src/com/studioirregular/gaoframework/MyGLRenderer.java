@@ -11,6 +11,7 @@ import android.util.Log;
 import com.studioirregular.gaoframework.gles.Circle;
 import com.studioirregular.gaoframework.gles.Rectangle;
 import com.studioirregular.gaoframework.gles.ShaderProgramPool;
+import com.studioirregular.gaoframework.gles.Shape;
 
 public class MyGLRenderer implements Renderer {
 
@@ -77,13 +78,9 @@ public class MyGLRenderer implements Renderer {
 		this.fps = fps;
 		fps.start();
 	}
-
-	void draw(Rectangle rect) {
-		rect.draw(mMVPMatrix);
-	}
 	
-	void draw(Circle circle) {
-		circle.draw(mMVPMatrix);
+	void draw(Shape shape) {
+		shape.draw(mMVPMatrix);
 	}
 	
 	private native void RendererOnSurfaceChanged(int w, int h, String assetFolder);
