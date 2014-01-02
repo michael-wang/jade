@@ -1,6 +1,8 @@
 package com.studioirregular.gaoframework.gles;
 
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.opengl.GLES20;
 import android.util.Log;
@@ -44,6 +46,8 @@ public class ShaderProgram {
 		}
 		
 		GLES20.glAttachShader(name, shader.getName());
+		
+		shaders.add(shader);
 	}
 	
 	public void detach(ShaderSource shader) {
@@ -53,6 +57,21 @@ public class ShaderProgram {
 		}
 		
 		GLES20.glDetachShader(name, shader.getName());
+	}
+	
+	public void bindAttributes() {
+		
+		int attrIndex = 0;
+		for (ShaderSource shader : shaders) {
+			for (String attr : shader.getAttributes()) {
+				if (DEBUG_LOG) {
+					Log.d(TAG, "bindAttributes index:" + attrIndex + ",attr:" + attr);
+				}
+				
+				GLES20.glBindAttribLocation(getName(), attrIndex, attr);
+				attrIndex++;
+			}
+		}
 	}
 	
 	public void link() throws RuntimeException {
@@ -91,4 +110,9 @@ public class ShaderProgram {
 	
 	private final int name;
 	private boolean deleted = false;
+	private List<ShaderSource> shaders = new ArrayList<ShaderSource>();
+	
+	/* package */ List<ShaderSource> getShaders() {
+		return shaders;
+	}
 }

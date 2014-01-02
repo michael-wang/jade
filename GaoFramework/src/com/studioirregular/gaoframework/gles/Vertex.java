@@ -8,31 +8,45 @@ import android.opengl.GLES20;
 
 public class Vertex {
 
-	public Vertex(int vertexCount, int elementPerVertex) {
+	private static final String TAG = "java-Vertex";
+	private static final boolean DEBUG_LOG = false;
+	
+	public Vertex(int vertexCount, int componentPerVertex) {
 		
-		ELEMENT_PER_VERTEX = elementPerVertex;
-		VERTEX_STRIDE = elementPerVertex * BYTES_PER_ELEMENT;
+		VERTEX_COUNT = vertexCount;
+		COMPONENT_PER_VERTEX = componentPerVertex;
+		VERTEX_STRIDE = componentPerVertex * BYTES_PER_COMPONENT;
 		
-		vertexBuffer = initBuffer(vertexCount, elementPerVertex);
+		fBuf = initBuffer(vertexCount, componentPerVertex);
 	}
 	
-	public Vertex put(int i, float value) {
-		vertexBuffer.put(i, value);
-		return this;
-	}
-	
-	public void finishPut() {
-		vertexBuffer.position(0);
+	public void set(float... values) {
+		
+		final int EXPECTED_LENGTH = VERTEX_COUNT * COMPONENT_PER_VERTEX;
+		if (values.length != EXPECTED_LENGTH) {
+			throw new IllegalArgumentException("Expect #values:"
+					+ EXPECTED_LENGTH + ", but got:" + values.length);
+		}
+		
+		fBuf.position(0);
+		
+		for (float v : values) {
+			fBuf.put(v);
+		}
+		
+		fBuf.position(0);
 	}
 	
 	public void bindValueToAttribute(int shaderProgram, String attrName) {
 		
 		attributeIndex = GLES20.glGetAttribLocation(shaderProgram, attrName);
+		errorChecker.hasError(TAG, "Failed when glGetAttribLocation attrName:" + attrName);
 		
 		GLES20.glEnableVertexAttribArray(attributeIndex);
 		
-		GLES20.glVertexAttribPointer(attributeIndex, ELEMENT_PER_VERTEX,
-				GLES20.GL_FLOAT, false, VERTEX_STRIDE, vertexBuffer);
+		GLES20.glVertexAttribPointer(attributeIndex, COMPONENT_PER_VERTEX,
+				GLES20.GL_FLOAT, false, VERTEX_STRIDE, fBuf);
+		errorChecker.hasError(TAG, "Failed when glVertexAttribPointer");
 	}
 	
 	public void unbindValueToAttribute() {
@@ -45,19 +59,22 @@ public class Vertex {
 	protected FloatBuffer initBuffer(int vertexCount, int elementPerVertex) {
 		
 		FloatBuffer buf = ByteBuffer
-				.allocateDirect(vertexCount * elementPerVertex * BYTES_PER_ELEMENT)
+				.allocateDirect(vertexCount * elementPerVertex * BYTES_PER_COMPONENT)
 				.order(ByteOrder.nativeOrder())
 				.asFloatBuffer();
 		buf.position(0);
 		return buf;
 	}
 	
-	private static final int BYTES_PER_ELEMENT = 4;
-	private static final int INVALID_ATTRIBUTE_INDEX = -1;
+	protected static final int BYTES_PER_COMPONENT = 4;
+	protected static final int INVALID_ATTRIBUTE_INDEX = -1;
 	
-	private final int ELEMENT_PER_VERTEX;
-	private final int VERTEX_STRIDE;
+	protected final int VERTEX_COUNT;
+	protected final int COMPONENT_PER_VERTEX;
+	protected final int VERTEX_STRIDE;
 	
-	private FloatBuffer vertexBuffer;
-	private int attributeIndex = INVALID_ATTRIBUTE_INDEX;
+	protected FloatBuffer fBuf;
+	protected int attributeIndex = INVALID_ATTRIBUTE_INDEX;
+	
+	protected GLError errorChecker = new GLError(DEBUG_LOG);
 }

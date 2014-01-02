@@ -19,19 +19,19 @@ GameStageTemplate
         g_TouchBeganPos[1] = x;
         g_TouchBeganPos[2] = y;
 
-        if (objPool[1]["Motion"]:IsOnMotion()) then
-        	objPool[1]["Motion"]:AppendNextTarget(x, y);
+        if (objPool[2]["Motion"]:IsOnMotion()) then
+        	objPool[2]["Motion"]:AppendNextTarget(x, y);
         else
-        	objPool[1]["Motion"]:AppendFirstTarget(x, y);
+        	objPool[2]["Motion"]:AppendFirstTarget(x, y);
         end
 		
-		objPool[4]["Transform"]:SetTranslate(x, y);
-		objPool[4]["Sprite"]:Animate();
+		objPool[5]["Transform"]:SetTranslate(x, y);
+		objPool[5]["Sprite"]:Animate();
 
-	    objPool[6]["SpriteGroup"]:SetOffset(1, 0, 0);
-	    objPool[6]["SpriteGroup"]:SetOffset(2, 50, 0);
-	    objPool[6]["SpriteGroup"]:SetOffset(3, 100, 0);
-	    objPool[6]["SpriteGroup"]:SetOffset(4, 150, 0);
+	    objPool[7]["SpriteGroup"]:SetOffset(1, 0, 0);
+	    objPool[7]["SpriteGroup"]:SetOffset(2, 50, 0);
+	    objPool[7]["SpriteGroup"]:SetOffset(3, 100, 0);
+	    objPool[7]["SpriteGroup"]:SetOffset(4, 150, 0);
   	end,
 
 	TouchMoved = function(x, y)

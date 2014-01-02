@@ -7,7 +7,7 @@ using namespace Gao::Framework;
 
 
 AndroidSprite::AndroidSprite() :
-	jobj ("com/studioirregular/gaoframework/AndroidSprite", "()V"),
+	jobj ("com/studioirregular/gaoframework/gles/Sprite", "()V"),
 	log ("native::framework::AndroidSpirte", false) {
 }
 
@@ -30,7 +30,7 @@ GaoBool AndroidSprite::Create(Transform* transform, Texture* texture) {
 	}
 
 	jboolean result = jobj.CallBooleanMethod("Create", 
-		"(Lcom/studioirregular/gaoframework/AndroidTransform;Lcom/studioirregular/gaoframework/GLTexture;)Z",
+		"(Lcom/studioirregular/gaoframework/AndroidTransform;Lcom/studioirregular/gaoframework/gles/Texture;)Z",
 		at->GetJavaRef(), gtx->GetJavaRef());
 
 	return result;

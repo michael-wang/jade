@@ -16,19 +16,15 @@ public class Rectangle extends Shape {
 	}
 	
 	@Override
-	protected String VERTEX_SHADER_CODE() {
-		return DEFAULT_VERTEX_SHADER;
-	}
-	
-	@Override
-	protected String FRAGMENT_SHADER_CODE() {
-		return DEFAULT_FRAGMENT_SHADER;
-	}
-	
-	@Override
 	public void setVertex(float... values) {
 		
-		assert(values.length == 3);
+		// Expect 2 points: top-left and bottom-right.
+		final int EXPECTED_LENGTH = 2 * COMPONENT_PER_VERTEX();
+		if (values.length != EXPECTED_LENGTH) {
+			throw new IllegalArgumentException("Expect #values:"
+					+ EXPECTED_LENGTH + ", but got:" + values.length);
+		}
+		
 		final float left   = values[0];
 		final float top    = values[1];
 		final float right  = values[2];
@@ -39,12 +35,13 @@ public class Rectangle extends Shape {
 					+ right + ",bottom:" + bottom);
 		}
 		
-		vertex.put(0, left) .put( 1,  top)   .put( 2, 0);
-		vertex.put(3, left) .put( 4,  bottom).put( 5, 0);
-		vertex.put(6, right).put( 7,  top)   .put( 8, 0);
-		vertex.put(9, right).put(10,  bottom).put(11, 0);
-		
-		vertex.finishPut();
+		final float args[] = {
+				left,  top,
+				left,  bottom,
+				right, top,
+				right, bottom,
+			};
+		vertex.set(args);
 	}
 	
 	@Override

@@ -1,6 +1,8 @@
 package com.studioirregular.gaoframework.gles;
 
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.opengl.GLES20;
 import android.util.Log;
@@ -18,7 +20,21 @@ public class ShaderSource {
 	 * @param type GL_VERTEX_SHADER or GL_FRAGMENT_SHADER
 	 * @param code
 	 */
-	public ShaderSource(int type, String code) throws RuntimeException {
+	public ShaderSource(int type, String code, String... attributes) throws RuntimeException {
+		
+		if (DEBUG_LOG) {
+			StringBuilder attrs = new StringBuilder(",attributes:");
+			for (String a : attributes) {
+				attrs.append(a).append(",");
+			}
+			Log.d(TAG, "ShaderSource type:" + type + ",code:\n" + code
+					+ "\nattributes:" + attrs.toString());
+		}
+		
+		this.sourceCode = code;
+		for (String attr : attributes) {
+			this.attributes.add(attr);
+		}
 		
 		name = GLES20.glCreateShader(type);
 		if (name == INVALID_SHADER_NAME) {
@@ -27,7 +43,7 @@ public class ShaderSource {
 		}
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "ShaderSource type:" + type + ",name:" + name);
+			Log.d(TAG, "ShaderSource name:" + name);
 		}
 		
 		GLES20.glShaderSource(name, code);
@@ -39,6 +55,11 @@ public class ShaderSource {
 			throw new RuntimeException(
 					"Shader compilation failed, error log:" + log);
 		}
+	}
+	
+	public List<String> getAttributes() {
+		
+		return attributes;
 	}
 	
 	public void delete() {
@@ -62,6 +83,10 @@ public class ShaderSource {
 		return name;
 	}
 	
+	/* package */ String getSource() {
+		return sourceCode;
+	}
+	
 	private boolean isCompileSuccess(int shader) {
 		
 		IntBuffer intBuf = IntBuffer.allocate(1);
@@ -73,4 +98,6 @@ public class ShaderSource {
 	
 	private final int name;
 	private boolean deleted = false;
+	private final String sourceCode;
+	private List<String> attributes = new ArrayList<String>();
 }

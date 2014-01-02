@@ -141,7 +141,7 @@ public class JavaInterface {
 		return context;
 	}
 	
-	/* package */ MyGLRenderer getRenderer() {
+	public MyGLRenderer getRenderer() {
 		return renderer;
 	}
 	

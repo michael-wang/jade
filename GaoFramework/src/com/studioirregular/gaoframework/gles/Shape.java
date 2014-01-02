@@ -1,5 +1,8 @@
 package com.studioirregular.gaoframework.gles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.opengl.GLES20;
 import android.util.Log;
 
@@ -9,7 +12,7 @@ public abstract class Shape {
 	protected abstract boolean DEBUG_LOG();
 	
 	public Shape() {
-		vertex = new Vertex(VERTEX_COUNT(), ELEMENT_PER_VERTEX);
+		vertex = initVertex();
 		color = initColorBuffer();
 		
 		ShaderProgram shaderProgram = ShaderProgramPool.getInstance().get(getClass());
@@ -19,14 +22,45 @@ public abstract class Shape {
 		}
 	}
 	
-	protected abstract String VERTEX_SHADER_CODE();
-	protected abstract String FRAGMENT_SHADER_CODE();
+	protected static final String DEFAULT_ATTR_POSITION = "vPosition";
+	protected static final String DEFAULT_UNIFORM_COLOR = "vColor";
+	protected static final String DEFAULT_UNIFORM_MVP   = "uMVPMatrix";
+	
+	protected List<ShaderSource> SHADER_SOURCES() {
+		
+		List<ShaderSource> result = new ArrayList<ShaderSource>();
+		
+		final String VERTEX_SHADER =
+				"uniform mat4 uMVPMatrix;" +
+				"attribute vec4 vPosition;" +
+				"void main() {" +
+				"  gl_Position = uMVPMatrix * vPosition;" +
+				"}";
+		
+		result.add(new ShaderSource(GLES20.GL_VERTEX_SHADER,
+				VERTEX_SHADER, "vPosition", "a_TexCoordinate"));
+		
+		final String FRAGMENT_SHADER = 
+				"precision mediump float;" +
+				"uniform vec4 vColor;" +
+				"void main() {" +
+				"  gl_FragColor = vColor;" +
+				"}";
+		
+		result.add(new ShaderSource(GLES20.GL_FRAGMENT_SHADER,
+				FRAGMENT_SHADER));
+		
+		return result;
+	}
 	
 	protected ShaderProgram getShaderProgram() {
 		return ShaderProgramPool.getInstance().get(getClass());
 	}
 	
-	public abstract void setVertex(float... values);
+	public void setVertex(float... values) {
+		
+		vertex.set(values);
+	}
 	
 	public void draw(float[] mvpMatrix) {
 		
@@ -38,7 +72,7 @@ public abstract class Shape {
 			return;
 		}
 		
-		setAttributeVertex(shaderProgram, DEFAULT_ATTR_POSITION, vertex);
+		vertex.bindValueToAttribute(shaderProgram, DEFAULT_ATTR_POSITION);
 		
 		setUniformColor(shaderProgram, DEFAULT_UNIFORM_COLOR, color);
 		
@@ -65,10 +99,6 @@ public abstract class Shape {
 		return program;
 	}
 	
-	protected void setAttributeVertex(int program, String attributeName, Vertex value) {
-		value.bindValueToAttribute(program, attributeName);
-	}
-	
 	protected void setUniformColor(int program, String uniformName, float[] value) {
 		
 		final int colorIndex = GLES20.glGetUniformLocation(program, uniformName);
@@ -89,14 +119,17 @@ public abstract class Shape {
 	
 	protected Vertex vertex;
 	protected abstract int VERTEX_COUNT();
-	protected static final int ELEMENT_PER_VERTEX = 3;
-	protected static final int BYTES_PER_ELEMENT = 4;
-	protected static final int VERTEX_STRIDE = ELEMENT_PER_VERTEX * BYTES_PER_ELEMENT;
+	protected int COMPONENT_PER_VERTEX() {
+		return 2;
+	}
+	protected Vertex initVertex() {
+		return new Vertex(VERTEX_COUNT(), COMPONENT_PER_VERTEX());
+	}
 	
 	protected float[] color;
 	protected static final int COLOR_ELEMENT_COUNT = 4;
 	
-	private float[] initColorBuffer() {
+	protected float[] initColorBuffer() {
 		return new float[COLOR_ELEMENT_COUNT];
 	}
 	
@@ -116,38 +149,18 @@ public abstract class Shape {
 	
 	protected ShaderProgram buildShaderProgram() {
 		
-		ShaderSource vertexShader = new ShaderSource(
-				GLES20.GL_VERTEX_SHADER, VERTEX_SHADER_CODE());
-		ShaderSource fragmentShader = new ShaderSource(
-				GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER_CODE());
-
-		ShaderProgram result = new ShaderProgram();
-
-		result.attach(vertexShader);
-		result.attach(fragmentShader);
-
-		GLES20.glBindAttribLocation(result.getName(), 0, "vPosition");
-
-		result.link();
+		List<ShaderSource> shaderSources = SHADER_SOURCES();
 		
-		return result;
+		ShaderProgram program = new ShaderProgram();
+		
+		for (ShaderSource shader : shaderSources) {
+			program.attach(shader);
+		}
+		
+		program.bindAttributes();
+		
+		program.link();
+		
+		return program;
 	}
-	
-	protected static final String DEFAULT_VERTEX_SHADER =
-			"uniform mat4 uMVPMatrix;" +
-			"attribute vec4 vPosition;" +
-			"void main() {" +
-			"  gl_Position = uMVPMatrix * vPosition;" +
-			"}";
-	
-	protected static final String DEFAULT_FRAGMENT_SHADER =
-		    "precision mediump float;" +
-		    "uniform vec4 vColor;" +
-		    "void main() {" +
-		    "  gl_FragColor = vColor;" +
-		    "}";
-	
-	private static final String DEFAULT_ATTR_POSITION = "vPosition";
-	private static final String DEFAULT_UNIFORM_COLOR = "vColor";
-	private static final String DEFAULT_UNIFORM_MVP   = "uMVPMatrix";
 }

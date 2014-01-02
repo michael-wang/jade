@@ -2,7 +2,7 @@
 #include "Java/JniEnv.h"
 
 
-static const char JAVA_CLASS_PATH[]				= "com/studioirregular/gaoframework/GLTexture";
+static const char JAVA_CLASS_PATH[]				= "com/studioirregular/gaoframework/gles/Texture";
 static const char JAVA_CONSTRUCTOR_DESCRIPTOR[] = "()V";
 static const char JAVA_INTERFACE_PATH[]			= "com/studioirregular/gaoframework/JavaInterface";
 static const char JAVA_CREATE_NAME[]            = "Create";
