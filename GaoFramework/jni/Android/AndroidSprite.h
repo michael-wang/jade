@@ -31,6 +31,18 @@ public:
 
 	virtual GaoVoid Draw();
 
+	// index: [1, 4].
+	virtual GaoVoid SetVertexData(GaoUInt16 index, GaoReal32 x, GaoReal32 y, 
+		GaoReal32 u, GaoReal32 v);
+
+	virtual GaoVoid SetQuadVertices(
+		GaoReal32 x1, GaoReal32 y1, GaoReal32 x2, GaoReal32 y2, 
+		GaoReal32 x3, GaoReal32 y3, GaoReal32 x4, GaoReal32 y4);
+
+	virtual GaoVoid SetQuadTexCoords(
+		GaoReal32 u1, GaoReal32 v1, GaoReal32 u2, GaoReal32 v2, 
+		GaoReal32 u3, GaoReal32 v3, GaoReal32 u4, GaoReal32 v4);
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;

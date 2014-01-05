@@ -184,5 +184,10 @@ GameObjectTemplate
 			class = "PuzzleSprite",
 			image = "ui_logo_background",
 		},
+
+        {
+            class = "LinearMotion",
+            velocity = 200,
+        },
 	},
 };

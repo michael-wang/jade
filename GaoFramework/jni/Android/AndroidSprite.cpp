@@ -43,13 +43,13 @@ GaoVoid AndroidSprite::SetTransform(GaoInt16 coordX, GaoInt16 coordY) {
 	m_Transform->SetTranslate(coordX, coordY);
 }
 
-GaoVoid AndroidSprite::SetTexCoords(GaoReal32 u1, GaoReal32 v1, 
-	GaoReal32 u2, GaoReal32 v2) {
+GaoVoid AndroidSprite::SetTexCoords(GaoReal32 left, GaoReal32 top, 
+	GaoReal32 right, GaoReal32 bottom) {
 	
-	LOGD(log, "SetTexCoords u1:%f, v1:%f, u2:%f, v2:%f", u1, v1, u2, v2);
+	LOGD(log, "SetTexCoords left:%f, top:%f, right:%f, bottom:%f", left, top, right, bottom);
 
-	SetTexCoordsU(u1, u2);
-	SetTexCoordsV(v1, v2);
+	SetTexCoordsU(left, right);
+	SetTexCoordsV(top, bottom);
 }
 
 GaoVoid AndroidSprite::SetTexCoordsU(GaoReal32 u1, GaoReal32 u2) {
@@ -59,25 +59,55 @@ GaoVoid AndroidSprite::SetTexCoordsU(GaoReal32 u1, GaoReal32 u2) {
 	jobj.CallVoidMethod("SetTexCoordsU", "(FF)V", u1, u2);
 }
 
-GaoVoid AndroidSprite::SetTexCoordsV(GaoReal32 v1, GaoReal32 v2) {
+GaoVoid AndroidSprite::SetTexCoordsV(GaoReal32 top, GaoReal32 bottom) {
 	
-	LOGD(log, "SetTexCoordsV v1:%f, v2:%f", v1, v2);
+	LOGD(log, "SetTexCoordsV top:%f, bottom:%f", top, bottom);
 
-	jobj.CallVoidMethod("SetTexCoordsV", "(FF)V", v1, v2);
+	jobj.CallVoidMethod("SetTexCoordsV", "(FF)V", top, bottom);
 }
 
 GaoVoid AndroidSprite::SetRenderSizeAndTexCoords(GaoInt16 width, GaoInt16 height, 
-	GaoReal32 u1, GaoReal32 v1, GaoReal32 u2, GaoReal32 v2) {
+	GaoReal32 left, GaoReal32 top, GaoReal32 right, GaoReal32 bottom) {
 	
 	LOGD(log, 
-		"SetRenderSizeAndTexCoords width:%d, height:%d, u1:%f, v1:%f, u2:%f, v2:%f", 
-		width, height, u1, v1, u2, v2)
+		"SetRenderSizeAndTexCoords width:%d, height:%d, left:%f, top:%f, right:%f, bottom:%f", 
+		width, height, left, top, right, bottom)
 
 	jobj.CallVoidMethod("SetRenderSize", "(II)V", width, height);
-	SetTexCoords(u1, v1, u2, v2);
+	SetTexCoords(left, top, right, bottom);
 }
 
 GaoVoid AndroidSprite::Draw() {
 	
 	jobj.CallVoidMethod("Draw", "()V");
+}
+
+GaoVoid AndroidSprite::SetVertexData(GaoUInt16 index, 
+	GaoReal32 x, GaoReal32 y, GaoReal32 u, GaoReal32 v) {
+
+	LOGD(log, "SetVertexData index:%d, x:%f, y:%f, u:%f, v:%f", index, x, y, u, v)
+
+	jobj.CallVoidMethod("SetVertexData", "(IFFFF)V", index, x, y, u, v);
+}
+
+GaoVoid AndroidSprite::SetQuadVertices(
+	GaoReal32 x1, GaoReal32 y1, GaoReal32 x2, GaoReal32 y2, 
+	GaoReal32 x3, GaoReal32 y3, GaoReal32 x4, GaoReal32 y4) {
+
+	LOGD(log, "SetQuadVertices x1:%f, y1:%f, x2:%f, y2:%f, x3:%f, y3:%f, x4:%f, y4:%f", 
+		x1, y1, x2, y2, x3, y3, x4, y4)
+
+	jobj.CallVoidMethod("SetQuadVertices", "(FFFFFFFF)V", 
+		x1, y1, x2, y2, x3, y3, x4, y4);
+}
+
+GaoVoid AndroidSprite::SetQuadTexCoords(
+	GaoReal32 u1, GaoReal32 v1, GaoReal32 u2, GaoReal32 v2, 
+	GaoReal32 u3, GaoReal32 v3, GaoReal32 u4, GaoReal32 v4) {
+
+	LOGD(log, "SetQuadTexCoords u1:%f, v1:%f, u2:%f, v2:%f, u3:%f, v3:%f, u4:%f, v4:%f", 
+		u1, v1, u2, v2, u3, v3, u4, v4)
+
+	jobj.CallVoidMethod("SetQuadTexCoords", "(FFFFFFFF)V", 
+		u1, v1, u2, v2, u3, v3, u4, v4);
 }

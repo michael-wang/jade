@@ -28,11 +28,14 @@ public class Vertex {
 					+ EXPECTED_LENGTH + ", but got:" + values.length);
 		}
 		
-		fBuf.position(0);
+		set(0, values);
+	}
+	
+	public void set(int offset, float... values) {
 		
-		for (float v : values) {
-			fBuf.put(v);
-		}
+		fBuf.position(offset);
+		
+		fBuf.put(values);
 		
 		fBuf.position(0);
 	}

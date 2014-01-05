@@ -78,10 +78,18 @@ public class JavaInterface {
 	
 	public String GetAssetFileFolder() {
 		
-		if (context != null) {
-			return context.getFilesDir().getAbsolutePath();
+		if (BuildConfig.DEBUG) {
+			// On debug mode, copy it to somewhere I can easily override the lua
+			// files, to make debug easier.
+			return Environment.getExternalStoragePublicDirectory(
+					Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+		} else {
+			if (context != null) {
+				return context.getFilesDir().getAbsolutePath();
+			} else {
+				return "";
+			}
 		}
-		return "";
 	}
 	
 	public String getLogFilePath() {

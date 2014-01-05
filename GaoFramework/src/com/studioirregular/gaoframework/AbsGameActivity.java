@@ -7,7 +7,6 @@ import java.util.Observer;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -45,7 +44,9 @@ public abstract class AbsGameActivity extends Activity {
 		
 		JavaInterface.getInstance().init(AbsGameActivity.this, renderer);
 		
-		copyAssetLuaFilesToStorageIfNecessary();
+		if (!isFilesCopiedToStorage(LUA_FILES_COPY_STATE)) {
+			copyAssetLuaFilesToStorage();
+		}
 		
 		SoundSystem.getInstance().open(AbsGameActivity.this);
 		
@@ -129,28 +130,15 @@ public abstract class AbsGameActivity extends Activity {
 		return folder.getAbsolutePath() + File.separator + fileName;
 	}
 	
-	private void copyAssetLuaFilesToStorageIfNecessary() {
+	private void copyAssetLuaFilesToStorage() {
 		
-		final boolean IS_DEBUG_BUILD = 
-				(getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+		final File copyToPath = new File(JavaInterface.getInstance()
+				.GetAssetFileFolder());
 		
-		boolean needCopy = false;
-		if (IS_DEBUG_BUILD) {
-			// always copy for debug build.
-			needCopy = true;
+		if (copyLuaToStorage(copyToPath)) {
+			setFilesCopiedToStorage(LUA_FILES_COPY_STATE);
 		} else {
-			needCopy = !isFilesCopiedToStorage(LUA_FILES_COPY_STATE);
-		}
-		
-		if (needCopy) {
-			
-			final File copyToPath = new File(JavaInterface.getInstance().GetAssetFileFolder());
-			
-			if (copyLuaToStorage(copyToPath)) {
-				setFilesCopiedToStorage(LUA_FILES_COPY_STATE);
-			} else {
-				Log.e(TAG, "copyAssetLuaFilesIfNecessary: failed to copy asset lua files.");
-			}
+			Log.e(TAG, "copyAssetLuaFilesIfNecessary: failed to copy asset lua files.");
 		}
 	}
 	
