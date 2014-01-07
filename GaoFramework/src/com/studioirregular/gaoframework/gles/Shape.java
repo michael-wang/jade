@@ -64,13 +64,19 @@ public abstract class Shape {
 	
 	public void draw(float[] mvpMatrix) {
 		
-		final int shaderProgram = useShaderProgram();
-		if (shaderProgram == ShaderProgram.INVALID_PROGRAM_NAME) {
+		ShaderProgram program = getShaderProgram();
+		if (program == null) {
 			if (DEBUG_LOG()) {
-				Log.w(TAG(), "draw: Cannot find my shader program.");
+				Log.w(TAG(), "draw: shader program gone, recreate one.");
 			}
-			return;
+			
+			program = buildShaderProgram();
+			ShaderProgramPool.getInstance().add(getClass(), program);
 		}
+		
+		final int shaderProgram = program.getName();
+		
+		useShaderProgram(program);
 		
 		vertex.bindValueToAttribute(shaderProgram, DEFAULT_ATTR_POSITION);
 		
@@ -85,18 +91,11 @@ public abstract class Shape {
 	
 	protected abstract void onDraw();
 	
-	protected int useShaderProgram() {
-		
-		ShaderProgram shaderProgram = getShaderProgram();
-		if (shaderProgram == null) {
-			return ShaderProgram.INVALID_PROGRAM_NAME;
-		}
+	protected void useShaderProgram(ShaderProgram shaderProgram) {
 		
 		final int program = shaderProgram.getName();
 		
 		GLES20.glUseProgram(program);
-		
-		return program;
 	}
 	
 	protected void setUniformColor(int program, String uniformName, float[] value) {
@@ -148,6 +147,10 @@ public abstract class Shape {
 	}
 	
 	protected ShaderProgram buildShaderProgram() {
+		
+		if (DEBUG_LOG()) {
+			Log.w(TAG(), "buildShaderProgram");
+		}
 		
 		List<ShaderSource> shaderSources = SHADER_SOURCES();
 		

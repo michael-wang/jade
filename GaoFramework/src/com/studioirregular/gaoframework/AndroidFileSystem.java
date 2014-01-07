@@ -8,8 +8,8 @@ import android.util.Log;
 
 public class AndroidFileSystem {
 
-	private static final String TAG = "java-FileSystem";
-	private static final boolean DEBUG_LOG = true;
+	private static final String TAG = "java-AndroidFileSystem";
+	private static final boolean DEBUG_LOG = false;
 	
 	/*
 	 * In my understanding, this path is for log file, so it should be easy for

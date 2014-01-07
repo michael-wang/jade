@@ -29,6 +29,7 @@ AndroidApplication* AndroidApplication::Singleton = NULL;
 
 AndroidApplication::AndroidApplication() :
 	luaManager (new LuaScriptManager()),
+	initialized (FALSE),
 	running (TRUE),
 	log ("native::framework::AndroidApplication", false),
 	worldWidth (0),
@@ -59,7 +60,11 @@ GaoBool AndroidApplication::Initialize(char* asset, int width, int height) {
 	worldWidth = width;
 	worldHeight = height;
 
-	return OnInitialize();
+	GaoBool result = OnInitialize();
+
+	initialized = result;
+
+	return result;
 }
 
 GaoVoid AndroidApplication::Pause() {
@@ -126,19 +131,35 @@ GaoVoid AndroidApplication::OnTerminate() {
 
 	LOGD(log, "OnTerminate")
 
+	if (!initialized) {
+		LOGE(log, "OnTerminated skipt for not initialized.")
+		return;
+	}
+
 	CallLua(SCRIPT_ROUTINE_ONTERMINATE);
 }
 
 GaoVoid AndroidApplication::OnUpdate() {
+
+	// LOGD(log, "OnUpdate")
+
 	CallLua(SCRIPT_ROUTINE_UPDATE);
 }
 
 GaoVoid AndroidApplication::OnRender() {
+
+	// LOGD(log, "OnRender")
+
 	CallLua(SCRIPT_ROUTINE_RENDER);
 }
 
 GaoVoid AndroidApplication::OnPause(GaoBool onPause) {
 	LOGD(log, "OnPause %d", onPause)
+
+	if (!initialized) {
+		LOGE(log, "OnPause(%d) skipt for not initialized.", onPause)
+		return;
+	}
 
 	if (!luaManager->GetFunction(SCRIPT_ROUTINE_PAUSE)) {
 		LOGE(log, "Cannot find lua function:%s", SCRIPT_ROUTINE_PAUSE)

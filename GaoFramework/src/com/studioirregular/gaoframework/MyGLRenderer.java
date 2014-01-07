@@ -13,12 +13,21 @@ import com.studioirregular.gaoframework.gles.Shape;
 
 public class MyGLRenderer implements Renderer {
 
-	private static final String TAG = "my-glrenderer";
+	private static final String TAG = "java-MyGLRenderer";
 	private static final boolean DEBUG_LOG = false;
 	
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onSurfaceCreated");
+		}
+		
+		RendererOnSurfaceCreated();
+		
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		
+		ShaderProgramPool.getInstance().clear();
 	}
 	
 	@Override
@@ -45,8 +54,6 @@ public class MyGLRenderer implements Renderer {
 				Math.round(world2View.viewHeight));
 		
 		GLES20.glClearColor(1, 0, 0, 1);
-		
-		ShaderProgramPool.getInstance().clear();
 		
 		RendererOnSurfaceChanged(surfaceWidth, surfaceHeight, 
 				JavaInterface.getInstance().GetAssetFileFolder());
@@ -81,6 +88,7 @@ public class MyGLRenderer implements Renderer {
 		shape.draw(mMVPMatrix);
 	}
 	
+	private native void RendererOnSurfaceCreated();
 	private native void RendererOnSurfaceChanged(int w, int h, String assetFolder);
 	private native void RendererOnDrawFrame();
 	

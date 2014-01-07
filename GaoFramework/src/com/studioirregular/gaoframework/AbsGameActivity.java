@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -34,6 +35,9 @@ public abstract class AbsGameActivity extends Activity {
 		surfaceView = new GLSurfaceView(AbsGameActivity.this);
 		surfaceView.setEGLContextClientVersion(2);
 		surfaceView.setOnTouchListener(surfaaceViewTouchListener);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			surfaceView.setPreserveEGLContextOnPause(true);
+		}
 		
 		MyGLRenderer renderer = new MyGLRenderer();
 		surfaceView.setRenderer(renderer);
@@ -226,7 +230,13 @@ public abstract class AbsGameActivity extends Activity {
 	private native void ActivityOnPause();
 	private native void ActivityOnResume();
 	
+	// On my Nexus S (running 4.1.2), it requires all dependent libs be loaded
+	// in order, or UnsatisfiedLinkError is raised.
 	static {
+		System.loadLibrary("lua");
+		System.loadLibrary("stlport_shared");
+		System.loadLibrary("luabind");
+		System.loadLibrary("luabins");
 		System.loadLibrary("gaoframework");
 	}
 }

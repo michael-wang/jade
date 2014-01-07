@@ -24,6 +24,9 @@ public:
 	virtual ~AndroidApplication();
 
 	GaoBool Initialize(char* assetPath, int worldWidth, int worldHeight);
+	GaoBool IsInitialized() {
+		return initialized;
+	}
 
 	GaoVoid Pause();
 	GaoVoid Resume();
@@ -46,6 +49,7 @@ protected:
 	GaoString assetPath;
 	int worldWidth, worldHeight;
 
+	GaoBool initialized;
 	GaoBool running;
 	AndroidLogger log;
 };

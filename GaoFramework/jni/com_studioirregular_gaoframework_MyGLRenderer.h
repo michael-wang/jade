@@ -10,6 +10,14 @@ extern "C" {
 
 /*
  * Class:     com_studioirregular_gaoframework_MyGLRenderer
+ * Method:    RendererOnSurfaceCreated
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnSurfaceCreated
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_studioirregular_gaoframework_MyGLRenderer
  * Method:    RendererOnSurfaceChanged
  * Signature: (IILjava/lang/String;)V
  */
