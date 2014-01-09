@@ -5,38 +5,22 @@
 --=======================================================================
 -- Constants
 --=======================================================================
-APP_NAME = "JadeNinja";
-APP_VERSION = "0.1";
+APP_NAME = "Gao Framework";
+APP_VERSION = "1.0";
 
 GAME_FUNC_FILES =
-{
+{	
     "GameLogic",
-	"GameSocial",
     "GameState",
-	"GameStateEnemy",
 	"GameStage",
-	"GameEnemy",
-	"GameBlade",
-	"GameScroll",
-	"GameShop",
-	"GameMoney",
-	"GameLevel",
-	"GameAudio",
-	"GameTutorial",
 };
 
 GAME_DATA_FILES =
-{
-    "GameGlobal",
+{	
 	"GamePuzzleAnim",
+	"GameGlobal",
     "GameObject",
 	"GameUI",
-	"GameAvatarData",
-	"GameEnemyData",
-	"GameStuffData",
-	"GameLevelData",
-	"GameSceneData",
-	"GameAchievement",
 };
 
 
@@ -82,32 +66,14 @@ end
 -------------------------------------------------------------------------
 function RenderDelegate()
     g_RenderManager:Execute();
-
+    
     StageManager:Render();
     UIManager:Render();
 end
 
 -------------------------------------------------------------------------
-function OnEnterBackgroundDelegate()
-	--log("OnEnterBackgroundDelegate: stage @ " .. StageManager:GetCurrentStageId())
-	RegisterLocalNotifications();
-
-	if (StageManager:IsOnStage("InGame")) then
-		PauseGame(true);
-	end
+function PauseDelegate(onPause)
 end
-
---[[
--------------------------------------------------------------------------
-function OnEnterForegroundDelegate()
-	log("OnEnterForegroundDelegate: stage @ " .. StageManager:GetCurrentStageId())
-end
-
--------------------------------------------------------------------------
-function OnReceiveLocalNotificationDelegate()
-	log("OnReceiveLocalNotificationDelegate: stage @ " .. StageManager:GetCurrentStageId())
-end
---]]
 
 --=======================================================================
 -- Input Delegates
@@ -117,18 +83,20 @@ end
 function TouchBegan(x, y)
     if (not UIManager:TouchBegan(x, y)) then
         StageManager:TouchBegan(x, y);
-    end	
+    end
 end
 
 -------------------------------------------------------------------------
 function TouchMoved(x, y)
     StageManager:TouchMoved(x, y);
-    UIManager:TouchMoved(x, y);	
+    UIManager:TouchMoved(x, y);
 end
 
 -------------------------------------------------------------------------
 function TouchEnded(x, y)
     if (not UIManager:TouchEnded(x, y)) then
         StageManager:TouchEnded(x, y);
-    end	
+    end
 end
+
+
