@@ -25,6 +25,9 @@ JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
 		va_end(args);
 
 		SetJavaRef(obj);
+
+		// fix: local reference table overflow.
+		g_JniEnv->DeleteLocalRef(obj);
 	} else {
 		LOGE(log, "JavaObject cannot find constructor with name:%s, descriptor:%s", 
 			JavaClass::CONSTRUCTOR_METHOD_NAME, constructor)

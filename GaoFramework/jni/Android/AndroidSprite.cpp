@@ -17,6 +17,11 @@ AndroidSprite::~AndroidSprite() {
 GaoBool AndroidSprite::Create(Transform* transform, Texture* texture) {
 
 	LOGD(log, "Create: transform:%p, texture:%p", transform, texture);
+
+	if (transform == 0) {
+		LOGE(log, "Create: expect transform NOT null.")
+		return false;
+	}
 	
 	m_Transform = transform;
 	m_Texture = texture;
@@ -24,14 +29,14 @@ GaoBool AndroidSprite::Create(Transform* transform, Texture* texture) {
 	AndroidTransform* at = dynamic_cast<AndroidTransform* >(transform);
 	GLTexture* gtx = dynamic_cast<GLTexture* >(texture);
 
-	if (at == 0 || gtx == 0) {
-		LOGE(log, "Create: transform or texture pointer cannot be cast to Android version.")
+	if (at == 0) {
+		LOGD(log, "Create: transform pointer cannot be cast to Android version.")
 		return false;
 	}
 
 	jboolean result = jobj.CallBooleanMethod("Create", 
 		"(Lcom/studioirregular/gaoframework/AndroidTransform;Lcom/studioirregular/gaoframework/gles/Texture;)Z",
-		at->GetJavaRef(), gtx->GetJavaRef());
+		at->GetJavaRef(), gtx != 0 ? gtx->GetJavaRef() : 0);
 
 	return result;
 }

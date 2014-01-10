@@ -33,19 +33,24 @@ public class NonStreamingAudio implements AbsAudioResource {
 	}
 	
 	@Override
-	public boolean Create(String assetFile, boolean loop) {
+	public boolean Create(String path, boolean loop) {
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Create: assetFile:" + assetFile + ",loop:" + loop);
+			Log.d(TAG, "Create: path:" + path + ",loop:" + loop);
 		}
 		
-		this.assetFile = assetFile;
+		this.filePath = path;
 		this.loop = loop;
 		
-		soundID = load(assetFile);
+		if (path.startsWith("/")) {
+			soundID = loadFromStorage(path);
+		} else {
+			soundID = loadFromAsset(path);
+		}
+		Log.d(TAG, "soundID:" + soundID);
 		
 		final boolean success = (soundID != INVALID_SOUND_ID);
 		if (!success) {
-			Log.e(TAG, "Create: failed to laod sound file:" + assetFile);
+			Log.e(TAG, "Create: failed to laod sound file:" + path);
 		}
 		
 		return success;
@@ -64,7 +69,7 @@ public class NonStreamingAudio implements AbsAudioResource {
 		
 		final boolean success = (streamID != INVALID_STREAM_ID);
 		if (!success) {
-			Log.e(TAG, "Play: failed to play sound file:" + assetFile);
+			Log.e(TAG, "Play: failed to play sound file:" + filePath);
 		}
 		
 		return success;
@@ -83,9 +88,9 @@ public class NonStreamingAudio implements AbsAudioResource {
 		return false;
 	}
 
-	private int load(String assetFile) {
+	private int loadFromAsset(String path) {
 		if (DEBUG_LOG) {
-			Log.d(TAG, "load assetFile:" + assetFile);
+			Log.d(TAG, "loadFromAsset path:" + path);
 		}
 		
 		Context ctx = SoundSystem.getInstance().getContext();
@@ -100,13 +105,22 @@ public class NonStreamingAudio implements AbsAudioResource {
 		
 		AssetFileDescriptor afd = null;
 		try {
-			afd = am.openFd(assetFile);
+			afd = am.openFd(path);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return INVALID_SOUND_ID;
 		}
 		
 		return soundPool.load(afd, 1);
+	}
+	
+	private int loadFromStorage(String path) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "loadFromStorage path:" + path);
+		}
+		
+		return soundPool.load(path, 1);
 	}
 	
 	private static final int INVALID_SOUND_ID = 0;
@@ -118,7 +132,7 @@ public class NonStreamingAudio implements AbsAudioResource {
 	private static final int   LOOP_FOREVER = -1;
 	private static final float PLAYBACK_RATE_NORMAL = 1.0f; /* 0.5 ~ 2.0 */
 	
-	private String assetFile;
+	private String filePath;
 	private boolean loop;
 	
 	private int soundID;

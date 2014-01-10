@@ -7,6 +7,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+import com.studioirregular.gaoframework.BuildConfig;
 import com.studioirregular.gaoframework.TextureImageLoader;
 
 public class Texture {
@@ -40,7 +41,14 @@ public class Texture {
 		this.name = workingBuf.get(0);
 		
 		TextureImageLoader loader = new TextureImageLoader();
-		Bitmap bmp = loader.load(path);
+		
+		Bitmap bmp = null;
+		if (path.startsWith("/")) {
+			bmp = loader.loadFromStorage(path);
+		} else {
+			bmp = loader.loadFromAsset(path);
+		}
+		
 		if (bmp == null) {
 			Log.e(TAG, "Failed to load bitmap:" + path);
 			workingBuf.put(0, this.name);
@@ -78,7 +86,7 @@ public class Texture {
 		}
 		
 		if (path == null) {
-			if (DEBUG_LOG) {
+			if (BuildConfig.DEBUG) {
 				Log.e(TAG, "Reload failed, invalid path:" + path);
 			}
 			return false;
@@ -109,7 +117,7 @@ public class Texture {
 			float u2, float v2, float u3, float v3) {
 		
 		if (name == INVALID_NAME) {
-			if (DEBUG_LOG) {
+			if (BuildConfig.DEBUG) {
 				Log.e(TAG, "draw invalid texture name:" + name);
 			}
 			return;

@@ -43,8 +43,9 @@ Texture* AndroidGraphicsRenderer::CreateTexture(GaoString& fileName) {
 	LOGD(log, "CreateTexture fileName:%s", fileName.c_str())
 
 	GLTexture* texture = new GLTexture();
+	GaoString path = m_ImageBasePath + fileName;
 
-	if (!texture->Create(fileName)) {
+	if (!texture->Create(path)) {
 		delete texture;
 		texture = NULL;
 		LOGE(log, "CreateTexture texture->Create failed.")

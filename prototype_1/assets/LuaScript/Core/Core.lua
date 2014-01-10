@@ -12,26 +12,30 @@
 --APP_DEFAULT_FULLSCREEN = false;
 --APP_DEFAULT_OPENGL = false;
 
-SCRIPT_DEFAULT_PATH = "../../Source/LuaScript/";
+-- SCRIPT_DEFAULT_PATH = "../../Source/LuaScript/";
 SCRIPT_DEFAULT_EXT = ".lua";
 
-ASSET_PATH_RELEASE = "./Data/";
-ASSET_PATH_DEBUG = "../../Asset/";
-ASSET_PATH_SCRIPT = "./Data/Script/";
+-- ASSET_PATH_RELEASE = "./Data/";
+-- ASSET_PATH_DEBUG = "../../Asset/";
+-- ASSET_PATH_SCRIPT = "./Data/Script/";
 ASSET_PATH_IMAGE = "Image/";
 ASSET_PATH_FONT = "Font/";
-ASSET_PATH_SOUND = "Sound";
+ASSET_PATH_SOUND = "Sound/";
 
 GAME_CORE_FILE = "GameCore"
 
 PREBUILD_FUNC_SCRIPT_NAME = "soul.essence";
 PREBUILD_DATA_SCRIPT_NAME = "love.essence";
 
+-- Temp solution for iOS dependent code.
+IS_PLATFORM_IOS = true;
+
 APP_DEVICE_IPHONE = 1;
 APP_DEVICE_IPHONE_RETINA = 2;
 APP_DEVICE_IPHONE_TALLER = 3;
 APP_DEVICE_IPAD = 4;
 APP_DEVICE_IPAD_RETINA = 5;
+APP_DEVICE_ANDROID_PHONE = 0x100;
 
 PLAIN_DEVICE_SCRIPT_POOL =
 {
@@ -40,6 +44,7 @@ PLAIN_DEVICE_SCRIPT_POOL =
 	[APP_DEVICE_IPHONE_TALLER] = { "GamePuzzleImg_iPhone5", },
 	[APP_DEVICE_IPAD] = { "GamePuzzleImg_iPad", },
 	[APP_DEVICE_IPAD_RETINA] = { "GamePuzzleImg_iPad", },
+	[APP_DEVICE_ANDROID_PHONE] = { "GamePuzzleImg_iPad", },
 };
 
 PREBUILD_DEVICE_SCRIPT_POOL =
@@ -49,11 +54,12 @@ PREBUILD_DEVICE_SCRIPT_POOL =
 	[APP_DEVICE_IPHONE_TALLER] = "iphone5.bottle",
 	[APP_DEVICE_IPAD] = "ipad.bottle",
 	[APP_DEVICE_IPAD_RETINA] = "ipad.bottle",
+	[APP_DEVICE_ANDROID_PHONE] = "android.bottle",
 };
 
 APP_DEBUG_MODE = true;
 APP_USE_COMPILED_SCRIPT = false;
-APP_IPHONE_RESOURCE_PATH = nil;
+APP_ASSET_PATH = nil;
 APP_IPOD_PLAYING = false;
 
 APP_BASE_X = 320;
@@ -116,6 +122,17 @@ g_AppIsRunning = false;
 --=======================================================================
 
 -------------------------------------------------------------------------
+function InitializeLuaAndroid(worldWidth, worldHeight, assetPath)
+
+	IS_PLATFORM_IOS = false;
+	APP_ASSET_PATH = assetPath;
+
+	local orientation = (worldWidth >= worldHeight) and 0 or 1;
+
+	return InitializeLuaIphone(APP_DEVICE_ANDROID_PHONE, 
+		worldWidth, worldHeight, orientation, 1.0, 1.0, false);
+end
+
 function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, useCompiledScript)
     assert(device);
 	assert(width);
@@ -152,8 +169,10 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
 		APP_USE_COMPILED_SCRIPT = true;
 	end
     
-    APP_IPHONE_RESOURCE_PATH = GaoApp.GetRootPath();
-    assert(APP_IPHONE_RESOURCE_PATH);
+    if (IS_PLATFORM_IOS) then
+    	APP_ASSET_PATH = GaoApp.GetRootPath();
+    	assert(APP_ASSET_PATH);
+    end
 
     -- Pre-initialize
 	local preInitResult = PreInitialize();
@@ -170,12 +189,12 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
     
     -- Load game scripts
 	if (APP_USE_COMPILED_SCRIPT) then
-		dofile(string.format("%s/%s", APP_IPHONE_RESOURCE_PATH, PREBUILD_DEVICE_SCRIPT_NAME));
-		dofile(string.format("%s/%s", APP_IPHONE_RESOURCE_PATH, PREBUILD_FUNC_SCRIPT_NAME));
+		dofile(string.format("%s/%s", APP_ASSET_PATH, PREBUILD_DEVICE_SCRIPT_NAME));
+		dofile(string.format("%s/%s", APP_ASSET_PATH, PREBUILD_FUNC_SCRIPT_NAME));
 
         InitializeAppDataDelegate();
 		
-		dofile(string.format("%s/%s", APP_IPHONE_RESOURCE_PATH, PREBUILD_DATA_SCRIPT_NAME));
+		dofile(string.format("%s/%s", APP_ASSET_PATH, PREBUILD_DATA_SCRIPT_NAME));
     else
 		-- NOTE: Must called before other scripts
         LoadScript(GAME_CORE_FILE, SCRIPT_FUNC_PATH);
@@ -194,36 +213,58 @@ end
 -------------------------------------------------------------------------
 function PreInitialize()
 	-- Create Logger
-    g_Logger = EaglLogger();
-	g_Logger:Create();
+	if (IS_PLATFORM_IOS) then
+	    g_Logger = EaglLogger();
+		g_Logger:Create();
+	else
+		-- For Android I create logger before Core.lua, so we can log Core.lua error.
+	end
 
     -- Create Window
 	g_Window = Window();
     
 	-- Initialize config
-	InitializeConfigIphone();
+	if (IS_PLATFORM_IOS) then
+		InitializeConfigIphone();
+	else
+		InitializeConfigAndroid();
+	end
 
 	-- Create GraphicsRenderer & GraphicsEngine
-	g_GraphicsRenderer = EaglGraphicsRenderer(APP_WIDTH, APP_HEIGHT);
-	g_GraphicsEngine = GraphicsEngine(g_GraphicsRenderer);
-	g_GraphicsEngine:SetBasePath(IMAGE_PATH, FONT_PATH);
+	if (IS_PLATFORM_IOS) then
+		g_GraphicsRenderer = EaglGraphicsRenderer(APP_WIDTH, APP_HEIGHT);
+		g_GraphicsEngine = GraphicsEngine(g_GraphicsRenderer);
+		g_GraphicsEngine:SetBasePath(IMAGE_PATH, FONT_PATH);
+	else
+		g_GraphicsRenderer = AndroidGraphicsRenderer();
+		g_GraphicsEngine = GraphicsEngine(g_GraphicsRenderer);
+		g_GraphicsEngine:SetBasePath(IMAGE_PATH, FONT_PATH);
+	end
 
 	-- Create AudioRenderer & AudioEngine
-    g_AudioRenderer = EaglOalAudioRenderer();
-	g_AudioEngine = AudioEngine(g_AudioRenderer);
-	g_AudioEngine:SetBasePath(AUDIO_PATH, AUDIO_PATH);
+	if (IS_PLATFORM_IOS) then
+	    g_AudioRenderer = EaglOalAudioRenderer();
+		g_AudioEngine = AudioEngine(g_AudioRenderer);
+		g_AudioEngine:SetBasePath(AUDIO_PATH, AUDIO_PATH);
+	else
+	    g_AudioRenderer = AndroidAudioRenderer();
+		g_AudioEngine = AudioEngine(g_AudioRenderer);
+		g_AudioEngine:SetBasePath(AUDIO_PATH, AUDIO_PATH);
+	end
 
     g_AudioEngine:SetGlobalVolumes(AudioEngine.AUDIO_NORMAL, 1.0);
 	g_AudioEngine:SetGlobalVolumes(AudioEngine.AUDIO_STREAMING, 1.0);
     
 	--g_AudioRenderer:CreateMicrophone();
-    APP_IPOD_PLAYING = g_AudioRenderer:IsIpodPlaying();
+	if (IS_PLATFORM_IOS) then
+    	APP_IPOD_PLAYING = g_AudioRenderer:IsIpodPlaying();
+    end
 
     -- Create GlyphFontRenderer
 	-- NOTE: Must be called after InitializeConfigIphone()
 	if (APP_DEBUG_MODE) then
 		g_FontRenderer = GlyphFontRenderer();
-		g_FontRenderer:Create(APP_IPHONE_RESOURCE_PATH .. "/Asset/Font/Font.FontInfo", g_GraphicsEngine:CreateSprite("Font.png"));
+		g_FontRenderer:Create(APP_ASSET_PATH .. "/Asset/Font/Font.FontInfo", g_GraphicsEngine:CreateSprite("Font.png"));
 		log("FontRenderer creation done")
 	else
 		log = function() end
@@ -231,7 +272,11 @@ function PreInitialize()
 	end
     
     -- Create Timer
-    g_Timer = EaglTimer();
+    if (IS_PLATFORM_IOS) then
+    	g_Timer = EaglTimer();
+    else
+    	g_Timer = AndroidTimer();
+    end
     g_Timer:Start();
 
 	return true;
@@ -273,9 +318,31 @@ function InitializeConfigIphone()
 	end
 
 	-- Setup paths
-	local rootPath = "/Asset/";
+	local rootPath = IS_PLATFORM_IOS and "/Asset/" or (APP_ASSET_PATH .. "/");
 	
-	SCRIPT_PATH = APP_IPHONE_RESOURCE_PATH .. "/LuaScript/";
+	SCRIPT_PATH = APP_ASSET_PATH .. "/LuaScript/";
+	SCRIPT_CORE_PATH = SCRIPT_PATH .. "Core/";
+	SCRIPT_FUNC_PATH = SCRIPT_PATH .. "GameFunc/";
+	SCRIPT_DATA_PATH = SCRIPT_PATH .. "GameData/";
+
+	IMAGE_PATH = rootPath .. ASSET_PATH_IMAGE;
+	FONT_PATH = rootPath .. ASSET_PATH_FONT;
+	AUDIO_PATH = rootPath .. ASSET_PATH_SOUND;
+	SCRIPT_FILE_EXT = SCRIPT_DEFAULT_EXT;
+end
+
+-------------------------------------------------------------------------
+function InitializeConfigAndroid()
+	-- Determine app configuration
+	-- if (g_Window:GetAppConfig() ~= Window.CONFIG_DEBUG) then
+	-- 	APP_DEBUG_MODE = false;
+	-- end
+
+	-- Setup paths
+	-- local rootPath = "/Asset/";
+	local rootPath = APP_ASSET_PATH .. "/";
+	
+	SCRIPT_PATH = APP_ASSET_PATH .. "/LuaScript/";
 	SCRIPT_CORE_PATH = SCRIPT_PATH .. "Core/";
 	SCRIPT_FUNC_PATH = SCRIPT_PATH .. "GameFunc/";
 	SCRIPT_DATA_PATH = SCRIPT_PATH .. "GameData/";
@@ -303,7 +370,7 @@ function InitializeAppData()
     
     g_AppData:SetData("UseCompiledScript", APP_USE_COMPILED_SCRIPT);
     g_AppData:SetData("DebugMode", APP_DEBUG_MODE);
-    g_AppData:SetData("ResourcePath", APP_IPHONE_RESOURCE_PATH);
+    g_AppData:SetData("ResourcePath", APP_ASSET_PATH);
     g_AppData:SetData("IsIpodPlaying", APP_IPOD_PLAYING);
 
     g_AppData:SetData("WorldTranslateX", 0);
@@ -431,11 +498,14 @@ end
 -------------------------------------------------------------------------
 function log(msg)
 	print(msg);
+	g_Logger:Show(msg);
 end
 
 -------------------------------------------------------------------------
 function logp(x, y, title)
-	print("[" .. (title or "#") .. "] " .. x .. " , " .. y);
+	local msg = "[" .. (title or "#") .. "] " .. x .. " , " .. y;
+	print(msg);
+	g_Logger:Show(msg);
 end
 
 -------------------------------------------------------------------------

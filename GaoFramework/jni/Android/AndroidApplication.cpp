@@ -7,10 +7,11 @@
 
 #include <Framework/LuaFunction.hpp>
 #include "AndroidApplication.h"
-#include "AndroidLuaScripts.h"
-#include "Resource.h"
-#include "JavaInterface.h"
 #include "AndroidLogger.h"
+#include "AndroidLuaScripts.h"
+#include "JavaInterface.h"
+#include "LuaBinding.h"
+#include "Resource.h"
 
 using namespace Gao::Framework;
 
@@ -98,6 +99,7 @@ GaoBool AndroidApplication::OnInitialize() {
 	}
 
 	AndroidLuaScripts::RegisterAndroidClasses(luaManager->GetLuaState());
+	RegisterGameFunctions(luaManager->GetLuaState());
 
 	std::string luaScript(assetPath);
 	luaScript += INIT_LOGGER_SCRIPT;

@@ -17,10 +17,10 @@ public class TextureImageLoader {
 	private static final String TAG = "java-TextureImageLoader";
 	private static final boolean DEBUG_LOG = false;
 	
-	public Bitmap load(String path) {
+	public Bitmap loadFromAsset(String path) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "load path:" + path);
+			Log.d(TAG, "loadFromAsset path:" + path);
 		}
 		
 		AssetManager am = JavaInterface.getInstance().getContext().getAssets();
@@ -29,7 +29,7 @@ public class TextureImageLoader {
 		try {
 			is = am.open(path);
 		} catch (IOException e) {
-			if (DEBUG_LOG) {
+			if (BuildConfig.DEBUG) {
 				e.printStackTrace();
 			}
 			return null;
@@ -39,12 +39,21 @@ public class TextureImageLoader {
 		try {
 			bmp = BitmapFactory.decodeStream(is);
 		} catch (OutOfMemoryError e) {
-			if (DEBUG_LOG) {
+			if (BuildConfig.DEBUG) {
 				e.printStackTrace();
 			}
 			return null;
 		}
 		
 		return bmp;
+	}
+	
+	public Bitmap loadFromStorage(String path) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "loadFromStorage path:" + path);
+		}
+		
+		return BitmapFactory.decodeFile(path);
 	}
 }

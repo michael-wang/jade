@@ -17,7 +17,17 @@ AudioResource* AndroidAudioRenderer::CreateAudio(AudioType type, GaoString& file
 	
 	AndroidAudioResource* audio = new AndroidAudioResource(type);
 
-	bool success = audio->Create(type, fileName, looping);
+	bool success = false;
+
+	if (type == Audio_Normal) {
+		GaoString path = m_NormalBasePath + fileName;
+		success = audio->Create(type, path, looping);
+	} else if (type == Audio_Streaming) {
+		GaoString path = m_StreamingBasePath + fileName;
+		success = audio->Create(type, path, looping);
+	} else {
+		LOGE(log, "CreateAudio: unknown audio type:%d", type)
+	}
 
 	if (!success) {
 		LOGE(log, "CreateAudio failed to create audio file:%s.", fileName.c_str())

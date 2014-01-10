@@ -7,14 +7,14 @@
 class GlyphFontRenderer {
 public:
 	GlyphFontRenderer() :
-		log ("native::framework::GlyphFontRenderer", true) {
+		log ("native::framework::GlyphFontRenderer", false) {
 	}
 	~GlyphFontRenderer() {}
 
 	bool Create(const char* fontDefPath, Gao::Framework::Sprite* fontSprite) {
 		LOGD(log, "Create fontDefPath:%s", fontDefPath)
 
-		return false;
+		return true;
 	}
 
 	void Draw(int e_iX, int e_iY, const char* e_pString) {

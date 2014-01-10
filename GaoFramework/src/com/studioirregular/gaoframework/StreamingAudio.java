@@ -1,8 +1,10 @@
 package com.studioirregular.gaoframework;
 
+import java.io.File;
+
 import android.content.Context;
-import android.content.res.Resources;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 
 public class StreamingAudio implements AbsAudioResource {
@@ -11,24 +13,16 @@ public class StreamingAudio implements AbsAudioResource {
 	private static final boolean DEBUG_LOG = false;
 	
 	@Override
-	public boolean Create(String assetFile, boolean loop) {
+	public boolean Create(String path, boolean loop) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Create assetFile:" + assetFile + ",loop:" + loop);
+			Log.d(TAG, "Create path:" + path + ",loop:" + loop);
 		}
-		
-		this.loop = loop;
 		
 		Context ctx = SoundSystem.getInstance().getContext();
-		Resources res = ctx.getResources();
-		final String resName = assetFile.substring(0, assetFile.lastIndexOf("."));
-		final String path = ctx.getPackageName() + RAW_RESOURCE_PREFIX + resName;
-		int resid = res.getIdentifier(path, null, null);
-		if (DEBUG_LOG) {
-			Log.w(TAG, "path:" + path + ",resid:" + resid);
-		}
+		Uri uri = Uri.fromFile(new File(path));
 		
-		mplayer = MediaPlayer.create(ctx, resid);
+		mplayer = MediaPlayer.create(ctx, uri);
 		
 		if (mplayer != null) {
 			mplayer.setLooping(loop);
@@ -94,9 +88,5 @@ public class StreamingAudio implements AbsAudioResource {
 		return false;
 	}
 
-	private static final String ASSET_FILE_URI_PREFIX = "file:///android_asset/";
-	private static final String RAW_RESOURCE_PREFIX = ":raw/";
-	
 	private MediaPlayer mplayer;
-	private boolean loop;
 }

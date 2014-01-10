@@ -5,7 +5,7 @@ public interface AbsAudioResource {
 	public static final int NON_STREAMING = 0;
 	public static final int STREAMING = 1;
 	
-	public boolean Create(String assetFile, boolean loop);
+	public boolean Create(String path, boolean loop);
 	public boolean Play();
 	public void    Stop();
 	public void    Pause();

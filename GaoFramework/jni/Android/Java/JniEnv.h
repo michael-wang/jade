@@ -81,6 +81,12 @@ public:
 		}
 	}
 
+	void DeleteLocalRef(jobject obj) {
+		if (env != NULL) {
+			env->DeleteLocalRef(obj);
+		}
+	}
+
 	jstring NewStringUTF(const char* str) {
 		if (env == NULL) {
 			return NULL;
