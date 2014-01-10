@@ -41,6 +41,15 @@ public class Sprite extends Shape {
 		return true;
 	}
 	
+	public void SetTexture(Texture texture) {
+		
+		if (DEBUG_LOG()) {
+			Log.d(TAG(), "SetTexture texture:" + texture);
+		}
+		
+		this.texture = texture;
+	}
+	
 	public void SetRenderSize(int width, int height) {
 		
 		if (DEBUG_LOG()) {

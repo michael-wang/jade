@@ -18,6 +18,8 @@ public:
 
 	virtual GaoVoid SetTransform(GaoInt16 coordX, GaoInt16 coordY);
 
+	virtual GaoVoid SetTexture(Gao::Framework::Texture* texture);
+
 	virtual GaoVoid SetTexCoords(GaoReal32 texCoordU1, GaoReal32 texCoordV1, 
 		GaoReal32 texCoordU2, GaoReal32 texCoordV2);
 

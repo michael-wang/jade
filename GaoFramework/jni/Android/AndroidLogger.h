@@ -13,8 +13,8 @@
 
 
 #define LOGD(logger, ...) if (logger.DO_LOG()) {__android_log_print(ANDROID_LOG_DEBUG, logger.TAG(), __VA_ARGS__);}
-#define LOGW(logger, ...) if (logger.DO_LOG()) {__android_log_print(ANDROID_LOG_WARN,  logger.TAG(), __VA_ARGS__);}
-#define LOGE(logger, ...) if (logger.DO_LOG()) {__android_log_print(ANDROID_LOG_ERROR, logger.TAG(), __VA_ARGS__);}
+#define LOGW(logger, ...) __android_log_print(ANDROID_LOG_WARN,  logger.TAG(), __VA_ARGS__);
+#define LOGE(logger, ...) __android_log_print(ANDROID_LOG_ERROR, logger.TAG(), __VA_ARGS__);
 
 class AndroidLogger {
 public:

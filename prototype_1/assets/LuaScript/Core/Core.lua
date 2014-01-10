@@ -217,6 +217,7 @@ function PreInitialize()
 	    g_Logger = EaglLogger();
 		g_Logger:Create();
 	else
+		-- Run init_logger.lua before Core.lua
 		-- For Android I create logger before Core.lua, so we can log Core.lua error.
 	end
 

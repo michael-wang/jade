@@ -52,6 +52,20 @@ Texture* AndroidGraphicsRenderer::CreateFilteredTexture(GaoString& fileName) {
 	return _createTexture(fileName, true);
 }
 
+Texture* AndroidGraphicsRenderer::CreateSpecialTexture(GaoInt32 width, GaoInt32 height) {
+
+	LOGD(log, "CreateSpecialTexture w:%d, h:%d", width, height)
+
+	return NULL;
+}
+
+GaoBool AndroidGraphicsRenderer::IsSpecialTextureValid() const {
+
+	LOGD(log, "IsSpecialTextureValid")
+
+	return false;
+}
+
 Texture* AndroidGraphicsRenderer::_createTexture(GaoString& fileName, GaoBool filtered) {
 	GLTexture* texture = new GLTexture();
 	GaoString path = m_ImageBasePath + fileName;

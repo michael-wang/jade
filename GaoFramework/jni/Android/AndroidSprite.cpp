@@ -22,7 +22,7 @@ GaoBool AndroidSprite::Create(Transform* transform, Texture* texture) {
 		LOGE(log, "Create: expect transform NOT null.")
 		return false;
 	}
-	
+
 	m_Transform = transform;
 	m_Texture = texture;
 
@@ -46,6 +46,21 @@ GaoVoid AndroidSprite::SetTransform(GaoInt16 coordX, GaoInt16 coordY) {
 	LOGD(log, "SetTransform coordX:%d, coordX:%d", coordX, coordY);
 
 	m_Transform->SetTranslate(coordX, coordY);
+}
+
+GaoVoid AndroidSprite::SetTexture(Texture* texture) {
+	
+	LOGD(log, "SetTexture: %p", texture)
+
+	GLTexture* gtx = dynamic_cast<GLTexture* >(texture);
+
+	if (gtx == 0) {
+		LOGE(log, "SetTexture cannot cast texture to Android texture.")
+		return;
+	}
+
+	jobj.CallVoidMethod("SetTexture", 
+		"(Lcom/studioirregular/gaoframework/gles/Texture;)V", gtx->GetJavaRef());
 }
 
 GaoVoid AndroidSprite::SetTexCoords(GaoReal32 left, GaoReal32 top, 

@@ -31,6 +31,10 @@ public:
 
 	virtual Gao::Framework::Texture* CreateFilteredTexture(GaoString& fileName);
 
+	virtual Gao::Framework::Texture* CreateSpecialTexture(GaoInt32 width, GaoInt32 height);
+
+	virtual GaoBool IsSpecialTextureValid() const;
+
 	virtual GaoBool ReloadTexture(Gao::Framework::Texture* texture);
 
 	virtual GaoVoid UnloadTexture(Gao::Framework::Texture* texture);
