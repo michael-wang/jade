@@ -6,7 +6,7 @@ static const char JAVA_CLASS_PATH[]				= "com/studioirregular/gaoframework/gles/
 static const char JAVA_CONSTRUCTOR_DESCRIPTOR[] = "()V";
 static const char JAVA_INTERFACE_PATH[]			= "com/studioirregular/gaoframework/JavaInterface";
 static const char JAVA_CREATE_NAME[]            = "Create";
-static const char JAVA_CREATE_DESCRIPTOR[]      = "(Ljava/lang/String;)Z";
+static const char JAVA_CREATE_DESCRIPTOR[]      = "(Ljava/lang/String;Z)Z";
 
 GLTexture::GLTexture() :
 	jobj (JAVA_CLASS_PATH, JAVA_CONSTRUCTOR_DESCRIPTOR),
@@ -20,11 +20,15 @@ GLTexture::~GLTexture() {
 }
 
 GaoBool GLTexture::Create(GaoString& fileName) {
-	LOGD(log, "Create fileName:%s", fileName.c_str())
+	return Create(fileName, false);
+}
+
+GaoBool GLTexture::Create(GaoString& fileName, GaoBool filtered) {
+	LOGD(log, "Create fileName:%s, filtered:%d", fileName.c_str(), filtered)
 
 	jstring jfilename = g_JniEnv->NewStringUTF(fileName.c_str());
 	jboolean success = jobj.CallBooleanMethod(
-		JAVA_CREATE_NAME, JAVA_CREATE_DESCRIPTOR, jfilename);
+		JAVA_CREATE_NAME, JAVA_CREATE_DESCRIPTOR, jfilename, filtered);
 
 	return success;
 }

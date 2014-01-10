@@ -18,6 +18,8 @@ public:
 	virtual GaoBool Reload();
 	virtual GaoVoid Unload();
 
+	GaoBool Create(GaoString& fileName, GaoBool filtered);
+
 	jobject GetJavaRef() {
 		return jobj.GetJavaRef();
 	}

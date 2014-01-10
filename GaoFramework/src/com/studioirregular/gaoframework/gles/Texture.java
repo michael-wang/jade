@@ -22,13 +22,14 @@ public class Texture {
 		}
 	}
 	
-	public boolean Create(String path) {
+	public boolean Create(String path, boolean filtered) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Create path:" + path);
+			Log.d(TAG, "Create path:" + path + ",filtered:" + filtered);
 		}
 		
 		this.path = path;
+		this.filtered = filtered;
 		
 		workingBuf.position(0);
 		GLES20.glGenTextures(1, workingBuf);
@@ -59,8 +60,13 @@ public class Texture {
 		
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, name);
 		
-		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+		if (filtered) {
+			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+		} else {
+			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+		}
 		
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
 		GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
@@ -92,7 +98,7 @@ public class Texture {
 			return false;
 		}
 		
-		return Create(path);
+		return Create(path, filtered);
 	}
 	
 	public void Unload() {
@@ -161,6 +167,7 @@ public class Texture {
 	private int name = INVALID_NAME;
 	private String path;
 	private TextureCoordinates coords = new TextureCoordinates();
+	private boolean filtered;
 	
 	private IntBuffer workingBuf = IntBuffer.allocate(1);
 	private GLError glError = new GLError(DEBUG_LOG);

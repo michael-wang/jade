@@ -42,16 +42,27 @@ Transform* AndroidGraphicsRenderer::CreateTransform() {
 Texture* AndroidGraphicsRenderer::CreateTexture(GaoString& fileName) {
 	LOGD(log, "CreateTexture fileName:%s", fileName.c_str())
 
+	return _createTexture(fileName, false);
+}
+
+Texture* AndroidGraphicsRenderer::CreateFilteredTexture(GaoString& fileName) {
+	
+	LOGD(log, "CreateFilteredTexture fileName:%s", fileName.c_str())
+
+	return _createTexture(fileName, true);
+}
+
+Texture* AndroidGraphicsRenderer::_createTexture(GaoString& fileName, GaoBool filtered) {
 	GLTexture* texture = new GLTexture();
 	GaoString path = m_ImageBasePath + fileName;
 
-	if (!texture->Create(path)) {
+	if (!texture->Create(path, filtered)) {
 		delete texture;
 		texture = NULL;
-		LOGE(log, "CreateTexture texture->Create failed.")
+		LOGE(log, "_createTexture texture->Create failed.")
 	}
 
-	LOGD(log, "CreateTexture texture:%p", texture)
+	LOGD(log, "_createTexture texture:%p", texture)
 	return texture;
 }
 

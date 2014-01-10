@@ -29,6 +29,8 @@ public:
      */
 	virtual Gao::Framework::Texture* CreateTexture(GaoString& fileName);
 
+	virtual Gao::Framework::Texture* CreateFilteredTexture(GaoString& fileName);
+
 	virtual GaoBool ReloadTexture(Gao::Framework::Texture* texture);
 
 	virtual GaoVoid UnloadTexture(Gao::Framework::Texture* texture);
@@ -47,6 +49,9 @@ public:
 
 	virtual GaoVoid DrawCircle(GaoInt16 centerX, GaoInt16 centerY, GaoInt16 radius, 
 		GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
+
+protected:
+	Gao::Framework::Texture*  _createTexture(GaoString& fileName, GaoBool filtered);
 
 protected:
 	AndroidLogger log;
