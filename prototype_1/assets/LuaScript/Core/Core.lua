@@ -127,10 +127,22 @@ function InitializeLuaAndroid(worldWidth, worldHeight, assetPath)
 	IS_PLATFORM_IOS = false;
 	APP_ASSET_PATH = assetPath;
 
-	local orientation = (worldWidth >= worldHeight) and 0 or 1;
+	local portrait = (worldWidth < worldHeight);
+	local orientation = portrait and 0 or 1;
+
+	local unitX = portrait and (worldWidth / APP_BASE_X) or (worldWidth / APP_BASE_Y);
+	local unitY = portrait and (worldHeight / APP_BASE_Y) or (worldHeight / APP_BASE_X);
+
+	if (portrait) then
+		APP_BASE_X = worldWidth;
+		APP_BASE_Y = worldHeight;
+	else
+		APP_BASE_X = worldHeight;
+		APP_BASE_Y = worldWidth;
+	end
 
 	return InitializeLuaIphone(APP_DEVICE_ANDROID_PHONE, 
-		worldWidth, worldHeight, orientation, 1.0, 1.0, false);
+		worldWidth, worldHeight, orientation, unitX, unitY, false);
 end
 
 function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, useCompiledScript)
@@ -140,7 +152,7 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
     assert(orientation);
     assert(unitX);
     assert(unitY);
-    
+
 	APP_DEVICE = device;
 	SCREEN_UNIT_X = width;
 	SCREEN_UNIT_Y = height;
@@ -394,6 +406,39 @@ function UpdateMain()
 	g_Timer:Update();
 
 	UpdateDelegate();
+
+    local arrEvents = g_JavaInterface:GetTouchEvents();
+    local SIZE = arrEvents:GetSize();
+    if SIZE > 0 then
+        for i = 0, (SIZE - 1) do
+            local touch = arrEvents:GetAt(i);
+            ProcessTouch(touch);
+        end
+    end
+end
+
+-------------------------------------------------------------------------
+function ProcessTouch(touch)
+
+    -- g_Logger:Show("process_touch event:" .. touch:GetAction() .. ",x:" .. touch:GetX() .. ",y:" .. touch:GetY());
+
+    if touch:IS_ACTION_DOWN() then
+
+        TouchBegan(touch:GetX(), touch:GetY());
+
+    elseif touch:IS_ACTION_MOVE() then
+
+        TouchMoved(touch:GetX(), touch:GetY());
+
+    elseif touch:IS_ACTION_UP() then
+
+        TouchEnded(touch:GetX(), touch:GetY());
+
+    else
+
+        g_Logger:Show("process_touch: unknown touch event:" .. touch:GetAction());
+
+    end
 end
 
 -------------------------------------------------------------------------
