@@ -8,14 +8,20 @@
 
 #include "Luabinding.h"
 #include <time.h>
+#include <Framework/LuaScriptManager.hpp>
+#include "AndroidLogger.h"
 
 
 //==============================================================================================================
 // Luabind
 //==============================================================================================================
 
+static AndroidLogger logger("native::GameKit", true);
+
 void RegisterGameFunctions(LuaState state)
 {
+    LOGD(logger, "RegisterGameFunctions")
+
     using namespace luabind;
     
     module(state, "GameKit")
@@ -100,6 +106,7 @@ void ShowMessage(const char* title, const char* message)
  //                         cancelButtonTitle:NSLocalizedString(@"button_ok", nil)
  //                         otherButtonTitles:NULL];
 	// [alert show];
+    LOGD(logger, "ShowMessage title:%s, message:%s", title, message)
 }
 
 void OpenURL(const char* url)
@@ -128,6 +135,8 @@ void OpenAppStore(const char* appName)
     // {
     //     NSLog(@"Error opening url: %@", [NSString stringWithUTF8String:appName]);
     // }
+
+    LOGD(logger, "OpenAppStore appName:%s", appName)
 }
 
 void OpenSelfTwitter()
@@ -144,6 +153,7 @@ void OpenSelfTwitter()
     //     NSURL* urlNormal = [NSURL URLWithString:[NSString stringWithFormat:@"http:///twitter.com/%@", kTwitterAccount]];
     //     [[UIApplication sharedApplication] openURL:urlNormal];
     // }
+    LOGD(logger, "OpenSelfTwitter")
 }
 
 void OpenSelfFacebook()
@@ -160,31 +170,35 @@ void OpenSelfFacebook()
     //     NSURL* urlNormal = [NSURL URLWithString:[NSString stringWithFormat:@"http:///facebook.com/%@", kFBPageID]];
     //     [[UIApplication sharedApplication] openURL:urlNormal];
     // }
+    LOGD(logger, "OpenSelfFacebook")
 }
 
 void OpenSelfSinaWeibo()
 {
     // NSURL* urlNormal = [NSURL URLWithString:[NSString stringWithFormat:kSinaWeibo]];
     // [[UIApplication sharedApplication] openURL:urlNormal];
-    
+    LOGD(logger, "OpenSelfSinaWeibo")
 }
 
 void GiftSelfApp()
 {
     // NSURL* urlString = [NSURL URLWithString:[NSString stringWithFormat:@"itms-appss://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/giftSongsWizard?gift=1&salableAdamId=%@&productType=C&pricingParameter=STDQ&mt=8&ign-mscache=1", kAppStoreID]];
     // [[UIApplication sharedApplication] openURL:urlString];
+    LOGD(logger, "GiftSelfApp")
 }
 
 void RateSelfApp()
 {
     // NSURL* urlString = [NSURL URLWithString:[NSString stringWithFormat: @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@", kAppStoreID]];
     // [[UIApplication sharedApplication] openURL:urlString];
+    LOGD(logger, "RateSelfApp")
 }
 
 const char* GetLocalizedString(const char* key)
 {
     // NSString* value = NSLocalizedString([NSString stringWithUTF8String:key], nil);
     // return [value UTF8String];
+    LOGD(logger, "GetLocalizedString key:%s", key)
     return key;
 }
 
@@ -192,6 +206,7 @@ const char* GetAppVersion()
 {
     // NSString* appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     // return [appVersion UTF8String];
+    LOGD(logger, "GetAppVersion")
     return "Android-1.0.0";
 }
 
@@ -199,6 +214,7 @@ const char* GetCurrentSystemTime()
 {
     // NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
     // return [[NSString stringWithFormat:@"%f", now] UTF8String];
+    LOGD(logger, "GetCurrentSystemTime")
     return "0";
 }
 
@@ -213,26 +229,32 @@ void ScheduleLocalNotification(const char* titleText, float duration)
     // localNotification.applicationIconBadgeNumber = 1;
     
     // [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+    LOGD(logger, "ScheduleLocalNotification titleText:%s, duration:%f", titleText, duration)
 }
 
 void CancelAllLocalNotification()
 {
     // [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    LOGD(logger, "CancelAllLocalNotification")
 }
 
 void VibrateDevice()
 {
     // AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+    LOGD(logger, "VibrateDevice")
 }
 
 bool IsGameCenterAvailable()
 {
     // return [g_ViewController isGameCenterAvailable];
+    LOGD(logger, "IsGameCenterAvailable")
+    return false;
 }
 
 bool HasGameCenterAuthenticated()
 {
     // return [g_ViewController hasGameCenterAuthenticated];
+    LOGD(logger, "HasGameCenterAuthenticated")
     return false;
 }
 
@@ -240,11 +262,13 @@ void ShowLeaderboard(const char* identifier)
 {
     // assert(identifier);
     // [g_ViewController showLeaderboard:[NSString stringWithUTF8String:identifier]];
+    LOGD(logger, "ShowLeaderboard identifier:%s", identifier)
 }
 
 void ShowAchievements()
 {
     // [g_ViewController showAchievements];
+    LOGD(logger, "ShowAchievements")
 }
 
 void SubmitScore(const char* category, double score)
@@ -252,6 +276,7 @@ void SubmitScore(const char* category, double score)
     // assert(category);
     // assert(score > 0);
     // [g_ViewController submitHighScore:score forCategory:[NSString stringWithUTF8String:category]];
+    LOGD(logger, "SubmitScore category:%s, score:%f", category, score)
 }
 
 void SubmitAchievement(const char* identifier, float percent, bool repeatable)
@@ -259,28 +284,33 @@ void SubmitAchievement(const char* identifier, float percent, bool repeatable)
     // assert(identifier);
     // assert(percent >= 0);
     // [g_ViewController submitAchievement:[NSString stringWithUTF8String:identifier] percentComplete:percent repeatable:repeatable];
+    LOGD(logger, "SubmitAchievement identifier:%s, percent:%f, repeatable:%d", identifier, percent, repeatable)
 }
 
 void ResetAchievements()
 {
     // [g_ViewController resetAchievements];
+    LOGD(logger, "ResetAchievements")
 }
 
 bool HasAchievementCompleted(const char* identifier)
 {
     // return [g_ViewController hasAchievementCompleted:[NSString stringWithUTF8String:identifier]];
+    LOGD(logger, "HasAchievementCompleted identifier:%s", identifier)
     return false;
 }
 
 const char* GetGameCenterID()
 {
     // return [[GKLocalPlayer localPlayer].playerID UTF8String];
+    LOGD(logger, "GetGameCenterID")
     return "0";
 }
 
 const char* GetUserLanguage()
 {
     // return [[[NSLocale preferredLanguages] objectAtIndex:0] UTF8String];
+    LOGD(logger, "GetUserLanguage")
     return "en";
 }
 
@@ -294,6 +324,7 @@ void ComposeMail(const char* subject, const char* recipient, bool shouldAppendIn
     // {
     //     [g_ViewController composeMail:[NSString stringWithUTF8String:subject] recipient:[NSString stringWithUTF8String:recipient] shouldAppendInfo:shouldAppendInfo];
     // }
+    LOGD(logger, "ComposeMail subject:%s, recipient:%s, shouldAppendInfo:%d", subject, recipient, shouldAppendInfo)
 }
 
 void ComposeSocialMessageByValuePair(int type, unsigned int value1, unsigned int value2)
@@ -301,11 +332,13 @@ void ComposeSocialMessageByValuePair(int type, unsigned int value1, unsigned int
     // NSString* str = [NSString stringWithFormat:@"%@%d%@%d%@", NSLocalizedString(@"tw_prefix", nil), value1, NSLocalizedString(@"tw_bridge", nil), value2, NSLocalizedString(@"tw_postfix", nil)];
     
     // [g_ViewController composeSocialMessage:type text:str url:kMainSite useSnapshot:YES];
+    LOGD(logger, "ComposeSocialMessageByValuePair type:%d, value1:%d, value2:%d", type, value1, value2)
 }
 
 void ComposeTweet(const char* text, const char* url, bool useSnapshot)
 {
     // [g_ViewController composeTweet:[NSString stringWithUTF8String:text] url:[NSString stringWithUTF8String:url] useSnapshot:useSnapshot];
+    LOGD(logger, "ComposeTweet text:%s, url:%s, useSnapshot:%d", text, url, useSnapshot)
 }
 
 void ComposeTweetByValuePair(unsigned int value1, unsigned int value2)
@@ -313,6 +346,7 @@ void ComposeTweetByValuePair(unsigned int value1, unsigned int value2)
     // NSString* str = [NSString stringWithFormat:@"%@%d%@%d%@", NSLocalizedString(@"tw_prefix", nil), value1, NSLocalizedString(@"tw_bridge", nil), value2, NSLocalizedString(@"tw_postfix", nil)];
     
     // [g_ViewController composeTweet:str url:kMainSite useSnapshot:YES];
+    LOGD(logger, "ComposeTweetByValuePair value1:%d, value2:%d", value1, value2)
 }
 
 bool LoginFacebook()
@@ -322,6 +356,7 @@ bool LoginFacebook()
 // #else
 //     return FALSE;
 // #endif
+    LOGD(logger, "LoginFacebook")
     return false;
 }
 
@@ -333,6 +368,7 @@ void PostFacebookFeed(const char* name, const char* caption, const char* descrip
 //                            description:[NSString stringWithUTF8String:description]
 //                                picture:[NSString stringWithUTF8String:picture]];
 // #endif
+    LOGD(logger, "PostFacebookFeed name:%s, caption:%s, description:%s, picture:%s", name, caption, description, picture)
 }
 
 void PostFacebookFeedByValuePair(unsigned int value1, unsigned int value2, const char* picture)
@@ -345,11 +381,25 @@ void PostFacebookFeedByValuePair(unsigned int value1, unsigned int value2, const
 //                            description:str
 //                                picture:[NSString stringWithUTF8String:picture]];
 // #endif
+    LOGD(logger, "PostFacebookFeedByValuePair value1:%d, value2:%d, picture:%s", value1, value2, picture)
 }
 
 void PlayMovie(const char* fileName, const char* pathName)
 {
     // [g_ViewController showMovieViewController:[NSString stringWithUTF8String:fileName] directory:[NSString stringWithUTF8String:pathName]];
+    LOGD(logger, "PlayMovie fileName:%s, pathName:%s", fileName, pathName)
+
+    // temp solution
+    GaoString file = fileName;
+    GaoString ENTERING = "jade";
+    GaoString BOSS = "boss";
+    if (file.compare(0, ENTERING.size(), ENTERING) == 0) {
+        g_ScriptManager->CallFunction("OnOPMoviePlaybackCompleted");
+    } else if (file.compare(0, BOSS.size(), BOSS) == 0) {
+        g_ScriptManager->CallFunction("OnBossMoviePlaybackCompleted");
+    } else {
+        LOGE(logger, "PlayMovie unexpected fileName:%s", fileName)
+    }
 }
 
 void LogEvent(const char* eventName, bool timedEvent)
@@ -357,6 +407,7 @@ void LogEvent(const char* eventName, bool timedEvent)
 // #ifdef GAO_USE_FLURRY_ANALYTICS
 //     [Flurry logEvent:[NSString stringWithUTF8String:eventName] timed:timedEvent];
 // #endif
+    LOGD(logger, "LogEvent eventName:%s, timedEvent:%d", eventName, timedEvent)
 }
 
 void LogEventEnded(const char* eventName)
@@ -364,6 +415,7 @@ void LogEventEnded(const char* eventName)
 // #ifdef GAO_USE_FLURRY_ANALYTICS
 //     [Flurry endTimedEvent:[NSString stringWithUTF8String:eventName] withParameters:nil];
 // #endif
+    LOGD(logger, "LogEventEnded eventName:%s", eventName)
 }
 
 void LogEventWithParameter(const char* eventName, const char* value, const char* key, bool timedEvent)
@@ -374,6 +426,7 @@ void LogEventWithParameter(const char* eventName, const char* value, const char*
 //                           [NSString stringWithUTF8String:key], nil];
 //     [Flurry logEvent:[NSString stringWithUTF8String:eventName] withParameters:dict timed:timedEvent];
 // #endif
+    LOGD(logger, "LogEventEnded eventName:%s, value:%s, key:%s, timedEvent:%d", eventName, value, key, timedEvent)
 }
 
 void LogEventWithLocale(const char* eventName, const char* key)
@@ -384,6 +437,7 @@ void LogEventWithLocale(const char* eventName, const char* key)
 //                           [NSString stringWithUTF8String:key], nil];
 //     [Flurry logEvent:[NSString stringWithUTF8String:eventName] withParameters:dict timed:FALSE];
 // #endif
+    LOGD(logger, "LogEventWithLocale eventName:%s, key:%s", eventName, key)
 }
 
 void BuyProduct(const char* productId, bool showMessage)
@@ -401,6 +455,7 @@ void BuyProduct(const char* productId, bool showMessage)
 //          [g_ViewController onReceivePurchaseResult:NO productId:@"" showMessage:showMessage];
 //      }];
 // #endif
+    LOGD(logger, "BuyProduct productId:%s, showMessage:%d", productId, showMessage)
 }
 
 void RestorePurchases()
@@ -420,6 +475,7 @@ void RestorePurchases()
 //          NSLog(@"IAP Restore attempt failed: %@", error);
 //      }];
 // #endif
+    LOGD(logger, "RestorePurchases")
 }
 
 bool IsFileExist(const char* fileName)
@@ -436,6 +492,7 @@ bool IsFileExist(const char* fileName)
     // NSString* fullPath = [documentsDirectory stringByAppendingPathComponent:fileNameStr];
     
     // return [[NSFileManager defaultManager] fileExistsAtPath:fullPath];
+    LOGD(logger, "IsFileExist fileName:%s", fileName)
     return false;
 }
 
@@ -454,6 +511,7 @@ bool RemoveFile(const char* fileName)
     // NSError* error;
     
     // return [[NSFileManager defaultManager] removeItemAtPath:fullPath error:&error];
+    LOGD(logger, "RemoveFile fileName:%s", fileName)
     return false;
 }
 
@@ -474,6 +532,7 @@ int GetInterfaceOrientation()
     //     default:
     //         return 0;
     // }
+    LOGD(logger, "GetInterfaceOrientation")
     return 2;
 }
 
@@ -486,6 +545,7 @@ void ShowLeaderboardChoices()
  //                          cancelButtonTitle:NSLocalizedString(@"rate_no", nil)
  //                          otherButtonTitles:NSLocalizedString(@"rate_yes", nil), nil];
 	// [alert show];
+    LOGD(logger, "ShowLeaderboardChoices")
 }
 
 void ShowLoveHateChoices()
@@ -497,6 +557,7 @@ void ShowLoveHateChoices()
  //                          cancelButtonTitle:NSLocalizedString(@"feedback_hate", nil)
  //                          otherButtonTitles:NSLocalizedString(@"feedback_love", nil), nil];
 	// [alert show];
+    LOGD(logger, "ShowLoveHateChoices")
 }
 
 void ShowRatingChoices()
@@ -508,6 +569,7 @@ void ShowRatingChoices()
  //                          cancelButtonTitle:NSLocalizedString(@"rate_no", nil)
  //                          otherButtonTitles:NSLocalizedString(@"rate_yes", nil), nil];
 	// [alert show];
+    LOGD(logger, "ShowRatingChoices")
 }
 
 void ShowIAPChoices()
@@ -530,6 +592,7 @@ void ShowMessageChoices(const char* title, const char* desc, const char* action)
  //                          cancelButtonTitle:NSLocalizedString(@"button_cancel", nil)
  //                          otherButtonTitles:NSLocalizedString([NSString stringWithUTF8String:action], nil), nil];
 	// [alert show];
+    LOGD(logger, "ShowMessageChoices title:%s, desc:%s, action:%s", title, desc, action)
 }
 
 void SaveFileToiCloud(const char* fileName)
@@ -548,6 +611,7 @@ void SaveFileToiCloud(const char* fileName)
     
     // BOOL result = [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     // NSLog(@"SYNC result: %d / SIZE: %d", result, data.length);
+    LOGD(logger, "SaveFileToiCloud fileName:%s", fileName)
 }
 
 void SyncFromiCloud()
@@ -583,6 +647,7 @@ void PF_RegisterPlayer()
 //         }
 //     }];
 // #endif
+    LOGD(logger, "PF_RegisterPlayer")
 }
 
 void PF_GetPlayerGift()
@@ -644,6 +709,7 @@ void PF_GetPlayerGift()
 //         }
 //     }];
 // #endif
+    LOGD(logger, "PF_GetPlayerGift")
 }
 
 void PF_SendPlayerScore(unsigned int score, unsigned int count, unsigned int coin, unsigned int gold, const char* map, const char* avatar, unsigned int koban1, unsigned int koban2, unsigned int koban3, unsigned int koban4)
@@ -679,6 +745,7 @@ void PF_SendPlayerScore(unsigned int score, unsigned int count, unsigned int coi
 //         }
 //     }];
 // #endif
+    LOGD(logger, "PF_SendPlayerScore score:%d, count:%d, coin:%d, gold:%d, map%s, avatar:%s, koban1:%d, koban2:%d, koban3:%d, koban4:%d", score, count, coin, gold, map, avatar, koban1,koban2, koban3, koban4)
 }
 
 void ShowInterstitial(const char* location)
@@ -688,14 +755,17 @@ void ShowInterstitial(const char* location)
 // //    [[Chartboost sharedChartboost] showInterstitial:[NSString stringWithUTF8String:location]];
 //     [[Chartboost sharedChartboost] cacheInterstitial];
 // #endif
+    LOGD(logger, "ShowInterstitial location:%s", location)
 }
 
 void SetTextTranslate(int x, int y)
 {
     // [g_ViewController setTextTranslate:x y:y];
+    LOGD(logger, "SetTextTranslate x:%d, y:%d", x, y)
 }
 
 void RenderText()
 {
     // [g_ViewController renderText];
+    LOGD(logger, "RenderText")
 }
