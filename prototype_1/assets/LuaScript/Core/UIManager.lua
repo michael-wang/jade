@@ -123,7 +123,7 @@ UIManager =
 			if (template.indie) then	-- If parent UI frame is indie, all its widgets must be indie too
 				widget.indie = template.indie;
 				--log("WID: "..widget.name.." @ ui: "..name)
-				if (IS_DEVICE_IPAD) then
+				if (IS_DEVICE_IPAD or IS_PLATFORM_ANDROID) then
 					widget.x = (widget.x or 0) * 2;
 					widget.y = (widget.y or 0) * 2;
 				end

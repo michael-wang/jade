@@ -5,7 +5,7 @@
 -------------------------------------------------------------------------
 -- UI Widgets
 -------------------------------------------------------------------------
-if (IS_DEVICE_IPAD) then
+if (IS_DEVICE_IPAD or IS_PLATFORM_ANDROID) then
 	UI_FULLSCREEN_HEIGHT = 600;
 else
 	UI_FULLSCREEN_HEIGHT = 270;
@@ -1034,7 +1034,7 @@ GameUITemplate
 };
 
 -------------------------------------------------------------------------
-if (IS_DEVICE_IPAD) then
+if (IS_DEVICE_IPAD or IS_PLATFORM_ANDROID) then
 	UI_HISTORY_ORIGIN = { 440, 135 };
 	UI_HISTORY_OFFSET = 21.5;
 else
@@ -1394,8 +1394,9 @@ GameUITemplate
 UI_MAP_LEVEL_SIZE = { 216 * APP_SCALE_FACTOR, 196 * APP_SCALE_FACTOR };
 --UI_MAP_LEVEL_OFFSET = 300 * APP_SCALE_FACTOR;
 UI_MAP_LEVEL_OFFSET = 300 * APP_SCALE_FACTOR / APP_UNIT_X;
+g_Logger:Show("APP_SCALE_FACTOR:" .. APP_SCALE_FACTOR .. ",APP_UNIT_X:" .. APP_UNIT_X .. ",UI_MAP_LEVEL_OFFSET:" .. UI_MAP_LEVEL_OFFSET);
 
-if (IS_DEVICE_IPAD) then
+if (IS_DEVICE_IPAD or IS_PLATFORM_ANDROID) then
 --	UI_MAP_LEVEL_ORIGIN = { (SCREEN_UNIT_X - UI_MAP_LEVEL_SIZE[1]) * 0.5 , 250 };
 	UI_MAP_LEVEL_ORIGIN = { (SCREEN_UNIT_X - UI_MAP_LEVEL_SIZE[1]) * 0.5 / APP_UNIT_X, 300 / APP_UNIT_Y };
 else
@@ -1790,7 +1791,7 @@ UI_SHOP_ITEM_OFFSET = 140;
 UI_SHOP_CAT_ORIGIN = { -4, 257 };
 UI_SHOP_CAT_OFFSET = -11;
 UI_SHOP_CAT_SIZE = { 105, 71 };
-if (IS_DEVICE_IPAD) then
+if (IS_DEVICE_IPAD or IS_PLATFORM_ANDROID) then
 	UI_SHOP_ITEM_ORIGIN = { 30, 160 };
 	UI_SHOP_TARGET_OFFSET = { -17, -35 };
 	UI_SHOP_NUM_OFFSET = 15;
@@ -3427,7 +3428,7 @@ GameUITemplate
 UI_SCROLL_ORIGIN = { 0, 50 };
 UI_SCROLL_OFFSET = 59;
 
-if (IS_DEVICE_IPAD) then
+if (IS_DEVICE_IPAD or IS_PLATFORM_ANDROID) then
 	UI_SCROLL_SIZE = { 507, 142 };
 	UI_SCROLL_COIN_OFFSET = { 90, 33 };
 	UI_SCROLL_ASSIGN_POS = { 74 * APP_SCALE_FACTOR, 35 * APP_SCALE_FACTOR };
@@ -6561,7 +6562,7 @@ GameUITemplate
 
 -------------------------------------------------------------------------
 UI_BOSS_POS = { 145, 280 };
-if (IS_DEVICE_IPAD) then
+if (IS_DEVICE_IPAD or IS_PLATFORM_ANDROID) then
 	UI_BOSSBK_OFFSET = { -3 + 1, -30 + 5};
 else
 	UI_BOSSBK_OFFSET = { -3, -30 };

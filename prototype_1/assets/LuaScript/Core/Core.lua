@@ -27,8 +27,8 @@ GAME_CORE_FILE = "GameCore"
 PREBUILD_FUNC_SCRIPT_NAME = "soul.essence";
 PREBUILD_DATA_SCRIPT_NAME = "love.essence";
 
--- Temp solution for iOS dependent code.
-IS_PLATFORM_IOS = true;
+-- For platform dependent code.
+IS_PLATFORM_ANDROID = false;
 
 APP_DEVICE_IPHONE = 1;
 APP_DEVICE_IPHONE_RETINA = 2;
@@ -124,21 +124,21 @@ g_AppIsRunning = false;
 -------------------------------------------------------------------------
 function InitializeLuaAndroid(worldWidth, worldHeight, assetPath)
 
-	IS_PLATFORM_IOS = false;
+	IS_PLATFORM_ANDROID = true;
 	APP_ASSET_PATH = assetPath;
 
 	local portrait = (worldWidth < worldHeight);
 	local orientation = portrait and 0 or 1;
 
-	local unitX = portrait and (worldWidth / APP_BASE_X) or (worldWidth / APP_BASE_Y);
-	local unitY = portrait and (worldHeight / APP_BASE_Y) or (worldHeight / APP_BASE_X);
+	local unitX = 1.0;
+	local unitY = 1.0;
 
 	if (portrait) then
-		APP_BASE_X = worldWidth;
-		APP_BASE_Y = worldHeight;
+		unitX = worldWidth / APP_BASE_X;
+		unitY = worldHeight / APP_BASE_Y;
 	else
-		APP_BASE_X = worldHeight;
-		APP_BASE_Y = worldWidth;
+		unitX = worldWidth / APP_BASE_Y;
+		unitY = worldHeight / APP_BASE_X;
 	end
 
 	return InitializeLuaIphone(APP_DEVICE_ANDROID_PHONE, 
@@ -162,6 +162,8 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
 	if ((APP_DEVICE == APP_DEVICE_IPAD) or (APP_DEVICE == APP_DEVICE_IPAD_RETINA)) then
 		IS_DEVICE_IPAD = true;
 	    APP_SCALE_FACTOR = 2;
+	elseif (IS_PLATFORM_ANDROID) then
+		APP_SCALE_FACTOR = 2;
 	end
 
 	if (orientation == 0) then  -- Portrait mode
@@ -181,7 +183,7 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
 		APP_USE_COMPILED_SCRIPT = true;
 	end
     
-    if (IS_PLATFORM_IOS) then
+    if (not IS_PLATFORM_ANDROID) then
     	APP_ASSET_PATH = GaoApp.GetRootPath();
     	assert(APP_ASSET_PATH);
     end
@@ -225,7 +227,7 @@ end
 -------------------------------------------------------------------------
 function PreInitialize()
 	-- Create Logger
-	if (IS_PLATFORM_IOS) then
+	if (not IS_PLATFORM_ANDROID) then
 	    g_Logger = EaglLogger();
 		g_Logger:Create();
 	else
@@ -237,30 +239,30 @@ function PreInitialize()
 	g_Window = Window();
     
 	-- Initialize config
-	if (IS_PLATFORM_IOS) then
-		InitializeConfigIphone();
-	else
+	if (IS_PLATFORM_ANDROID) then
 		InitializeConfigAndroid();
+	else
+		InitializeConfigIphone();
 	end
 
 	-- Create GraphicsRenderer & GraphicsEngine
-	if (IS_PLATFORM_IOS) then
-		g_GraphicsRenderer = EaglGraphicsRenderer(APP_WIDTH, APP_HEIGHT);
+	if (IS_PLATFORM_ANDROID) then
+		g_GraphicsRenderer = AndroidGraphicsRenderer();
 		g_GraphicsEngine = GraphicsEngine(g_GraphicsRenderer);
 		g_GraphicsEngine:SetBasePath(IMAGE_PATH, FONT_PATH);
 	else
-		g_GraphicsRenderer = AndroidGraphicsRenderer();
+		g_GraphicsRenderer = EaglGraphicsRenderer(APP_WIDTH, APP_HEIGHT);
 		g_GraphicsEngine = GraphicsEngine(g_GraphicsRenderer);
 		g_GraphicsEngine:SetBasePath(IMAGE_PATH, FONT_PATH);
 	end
 
 	-- Create AudioRenderer & AudioEngine
-	if (IS_PLATFORM_IOS) then
-	    g_AudioRenderer = EaglOalAudioRenderer();
+	if (IS_PLATFORM_ANDROID) then
+	    g_AudioRenderer = AndroidAudioRenderer();
 		g_AudioEngine = AudioEngine(g_AudioRenderer);
 		g_AudioEngine:SetBasePath(AUDIO_PATH, AUDIO_PATH);
 	else
-	    g_AudioRenderer = AndroidAudioRenderer();
+	    g_AudioRenderer = EaglOalAudioRenderer();
 		g_AudioEngine = AudioEngine(g_AudioRenderer);
 		g_AudioEngine:SetBasePath(AUDIO_PATH, AUDIO_PATH);
 	end
@@ -269,7 +271,7 @@ function PreInitialize()
 	g_AudioEngine:SetGlobalVolumes(AudioEngine.AUDIO_STREAMING, 1.0);
     
 	--g_AudioRenderer:CreateMicrophone();
-	if (IS_PLATFORM_IOS) then
+	if (not IS_PLATFORM_ANDROID) then
     	APP_IPOD_PLAYING = g_AudioRenderer:IsIpodPlaying();
     end
 
@@ -285,10 +287,10 @@ function PreInitialize()
 	end
     
     -- Create Timer
-    if (IS_PLATFORM_IOS) then
-    	g_Timer = EaglTimer();
-    else
+    if (IS_PLATFORM_ANDROID) then
     	g_Timer = AndroidTimer();
+    else
+    	g_Timer = EaglTimer();
     end
     g_Timer:Start();
 
@@ -331,7 +333,7 @@ function InitializeConfigIphone()
 	end
 
 	-- Setup paths
-	local rootPath = IS_PLATFORM_IOS and "/Asset/" or (APP_ASSET_PATH .. "/");
+	local rootPath = IS_PLATFORM_ANDROID and (APP_ASSET_PATH .. "/") or "/Asset/";
 	
 	SCRIPT_PATH = APP_ASSET_PATH .. "/LuaScript/";
 	SCRIPT_CORE_PATH = SCRIPT_PATH .. "Core/";

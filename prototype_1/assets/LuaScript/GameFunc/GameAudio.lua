@@ -590,7 +590,7 @@ AudioManager =
 	end,
 	---------------------------------------------------------------------
 	UpdateIpodStatus = function(self)
-		if (IS_PLATFORM_IOS and g_AudioRenderer:IsIpodPlaying()) then
+		if ((not IS_PLATFORM_ANDROID) and g_AudioRenderer:IsIpodPlaying()) then
 			log("AudioManager: iPod is playing! Turn BGM off!")			
 			self:ToggleBgm(false);
 			return false;

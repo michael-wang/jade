@@ -742,7 +742,7 @@ EnemyManager =
 		local width, height = enemy["SpriteGroup"]:GetSprite(ENEMY_MAIN_SPRITE):GetSize();
 		local scale = template[ENEMY_TEMPLATE_SCALE] or 1.0;
 		
-		if (IS_DEVICE_IPAD) then
+		if (IS_DEVICE_IPAD or IS_PLATFORM_ANDROID) then
 			width = width * 0.5;
 			height = height * 0.5;
 		end
