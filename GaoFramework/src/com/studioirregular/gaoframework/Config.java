@@ -5,9 +5,23 @@ package com.studioirregular.gaoframework;
  */
 public class Config {
 
-	/* 
-	 * These values should match texture image's target screen size.
-	 */
-	public static final int WORLD_DIMENSION_LONG_SIDE = 960;
-	public static final int WORLD_DIMENSION_SHORT_SIDE = 640;
+	public static enum AssetType {
+		Phone,
+		Tablet
+	};
+	public static final AssetType ASSET_TYPE = AssetType.Tablet;
+	
+	public static final int PHONE_WORLD_LONG = 480;
+	public static final int PHONE_WORLD_SHORT = 320;
+	
+	public static final int TABLET_WORLD_LONG = 960;
+	public static final int TABLET_WORLD_SHORT = 640;
+	
+	public static final int WORLD_LONG_SIDE = 
+			(ASSET_TYPE == AssetType.Phone) ? 
+					PHONE_WORLD_LONG : TABLET_WORLD_LONG;
+	
+	public static final int WORLD_SHORT_SIDE = 
+			(ASSET_TYPE == AssetType.Phone) ? 
+					PHONE_WORLD_SHORT : TABLET_WORLD_SHORT;
 }

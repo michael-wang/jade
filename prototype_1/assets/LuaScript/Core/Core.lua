@@ -36,6 +36,7 @@ APP_DEVICE_IPHONE_TALLER = 3;
 APP_DEVICE_IPAD = 4;
 APP_DEVICE_IPAD_RETINA = 5;
 APP_DEVICE_ANDROID_PHONE = 0x100;
+APP_DEVICE_ANDROID_TABLET = 0x200;
 
 PLAIN_DEVICE_SCRIPT_POOL =
 {
@@ -44,7 +45,8 @@ PLAIN_DEVICE_SCRIPT_POOL =
 	[APP_DEVICE_IPHONE_TALLER] = { "GamePuzzleImg_iPhone5", },
 	[APP_DEVICE_IPAD] = { "GamePuzzleImg_iPad", },
 	[APP_DEVICE_IPAD_RETINA] = { "GamePuzzleImg_iPad", },
-	[APP_DEVICE_ANDROID_PHONE] = { "GamePuzzleImg_iPad", },
+	[APP_DEVICE_ANDROID_PHONE] = { "GamePuzzleImg", },
+	[APP_DEVICE_ANDROID_TABLET] = { "GamePuzzleImg_iPad", },
 };
 
 PREBUILD_DEVICE_SCRIPT_POOL =
@@ -55,6 +57,7 @@ PREBUILD_DEVICE_SCRIPT_POOL =
 	[APP_DEVICE_IPAD] = "ipad.bottle",
 	[APP_DEVICE_IPAD_RETINA] = "ipad.bottle",
 	[APP_DEVICE_ANDROID_PHONE] = "android.bottle",
+	[APP_DEVICE_ANDROID_TABLET] = "android.bottle",
 };
 
 APP_DEBUG_MODE = true;
@@ -124,6 +127,7 @@ g_AppIsRunning = false;
 -------------------------------------------------------------------------
 function InitializeLuaAndroid(worldWidth, worldHeight, assetPath)
 
+	g_Logger:Show("InitializeLuaAndroid w:" .. worldWidth .. ",h:" .. worldHeight .. ",assetPath:" .. assetPath)
 	IS_PLATFORM_ANDROID = true;
 	APP_ASSET_PATH = assetPath;
 
@@ -140,9 +144,15 @@ function InitializeLuaAndroid(worldWidth, worldHeight, assetPath)
 		unitX = worldWidth / APP_BASE_Y;
 		unitY = worldHeight / APP_BASE_X;
 	end
+	g_Logger:Show("InitializeLuaAndroid unitX:" .. unitX .. ",unitY:" .. unitY);
 
-	return InitializeLuaIphone(APP_DEVICE_ANDROID_PHONE, 
-		worldWidth, worldHeight, orientation, unitX, unitY, false);
+	local deviceType = APP_DEVICE_ANDROID_PHONE;
+	if (worldWidth > (portrait and APP_BASE_X or APP_BASE_Y)) then
+		deviceType = APP_DEVICE_ANDROID_TABLET;
+	end
+
+	return InitializeLuaIphone(deviceType, worldWidth, worldHeight, orientation, 
+		unitX, unitY, false);
 end
 
 function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, useCompiledScript)
@@ -163,7 +173,11 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
 		IS_DEVICE_IPAD = true;
 	    APP_SCALE_FACTOR = 2;
 	elseif (IS_PLATFORM_ANDROID) then
-		APP_SCALE_FACTOR = 2;
+		if (orientation == 0) then
+			APP_SCALE_FACTOR = width / APP_BASE_X;
+		else
+			APP_SCALE_FACTOR = width / APP_BASE_Y;
+		end
 	end
 
 	if (orientation == 0) then  -- Portrait mode
@@ -546,14 +560,14 @@ end
 -------------------------------------------------------------------------
 function log(msg)
 	print(msg);
-	g_Logger:Show(msg);
+	-- g_Logger:Show(msg);
 end
 
 -------------------------------------------------------------------------
 function logp(x, y, title)
 	local msg = "[" .. (title or "#") .. "] " .. x .. " , " .. y;
 	print(msg);
-	g_Logger:Show(msg);
+	-- g_Logger:Show(msg);
 end
 
 -------------------------------------------------------------------------

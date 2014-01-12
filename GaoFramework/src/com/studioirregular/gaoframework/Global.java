@@ -45,10 +45,10 @@ public class Global {
 			
 			final boolean portrait = surfaceWidth <= surfaceHeight;
 			
-			worldWidth = portrait ? Config.WORLD_DIMENSION_SHORT_SIDE
-					: Config.WORLD_DIMENSION_LONG_SIDE;
-			worldHeight = portrait ? Config.WORLD_DIMENSION_LONG_SIDE
-					: Config.WORLD_DIMENSION_SHORT_SIDE;
+			worldWidth = portrait ? Config.WORLD_SHORT_SIDE
+					: Config.WORLD_LONG_SIDE;
+			worldHeight = portrait ? Config.WORLD_LONG_SIDE
+					: Config.WORLD_SHORT_SIDE;
 			if (DEBUG_LOG) {
 				Log.d(TAG, "onSurfaceChanged worldWidth:" + worldWidth
 						+ ",worldHeight:" + worldHeight);

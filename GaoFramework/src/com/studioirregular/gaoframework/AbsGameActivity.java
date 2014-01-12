@@ -56,13 +56,13 @@ public abstract class AbsGameActivity extends Activity {
 		
 		if (isPortraitMode()) {
 			ActivityOnCreate(
-					Config.WORLD_DIMENSION_SHORT_SIDE,
-					Config.WORLD_DIMENSION_LONG_SIDE, 
+					Config.WORLD_SHORT_SIDE,
+					Config.WORLD_LONG_SIDE, 
 					JavaInterface.getInstance().GetAssetFileFolder());
 		} else {
 			ActivityOnCreate(
-					Config.WORLD_DIMENSION_LONG_SIDE,
-					Config.WORLD_DIMENSION_SHORT_SIDE, 
+					Config.WORLD_LONG_SIDE,
+					Config.WORLD_SHORT_SIDE, 
 					JavaInterface.getInstance().GetAssetFileFolder());
 		}
 		
