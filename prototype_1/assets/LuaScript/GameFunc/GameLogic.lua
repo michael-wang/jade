@@ -187,62 +187,51 @@ function ResetDefaultDataDelegate()
     --==================================
     -- TESTING
     --==================================
---[[ @DEBUG
-    local ds = dataSet[IO_CAT_HACK];
---]]    
---[[ @DEBUG
-    ds["Weapon"][WEAPON_TYPE_KATANA] = 5;
-    ds["Weapon"][WEAPON_TYPE_BLADE] = 5;
-    ds["Weapon"][WEAPON_TYPE_SPEAR] = 5;
---]]
---[[ @DEBUG    
-    ds["Boost"]["Initial"] = 2500;
---]]
---[[ @DEBUG
-    ds["Money"]["Koban"] = 500;
-    ds["Money"]["Coin"] = 30000;
---]]
---[[ @DEBUG
-    for i = 1, SCROLL_MAX do
-        ds["Scroll"][i] = 1;
-    end
---]]
---[[ @DEBUG
-    --for i = 1, JADE_MAX do
-    for i = 1, JADE_MAX - 1 do
-        ds["Jade"][i] = 1;
-    end
---]]
---[[ @DEBUG
-    --for i = 1, AVATAR_MAX do
-    for i = 1, AVATAR_MAX - 1 do
-        ds["Avatar"][i] = 1;
-        ds["AvatarLv"][i] = 1;
-        ds["AvatarExp"][i] = 0;
-    end
---]]
+    if APP_DEBUG_MODE then
+        local ds = dataSet[IO_CAT_HACK];
+        
+        ds["Weapon"][WEAPON_TYPE_KATANA] = 5;
+        ds["Weapon"][WEAPON_TYPE_BLADE] = 5;
+        ds["Weapon"][WEAPON_TYPE_SPEAR] = 5;
 
---[[ @DEBUG
-    local ds = dataSet[IO_CAT_CONTENT];
-    ds["Tutorial"]["Completed"] = true;
-    --ds["Level"]["Normal"][1] = { Distance = 100, Coin = 0, Score = 100, Medal = 0, };
-    ds["Level"]["Normal"][1] = { Distance = 500, Coin = 0, Score = 100, Medal = 1, };
---]]    
---[[ @DEBUG
-    ds["Level"]["Normal"][1] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
-    ds["Level"]["Normal"][2] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
-    ds["Level"]["Normal"][3] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
-    ds["Level"]["Normal"][4] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
-    ds["Level"]["Normal"][5] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
-ds["Level"]["Shadow"][1] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
---]]
---[[
-    ds["Level"]["Shadow"][1] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
-    ds["Level"]["Shadow"][2] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
-    ds["Level"]["Shadow"][3] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
-    ds["Level"]["Shadow"][4] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
-    ds["Level"]["Shadow"][5] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
---]]    
+        ds["Boost"]["Initial"] = 2500;
+
+        ds["Money"]["Koban"] = 500;
+        ds["Money"]["Coin"] = 30000;
+
+        for i = 1, SCROLL_MAX do
+            ds["Scroll"][i] = 1;
+        end
+
+        --for i = 1, JADE_MAX do
+        for i = 1, JADE_MAX - 1 do
+            ds["Jade"][i] = 1;
+        end
+
+        --for i = 1, AVATAR_MAX do
+        for i = 1, AVATAR_MAX - 1 do
+            ds["Avatar"][i] = 1;
+            ds["AvatarLv"][i] = 1;
+            ds["AvatarExp"][i] = 0;
+        end
+
+        local ds = dataSet[IO_CAT_CONTENT];
+        ds["Tutorial"]["Completed"] = true;
+        --ds["Level"]["Normal"][1] = { Distance = 100, Coin = 0, Score = 100, Medal = 0, };
+        ds["Level"]["Normal"][1] = { Distance = 500, Coin = 0, Score = 100, Medal = 1, };
+        
+        ds["Level"]["Normal"][1] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
+        ds["Level"]["Normal"][2] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
+        ds["Level"]["Normal"][3] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
+        ds["Level"]["Normal"][4] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
+        ds["Level"]["Normal"][5] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
+        ds["Level"]["Shadow"][1] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        ds["Level"]["Shadow"][1] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        ds["Level"]["Shadow"][2] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        ds["Level"]["Shadow"][3] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        ds["Level"]["Shadow"][4] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        ds["Level"]["Shadow"][5] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+    end
 
     return dataSet;
 end
