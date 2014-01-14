@@ -218,10 +218,10 @@ public class Sprite extends Shape {
 	protected void setUniformMVP(int program, String uniformName, float[] value) {
 		
 		Matrix.setIdentityM(modelMatrix, 0);
-		Matrix.scaleM(modelMatrix, 0, transform.GetScale(), transform.GetScale(), 1);
-		Matrix.rotateM(modelMatrix, 0, transform.GetRotateByRadian(), 0, 0, 1);
 		Matrix.translateM(modelMatrix, 0, transform.GetTranslateX() + halfWidth,
 				transform.GetTranslateY() + halfHeight, 0);
+		Matrix.rotateM(modelMatrix, 0, transform.GetRotateByRadian(), 0, 0, 1);
+		Matrix.scaleM(modelMatrix, 0, transform.GetScale(), transform.GetScale(), 1);
 		
 		Matrix.multiplyMM(mvpMatrix, 0, value, 0, modelMatrix, 0);
 		
