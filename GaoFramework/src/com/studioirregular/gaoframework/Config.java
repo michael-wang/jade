@@ -9,7 +9,7 @@ public class Config {
 		Phone,
 		Tablet
 	};
-	public static final AssetType ASSET_TYPE = AssetType.Tablet;
+	public static final AssetType ASSET_TYPE = AssetType.Phone;
 	
 	public static final int PHONE_WORLD_LONG = 480;
 	public static final int PHONE_WORLD_SHORT = 320;
