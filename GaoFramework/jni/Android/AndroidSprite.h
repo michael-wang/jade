@@ -33,6 +33,8 @@ public:
 
 	virtual GaoVoid Draw();
 
+	virtual GaoVoid DrawOffset(GaoInt16 dx, GaoInt16 dy);
+
 	// index: [1, 4].
 	virtual GaoVoid SetVertexData(GaoUInt16 index, GaoReal32 x, GaoReal32 y, 
 		GaoReal32 u, GaoReal32 v);
@@ -44,6 +46,10 @@ public:
 	virtual GaoVoid SetQuadTexCoords(
 		GaoReal32 u1, GaoReal32 v1, GaoReal32 u2, GaoReal32 v2, 
 		GaoReal32 u3, GaoReal32 v3, GaoReal32 u4, GaoReal32 v4);
+
+	virtual GaoVoid SetOffset(GaoReal32 x, GaoReal32 y);
+
+	virtual GaoVoid SetRenderSize(GaoInt16 width, GaoInt16 height);
 
 private:
 	JavaObject jobj;

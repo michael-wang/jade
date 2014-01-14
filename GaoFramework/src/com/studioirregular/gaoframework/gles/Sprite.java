@@ -166,9 +166,31 @@ public class Sprite extends Shape {
 		vertex.set(x0, y0, x1, y1, x2, y2, x3, y3);
 	}
 	
+	public void SetOffset(float dx, float dy) {
+		
+		if (DEBUG_LOG()) {
+			Log.d(TAG(), "SetOffset dx:" + dx + ",dy:" + dy);
+		}
+		
+		this.dx = dx;
+		this.dy = dy;
+	}
+	
 	public void Draw() {
 		
+		this.dxDraw = 0;
+		this.dyDraw = 0;
 		float[] mvp = JavaInterface.getInstance().getRenderer().GetMVPMatrix();
+		
+		draw(mvp);
+	}
+	
+	public void DrawOffset(int dx, int dy) {
+		
+		this.dxDraw = dx;
+		this.dyDraw = dy;
+		float[] mvp = JavaInterface.getInstance().getRenderer().GetMVPMatrix();
+		
 		draw(mvp);
 	}
 	
@@ -218,8 +240,10 @@ public class Sprite extends Shape {
 	protected void setUniformMVP(int program, String uniformName, float[] value) {
 		
 		Matrix.setIdentityM(modelMatrix, 0);
-		Matrix.translateM(modelMatrix, 0, transform.GetTranslateX() + halfWidth,
-				transform.GetTranslateY() + halfHeight, 0);
+		Matrix.translateM(modelMatrix, 0, 
+				transform.GetTranslateX() + halfWidth + dx + dxDraw,
+				transform.GetTranslateY() + halfHeight + dy + dyDraw, 
+				0);
 		Matrix.rotateM(modelMatrix, 0, transform.GetRotateByRadian(), 0, 0, 1);
 		Matrix.scaleM(modelMatrix, 0, transform.GetScale(), transform.GetScale(), 1);
 		
@@ -254,4 +278,8 @@ public class Sprite extends Shape {
 	private float halfWidth, halfHeight;
 	private final float[] modelMatrix = new float[16];
 	private final float[] mvpMatrix = new float[16];
+	
+	private float dx, dy;
+	// Only given when Draw function called.
+	private float dxDraw, dyDraw;
 }

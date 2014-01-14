@@ -93,13 +93,18 @@ GaoVoid AndroidSprite::SetRenderSizeAndTexCoords(GaoInt16 width, GaoInt16 height
 		"SetRenderSizeAndTexCoords width:%d, height:%d, left:%f, top:%f, right:%f, bottom:%f", 
 		width, height, left, top, right, bottom)
 
-	jobj.CallVoidMethod("SetRenderSize", "(II)V", width, height);
+	SetRenderSize(width, height);
 	SetTexCoords(left, top, right, bottom);
 }
 
 GaoVoid AndroidSprite::Draw() {
 	
 	jobj.CallVoidMethod("Draw", "()V");
+}
+
+GaoVoid AndroidSprite::DrawOffset(GaoInt16 dx, GaoInt16 dy) {
+	
+	jobj.CallVoidMethod("DrawOffset", "(II)V", dx, dy);
 }
 
 GaoVoid AndroidSprite::SetVertexData(GaoUInt16 index, 
@@ -130,4 +135,24 @@ GaoVoid AndroidSprite::SetQuadTexCoords(
 
 	jobj.CallVoidMethod("SetQuadTexCoords", "(FFFFFFFF)V", 
 		u1, v1, u2, v2, u3, v3, u4, v4);
+}
+
+GaoVoid AndroidSprite::SetOffset(GaoReal32 dx, GaoReal32 dy) {
+
+	LOGD(log, "SetOffset dx:%f, dy:%f", dx, dy)
+
+	m_Offset[0] = dx;
+	m_Offset[1] = dy;
+
+	jobj.CallVoidMethod("SetOffset", "(FF)V", dx, dy);
+}
+
+GaoVoid AndroidSprite::SetRenderSize(GaoInt16 width, GaoInt16 height) {
+
+	LOGD(log, "SetRenderSize width:%d, dy:%d", width, height)
+
+	m_Radius[0] = width * 0.5f;
+	m_Radius[1] = height * 0.5f;
+
+	jobj.CallVoidMethod("SetRenderSize", "(II)V", width, height);
 }

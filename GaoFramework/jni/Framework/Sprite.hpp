@@ -81,9 +81,9 @@ namespace Gao
 
             virtual GaoVoid SetColor(GaoReal32 r, GaoReal32 g, GaoReal32 b);
 
-            inline GaoVoid ModifyAlpha(GaoReal32 value);
+            inline virtual GaoVoid ModifyAlpha(GaoReal32 value);
 
-            inline GaoVoid SetFlip(GaoBool flipX, GaoBool flipY);
+            inline virtual GaoVoid SetFlip(GaoBool flipX, GaoBool flipY);
 
 //            inline GaoVoid SetRenderOrigin(GaoInt16 renderOriginX, GaoInt16 renderOriginY);
 //
@@ -95,33 +95,33 @@ namespace Gao
 //
 //            inline GaoVoid ModifyRenderBound(GaoInt16 renderOriginX, GaoInt16 renderOriginY, GaoInt16 renderEndX, GaoInt16 renderEndY);
 
-            inline GaoVoid SetTranslate(GaoInt16 coordX, GaoInt16 coordY);
+            inline virtual GaoVoid SetTranslate(GaoInt16 coordX, GaoInt16 coordY);
 
-            inline GaoVoid SetTranslate(Vector2D& coord);
+            inline virtual GaoVoid SetTranslate(Vector2D& coord);
             
-            inline GaoVoid SetOffset(GaoReal32 x, GaoReal32 y);
+            inline virtual GaoVoid SetOffset(GaoReal32 x, GaoReal32 y);
 
-            inline GaoReal32 GetOffsetX() const;
+            inline virtual GaoReal32 GetOffsetX() const;
 
-            inline GaoReal32 GetOffsetY() const;
+            inline virtual GaoReal32 GetOffsetY() const;
 
-            inline GaoVoid ResetFlip();
+            inline virtual GaoVoid ResetFlip();
 
-            inline Transform* GetTransform() const;
+            inline virtual Transform* GetTransform() const;
 
-			inline GaoInt16 GetWidth() const;
+			inline virtual GaoInt16 GetWidth() const;
 
-			inline GaoInt16 GetHeight() const;
+			inline virtual GaoInt16 GetHeight() const;
             
-            inline GaoVoid SetRenderSize(GaoInt16 width, GaoInt16 height);
+            inline virtual GaoVoid SetRenderSize(GaoInt16 width, GaoInt16 height);
 
-            inline GaoInt16 GetRenderSizeX() const;
+            inline virtual GaoInt16 GetRenderSizeX() const;
 
-            inline GaoInt16 GetRenderSizeY() const;
+            inline virtual GaoInt16 GetRenderSizeY() const;
 
-			inline GaoReal32 GetAlpha() const;
+			inline virtual GaoReal32 GetAlpha() const;
             
-			inline Texture* GetTexture();
+			inline virtual Texture* GetTexture();
 
 
         protected:
