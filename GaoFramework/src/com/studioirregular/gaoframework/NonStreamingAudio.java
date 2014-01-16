@@ -46,7 +46,9 @@ public class NonStreamingAudio implements AbsAudioResource {
 		} else {
 			soundID = loadFromAsset(path);
 		}
-		Log.d(TAG, "soundID:" + soundID);
+		if (DEBUG_LOG || BuildConfig.DEBUG) {
+			Log.d(TAG, "soundID:" + soundID + ",path:" + path);
+		}
 		
 		final boolean success = (soundID != INVALID_SOUND_ID);
 		if (!success) {
