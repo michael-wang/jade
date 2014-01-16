@@ -97,6 +97,19 @@ GaoVoid AndroidSprite::SetRenderSizeAndTexCoords(GaoInt16 width, GaoInt16 height
 	SetTexCoords(left, top, right, bottom);
 }
 
+GaoVoid AndroidSprite::SetRenderSizeAndRadius(GaoInt16 width, GaoInt16 height) {
+	
+	LOGD(log, "SetRenderSizeAndRadius w:%d, h:%d", width, height)
+
+	// SetRenderSizeAndRadius is a special function for rotating non-square sprite.
+	// Cannot apply SetRenderSize.
+	//SetRenderSize(width, height);
+	m_Radius[0] = 0;
+	m_Radius[1] = 0;
+
+	jobj.CallVoidMethod("SetRenderSizeAndRadius", "(II)V", width, height);
+}
+
 GaoVoid AndroidSprite::Draw() {
 	
 	jobj.CallVoidMethod("Draw", "()V");

@@ -31,6 +31,8 @@ public:
 		GaoReal32 texCoordU1, GaoReal32 texCoordV1, GaoReal32 texCoordU2, 
 		GaoReal32 texCoordV2);
 
+	virtual GaoVoid SetRenderSizeAndRadius(GaoInt16 width, GaoInt16 height);
+
 	virtual GaoVoid Draw();
 
 	virtual GaoVoid DrawOffset(GaoInt16 dx, GaoInt16 dy);

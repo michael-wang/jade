@@ -59,14 +59,30 @@ public class Sprite extends Shape {
 		final float hw = width / 2;
 		final float hh = height / 2;
 		
+		this.halfWidth = hw;
+		this.halfHeight = hh;
+		
 		setVertex(
 				-hw, -hh, 
 				-hw,  hh,
 				 hw, -hh,
 				 hw,  hh);
+	}
+	
+	// Special function for rotating non-square sprite.
+	public void SetRenderSizeAndRadius(int width, int height) {
+		if (DEBUG_LOG()) {
+			Log.d(TAG(), "SetRenderSizeAndRadius: w:" + width + ",h:" + height);
+		}
 		
-		this.halfWidth = hw;
-		this.halfHeight = hh;
+		this.halfWidth = 0;
+		this.halfHeight = 0;
+		
+		setVertex(
+				0,     0,
+				0,     height,
+				width, 0,
+				width, height);
 	}
 	
 	public void SetTexCoordsU(float left, float right) {
@@ -153,6 +169,13 @@ public class Sprite extends Shape {
 		}
 	}
 	
+	/*
+	 * Assume SetRenderSize is called before this to set halfWidth and halfHeight.
+	 * Point sequence:
+	 * (x0, y0)----(x2, y2)
+	 *    |            |
+	 * (x1, y1)----(x3, y3)
+	 */
 	public void SetQuadVertices(
 			float x0, float y0, float x1, float y1,
 			float x2, float y2, float x3, float y3) {
@@ -163,7 +186,11 @@ public class Sprite extends Shape {
 					+ ",y3:" + y3);
 		}
 		
-		vertex.set(x0, y0, x1, y1, x2, y2, x3, y3);
+		vertex.set(
+				x0 - halfWidth, y0 - halfHeight, 
+				x1 - halfWidth, y1 - halfHeight, 
+				x2 - halfWidth, y2 - halfHeight, 
+				x3 - halfWidth, y3 - halfHeight);
 	}
 	
 	public void SetOffset(float dx, float dy) {
@@ -244,7 +271,7 @@ public class Sprite extends Shape {
 				transform.GetTranslateX() + halfWidth + dx + dxDraw,
 				transform.GetTranslateY() + halfHeight + dy + dyDraw, 
 				0);
-		Matrix.rotateM(modelMatrix, 0, transform.GetRotateByRadian(), 0, 0, 1);
+		Matrix.rotateM(modelMatrix, 0, transform.GetRotateByDegree(), 0, 0, 1);
 		Matrix.scaleM(modelMatrix, 0, transform.GetScale(), transform.GetScale(), 1);
 		
 		Matrix.multiplyMM(mvpMatrix, 0, value, 0, modelMatrix, 0);

@@ -9,7 +9,7 @@ public class AndroidTransform {
 	
 	private float translateX = 0;
 	private float translateY = 0;
-	private float rotation = 0;
+	private float rotationInRadian = 0;
 	private float scale = 1;
 	
 	public AndroidTransform() {
@@ -63,7 +63,7 @@ public class AndroidTransform {
 			Log.d(TAG, "SetRotateByRadian value:" + value);
 		}
 		
-		rotation = value;
+		rotationInRadian = value;
 	}
 	
 	public void SetRotateByDegree(int value) {
@@ -72,14 +72,16 @@ public class AndroidTransform {
 			Log.d(TAG, "SetRotateByDegree value:" + value);
 		}
 		
-		rotation = (float) ((double)value / 180.0 * Math.PI);
+		rotationInRadian = (float) ((double)value * Math.PI / 180.0);
 	}
 	
 	public void ModifyRotateByRadian(float value) {
 		
-		Log.d(TAG, "ModifyRotateByRadian value:" + value);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ModifyRotateByRadian value:" + value);
+		}
 		
-		rotation += value;
+		rotationInRadian += value;
 	}
 	
 	public void ModifyRotateByDegree(int value) {
@@ -88,22 +90,22 @@ public class AndroidTransform {
 			Log.d(TAG, "ModifyRotateByDegree value:" + value);
 		}
 		
-		float valueInRadian = (float) ((double)value / 180.0 * Math.PI);
-		rotation += valueInRadian;
+		float valueInRadian = (float) ((double)value * Math.PI / 180.0);
+		rotationInRadian += valueInRadian;
 	}
 	
 	public float GetRotateByRadian() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "GetRotateByRadian:" + rotation);
+			Log.d(TAG, "GetRotateByRadian:" + rotationInRadian);
 		}
 		
-		return rotation;
+		return rotationInRadian;
 	}
 	
 	public float GetRotateByDegree() {
 		
-		final float result = (float) ((double) rotation * 180.0 / Math.PI);
+		final float result = (float) ((double) rotationInRadian * 180.0 / Math.PI);
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "GetRotateByDegree:" + result);
@@ -143,7 +145,7 @@ public class AndroidTransform {
 	public String toString() {
 		StringBuilder result = new StringBuilder(getClass().getSimpleName());
 		result.append("\n\ttranslate x:" + translateX + ",y:" + translateY);
-		result.append("\n\trotation:" + rotation);
+		result.append("\n\trotation:" + GetRotateByDegree());
 		result.append("\n\tscale:" + scale);
 		return result.toString();
 	}
