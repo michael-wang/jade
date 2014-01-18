@@ -15,20 +15,17 @@
 -- SCRIPT_DEFAULT_PATH = "../../Source/LuaScript/";
 SCRIPT_DEFAULT_EXT = ".lua";
 
--- ASSET_PATH_RELEASE = "./Data/";
--- ASSET_PATH_DEBUG = "../../Asset/";
--- ASSET_PATH_SCRIPT = "./Data/Script/";
-ASSET_PATH_IMAGE = "Image/";
-ASSET_PATH_FONT = "Font/";
-ASSET_PATH_SOUND = "Sound/";
+-- For platform dependent code.
+IS_PLATFORM_ANDROID = false;
+
+ASSET_PATH_IMAGE = IS_PLATFORM_ANDROID and "Image/" or "./Data/";
+ASSET_PATH_FONT = IS_PLATFORM_ANDROID and "Font/" or "../../Asset/";
+ASSET_PATH_SOUND = IS_PLATFORM_ANDROID and "Sound/" or "./Data/Script/";
 
 GAME_CORE_FILE = "GameCore"
 
 PREBUILD_FUNC_SCRIPT_NAME = "soul.essence";
 PREBUILD_DATA_SCRIPT_NAME = "love.essence";
-
--- For platform dependent code.
-IS_PLATFORM_ANDROID = false;
 
 APP_DEVICE_IPHONE = 1;
 APP_DEVICE_IPHONE_RETINA = 2;
