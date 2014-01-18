@@ -19,10 +19,10 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
 /*
  * Class:     com_studioirregular_gaoframework_MyGLRenderer
  * Method:    RendererOnSurfaceChanged
- * Signature: (IILjava/lang/String;)V
+ * Signature: (II)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnSurfaceChanged
-  (JNIEnv *, jobject, jint, jint, jstring);
+  (JNIEnv *, jobject, jint, jint);
 
 /*
  * Class:     com_studioirregular_gaoframework_MyGLRenderer

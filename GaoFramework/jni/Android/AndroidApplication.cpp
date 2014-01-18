@@ -28,15 +28,16 @@ static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
 
-AndroidApplication::AndroidApplication() :
+AndroidApplication::AndroidApplication(int width, int height, char* asset) :
 	luaManager (new LuaScriptManager()),
-	initialized (FALSE),
 	running (TRUE),
 	log ("native::framework::AndroidApplication", false),
-	worldWidth (0),
-	worldHeight (0) {
+	worldWidth (width),
+	worldHeight (height),
+	assetPath (asset),
+	initialized (FALSE) {
 
-	LOGD(log, "Constructor")
+	LOGD(log, "Constructor w:%d, h:%d, asset:%s", width, height, asset)
 
 	AndroidApplication::Singleton = dynamic_cast<AndroidApplication*>(g_Application);
 }
@@ -46,26 +47,6 @@ AndroidApplication::~AndroidApplication() {
 	LOGD(log, "Descructor")
 
 	SAFE_DELETE(luaManager);
-}
-
-GaoBool AndroidApplication::Initialize(char* asset, int width, int height) {
-
-	if (asset == NULL) {
-		LOGE(log, "Initialize: invalid argument asset: NULL")
-		return FALSE;
-	}
-
-	LOGD(log, "Initialize asset:%s, worldWidth:%d, worldHeight:%d", asset, width, height)
-
-	assetPath = asset;
-	worldWidth = width;
-	worldHeight = height;
-
-	GaoBool result = OnInitialize();
-
-	initialized = result;
-
-	return result;
 }
 
 GaoVoid AndroidApplication::Pause() {
@@ -125,6 +106,8 @@ GaoBool AndroidApplication::OnInitialize() {
 	if (!luaManager->CallFunction()) {
 		LOGE(log, "Failed to run lua function: %s", SCRIPT_ROUTINE_INIT);
 	}
+
+	initialized = TRUE;
 
 	return TRUE;
 }

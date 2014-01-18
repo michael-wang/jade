@@ -55,8 +55,7 @@ public class MyGLRenderer implements Renderer {
 		
 		GLES20.glClearColor(1, 0, 0, 1);
 		
-		RendererOnSurfaceChanged(surfaceWidth, surfaceHeight, 
-				JavaInterface.getInstance().GetAssetFileFolder());
+		RendererOnSurfaceChanged(surfaceWidth, surfaceHeight);
 	}
 	
 	@Override
@@ -89,7 +88,7 @@ public class MyGLRenderer implements Renderer {
 	}
 	
 	private native void RendererOnSurfaceCreated();
-	private native void RendererOnSurfaceChanged(int w, int h, String assetFolder);
+	private native void RendererOnSurfaceChanged(int w, int h);
 	private native void RendererOnDrawFrame();
 	
 	private final float[] mMVPMatrix = new float[16];

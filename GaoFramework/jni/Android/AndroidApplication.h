@@ -20,10 +20,9 @@ public:
 	static AndroidApplication* Singleton;
 	
 public:
-	AndroidApplication();
+	AndroidApplication(int worldWidth, int worldHeight, char* assetPath);
 	virtual ~AndroidApplication();
 
-	GaoBool Initialize(char* assetPath, int worldWidth, int worldHeight);
 	GaoBool IsInitialized() {
 		return initialized;
 	}
@@ -49,8 +48,8 @@ protected:
 	GaoString assetPath;
 	int worldWidth, worldHeight;
 
-	GaoBool initialized;
 	GaoBool running;
+	GaoBool initialized;
 	AndroidLogger log;
 };
 

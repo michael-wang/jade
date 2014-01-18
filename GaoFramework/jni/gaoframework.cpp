@@ -44,14 +44,8 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
     WORLD_WIDTH = worldWidth;
     WORLD_HEIGHT = worldHeight;
 
-    app = new AndroidApplication();
+    app = new AndroidApplication(worldWidth, worldHeight, getJniString(env, assetFolder));
     jni = new JniEnv();
-
-    // g_JniEnv->Set(env);
-
-    // app->Initialize(getJniString(env, assetFolder));
-
-    // g_JniEnv->Set(NULL);
 }
 
 /*
@@ -87,27 +81,27 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
 /*
  * Class:     com_studioirregular_gaoframework_NativeInterface
  * Method:    RendererOnSurfaceChanged
- * Signature: (IILjava/lang/String;)V
+ * Signature: (II)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnSurfaceChanged
-  (JNIEnv *env, jobject obj, jint glSurfaceWidth, jint glSurfaceHeight, jstring assetFolder) {
+  (JNIEnv *env, jobject obj, jint glSurfaceWidth, jint glSurfaceHeight) {
     LOGD(logger, "RendererOnSurfaceChanged w:%d, h:%d", glSurfaceWidth, glSurfaceHeight)
 
     if (app == NULL) {
-        app = new AndroidApplication();
-        LOGE(logger, "Unexpected AndroidApplication == null, reallocate here.")
+        LOGE(logger, "Unexpected AndroidApplication == null.")
+        return;
     }
 
     if (jni == NULL) {
         jni = new JniEnv();
-        LOGE(logger, "Unexpected JniEnv == null, reallocate here.")
+        LOGW(logger, "Unexpected JniEnv == null, reallocate here.")
     }
 
     if (app->IsInitialized() == FALSE) {
         g_JniEnv->Set(env);
 
         // app needs logical game world size, not GL surface size.
-        app->Initialize(getJniString(env, assetFolder), WORLD_WIDTH, WORLD_HEIGHT);
+        app->Initialize();
 
         g_JniEnv->Set(NULL);
     }
