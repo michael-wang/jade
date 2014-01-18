@@ -16,7 +16,6 @@ public:
 
 	TouchEventArray* GetTouchEvents();
 	char* GetLogFilePath();
-	char* GetAssetFileFolder();
 
 	void DrawRectangle(
 		GaoInt16 left, GaoInt16 top, GaoInt16 right, GaoInt16 bottom, 

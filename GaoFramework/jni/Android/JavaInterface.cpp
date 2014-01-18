@@ -9,8 +9,6 @@ static const char METHOD_NAME_POP_TOUCH_EVENTS[]       = "popTouchEvents";
 static const char METHOD_DESCRIPTOR_POP_TOUCH_EVENTS[] = "()[Lcom/studioirregular/gaoframework/TouchEvent;";
 static const char METHOD_NAME_GET_LOG_FILE_PATH[]      = "getLogFilePath";
 static const char METHOD_DESCRIPTOR_GET_LOG_FILE_PATH[]= "()Ljava/lang/String;";
-static const char METHOD_NAME_GET_ASSET_FILE_FOLDER[]  = "GetAssetFileFolder";
-static const char METHOD_DESCRIPTOR_GET_ASSET_FILE_FOLDER[]= "()Ljava/lang/String;";
 static const char METHOD_NAME_DRAW_RECTANGLE[]         = "DrawRectangle";
 static const char METHOD_DESCRIPTOR_DRAW_RECTANGLE[]   = "(IIIIFFFF)V";
 static const char METHOD_NAME_DRAW_CIRCLE[]            = "DrawCircle";
@@ -85,29 +83,6 @@ char* JavaInterface::GetLogFilePath() {
 	char* result = new char[std::strlen(cstrPath) + 1];
 	std::strcpy(result, cstrPath);
 	LOGD(log, "GetLogFilePath path:%s", result)
-
-	env->ReleaseStringUTFChars(jstrPath, cstrPath);
-
-	return result;
-}
-
-char* JavaInterface::GetAssetFileFolder() {
-
-	LOGD(log, "GetAssetFileFolder")
-
-	JNIEnv* env = g_JniEnv->Get();
-
-	jstring jstrPath = (jstring)jobj.CallObjectMethod(
-		METHOD_NAME_GET_ASSET_FILE_FOLDER, METHOD_DESCRIPTOR_GET_ASSET_FILE_FOLDER);
-	if (jstrPath == NULL) {
-		LOGE(log, "GetAssetFileFolder: CallObjectMethod return NULL")
-		return NULL;
-	}
-	const char* cstrPath = env->GetStringUTFChars(jstrPath, NULL);
-
-	char* result = new char[std::strlen(cstrPath) + 1];
-	std::strcpy(result, cstrPath);
-	LOGD(log, "GetAssetFileFolder path:%s", result)
 
 	env->ReleaseStringUTFChars(jstrPath, cstrPath);
 
