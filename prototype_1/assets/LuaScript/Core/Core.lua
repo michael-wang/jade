@@ -18,9 +18,9 @@ SCRIPT_DEFAULT_EXT = ".lua";
 -- For platform dependent code.
 IS_PLATFORM_ANDROID = false;
 
-ASSET_PATH_IMAGE = IS_PLATFORM_ANDROID and "Image/" or "./Data/";
-ASSET_PATH_FONT = IS_PLATFORM_ANDROID and "Font/" or "../../Asset/";
-ASSET_PATH_SOUND = IS_PLATFORM_ANDROID and "Sound/" or "./Data/Script/";
+ASSET_PATH_IMAGE = "./Data/";
+ASSET_PATH_FONT = "../../Asset/";
+ASSET_PATH_SOUND = "./Data/Script/";
 
 GAME_CORE_FILE = "GameCore"
 
@@ -127,6 +127,9 @@ function InitializeLuaAndroid(worldWidth, worldHeight, assetPath)
 	g_Logger:Show("InitializeLuaAndroid w:" .. worldWidth .. ",h:" .. worldHeight .. ",assetPath:" .. assetPath)
 	IS_PLATFORM_ANDROID = true;
 	APP_ASSET_PATH = assetPath;
+	ASSET_PATH_IMAGE = "Image/";
+	ASSET_PATH_FONT = "Font/";
+	ASSET_PATH_SOUND = "Sound/";
 
 	local portrait = (worldWidth < worldHeight);
 	local orientation = portrait and 0 or 1;
