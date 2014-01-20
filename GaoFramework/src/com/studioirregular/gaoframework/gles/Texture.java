@@ -8,6 +8,7 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 import com.studioirregular.gaoframework.BuildConfig;
+import com.studioirregular.gaoframework.Config;
 import com.studioirregular.gaoframework.TextureImageLoader;
 
 public class Texture {
@@ -22,20 +23,21 @@ public class Texture {
 		}
 	}
 	
-	public boolean Create(String path, boolean filtered) {
+	public boolean Create(String file, boolean filtered) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Create path:" + path + ",filtered:" + filtered);
+			Log.d(TAG, "Create file:" + file + ",filtered:" + filtered);
 		}
 		
-		this.path = path;
+		this.file = file;
 		this.filtered = filtered;
+		final String path = Config.Asset.GetImagePath() + file;
 		
 		workingBuf.position(0);
 		GLES20.glGenTextures(1, workingBuf);
 		
 		if (glError.hasError(TAG, "glGenTextures failed.")) {
-			name = INVALID_NAME;
+			this.name = INVALID_NAME;
 			return false;
 		}
 		
@@ -47,18 +49,18 @@ public class Texture {
 		if (path.startsWith("/")) {
 			bmp = loader.loadFromStorage(path);
 		} else {
-			bmp = loader.loadFromAsset(path);
+			bmp = loader.loadFromResource(path);
 		}
 		
 		if (bmp == null) {
-			Log.e(TAG, "Failed to load bitmap:" + path);
+			Log.e(TAG, "Failed to load bitmap:" + file);
 			workingBuf.put(0, this.name);
 			GLES20.glDeleteTextures(1, workingBuf);
 			this.name = INVALID_NAME;
 			return false;
 		}
 		
-		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, name);
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, this.name);
 		
 		if (filtered) {
 			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
@@ -91,14 +93,14 @@ public class Texture {
 			Log.d(TAG, "Reload");
 		}
 		
-		if (path == null) {
+		if (file == null) {
 			if (BuildConfig.DEBUG) {
-				Log.e(TAG, "Reload failed, invalid path:" + path);
+				Log.e(TAG, "Reload failed, invalid file:" + file);
 			}
 			return false;
 		}
 		
-		return Create(path, filtered);
+		return Create(file, filtered);
 	}
 	
 	public void Unload() {
@@ -159,13 +161,13 @@ public class Texture {
 	@Override
 	public String toString() {
 		
-		return "Texture name:" + name + "\n\tpath:" + path + "\n\tcoords:" + coords;
+		return "Texture name:" + name + "\n\tfile:" + file + "\n\tcoords:" + coords;
 	}
 	
 	private static final int INVALID_NAME = 0;
 	
 	private int name = INVALID_NAME;
-	private String path;
+	private String file;
 	private TextureCoordinates coords = new TextureCoordinates();
 	private boolean filtered;
 	

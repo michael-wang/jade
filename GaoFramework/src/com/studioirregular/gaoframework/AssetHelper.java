@@ -15,7 +15,7 @@ import android.util.Log;
 public class AssetHelper {
 
 	private static final String TAG = "java-AssetHelper";
-	private static final boolean DEBUG_LOG = true;
+	private static final boolean DEBUG_LOG = false;
 	
 	public String getFileContent(Context context, String filename) {
 		

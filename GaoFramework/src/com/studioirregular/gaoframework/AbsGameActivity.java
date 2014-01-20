@@ -23,8 +23,6 @@ public abstract class AbsGameActivity extends Activity {
 	private static final String TAG = "abs-game-activity";
 	private static final boolean DEBUG_LOG = false;
 	
-	private static final String LUA_SCRIPT_ASSET = "LuaScript";
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,12 +56,12 @@ public abstract class AbsGameActivity extends Activity {
 			ActivityOnCreate(
 					Config.WORLD_SHORT_SIDE,
 					Config.WORLD_LONG_SIDE, 
-					JavaInterface.getInstance().GetAssetFileFolder());
+					Config.Asset.GetLuaScriptPath(AbsGameActivity.this));
 		} else {
 			ActivityOnCreate(
 					Config.WORLD_LONG_SIDE,
 					Config.WORLD_SHORT_SIDE, 
-					JavaInterface.getInstance().GetAssetFileFolder());
+					Config.Asset.GetLuaScriptPath(AbsGameActivity.this));
 		}
 		
 		setContentView(R.layout.activity_main);
@@ -112,34 +110,32 @@ public abstract class AbsGameActivity extends Activity {
 		}
 	}
 	
-	private boolean copyLuaToStorage(File to) {
+	private boolean copyLuaToStorage() {
+		
+		File toHere = new File(Config.Asset.CopyLuaScriptFolderTo(AbsGameActivity.this));
+		
 		if (DEBUG_LOG) {
-			Log.w(TAG, "copyLuaToStorage to:" + to.getAbsolutePath());
+			Log.d(TAG, "copyLuaToStorage:" + toHere.getAbsolutePath());
 		}
 		
-		AssetHelper helper = new AssetHelper();
-		
 		try {
-			helper.copyAssetsToStorage(getAssets(), LUA_SCRIPT_ASSET, to);
+			
+			AssetHelper helper = new AssetHelper();
+			helper.copyAssetsToStorage(getAssets(), Config.Asset.LUA_SCRIPT_FOLDER, toHere);
+			
 		} catch (IOException e) {
-			//e.printStackTrace();
-			Log.e(TAG, "copyLuaToStorage exception:" + e);
+			if (BuildConfig.DEBUG) {
+				e.printStackTrace();
+			}
 			return false;
 		}
 		
 		return true;
 	}
 	
-	private String buildPath(File folder, String fileName) {
-		return folder.getAbsolutePath() + File.separator + fileName;
-	}
-	
 	private void copyAssetLuaFilesToStorage() {
 		
-		final File copyToPath = new File(JavaInterface.getInstance()
-				.GetAssetFileFolder());
-		
-		if (copyLuaToStorage(copyToPath)) {
+		if (copyLuaToStorage()) {
 			setFilesCopiedToStorage(LUA_FILES_COPY_STATE);
 		} else {
 			Log.e(TAG, "copyAssetLuaFilesIfNecessary: failed to copy asset lua files.");
@@ -225,7 +221,7 @@ public abstract class AbsGameActivity extends Activity {
 	};
 	private ShowFPS showFPS = new ShowFPS();
 	
-	private native void ActivityOnCreate(int worldWidth, int worldHeight, String assetFolder);
+	private native void ActivityOnCreate(int worldWidth, int worldHeight, String luaScriptPath);
 	private native void ActivityOnDestroy();
 	private native void ActivityOnPause();
 	private native void ActivityOnResume();

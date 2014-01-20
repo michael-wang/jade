@@ -20,7 +20,7 @@ public:
 	static AndroidApplication* Singleton;
 	
 public:
-	AndroidApplication(int worldWidth, int worldHeight, char* assetPath);
+	AndroidApplication(int worldWidth, int worldHeight, char* luaScriptPath);
 	virtual ~AndroidApplication();
 
 	GaoBool IsInitialized() {
@@ -45,7 +45,7 @@ protected:
 
 	GaoBool CallLua(GaoConstCharPtr func);
 
-	GaoString assetPath;
+	GaoString luaScriptPath;
 	int worldWidth, worldHeight;
 
 	GaoBool running;

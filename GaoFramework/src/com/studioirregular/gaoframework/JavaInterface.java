@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -76,28 +75,11 @@ public class JavaInterface {
 		}
 	}
 	
-	public String GetAssetFileFolder() {
-		
-		if (BuildConfig.DEBUG) {
-			// On debug mode, copy it to somewhere I can easily override the lua
-			// files, to make debug easier.
-			return Environment.getExternalStoragePublicDirectory(
-					Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-		} else {
-			if (context != null) {
-				return context.getFilesDir().getAbsolutePath();
-			} else {
-				return "";
-			}
-		}
-	}
-	
 	public String getLogFilePath() {
 		
-		File DOWNLOAD_FOLDER = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-		
-		File log = new File(DOWNLOAD_FOLDER, "log.txt");
+		// Put log to where lua scripts goes.
+		final String folder = Config.Asset.CopyLuaScriptFolderTo(getContext());
+		File log = new File(folder, "log.txt");
 		
 		if (!log.exists()) {
 			try {

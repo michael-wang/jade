@@ -1,10 +1,7 @@
 package com.studioirregular.gaoframework;
 
-import java.io.IOException;
-
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
@@ -41,18 +38,20 @@ public class NonStreamingAudio implements AbsAudioResource {
 		this.filePath = path;
 		this.loop = loop;
 		
-		if (path.startsWith("/")) {
+		if (filePath.startsWith("/")) {
 			soundID = loadFromStorage(path);
 		} else {
-			soundID = loadFromAsset(path);
-		}
-		if (DEBUG_LOG || BuildConfig.DEBUG) {
-			Log.d(TAG, "soundID:" + soundID + ",path:" + path);
+			soundID = loadFromResource(path);
 		}
 		
 		final boolean success = (soundID != INVALID_SOUND_ID);
-		if (!success) {
-			Log.e(TAG, "Create: failed to laod sound file:" + path);
+		
+		if (DEBUG_LOG || BuildConfig.DEBUG) {
+			if (success) {
+				Log.d(TAG, "soundID:" + soundID + ",path:" + path);
+			} else {
+				Log.d(TAG, "soundID:" + soundID + ",path:" + path);
+			}
 		}
 		
 		return success;
@@ -90,9 +89,39 @@ public class NonStreamingAudio implements AbsAudioResource {
 		return false;
 	}
 
-	private int loadFromAsset(String path) {
+//	private int loadFromAsset(String path) {
+//		if (DEBUG_LOG) {
+//			Log.d(TAG, "loadFromAsset path:" + path);
+//		}
+//		
+//		Context ctx = SoundSystem.getInstance().getContext();
+//		if (ctx == null) {
+//			return INVALID_SOUND_ID;
+//		}
+//		
+//		AssetManager am = ctx.getAssets();
+//		if (am == null) {
+//			return INVALID_SOUND_ID;
+//		}
+//		
+//		AssetFileDescriptor afd = null;
+//		try {
+//			afd = am.openFd(path);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return INVALID_SOUND_ID;
+//		}
+//		
+//		return soundPool.load(afd, 1);
+//	}
+	
+	private int loadFromResource(String path) {
+		
+		// Resource names cannot contain file extension, remove it.
+		path = path.substring(0, path.lastIndexOf("."));
+		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "loadFromAsset path:" + path);
+			Log.d(TAG, "loadFromResource path:" + path);
 		}
 		
 		Context ctx = SoundSystem.getInstance().getContext();
@@ -100,20 +129,20 @@ public class NonStreamingAudio implements AbsAudioResource {
 			return INVALID_SOUND_ID;
 		}
 		
-		AssetManager am = ctx.getAssets();
-		if (am == null) {
+		Resources res = ctx.getResources();
+		if (res == null) {
 			return INVALID_SOUND_ID;
 		}
 		
-		AssetFileDescriptor afd = null;
-		try {
-			afd = am.openFd(path);
-		} catch (IOException e) {
-			e.printStackTrace();
+		final int resid = res.getIdentifier(path, "raw", ctx.getPackageName());
+		if (resid == 0) {
+			if (DEBUG_LOG || BuildConfig.DEBUG) {
+				Log.e(TAG, "Unable to find raw resource:" + path);
+			}
 			return INVALID_SOUND_ID;
 		}
 		
-		return soundPool.load(afd, 1);
+		return soundPool.load(ctx, resid, 1);
 	}
 	
 	private int loadFromStorage(String path) {

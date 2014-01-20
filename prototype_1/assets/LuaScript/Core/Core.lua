@@ -60,6 +60,7 @@ PREBUILD_DEVICE_SCRIPT_POOL =
 APP_DEBUG_MODE = true;
 APP_USE_COMPILED_SCRIPT = false;
 APP_ASSET_PATH = nil;
+APP_LUA_PATH = nil;
 APP_IPOD_PLAYING = false;
 
 APP_BASE_X = 320;
@@ -122,14 +123,12 @@ g_AppIsRunning = false;
 --=======================================================================
 
 -------------------------------------------------------------------------
-function InitializeLuaAndroid(worldWidth, worldHeight, assetPath)
+function InitializeLuaAndroid(worldWidth, worldHeight, luaScriptPath)
 
-	g_Logger:Show("InitializeLuaAndroid w:" .. worldWidth .. ",h:" .. worldHeight .. ",assetPath:" .. assetPath)
+	g_Logger:Show("InitializeLuaAndroid w:" .. worldWidth .. ",h:" .. worldHeight .. ",luaScriptPath:" .. luaScriptPath);
 	IS_PLATFORM_ANDROID = true;
-	APP_ASSET_PATH = assetPath;
-	ASSET_PATH_IMAGE = "Image/";
-	ASSET_PATH_FONT = "Font/";
-	ASSET_PATH_SOUND = "Sound/";
+	APP_ASSET_PATH = "";
+	APP_LUA_PATH = luaScriptPath;
 
 	local portrait = (worldWidth < worldHeight);
 	local orientation = portrait and 0 or 1;
@@ -200,6 +199,7 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
     if (not IS_PLATFORM_ANDROID) then
     	APP_ASSET_PATH = GaoApp.GetRootPath();
     	assert(APP_ASSET_PATH);
+    	APP_LUA_PATH = APP_ASSET_PATH;
     end
 
     -- Pre-initialize
@@ -217,12 +217,12 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
     
     -- Load game scripts
 	if (APP_USE_COMPILED_SCRIPT) then
-		dofile(string.format("%s/%s", APP_ASSET_PATH, PREBUILD_DEVICE_SCRIPT_NAME));
-		dofile(string.format("%s/%s", APP_ASSET_PATH, PREBUILD_FUNC_SCRIPT_NAME));
+		dofile(string.format("%s/%s", APP_LUA_PATH, PREBUILD_DEVICE_SCRIPT_NAME));
+		dofile(string.format("%s/%s", APP_LUA_PATH, PREBUILD_FUNC_SCRIPT_NAME));
 
         InitializeAppDataDelegate();
 		
-		dofile(string.format("%s/%s", APP_ASSET_PATH, PREBUILD_DATA_SCRIPT_NAME));
+		dofile(string.format("%s/%s", APP_LUA_PATH, PREBUILD_DATA_SCRIPT_NAME));
     else
 		-- NOTE: Must called before other scripts
         LoadScript(GAME_CORE_FILE, SCRIPT_FUNC_PATH);
@@ -293,7 +293,11 @@ function PreInitialize()
 	-- NOTE: Must be called after InitializeConfigIphone()
 	if (APP_DEBUG_MODE) then
 		g_FontRenderer = GlyphFontRenderer();
-		g_FontRenderer:Create(APP_ASSET_PATH .. "/Asset/Font/Font.FontInfo", g_GraphicsEngine:CreateSprite("Font.png"));
+		if IS_PLATFORM_ANDROID then
+			g_FontRenderer:Create(APP_ASSET_PATH .. "/Asset/Font/Font.FontInfo", g_GraphicsEngine:CreateSprite("font.png"));
+		else
+			g_FontRenderer:Create(APP_ASSET_PATH .. "/Asset/Font/Font.FontInfo", g_GraphicsEngine:CreateSprite("Font.png"));
+		end
 		log("FontRenderer creation done")
 	else
 		log = function() end
@@ -347,7 +351,7 @@ function InitializeConfigIphone()
 	end
 
 	-- Setup paths
-	local rootPath = IS_PLATFORM_ANDROID and (APP_ASSET_PATH .. "/") or "/Asset/";
+	local rootPath = "/Asset/";
 	
 	SCRIPT_PATH = APP_ASSET_PATH .. "/LuaScript/";
 	SCRIPT_CORE_PATH = SCRIPT_PATH .. "Core/";
@@ -362,23 +366,14 @@ end
 
 -------------------------------------------------------------------------
 function InitializeConfigAndroid()
-	-- Determine app configuration
-	-- if (g_Window:GetAppConfig() ~= Window.CONFIG_DEBUG) then
-	-- 	APP_DEBUG_MODE = false;
-	-- end
-
-	-- Setup paths
-	-- local rootPath = "/Asset/";
-	local rootPath = APP_ASSET_PATH .. "/";
 	
-	SCRIPT_PATH = APP_ASSET_PATH .. "/LuaScript/";
-	SCRIPT_CORE_PATH = SCRIPT_PATH .. "Core/";
-	SCRIPT_FUNC_PATH = SCRIPT_PATH .. "GameFunc/";
-	SCRIPT_DATA_PATH = SCRIPT_PATH .. "GameData/";
+	SCRIPT_CORE_PATH = APP_LUA_PATH .. "Core/";
+	SCRIPT_FUNC_PATH = APP_LUA_PATH .. "GameFunc/";
+	SCRIPT_DATA_PATH = APP_LUA_PATH .. "GameData/";
 
-	IMAGE_PATH = rootPath .. ASSET_PATH_IMAGE;
-	FONT_PATH = rootPath .. ASSET_PATH_FONT;
-	AUDIO_PATH = rootPath .. ASSET_PATH_SOUND;
+	IMAGE_PATH = "";
+	FONT_PATH = "";
+	AUDIO_PATH = "";
 	SCRIPT_FILE_EXT = SCRIPT_DEFAULT_EXT;
 end
 

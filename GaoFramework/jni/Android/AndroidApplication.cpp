@@ -15,8 +15,8 @@
 
 using namespace Gao::Framework;
 
-static const char INIT_LOGGER_SCRIPT[]  = "/LuaScript/Core/init_logger.lua";
-static const char CORE_SCRIPT[]         = "/LuaScript/Core/Core.lua";
+static const char INIT_LOGGER_SCRIPT[]  = "Core/init_logger.lua";
+static const char CORE_SCRIPT[]         = "Core/Core.lua";
 static const char SCRIPT_ROUTINE_INIT[] = "InitializeLuaAndroid";
 static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
 static const char SCRIPT_ROUTINE_UPDATE[] = "UpdateMain";
@@ -28,16 +28,16 @@ static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
 
-AndroidApplication::AndroidApplication(int width, int height, char* asset) :
+AndroidApplication::AndroidApplication(int width, int height, char* luaScript) :
 	luaManager (new LuaScriptManager()),
 	running (TRUE),
-	log ("native::framework::AndroidApplication", false),
+	log ("native::framework::AndroidApplication", FALSE),
 	worldWidth (width),
 	worldHeight (height),
-	assetPath (asset),
+	luaScriptPath (luaScript),
 	initialized (FALSE) {
 
-	LOGD(log, "Constructor w:%d, h:%d, asset:%s", width, height, asset)
+	LOGD(log, "Constructor w:%d, h:%d, luaScript:%s", width, height, luaScript)
 
 	AndroidApplication::Singleton = dynamic_cast<AndroidApplication*>(g_Application);
 }
@@ -82,12 +82,12 @@ GaoBool AndroidApplication::OnInitialize() {
 	AndroidLuaScripts::RegisterAndroidClasses(luaManager->GetLuaState());
 	RegisterGameFunctions(luaManager->GetLuaState());
 
-	std::string luaScript(assetPath);
+	std::string luaScript(luaScriptPath);
 	luaScript += INIT_LOGGER_SCRIPT;
 	LOGD(log, "luaScript:%s", luaScript.c_str());
 	luaManager->RunFromFullPathFile(luaScript);
 
-	std::string core(assetPath);
+	std::string core(luaScriptPath);
 	core += CORE_SCRIPT;
 	LOGD(log, "core:%s", core.c_str());
 	if (!luaManager->RunFromFullPathFile(core)) {
@@ -101,7 +101,7 @@ GaoBool AndroidApplication::OnInitialize() {
 	}
 	luaManager->PushValue(worldWidth);
 	luaManager->PushValue(worldHeight);
-	luaManager->PushValue(assetPath);
+	luaManager->PushValue(luaScriptPath);
 	LOGD(log, "before call function: %s", SCRIPT_ROUTINE_INIT);
 	if (!luaManager->CallFunction()) {
 		LOGE(log, "Failed to run lua function: %s", SCRIPT_ROUTINE_INIT);

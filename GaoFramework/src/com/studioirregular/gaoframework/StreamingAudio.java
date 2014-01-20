@@ -12,6 +12,7 @@ public class StreamingAudio implements AbsAudioResource {
 	private static final String TAG = "java-StreamingAudio";
 	private static final boolean DEBUG_LOG = false;
 	
+	// TODO: delay media player creation until first play.
 	@Override
 	public boolean Create(String path, boolean loop) {
 		
@@ -19,10 +20,11 @@ public class StreamingAudio implements AbsAudioResource {
 			Log.d(TAG, "Create path:" + path + ",loop:" + loop);
 		}
 		
-		Context ctx = SoundSystem.getInstance().getContext();
-		Uri uri = Uri.fromFile(new File(path));
-		
-		mplayer = MediaPlayer.create(ctx, uri);
+		if (path.startsWith("/")) {
+			mplayer = loadFromAsset(path);
+		} else {
+			mplayer = loadFromResources(path);
+		}
 		
 		if (mplayer != null) {
 			mplayer.setLooping(loop);
@@ -86,6 +88,40 @@ public class StreamingAudio implements AbsAudioResource {
 		}
 		
 		return false;
+	}
+	
+	private MediaPlayer loadFromAsset(String path) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "loadFromAsset path:" + path);
+		}
+		
+		Context ctx = SoundSystem.getInstance().getContext();
+		final Uri uri = Uri.fromFile(new File(path));
+		
+		return MediaPlayer.create(ctx, uri);
+	}
+	
+	private MediaPlayer loadFromResources(String path) {
+		
+		// Resource names cannot contain file extension, remove it.
+		path = path.substring(0, path.lastIndexOf("."));
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "loadFromResources path:" + path);
+		}
+		
+		Context ctx = SoundSystem.getInstance().getContext();
+		
+		final int resid = ctx.getResources().getIdentifier(path, "raw", ctx.getPackageName());
+		
+		if (resid == 0) {
+			if (DEBUG_LOG) {
+				Log.e(TAG, "Unable to find resource id for path:" + path);
+			}
+			return null;
+		}
+		return MediaPlayer.create(ctx, resid);
 	}
 
 	private MediaPlayer mplayer;

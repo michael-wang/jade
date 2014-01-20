@@ -38,13 +38,13 @@ static char* getJniString(JNIEnv* env, jstring jstr) {
  * Signature: (IILjava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *env, jobject obj, jint worldWidth, jint worldHeight, jstring assetFolder) {    
+  (JNIEnv *env, jobject obj, jint worldWidth, jint worldHeight, jstring luaScriptPath) {    
     LOGD(logger, "ActivityOnCreate")
 
     WORLD_WIDTH = worldWidth;
     WORLD_HEIGHT = worldHeight;
 
-    app = new AndroidApplication(worldWidth, worldHeight, getJniString(env, assetFolder));
+    app = new AndroidApplication(worldWidth, worldHeight, getJniString(env, luaScriptPath));
     jni = new JniEnv();
 }
 

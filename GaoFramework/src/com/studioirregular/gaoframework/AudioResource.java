@@ -24,11 +24,13 @@ public class AudioResource implements AbsAudioResource {
 	}
 	
 	@Override
-	public boolean Create(String path, boolean looping) {
+	public boolean Create(String name, boolean looping) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Create path:" + path + ",looping:" + looping);
+			Log.d(TAG, "Create name:" + name + ",looping:" + looping);
 		}
+		
+		final String path = Config.Asset.GetSoundPath() + name;
 		
 		if (impl != null) {
 			return impl.Create(path, looping);
