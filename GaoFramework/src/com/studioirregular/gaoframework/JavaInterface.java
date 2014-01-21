@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.studioirregular.gaoframework.gles.Circle;
 import com.studioirregular.gaoframework.gles.Rectangle;
+import com.testflightapp.lib.TestFlight;
 
 
 public class JavaInterface {
@@ -91,6 +92,18 @@ public class JavaInterface {
 	public TouchEvent[] popTouchEvents() {
 		
 		return InputSystem.getInstance().popTouchEvents();
+	}
+	
+	// TestFlight
+	public void TestFlightPassCheckpoint(String msg) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "TestFlightPassCheckpoint msg:" + msg);
+		}
+		
+		if (TestFlight.isActive()) {
+			TestFlight.passCheckpoint(msg);
+		}
 	}
 	
 	// For java layer, native code should not use.

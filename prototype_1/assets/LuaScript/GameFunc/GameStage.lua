@@ -94,6 +94,10 @@ GameStageTemplate
     ui = "Info",
 	
 	OnEnter = function()
+		if IS_PLATFORM_ANDROID then
+			JavaInterface:TestFlightPassCheckpoint("OnEnter Stage: " .. id);
+		end
+
 		GameKit.LogEvent("UI_Info", true);
 
         UIManager:GetWidgetComponent("Info", "Content", "Sprite"):SetImage("credit_00");
