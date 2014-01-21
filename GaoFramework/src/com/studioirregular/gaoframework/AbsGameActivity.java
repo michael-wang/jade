@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.testflightapp.lib.TestFlight;
+
 public abstract class AbsGameActivity extends Activity {
 
 	private static final String TAG = "abs-game-activity";
@@ -29,6 +31,8 @@ public abstract class AbsGameActivity extends Activity {
 		if (DEBUG_LOG) {
 			Log.w(TAG, "onCreate");
 		}
+		
+		TestFlight.takeOff(this.getApplication(), "e1d35c9d-3282-48a4-9ab6-2af2a52349d2");
 		
 		surfaceView = new GLSurfaceView(AbsGameActivity.this);
 		surfaceView.setEGLContextClientVersion(2);
