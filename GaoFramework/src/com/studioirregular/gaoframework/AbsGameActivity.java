@@ -177,7 +177,7 @@ public abstract class AbsGameActivity extends Activity {
 		
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			JavaInterface.getInstance().onTouch(event);
+			InputSystem.getInstance().onTouch(event);
 			return true;
 		}
 	};

@@ -2,12 +2,9 @@ package com.studioirregular.gaoframework;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.MotionEvent;
 
 import com.studioirregular.gaoframework.gles.Circle;
 import com.studioirregular.gaoframework.gles.Rectangle;
@@ -31,8 +28,6 @@ public class JavaInterface {
 		if (DEBUG_LOG) {
 			Log.d(TAG, "JavaInterface()");
 		}
-		
-		touchEvents = new ArrayList<TouchEvent>();
 	}
 	
 	// Java APIs for native code.
@@ -94,37 +89,14 @@ public class JavaInterface {
 	}
 	
 	public TouchEvent[] popTouchEvents() {
-		TouchEvent[] result = null;
 		
-		synchronized (touchEvents) {
-			if (!touchEvents.isEmpty()) {
-				result = new TouchEvent[touchEvents.size()];
-				result = touchEvents.toArray(result);
-				
-				touchEvents.clear();
-				if (DEBUG_LOG) {
-					Log.d(TAG, "popTouchEvents #events:" + result.length);
-				}
-			} else {
-				result = new TouchEvent[0];
-			}
-		}
-		
-		return result;
+		return InputSystem.getInstance().popTouchEvents();
 	}
 	
 	// For java layer, native code should not use.
 	/* package */ void init(Context context, MyGLRenderer r) {
 		this.context = context;
 		this.renderer = r;
-	}
-	
-	/* package */ void onTouch(MotionEvent motion) {
-//		Log.d(TAG, "popTouchEvents event:" + event);
-		
-		synchronized (touchEvents) {
-			touchEvents.add(new TouchEvent(motion));
-		}
 	}
 	
 	/* package */ Context getContext() {
@@ -137,7 +109,6 @@ public class JavaInterface {
 	
 	private Context context;
 	private MyGLRenderer renderer;
-	private List<TouchEvent> touchEvents;
 	
 	private Circle circle;
 	private Rectangle rectangle;
