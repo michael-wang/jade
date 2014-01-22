@@ -26,6 +26,8 @@ public:
 
 	void TestFlightPassCheckpoint(const char* msg);
 
+	void NotifyBackProcessResult(GaoBool consumed);
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;

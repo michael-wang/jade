@@ -39,15 +39,6 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnPause
   (JNIEnv *, jobject);
 
-/*
- * Class:     com_studioirregular_gaoframework_AbsGameActivity
- * Method:    ActivityOnBackPressed
- * Signature: ()Z
- */
-JNIEXPORT jboolean JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnBackPressed
-  (JNIEnv *, jobject);
-
-
 #ifdef __cplusplus
 }
 #endif

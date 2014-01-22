@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -181,14 +180,28 @@ public abstract class AbsGameActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		
-		if (ActivityOnBackPressed()) {
-			Log.w(TAG, "Back key consumed by native.");
-		} else {
-			Log.w(TAG, "Back key NOT consumed by native.");
-			super.onBackPressed();
-		}
+		NativeInterface.getInstance().NotifyBackPressed();
+		
+		// Native will handle back key on next update, and ask activity to
+		// finish if native cannot consume this back.
 	}
+	
+	public void toFinishOnUiThread() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "toFinishOnUiThread");
+		}
+		
+		this.runOnUiThread(new Runnable() {
 
+			@Override
+			public void run() {
+				finish();
+			}
+			
+		});
+	}
+	
 	private View.OnTouchListener surfaaceViewTouchListener = new View.OnTouchListener() {
 		
 		@Override
@@ -241,7 +254,6 @@ public abstract class AbsGameActivity extends Activity {
 	private native void ActivityOnDestroy();
 	private native void ActivityOnPause();
 	private native void ActivityOnResume();
-	private native boolean ActivityOnBackPressed();
 	
 	// On my Nexus S (running 4.1.2), it requires all dependent libs be loaded
 	// in order, or UnsatisfiedLinkError is raised.

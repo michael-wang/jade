@@ -4199,7 +4199,7 @@ GameUITemplate
 
         {
 			class = "PuzzleButton",
-			name = "Back",
+			name = "BACK",
 			x = UI_BUTTON_POS[1],
 			y = 280,
 			
@@ -4237,7 +4237,7 @@ GameUITemplate
 		
 		ButtonWidgets =
 		{
-			"Start", "Back", "KobanNum", "CoinNum", --"Category", 
+			"Start", "BACK", "KobanNum", "CoinNum", --"Category", 
 		},
 	},
 };

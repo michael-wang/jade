@@ -32,7 +32,7 @@ public:
 
 	GaoVoid RunOnePass();
 
-	GaoBool ProcessBack();
+	GaoVoid NotifyBackPressed();
 
 protected:
 	virtual GaoBool OnInitialize();
