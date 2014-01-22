@@ -24,6 +24,7 @@ static const char SCRIPT_ROUTINE_RENDER[] = "RenderMain";
 static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
 static const char SCRIPT_ROUTINE_PAUSE[]  = "Pause";
 static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
+static const char SCRIPT_ROUTINE_PROCESS_BACK[] = "ProcessBack";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
@@ -169,3 +170,15 @@ GaoBool AndroidApplication::CallLua(GaoConstCharPtr func) {
 	return TRUE;
 }
 
+GaoBool AndroidApplication::ProcessBack() {
+
+	LOGD(log, "ProcessBack")
+
+	luaManager->CallFunction(SCRIPT_ROUTINE_PROCESS_BACK);
+
+	GaoBool result = FALSE;
+	luaManager->GetValueAt(1, result);
+	LOGW(log, "ProcessBack result:%d", result)
+
+	return result;
+}

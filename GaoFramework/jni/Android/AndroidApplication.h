@@ -32,6 +32,8 @@ public:
 
 	GaoVoid RunOnePass();
 
+	GaoBool ProcessBack();
+
 protected:
 	virtual GaoBool OnInitialize();
 	virtual GaoVoid OnTerminate();

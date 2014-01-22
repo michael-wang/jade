@@ -159,3 +159,26 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
         jni->Set(NULL);
     }
 }
+
+/*
+ * Class:     com_studioirregular_gaoframework_AbsGameActivity
+ * Method:    ActivityOnBackPressed
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnBackPressed
+  (JNIEnv *env, jobject obj) {
+
+    LOGD(logger, "ActivityOnBackPressed")
+
+    jboolean result = FALSE;
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        result = app->ProcessBack();
+
+        jni->Set(NULL);
+    }
+
+    return result;
+}

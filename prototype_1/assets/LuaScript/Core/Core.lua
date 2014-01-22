@@ -453,6 +453,13 @@ function ProcessTouch(touch)
 end
 
 -------------------------------------------------------------------------
+-- For Android platform, back key is used to control game stage flow.
+-- Return true if consumed, false if not.
+function ProcessBackKey()
+	return false;
+end
+
+-------------------------------------------------------------------------
 function RenderMain()
 	RenderDelegate();
 end
