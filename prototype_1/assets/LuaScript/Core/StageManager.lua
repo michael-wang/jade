@@ -31,6 +31,12 @@ StageManager =
 		local oldUI;
         if (self.m_CurrentStage and self.m_CurrentStage["OnExit"]) then
         --log("OnExit >>> " .. self.m_CurrentStage["id"]);            
+            
+			if IS_PLATFORM_ANDROID then
+				local msg = "OnExit Stage: " .. self.m_CurrentStage["id"];
+				g_JavaInterface:TestFlightPassCheckpoint(msg);
+			end
+
             self.m_CurrentStage["OnExit"](self.m_CurrentStageState);
 			oldUI = self.m_CurrentStage["ui"];
         end
@@ -54,6 +60,12 @@ StageManager =
 		-- Proceed 'OnEnter' of new stage
         if (self.m_CurrentStage["OnEnter"]) then
         --log("OnEnter << " .. self.m_CurrentStage["id"]);    
+
+			if IS_PLATFORM_ANDROID then
+				local msg = "OnEnter Stage: " .. self.m_CurrentStage["id"];
+				g_JavaInterface:TestFlightPassCheckpoint(msg);
+			end
+
             self.m_CurrentStage["OnEnter"](self.m_CurrentStageState);
         end
     end,
@@ -92,6 +104,12 @@ StageManager =
 		local newUI;
 		
         if (self.m_CurrentStage and self.m_CurrentStage["OnExit"]) then
+
+			if IS_PLATFORM_ANDROID then
+				local msg = "OnExit Stage: " .. self.m_CurrentStage["id"];
+				g_JavaInterface:TestFlightPassCheckpoint(msg);
+			end
+
             self.m_CurrentStage["OnExit"](self.m_CurrentStageState);
 			oldUI = self.m_CurrentStage["ui"];
         end
@@ -114,6 +132,12 @@ StageManager =
 		end
 		
         if (self.m_CurrentStage["OnEnter"]) then
+
+			if IS_PLATFORM_ANDROID then
+				local msg = "OnEnter Stage: " .. self.m_CurrentStage["id"];
+				g_JavaInterface:TestFlightPassCheckpoint(msg);
+			end
+
             self.m_CurrentStage["OnEnter"](self.m_CurrentStageState);
         end
     end,

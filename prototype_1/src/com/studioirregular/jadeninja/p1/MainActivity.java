@@ -1,19 +1,15 @@
 package com.studioirregular.jadeninja.p1;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 
 import com.studioirregular.gaoframework.AbsGameActivity;
 
 public class MainActivity extends AbsGameActivity {
 
-	private static final String TAG = "main-activity";
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.w(TAG, "onCreate");
 	}
 	
 	@Override

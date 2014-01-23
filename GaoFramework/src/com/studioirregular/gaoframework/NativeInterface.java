@@ -4,7 +4,8 @@ import android.util.Log;
 
 public class NativeInterface {
 
-	private static final String TAG = "native-interface";
+	private static final String TAG = "java-NativeInterface";
+	private static final boolean DEBUG_LOG = false;
 	
 	// Singleton.
 	public static NativeInterface getInstance() {
@@ -16,7 +17,10 @@ public class NativeInterface {
 	}
 	
 	private NativeInterface() {
-		Log.w(TAG, "NativeInterface");
+		if (DEBUG_LOG) {
+			Log.d(TAG, "NativeInterface");
+		}
 	}
 	
+	public native void NotifyBackPressed();
 }

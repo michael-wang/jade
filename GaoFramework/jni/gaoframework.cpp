@@ -1,5 +1,6 @@
 #include "com_studioirregular_gaoframework_AbsGameActivity.h"
 #include "com_studioirregular_gaoframework_MyGLRenderer.h"
+#include "com_studioirregular_gaoframework_NativeInterface.h"
 #include <android/asset_manager_jni.h>
 #include <android/log.h>
 #include <Android/AndroidApplication.h>
@@ -124,18 +125,18 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_Render
 
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
- * Method:    ActivityOnResume
+ * Method:    ActivityOnStart
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnResume
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnStart
   (JNIEnv *env, jobject obj) {
 
-    LOGD(logger, "ActivityOnResume");
+    LOGD(logger, "ActivityOnStart");
 
     if (jni != NULL && app != NULL) {
         jni->Set(env);
 
-        app->Resume();
+        app->Start();
 
         jni->Set(NULL);
     }
@@ -143,18 +144,37 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
- * Method:    ActivityOnPause
+ * Method:    ActivityOnStop
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnPause
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnStop
   (JNIEnv *env, jobject obj) {
 
-    LOGD(logger, "ActivityOnPause");
+    LOGD(logger, "ActivityOnStop");
     
     if (jni != NULL && app != NULL) {
         jni->Set(env);
 
-        app->Pause();
+        app->Stop();
+
+        jni->Set(NULL);
+    }
+}
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyBackPressed
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyBackPressed
+  (JNIEnv *env, jobject obj) {
+
+    LOGD(logger, "NotifyBackPressed");
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->NotifyBackPressed();
 
         jni->Set(NULL);
     }

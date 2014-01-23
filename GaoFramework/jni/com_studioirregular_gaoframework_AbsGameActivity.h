@@ -25,20 +25,19 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
- * Method:    ActivityOnResume
+ * Method:    ActivityOnStart
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnResume
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnStart
   (JNIEnv *, jobject);
 
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
- * Method:    ActivityOnPause
+ * Method:    ActivityOnStop
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnPause
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnStop
   (JNIEnv *, jobject);
-
 
 #ifdef __cplusplus
 }

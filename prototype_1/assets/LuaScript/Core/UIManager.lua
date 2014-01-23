@@ -44,7 +44,7 @@ UIManager =
 
 	m_PositionX = 0,
 	m_PositionY = 0,
-	
+
     --
     -- Private Methods
     --
@@ -692,6 +692,69 @@ UIManager =
 	--------------------------------------------------------------------------------
 	GetTouchPos = function(self)
 		return self.m_PositionX, self.m_PositionY;
+	end,
+	--------------------------------------------------------------------------------
+	-- Return true if back key consumed, false if not.
+	ProcessBack = function(self)
+
+		local back = self:FindActiveBackUI();
+		if (back == nil) then
+			g_Logger:Show("ProcessBack: cannot find back UI.");
+
+			-- if (self.m_ModalUI ~= nil) then
+			-- 	for key, ui in pairs(self.m_ModalUI) do
+			-- 		g_Logger:Show("m_ModalUI[" .. key .. "]");
+			-- 		for k, _ in pairs(ui["m_Widgets"]) do
+			-- 			g_Logger:Show("widgets[" .. k .. "]");
+			-- 		end
+			-- 	end
+			-- end
+			-- if (self.m_ActiveUI ~= nil) then
+			-- 	for key, ui in pairs(self.m_ActiveUI) do
+			-- 		g_Logger:Show("m_ActiveUI[" .. key .. "]");
+			-- 		for k, _ in pairs(ui["m_Widgets"]) do
+			-- 			g_Logger:Show("widgets[" .. k .. "]");
+			-- 		end
+			-- 	end
+			-- end
+
+			return false;
+		end
+
+		-- process only if there is no modal UI.
+		if (self.m_OnModalUI) then
+			-- not process, but consumed.
+			g_Logger:Show("ProcessBack: back consumed, but NOT processed.");
+			return true;
+		end
+
+		if (back["m_OnMouseUp"] ~= nil) then
+			back["m_OnMouseUp"](0, 0);
+			g_Logger:Show("ProcessBack: back consumed, and also processed.");
+		else
+			g_Logger:Show("ProcessBack find back UI, but cannot find its m_OnMouseUp.");
+		end
+
+		return true;
+	end,
+	--------------------------------------------------------------------------------
+	FindActiveBackUI = function(self)
+		if (self.m_ActiveUI == nil) then
+			return nil;
+		end
+
+		for _, ui in ipairs(self.m_ActiveUI) do
+			local widgets = ui["m_Widgets"];
+			if (widgets) then
+				if (widgets["BACK"]) then
+					return widgets["BACK"];
+				elseif (widgets["Pause"]) then
+					return widgets["Pause"];
+				end
+			end
+		end
+
+		return nil;
 	end,
 };
 

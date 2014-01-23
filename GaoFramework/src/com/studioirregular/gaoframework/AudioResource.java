@@ -66,6 +66,22 @@ public class AudioResource implements AbsAudioResource {
 	}
 
 	@Override
+	public void SetLoop(boolean loop) {
+		
+		if (impl != null) {
+			impl.SetLoop(loop);
+		}
+	}
+
+	@Override
+	public void SetVolume(float volume) {
+		
+		if (impl != null) {
+			impl.SetVolume(volume);
+		}
+	}
+
+	@Override
 	public boolean IsPlaying() {
 		
 		if (impl != null) {

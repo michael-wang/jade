@@ -19,6 +19,7 @@ public class NonStreamingAudio implements AbsAudioResource {
 	static void close() {
 		if (soundPool != null) {
 			soundPool.release();
+			soundPool = null;
 		}
 	}
 	
@@ -83,9 +84,40 @@ public class NonStreamingAudio implements AbsAudioResource {
 	@Override
 	public void Pause() {
 	}
+	
+	@Override
+	public void SetLoop(boolean loop) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SetLoop:" + loop);
+		}
+		
+		this.loop = loop;
+		
+		if (soundPool != null) {
+			final int loopMode = loop ? LOOP_FOREVER : NO_LOOP;
+			soundPool.setLoop(streamID, loopMode);
+		}
+	}
 
 	@Override
+	public void SetVolume(float volume) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SetVolume:" + volume);
+		}
+		
+		if (soundPool != null) {
+			soundPool.setVolume(streamID, volume, volume);
+		}
+	}
+	
+	@Override
 	public boolean IsPlaying() {
+		
+		if (BuildConfig.DEBUG) {
+			Log.w(TAG, "IsPlayer: NO IMPLEMENTATION, why need to know if a sound is playing?");
+		}
 		return false;
 	}
 

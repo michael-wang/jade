@@ -53,7 +53,7 @@ public class MyGLRenderer implements Renderer {
 				Math.round(world2View.viewWidth), 
 				Math.round(world2View.viewHeight));
 		
-		GLES20.glClearColor(1, 0, 0, 1);
+		GLES20.glClearColor(0, 0, 0, 1);
 		
 		RendererOnSurfaceChanged(surfaceWidth, surfaceHeight);
 	}

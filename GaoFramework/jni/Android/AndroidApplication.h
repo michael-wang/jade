@@ -27,17 +27,18 @@ public:
 		return initialized;
 	}
 
-	GaoVoid Pause();
-	GaoVoid Resume();
+	GaoVoid Start();
+	GaoVoid Stop();
 
 	GaoVoid RunOnePass();
+
+	GaoVoid NotifyBackPressed();
 
 protected:
 	virtual GaoBool OnInitialize();
 	virtual GaoVoid OnTerminate();
 	virtual GaoVoid OnUpdate();
 	virtual GaoVoid OnRender();
-	virtual GaoVoid OnPause(GaoBool onPause);
 	virtual GaoBool IsAppRunning();
 
 protected:
