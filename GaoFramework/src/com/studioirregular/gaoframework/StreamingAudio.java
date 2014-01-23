@@ -12,7 +12,6 @@ public class StreamingAudio implements AbsAudioResource {
 	private static final String TAG = "java-StreamingAudio";
 	private static final boolean DEBUG_LOG = false;
 	
-	// TODO: delay media player creation until first play.
 	@Override
 	public boolean Create(String path, boolean loop) {
 		
@@ -20,32 +19,31 @@ public class StreamingAudio implements AbsAudioResource {
 			Log.d(TAG, "Create path:" + path + ",loop:" + loop);
 		}
 		
-		if (path.startsWith("/")) {
-			mplayer = loadFromAsset(path);
-		} else {
-			mplayer = loadFromResources(path);
-		}
+		this.filePath = path;
+		this.looping = loop;
 		
-		if (mplayer != null) {
-			mplayer.setLooping(loop);
-		}
-				
-		final boolean success = (mplayer != null);
-		return success;
+		return true;
 	}
 
 	@Override
 	public boolean Play() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Play");
+			Log.d(TAG, "Play: " + filePath);
+		}
+		
+		if (filePath.startsWith("/")) {
+			mplayer = loadFromStorage(filePath);
+		} else {
+			mplayer = loadFromResources(filePath);
 		}
 		
 		if (mplayer == null) {
-			Log.e(TAG, "Play: call Create first.");
+			Log.e(TAG, "Play: failed to play:" + filePath);
 			return false;
 		}
 		
+		mplayer.setLooping(looping);
 		mplayer.start();
 		
 		return true;
@@ -55,7 +53,7 @@ public class StreamingAudio implements AbsAudioResource {
 	public void Stop() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Stop");
+			Log.d(TAG, "Stop: " + filePath);
 		}
 		
 		if (mplayer != null) {
@@ -90,10 +88,10 @@ public class StreamingAudio implements AbsAudioResource {
 		return false;
 	}
 	
-	private MediaPlayer loadFromAsset(String path) {
+	private MediaPlayer loadFromStorage(String path) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "loadFromAsset path:" + path);
+			Log.d(TAG, "loadFromStorage path:" + path);
 		}
 		
 		Context ctx = SoundSystem.getInstance().getContext();
@@ -125,4 +123,6 @@ public class StreamingAudio implements AbsAudioResource {
 	}
 
 	private MediaPlayer mplayer;
+	private String filePath;
+	private boolean looping;
 }
