@@ -55,11 +55,15 @@ GaoVoid AndroidAudioResource::Pause() {
 }
 
 GaoVoid AndroidAudioResource::SetLoop(GaoBool looping) {
-	LOGE(log, "SetLoop looping:%d NOT IMPLEMENT", looping);
+	LOGD(log, "SetLoop looping:%d", looping);
+
+	jobj.CallVoidMethod("SetLoop", "(Z)V", looping);
 }
 
 GaoVoid AndroidAudioResource::SetVolume(GaoReal32 volume) {
-	LOGE(log, "SetVolume volume:%f NOT IMPLEMENT", volume);
+	LOGD(log, "SetVolume volume:%f", volume);
+
+	jobj.CallVoidMethod("SetVolume", "(F)V", volume);
 }
 
 GaoBool AndroidAudioResource::IsPlaying() const {

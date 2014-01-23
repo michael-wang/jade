@@ -79,6 +79,32 @@ public class StreamingAudio implements AbsAudioResource {
 	}
 
 	@Override
+	public void SetLoop(boolean loop) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SetLoop:" + loop);
+		}
+		
+		this.looping = loop;
+		
+		if (mplayer != null) {
+			mplayer.setLooping(loop);
+		}
+	}
+
+	@Override
+	public void SetVolume(float volume) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SetVolume:" + volume);
+		}
+		
+		if (mplayer != null) {
+			mplayer.setVolume(volume, volume);
+		}
+	}
+
+	@Override
 	public boolean IsPlaying() {
 		
 		if (mplayer != null) {
