@@ -32,19 +32,26 @@ public class StreamingAudio implements AbsAudioResource {
 			Log.d(TAG, "Play: " + filePath);
 		}
 		
-		if (filePath.startsWith("/")) {
-			mplayer = loadFromStorage(filePath);
-		} else {
-			mplayer = loadFromResources(filePath);
-		}
-		
+		// Notice Play can be called after Pause, in this case, mplayer already
+		// created.
 		if (mplayer == null) {
-			Log.e(TAG, "Play: failed to play:" + filePath);
-			return false;
+		
+			if (filePath.startsWith("/")) {
+				mplayer = loadFromStorage(filePath);
+			} else {
+				mplayer = loadFromResources(filePath);
+			}
+			
+			if (mplayer == null) {
+				Log.e(TAG, "Play: failed to play:" + filePath);
+				return false;
+			}
+			
+			mplayer.setLooping(looping);
 		}
 		
-		mplayer.setLooping(looping);
 		mplayer.start();
+		SoundSystem.getInstance().registerPlaying(this);
 		
 		return true;
 	}
@@ -64,6 +71,8 @@ public class StreamingAudio implements AbsAudioResource {
 			mplayer.release();
 			mplayer = null;
 		}
+		
+		SoundSystem.getInstance().unregisterPlaying(this);
 	}
 
 	@Override

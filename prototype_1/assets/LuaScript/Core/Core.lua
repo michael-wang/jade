@@ -418,56 +418,39 @@ function UpdateMain()
 
 	UpdateDelegate();
 
-    local arrEvents = g_JavaInterface:GetTouchEvents();
-    local SIZE = arrEvents:GetSize();
-    if SIZE > 0 then
-        for i = 0, (SIZE - 1) do
-            local touch = arrEvents:GetAt(i);
-            ProcessTouch(touch);
-        end
-    end
+	if IS_PLATFORM_ANDROID then
 
-    if (BACK_PRESSED) then
-    	BACK_PRESSED = false;
+		-- Start/Stop
+		if ANDROID_START then
 
-    	local consumed = UIManager:ProcessBack();
-   		g_JavaInterface:NotifyBackProcessResult(consumed);
-    end
-end
+			OnEnterForeground();
+			ANDROID_START = false;
 
--------------------------------------------------------------------------
-function ProcessTouch(touch)
+		elseif ANDROID_STOP then
 
-    -- g_Logger:Show("process_touch event:" .. touch:GetAction() .. ",x:" .. touch:GetX() .. ",y:" .. touch:GetY());
+			OnEnterBackground();
+			ANDROID_STOP = false;
 
-    if touch:IS_ACTION_DOWN() then
+		end
 
-        TouchBegan(touch:GetX(), touch:GetY());
+		-- For touch events
+	    local arrEvents = g_JavaInterface:GetTouchEvents();
+	    local SIZE = arrEvents:GetSize();
+	    if SIZE > 0 then
+	        for i = 0, (SIZE - 1) do
+	            local touch = arrEvents:GetAt(i);
+	            ProcessTouch(touch);
+	        end
+	    end
 
-    elseif touch:IS_ACTION_MOVE() then
+	    -- For back key.
+	    if (BACK_PRESSED) then
+	    	BACK_PRESSED = false;
 
-        TouchMoved(touch:GetX(), touch:GetY());
-
-    elseif touch:IS_ACTION_UP() then
-
-        TouchEnded(touch:GetX(), touch:GetY());
-
-    else
-
-        g_Logger:Show("process_touch: unknown touch event:" .. touch:GetAction());
-
-    end
-end
-
--------------------------------------------------------------------------
--- For Android platform, back key is used to control game stage flow.
--- Return true if consumed, false if not.
-
-BACK_PRESSED = false;
-
-function NotifyBackPressed()
-
-	BACK_PRESSED = true;
+	    	local consumed = UIManager:ProcessBack();
+	   		g_JavaInterface:NotifyBackProcessResult(consumed);
+	    end
+	end
 end
 
 -------------------------------------------------------------------------
@@ -503,6 +486,62 @@ end
 -------------------------------------------------------------------------
 function Pause(onPause)
 	PauseDelegate(onPause);
+end
+
+-------------------------------------------------------------------------
+-- AndroidStart is called on main thread, while lua need to be run on GL thread.
+ANDROID_START = false;
+
+function AndroidStart()
+	g_Logger:Show("AndroidStart");
+
+	ANDROID_START = true;
+end
+
+-------------------------------------------------------------------------
+-- AndroidStop is called on main thread, while lua need to be run on GL thread.
+ANDROID_STOP = false;
+
+function AndroidStop()
+	g_Logger:Show("AndroidStop");
+
+	ANDROID_STOP = true;
+end
+
+-------------------------------------------------------------------------
+-- Android: touch event.
+function ProcessTouch(touch)
+
+    -- g_Logger:Show("process_touch event:" .. touch:GetAction() .. ",x:" .. touch:GetX() .. ",y:" .. touch:GetY());
+
+    if touch:IS_ACTION_DOWN() then
+
+        TouchBegan(touch:GetX(), touch:GetY());
+
+    elseif touch:IS_ACTION_MOVE() then
+
+        TouchMoved(touch:GetX(), touch:GetY());
+
+    elseif touch:IS_ACTION_UP() then
+
+        TouchEnded(touch:GetX(), touch:GetY());
+
+    else
+
+        g_Logger:Show("process_touch: unknown touch event:" .. touch:GetAction());
+
+    end
+end
+
+-------------------------------------------------------------------------
+-- For Android platform, back key is used to control game stage flow.
+-- Return true if consumed, false if not.
+
+BACK_PRESSED = false;
+
+function NotifyBackPressed()
+
+	BACK_PRESSED = true;
 end
 
 --=======================================================================

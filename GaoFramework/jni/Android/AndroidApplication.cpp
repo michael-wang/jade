@@ -22,7 +22,8 @@ static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
 static const char SCRIPT_ROUTINE_UPDATE[] = "UpdateMain";
 static const char SCRIPT_ROUTINE_RENDER[] = "RenderMain";
 static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
-static const char SCRIPT_ROUTINE_PAUSE[]  = "Pause";
+static const char SCRIPT_ROUTINE_START[] = "AndroidStart";
+static const char SCRIPT_ROUTINE_STOP[]  = "AndroidStop";
 static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
 static const char SCRIPT_ROUTINE_NOTIFY_BACK_PRESSED[] = "NotifyBackPressed";
 
@@ -31,7 +32,7 @@ AndroidApplication* AndroidApplication::Singleton = NULL;
 
 AndroidApplication::AndroidApplication(int width, int height, char* luaScript) :
 	luaManager (new LuaScriptManager()),
-	running (TRUE),
+	running (FALSE),
 	log ("native::framework::AndroidApplication", FALSE),
 	worldWidth (width),
 	worldHeight (height),
@@ -50,23 +51,52 @@ AndroidApplication::~AndroidApplication() {
 	SAFE_DELETE(luaManager);
 }
 
-GaoVoid AndroidApplication::Pause() {
+GaoVoid AndroidApplication::Start() {
 
-	running = FALSE;
-	OnPause(TRUE);
-}
+	LOGD(log, "Start")
 
-GaoVoid AndroidApplication::Resume() {
+	if (running) {
+		LOGW(log, "Start: already running.")
+		return;
+	}
 
 	running = TRUE;
-	OnPause(FALSE);
+
+	if (!initialized) {
+		LOGW(log, "Start skipt for not initialized.")
+		return;
+	}
+
+	if (!luaManager->CallFunction(SCRIPT_ROUTINE_START)) {
+		LOGE(log, "Failed to call:%s", SCRIPT_ROUTINE_START)
+	}
+}
+
+GaoVoid AndroidApplication::Stop() {
+
+	LOGD(log, "Stop")
+
+	if (!running) {
+		LOGW(log, "Stop: already not running.")
+		return;
+	}
+
+	running = FALSE;
+
+	if (!initialized) {
+		LOGW(log, "Stop skipt for not initialized.")
+		return;
+	}
+
+	if (!luaManager->CallFunction(SCRIPT_ROUTINE_STOP)) {
+		LOGE(log, "Failed to call:%s", SCRIPT_ROUTINE_STOP)
+	}
 }
 
 GaoVoid AndroidApplication::RunOnePass() {
-	if (IsAppRunning()) {
-		OnUpdate();
-		OnRender();
-	}
+
+	OnUpdate();
+	OnRender();
 }
 
 GaoBool AndroidApplication::OnInitialize() {
@@ -137,23 +167,6 @@ GaoVoid AndroidApplication::OnRender() {
 	// LOGD(log, "OnRender")
 
 	CallLua(SCRIPT_ROUTINE_RENDER);
-}
-
-GaoVoid AndroidApplication::OnPause(GaoBool onPause) {
-	LOGD(log, "OnPause %d", onPause)
-
-	if (!initialized) {
-		LOGE(log, "OnPause(%d) skipt for not initialized.", onPause)
-		return;
-	}
-
-	if (!luaManager->GetFunction(SCRIPT_ROUTINE_PAUSE)) {
-		LOGE(log, "Cannot find lua function:%s", SCRIPT_ROUTINE_PAUSE)
-		return;
-	}
-
-	luaManager->PushValue(onPause);
-	luaManager->CallFunction();
 }
 
 GaoBool AndroidApplication::IsAppRunning() {

@@ -54,7 +54,7 @@ public abstract class AbsGameActivity extends Activity {
 			copyAssetLuaFilesToStorage();
 		}
 		
-		SoundSystem.getInstance().open(AbsGameActivity.this);
+		SoundSystem.getInstance().onCreate(AbsGameActivity.this);
 		
 		if (isPortraitMode()) {
 			ActivityOnCreate(
@@ -152,7 +152,7 @@ public abstract class AbsGameActivity extends Activity {
 		
 		ActivityOnDestroy();
 		
-		SoundSystem.getInstance().close();
+		SoundSystem.getInstance().onDestroy();
 	}
 	
 	@Override
@@ -162,8 +162,6 @@ public abstract class AbsGameActivity extends Activity {
 		if (surfaceView != null) {
 			surfaceView.onResume();
 		}
-		
-		ActivityOnResume();
 	}
 	
 	@Override
@@ -173,10 +171,34 @@ public abstract class AbsGameActivity extends Activity {
 		if (surfaceView != null) {
 			surfaceView.onPause();
 		}
-		
-		ActivityOnPause();
 	}
 	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onStart");
+		}
+		
+		ActivityOnStart();
+		
+		SoundSystem.getInstance().onStart();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onStop");
+		}
+		
+		ActivityOnStop();
+		
+		SoundSystem.getInstance().onStop();
+	}
+
 	@Override
 	public void onBackPressed() {
 		
@@ -252,8 +274,8 @@ public abstract class AbsGameActivity extends Activity {
 	
 	private native void ActivityOnCreate(int worldWidth, int worldHeight, String luaScriptPath);
 	private native void ActivityOnDestroy();
-	private native void ActivityOnPause();
-	private native void ActivityOnResume();
+	private native void ActivityOnStart();
+	private native void ActivityOnStop();
 	
 	// On my Nexus S (running 4.1.2), it requires all dependent libs be loaded
 	// in order, or UnsatisfiedLinkError is raised.
