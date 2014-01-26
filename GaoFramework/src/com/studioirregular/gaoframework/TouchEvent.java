@@ -8,7 +8,7 @@ public class TouchEvent {
 	public float y;
 	public int action;
 	
-	public TouchEvent(MotionEvent motion) {
+	public TouchEvent(MotionEvent motion) throws RuntimeException {
 		
 		Global.World2ViewMapping w2v = Global.getWorld2ViewMapping();
 		if (w2v == null) {

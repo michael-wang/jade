@@ -3,6 +3,8 @@ package com.studioirregular.gaoframework;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.testflightapp.lib.TestFlight;
+
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -62,9 +64,7 @@ public class InputSystem {
 			break;
 		}
 		
-		synchronized (touchEvents) {
-			touchEvents.add(new TouchEvent(motion));
-		}
+		addEvent(motion);
 	}
 	
 	public TouchEvent[] popTouchEvents() {
@@ -104,6 +104,23 @@ public class InputSystem {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	private void addEvent(MotionEvent motion) {
+		
+		try {
+			final TouchEvent touch = new TouchEvent(motion);
+			
+			synchronized (touchEvents) {
+				touchEvents.add(touch);
+			}
+		} catch (RuntimeException e) {
+			if (BuildConfig.DEBUG) {
+				Log.w(TAG, "addEvent exception:" + e);
+			} else {
+				TestFlight.log(TAG + ": add touch event exception: " + e);
+			}
 		}
 	}
 	
