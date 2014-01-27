@@ -416,8 +416,6 @@ end
 function UpdateMain()
 	g_Timer:Update();
 
-	UpdateDelegate();
-
 	if IS_PLATFORM_ANDROID then
 
 		-- Start/Stop
@@ -451,6 +449,8 @@ function UpdateMain()
 	   		g_JavaInterface:NotifyBackProcessResult(consumed);
 	    end
 	end
+
+	UpdateDelegate();
 end
 
 -------------------------------------------------------------------------
