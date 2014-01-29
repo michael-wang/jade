@@ -10,7 +10,7 @@ import android.util.Log;
 public class StreamingAudio implements AbsAudioResource {
 
 	private static final String TAG = "java-StreamingAudio";
-	private static final boolean DEBUG_LOG = false;
+	private static final boolean DEBUG_LOG = true;
 	
 	@Override
 	public boolean Create(String path, boolean loop) {
@@ -32,6 +32,7 @@ public class StreamingAudio implements AbsAudioResource {
 			Log.d(TAG, "Play: " + filePath);
 		}
 		
+		// Make sure mplayer haven't be created yet.
 		// Notice Play can be called after Pause, in this case, mplayer already
 		// created.
 		if (mplayer == null) {
@@ -50,6 +51,10 @@ public class StreamingAudio implements AbsAudioResource {
 			mplayer.setLooping(looping);
 		}
 		
+		if (mplayer.isPlaying()) {
+			Log.w(TAG, "Play: audio already playing:" + filePath);
+		}
+		
 		mplayer.start();
 		SoundSystem.getInstance().registerPlaying(this);
 		
@@ -63,6 +68,8 @@ public class StreamingAudio implements AbsAudioResource {
 			Log.d(TAG, "Stop: " + filePath);
 		}
 		
+		SoundSystem.getInstance().unregisterPlaying(this);
+		
 		if (mplayer != null) {
 			if (mplayer.isPlaying()) {
 				mplayer.stop();
@@ -70,9 +77,9 @@ public class StreamingAudio implements AbsAudioResource {
 			
 			mplayer.release();
 			mplayer = null;
+		} else {
+			Log.w(TAG, "Stop: audio not playing:" + filePath);
 		}
-		
-		SoundSystem.getInstance().unregisterPlaying(this);
 	}
 
 	@Override
@@ -116,11 +123,16 @@ public class StreamingAudio implements AbsAudioResource {
 	@Override
 	public boolean IsPlaying() {
 		
+		boolean result = false;
+		
 		if (mplayer != null) {
-			return mplayer.isPlaying();
+			result = mplayer.isPlaying();
 		}
 		
-		return false;
+		if (DEBUG_LOG) {
+			Log.w(TAG, "IsPlaying:" + result);
+		}
+		return result;
 	}
 	
 	private MediaPlayer loadFromStorage(String path) {
@@ -155,6 +167,11 @@ public class StreamingAudio implements AbsAudioResource {
 			return null;
 		}
 		return MediaPlayer.create(ctx, resid);
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName() + ":" + filePath;
 	}
 
 	private MediaPlayer mplayer;

@@ -42,7 +42,7 @@ public class SoundSystem {
 		
 		NonStreamingAudio.close();
 		
-		stopPlayingAudio();
+		stopPlayingAudios();
 	}
 	
 	void onStart() {
@@ -51,7 +51,7 @@ public class SoundSystem {
 			Log.d(TAG, "start");
 		}
 		
-		resumePlayingAudio();
+		resumePlayingAudios();
 	}
 	
 	void onStop() {
@@ -60,7 +60,7 @@ public class SoundSystem {
 			Log.d(TAG, "stop");
 		}
 		
-		pausePlayingAudio();
+		pausePlayingAudios();
 	}
 	
 	Context getContext() {
@@ -74,7 +74,9 @@ public class SoundSystem {
 			Log.d(TAG, "registerPlaying:" + audio);
 		}
 		
-		playingAudios.add(audio);
+		if (!playingAudios.add(audio)) {
+			Log.w(TAG, "registerPlaying: this audio is already registered:" + audio);
+		}
 	}
 	
 	void unregisterPlaying(StreamingAudio audio) {
@@ -83,24 +85,38 @@ public class SoundSystem {
 			Log.d(TAG, "unregisterPlaying:" + audio);
 		}
 		
-		playingAudios.remove(audio);
+		if (!playingAudios.remove(audio)) {
+			Log.w(TAG, "unregisterPlaying: this audio is not registered:" + audio);
+		}
 	}
 	
-	private void stopPlayingAudio() {
+	private void stopPlayingAudios() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "stopPlayingAudios");
+		}
 		
 		for (StreamingAudio audio : playingAudios) {
 			audio.Stop();
 		}
 	}
 	
-	private void pausePlayingAudio() {
+	private void pausePlayingAudios() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "pausePlayingAudios");
+		}
 		
 		for (StreamingAudio audio : playingAudios) {
 			audio.Pause();
 		}
 	}
 	
-	private void resumePlayingAudio() {
+	private void resumePlayingAudios() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "resumePlayingAudios");
+		}
 		
 		for (StreamingAudio audio : playingAudios) {
 			audio.Play();
