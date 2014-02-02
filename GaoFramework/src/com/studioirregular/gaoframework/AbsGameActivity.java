@@ -150,6 +150,10 @@ public abstract class AbsGameActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onDestroy");
+		}
+		
 		ActivityOnDestroy();
 		
 		SoundSystem.getInstance().onDestroy();
@@ -159,6 +163,10 @@ public abstract class AbsGameActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onResume");
+		}
+		
 		if (surfaceView != null) {
 			surfaceView.onResume();
 		}
@@ -167,6 +175,10 @@ public abstract class AbsGameActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onPause");
+		}
 		
 		if (surfaceView != null) {
 			surfaceView.onPause();
@@ -211,7 +223,7 @@ public abstract class AbsGameActivity extends Activity {
 	public void toFinishOnUiThread() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "toFinishOnUiThread");
+			Log.w(TAG, "toFinishOnUiThread");
 		}
 		
 		this.runOnUiThread(new Runnable() {
