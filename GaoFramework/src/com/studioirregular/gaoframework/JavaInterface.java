@@ -3,7 +3,9 @@ package com.studioirregular.gaoframework;
 import java.io.File;
 import java.io.IOException;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.studioirregular.gaoframework.gles.Circle;
@@ -14,7 +16,7 @@ import com.testflightapp.lib.TestFlight;
 public class JavaInterface {
 
 	private static final String TAG = "java-interface";
-	private static final boolean DEBUG_LOG = false;
+	private static final boolean DEBUG_LOG = true;
 	
 	// Singleton.
 	public static JavaInterface getInstance() {
@@ -103,6 +105,63 @@ public class JavaInterface {
 		if (!consumed && context != null) {
 			((AbsGameActivity)context).toFinishOnUiThread();
 		}
+	}
+	
+	public String GetString(String name) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "GetString name:" + name);
+		}
+		
+		if (context == null) {
+			if (BuildConfig.DEBUG) {
+				throw new RuntimeException(TAG + ":GetString context == null.");
+			}
+			return name;
+		}
+		
+		Resources res = context.getResources();
+		final int id = res.getIdentifier(name, "name", context.getPackageName());
+		
+		if (id == 0) {
+			if (BuildConfig.DEBUG) {
+				throw new RuntimeException(TAG + ":GetString cannot find string for name:" + name);
+			}
+			return name;
+		}
+		
+		try {
+			return res.getString(id);
+		} catch (Resources.NotFoundException e) {
+			if (BuildConfig.DEBUG) {
+				throw e;
+			}
+			return name;
+		}
+	}
+	
+	public void ShowDialog(final String title, final String msg, final String ok) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowDialog title:" + title + ",msg:" + msg + ",button:" + ok);
+		}
+		
+		((AbsGameActivity)context).runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				builder.setTitle(title).setMessage(msg);
+				if (ok != null) {
+					builder.setPositiveButton(ok, null);
+				}
+				
+				final AlertDialog dialog = builder.create();
+				dialog.show();
+			}
+			
+		});
 	}
 	
 	// TestFlight

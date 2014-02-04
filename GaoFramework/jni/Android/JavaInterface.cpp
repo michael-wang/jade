@@ -17,7 +17,7 @@ static const char METHOD_DESCRIPTOR_DRAW_CIRCLE[]      = "(FFFFFFF)V";
 
 JavaInterface::JavaInterface() :
 	jobj (JAVA_CLASS_PATH),
-	log ("native::framework::JavaInterface", false) {
+	log ("native::framework::JavaInterface", true) {
 
 	LOGD(log, "JavaInterface")
 
@@ -119,4 +119,50 @@ void JavaInterface::NotifyBackProcessResult(GaoBool consumed) {
 	LOGD(log, "NotifyBackProcessResult consumed:%d", consumed)
 
 	jobj.CallVoidMethod("NotifyBackProcessResult", "(Z)V", consumed);
+}
+
+const char* JavaInterface::GetString(const char* name) {
+
+	LOGD(log, "GetString name:%s", name)
+
+	JNIEnv* env = g_JniEnv->Get();
+	jstring jname = name != NULL ? env->NewStringUTF(name) : NULL;
+
+	jstring jstr = (jstring)jobj.CallObjectMethod("GetString", "(Ljava/lang/String;)Ljava/lang/String;", name);
+	if (jname != NULL)   env->DeleteLocalRef(jname);
+
+	if (jstr == NULL) {
+		LOGE(log, "GetString failed to get string with name:%s", name)
+		return name;
+	}
+
+	const char* str = env->GetStringUTFChars(jstr, NULL);
+
+	if (str == NULL) {
+		LOGE(log, "GetString GetStringUTFChars returns NULL")
+		return name;
+	}
+
+	char* result = new char[std::strlen(str) + 1];
+	std::strcpy(result, str);
+
+	env->ReleaseStringUTFChars(jstr, str);
+	return result;
+}
+
+void JavaInterface::ShowMessage(const char* title, const char* message, const char* button) {
+
+	LOGD(log, "ShowMessage title:%s, message:%s, button:%s", title, message, button)
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jtitle   = title != NULL ?   env->NewStringUTF(title) : NULL;
+	jstring jmessage = message != NULL ? env->NewStringUTF(message) : NULL;
+	jstring jbutton  = button != NULL ?  env->NewStringUTF(button) : NULL;
+
+	jobj.CallVoidMethod("ShowDialog", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", jtitle, jmessage, jbutton);
+
+	if (jtitle != NULL)   env->DeleteLocalRef(jtitle);
+	if (jmessage != NULL) env->DeleteLocalRef(jmessage);
+	if (jbutton != NULL)  env->DeleteLocalRef(jbutton);
 }

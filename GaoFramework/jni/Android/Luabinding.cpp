@@ -10,6 +10,7 @@
 #include <time.h>
 #include <Framework/LuaScriptManager.hpp>
 #include "AndroidLogger.h"
+#include "JavaInterface.h"
 
 
 //==============================================================================================================
@@ -107,6 +108,8 @@ void ShowMessage(const char* title, const char* message)
  //                         otherButtonTitles:NULL];
 	// [alert show];
     LOGD(logger, "ShowMessage title:%s, message:%s", title, message)
+
+    ShowMessageChoices(title, message, NULL);
 }
 
 void OpenURL(const char* url)
@@ -199,7 +202,15 @@ const char* GetLocalizedString(const char* key)
     // NSString* value = NSLocalizedString([NSString stringWithUTF8String:key], nil);
     // return [value UTF8String];
     LOGD(logger, "GetLocalizedString key:%s", key)
-    return key;
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "java == NULL")
+        return key;
+    }
+
+    return java->GetString(key);
 }
 
 const char* GetAppVersion()
@@ -593,6 +604,15 @@ void ShowMessageChoices(const char* title, const char* desc, const char* action)
  //                          otherButtonTitles:NSLocalizedString([NSString stringWithUTF8String:action], nil), nil];
 	// [alert show];
     LOGD(logger, "ShowMessageChoices title:%s, desc:%s, action:%s", title, desc, action)
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ShowMessage: java == NULL")
+        return;
+    }
+
+    java->ShowMessage(title, desc, action);
 }
 
 void SaveFileToiCloud(const char* fileName)

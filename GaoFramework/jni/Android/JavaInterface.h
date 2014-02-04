@@ -28,6 +28,10 @@ public:
 
 	void NotifyBackProcessResult(GaoBool consumed);
 
+	const char* GetString(const char* name);
+
+	void ShowMessage(const char* title, const char* message, const char* button);
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;
