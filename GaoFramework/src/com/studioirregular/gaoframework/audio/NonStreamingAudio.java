@@ -1,4 +1,6 @@
-package com.studioirregular.gaoframework;
+package com.studioirregular.gaoframework.audio;
+
+import com.studioirregular.gaoframework.BuildConfig;
 
 import android.content.Context;
 import android.content.res.Resources;

@@ -1,4 +1,4 @@
-package com.studioirregular.gaoframework;
+package com.studioirregular.gaoframework.audio;
 
 public interface AbsAudioResource {
 

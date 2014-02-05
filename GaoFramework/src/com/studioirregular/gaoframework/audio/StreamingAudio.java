@@ -1,4 +1,4 @@
-package com.studioirregular.gaoframework;
+package com.studioirregular.gaoframework.audio;
 
 import java.io.File;
 
@@ -10,7 +10,7 @@ import android.util.Log;
 public class StreamingAudio implements AbsAudioResource {
 
 	private static final String TAG = "java-StreamingAudio";
-	private static final boolean DEBUG_LOG = true;
+	private static final boolean DEBUG_LOG = false;
 	
 	@Override
 	public boolean Create(String path, boolean loop) {

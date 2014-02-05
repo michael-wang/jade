@@ -1,4 +1,7 @@
-package com.studioirregular.gaoframework;
+package com.studioirregular.gaoframework.audio;
+
+import com.studioirregular.gaoframework.Config;
+import com.studioirregular.gaoframework.Config.Asset;
 
 import android.util.Log;
 
