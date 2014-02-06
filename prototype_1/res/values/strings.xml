@@ -2,7 +2,85 @@
 <resources>
 
     <string name="app_name">Jade Ninja</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
 
+    <string name="feedback_title">One moment please!</string>
+    <string name="feedback_prefix">Do you enjoy being a </string>
+    <string name="feedback_postfix">?</string>
+    <string name="feedback_love">Love it!</string>
+    <string name="feedback_hate">Not sure</string>
+
+    <string name="rate_title">Rate & Comment</string>
+    <string name="rate_desc">Please rate us 5 stars and leave great comment to share your love with others! :)</string>
+    <string name="rate_yes">Go!</string>
+    <string name="rate_no">Maybe later</string>
+
+    <string name="gc_title">Honor our country</string>
+    <string name="gc_desc">Would you like to check out your ranking?</string>
+
+    <string name="tw_prefix">I just reached </string>
+    <string name="tw_bridge">m and scored </string>
+    <string name="tw_postfix">! Protect your beloved one in #JadeNinja</string>
+    <string name="tw_error">Access Failure. Please check your device settings or Twitter account.</string>
+
+    <string name="fb_prefix">I just reached </string>
+    <string name="fb_bridge">m and scored </string>
+    <string name="fb_postfix">! Protect your beloved one in Jade Ninja!</string>
+    <string name="fb_appname">Jade Ninja</string>
+    <string name="fb_caption">Jade Ninja never give up</string>
+
+    <string name="mail_success">Mail sent successfully!</string>
+    <string name="mail_error">Access Failure. Please check your device settings or Mail account.</string>
+    <string name="mail_title1">Jade Ninja: Suggestions & Comments</string>
+    <string name="mail_title2">Jade Ninja: Report a problem</string>
+    <string name="mail_comment">Comments:</string>
+    <string name="mail_info">Debug info:</string>
+
+    <string name="iap_success">Product purchased successfully!\Thank you for your support! :)</string>
+    <string name="iap_error">Purchase failed. Please check your internet connection and account settings.</string>
+    <string name="iap_title">Insufficient Golds</string>
+    <string name="iap_desc">Buy 150 golds for $1.99 and get ONE revival for FREE?</string>
+    <string name="iap_restore">Your previous non-consumable purchases are restored</string>
+
+    <string name="text_status">Status</string>
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_unlock">Unlock it</string>
+
+    <string name="game_map_title">Train Your Skills Persistently</string>
+    <string name="game_map_coming">Coming soon!</string>
+    <string name="game_map_first">Complete the Dojo stage to unlock</string>
+    <string name="game_map_middle">Reach 1500m in the previous stage to unlock</string>
+    <string name="game_map_last">Reach 1500m in all stages to unlock</string>
+    <string name="game_shaodw_first">Reach 3000m in the last stage in Normal Mode to unlock</string>
+    <string name="game_shadow_middle">Reach 3000m in the previous stage to unlock</string>
+
+    <string name="game_challenge_gc">Please log in Game Center to play the Daily Challenge Mode</string>
+    <string name="game_challenge_title">Next Open Time</string>
+    <string name="game_challenge_desc">Time Remaining: </string>
+    <string name="game_challenge_hour"> hr </string>
+    <string name="game_challenge_min"> min</string>
+
+    <string name="map_unlock_title">Unlock By Golds?</string>
+    <string name="map_unlock_prefix">Would you like to unlock the new stage by </string>
+    <string name="map_unlock_postfix"> golds?</string>
+    <string name="shop_no_coin">You don't have enough coins!</string>
+
+    <string name="icloud_title">iCloud Backup</string>
+    <string name="icloud_desc">Do you want to enable iCloud? It will help you backup game save and can be sync on your devices</string>
+    <string name="icloud_sync">iCloud Sync Completed</string>
+
+    <string name="ad_gold">You found Gold x</string>
+    <string name="ad_coin">You found Coin x</string>
+    <string name="ad_money_post"> !</string>
+
+    <string name="notif_msg1">Real ninja never give up</string>
+    <string name="notif_msg2">Ninja must keep practicing skills daily</string>
+    <string name="notif_msg3">Don't run. Protect the beloved one.</string>
+    <string name="notif_msg4">Your ninja skills are rusty. Train yourself persistently.</string>
+    <string name="notif_msg5">We are under siege! Come defend our country!</string>
+    <string name="notif_sp1">Bosses are waiting for your challenge in Shadow Mode! Come back to rescue us!</string>
+    <string name="notif_sp2">You've defeated bosses </string>
+    <string name="notif_sp3"> times! Can you beat the final boss Devil Samurai?</string>
+    <string name="notif_bye">Be water, my friend.</string>
+    <string name="notif_challenge">Daily Challenge is open! Get 2x GOLD from treasure box!</string>
 </resources>
