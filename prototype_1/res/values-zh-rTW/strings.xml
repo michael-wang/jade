@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">勾玉忍者</string>
+    
+    <string name="feedback_title">請稍待片刻！</string>
+    <string name="feedback_prefix">你喜歡當個「</string>
+    <string name="feedback_postfix">」嗎？</string>
+    <string name="feedback_love">超愛！</string>
+    <string name="feedback_hate">不確定</string>
+
+    <string name="rate_title">評分與評論</string>
+    <string name="rate_desc">請給予我們5星評分與優良評論，以此向其他玩家分享你的愛！^_^</string>
+    <string name="rate_yes">好！</string>
+    <string name="rate_no">稍後再說</string>
+
+    <string name="gc_title">榮耀我們的國家</string>
+    <string name="gc_desc">想查看你的忍者排名嗎？</string>
+
+    <string name="tw_prefix">我剛在《勾玉忍者》中抵達 </string>
+    <string name="tw_bridge"> 公尺且得到 </string>
+    <string name="tw_postfix"> 分！保護你心愛的人吧！ #JadeNinja</string>
+    <string name="tw_error">您的裝置未設置推特帳號</string>
+
+    <string name="fb_prefix">我剛在《勾玉忍者》中抵達 </string>
+    <string name="fb_bridge"> 公尺且得到 </string>
+    <string name="fb_postfix"> 分！保護你心愛的人吧！</string>
+    <string name="fb_appname">勾玉忍者</string>
+    <string name="fb_caption">勾玉忍者從不輕言放棄</string>
+
+    <string name="mail_success">已成功傳送郵件！</string>
+    <string name="mail_error">您的裝置未設置郵件帳號</string>
+    <string name="mail_title1">勾玉忍者：建議與意見</string>
+    <string name="mail_title2">勾玉忍者：回報問題</string>
+    <string name="mail_comment">問題敘述：</string>
+    <string name="mail_info">除錯資訊：</string>
+
+    <string name="iap_success">商品購買成功！\n開發小組感謝您的支持！^_^</string>
+    <string name="iap_error">商品購買失敗，請檢查您的網路連線與帳號設定</string>
+    <string name="iap_title">金幣不足</string>
+    <string name="iap_desc">是否用NT$60購買150個金幣，並獲得一次免費復活？</string>
+    <string name="iap_restore">你購買過的非消耗性商品已回復！</string>
+
+    <string name="text_status">狀態</string>
+    <string name="button_ok">確定</string>
+    <string name="button_cancel">取消</string>
+    <string name="button_unlock">解鎖關卡</string>
+
+    <string name="game_map_title">持續鍛鍊你的技能</string>
+    <string name="game_map_coming">即將推出，敬請期待！</string>
+    <string name="game_map_first">完成道場關卡以解鎖</string>
+    <string name="game_map_middle">在前一關卡中突破1500m以解鎖</string>
+    <string name="game_map_last">所有關卡突破1500m以解鎖</string>
+    <string name="game_shaodw_first">於「一般模式」最後一關突破3000m以解鎖</string>
+    <string name="game_shadow_middle">在前一關卡中突破3000m以解鎖</string>
+
+    <string name="game_challenge_gc">請登入Game Center以進入「每日挑戰」關卡</string>
+    <string name="game_challenge_title">次回開啓時間</string>
+    <string name="game_challenge_desc">等待時間：</string>
+    <string name="game_challenge_hour">時</string>
+    <string name="game_challenge_min">分</string>
+
+    <string name="map_unlock_title">解鎖新關卡？</string>
+    <string name="map_unlock_prefix">你想要使用</string>
+    <string name="map_unlock_postfix">個金幣解鎖新關卡嗎？</string>
+    <string name="shop_no_coin">你沒有足夠的銅錢！</string>
+
+    <string name="icloud_title">iCloud備份</string>
+    <string name="icloud_desc">是否開啟iCloud功能？它可幫你備份遊戲存檔，並且於各裝置之間同步</string>
+    <string name="icloud_sync">iCloud同步完成</string>
+
+    <string name="ad_gold">你發現了「金幣 x</string>
+    <string name="ad_coin">你發現了「銅錢 x</string>
+    <string name="ad_money_post">」！</string>
+
+    <string name="notif_msg1">真忍者從不輕言放棄</string>
+    <string name="notif_msg2">忍者必須每日持續修練技能</string>
+    <string name="notif_msg3">別逃跑，挺身而出保護心愛的人</string>
+    <string name="notif_msg4">你的忍者技能已生鏽掉漆，請持續鍛鍊自我</string>
+    <string name="notif_msg5">我們被圍攻了！快來保護你的國家！</string>
+    <string name="notif_sp1">敵軍頭目正在暗影模式中等待你的挑戰！快回來拯救我們！</string>
+    <string name="notif_sp2">你已成功擊退 </string>
+    <string name="notif_sp3"> 次敵軍頭目，但你能擊敗最終頭目邪鬼丸嗎？</string>
+    <string name="notif_bye">心如止水，我的朋友</string>
+    <string name="notif_challenge">每日挑戰已開啓！可從寶箱中獲得2倍金幣！</string>
+    
+</resources>

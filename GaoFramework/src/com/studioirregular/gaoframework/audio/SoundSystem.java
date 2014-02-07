@@ -1,4 +1,4 @@
-package com.studioirregular.gaoframework;
+package com.studioirregular.gaoframework.audio;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +23,7 @@ public class SoundSystem {
 	private SoundSystem() {
 	}
 	
-	void onCreate(Context context) {
+	public void onCreate(Context context) {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "open");
@@ -34,7 +34,7 @@ public class SoundSystem {
 		NonStreamingAudio.open();
 	}
 	
-	void onDestroy() {
+	public void onDestroy() {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "close");
@@ -45,7 +45,7 @@ public class SoundSystem {
 		stopPlayingAudios();
 	}
 	
-	void onStart() {
+	public void onStart() {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "start");
@@ -54,7 +54,7 @@ public class SoundSystem {
 		resumePlayingAudios();
 	}
 	
-	void onStop() {
+	public void onStop() {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "stop");

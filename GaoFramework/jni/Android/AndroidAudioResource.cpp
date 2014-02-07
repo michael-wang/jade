@@ -2,7 +2,7 @@
 #include "Java/JniEnv.h"
 
 
-static const char JAVA_CLASS_PATH[]				= "com/studioirregular/gaoframework/AudioResource";
+static const char JAVA_CLASS_PATH[]				= "com/studioirregular/gaoframework/audio/AudioResource";
 static const char JAVA_METHOD_CONSTRUCTOR_DESC[]= "(I)V";
 static const char JAVA_METHOD_CREATE[]			= "Create";
 static const char JAVA_METHOD_CREATE_DESC[]		= "(Ljava/lang/String;Z)Z";

@@ -1,4 +1,4 @@
-package com.studioirregular.gaoframework;
+package com.studioirregular.gaoframework.audio;
 
 public interface AbsAudioResource {
 
@@ -12,4 +12,6 @@ public interface AbsAudioResource {
 	public void    SetLoop(boolean loop);
 	public void    SetVolume(float volume);
 	public boolean IsPlaying();
+	
+	public boolean load();
 }

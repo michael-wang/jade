@@ -1,4 +1,4 @@
-package com.studioirregular.gaoframework;
+package com.studioirregular.gaoframework.audio;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -6,10 +6,12 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
 
+import com.studioirregular.gaoframework.BuildConfig;
+
 public class NonStreamingAudio implements AbsAudioResource {
 
 	private static final String TAG = "java-NonStreamingAudio";
-	private static final boolean DEBUG_LOG = false;
+	private static final boolean DEBUG_LOG = true;
 	
 	private static SoundPool soundPool = null;
 	static void open() {
@@ -39,29 +41,21 @@ public class NonStreamingAudio implements AbsAudioResource {
 		this.filePath = path;
 		this.loop = loop;
 		
-		if (filePath.startsWith("/")) {
-			soundID = loadFromStorage(path);
-		} else {
-			soundID = loadFromResource(path);
-		}
-		
-		final boolean success = (soundID != INVALID_SOUND_ID);
-		
-		if (DEBUG_LOG || BuildConfig.DEBUG) {
-			if (success) {
-				Log.d(TAG, "soundID:" + soundID + ",path:" + path);
-			} else {
-				Log.d(TAG, "soundID:" + soundID + ",path:" + path);
-			}
-		}
-		
-		return success;
+		AudioLoader.getInstance().scheduleLoad(this);
+		return true;
 	}
-
+	
 	@Override
 	public boolean Play() {
 		if (DEBUG_LOG) {
 			Log.d(TAG, "Play");
+		}
+		
+		if (soundID == INVALID_SOUND_ID) {
+			if (DEBUG_LOG) {
+				Log.w(TAG, "Play: sound not ready:" + filePath);
+			}
+			return false;
 		}
 		
 		final int loopMode = loop ? LOOP_FOREVER : NO_LOOP;
@@ -79,10 +73,18 @@ public class NonStreamingAudio implements AbsAudioResource {
 	
 	@Override
 	public void Stop() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Stop");
+		}
 	}
 
 	@Override
 	public void Pause() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Pause");
+		}
 	}
 	
 	@Override
@@ -121,31 +123,35 @@ public class NonStreamingAudio implements AbsAudioResource {
 		return false;
 	}
 
-//	private int loadFromAsset(String path) {
-//		if (DEBUG_LOG) {
-//			Log.d(TAG, "loadFromAsset path:" + path);
-//		}
-//		
-//		Context ctx = SoundSystem.getInstance().getContext();
-//		if (ctx == null) {
-//			return INVALID_SOUND_ID;
-//		}
-//		
-//		AssetManager am = ctx.getAssets();
-//		if (am == null) {
-//			return INVALID_SOUND_ID;
-//		}
-//		
-//		AssetFileDescriptor afd = null;
-//		try {
-//			afd = am.openFd(path);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return INVALID_SOUND_ID;
-//		}
-//		
-//		return soundPool.load(afd, 1);
-//	}
+	@Override
+	public String toString() {
+		return super.toString() + ":" + filePath;
+	}
+	
+	@Override
+	public boolean load() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "doCreate:" + filePath);
+		}
+		if (filePath.startsWith("/")) {
+			soundID = loadFromStorage(filePath);
+		} else {
+			soundID = loadFromResource(filePath);
+		}
+		
+		final boolean success = (soundID != INVALID_SOUND_ID);
+		
+		if (success) {
+			if (DEBUG_LOG) {
+				Log.d(TAG, "SUCCESS to load path:" + filePath);
+			}
+		} else {
+			Log.e(TAG, "FAILED to load path:" + filePath);
+		}
+		
+		return success;
+	}
 	
 	private int loadFromResource(String path) {
 		
@@ -198,6 +204,6 @@ public class NonStreamingAudio implements AbsAudioResource {
 	private String filePath;
 	private boolean loop;
 	
-	private int soundID;
-	private int streamID;
+	private int soundID = INVALID_SOUND_ID;
+	private int streamID = INVALID_STREAM_ID;
 }

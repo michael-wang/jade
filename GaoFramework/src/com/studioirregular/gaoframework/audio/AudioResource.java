@@ -1,6 +1,8 @@
-package com.studioirregular.gaoframework;
+package com.studioirregular.gaoframework.audio;
 
 import android.util.Log;
+
+import com.studioirregular.gaoframework.Config;
 
 
 public class AudioResource implements AbsAudioResource {
@@ -86,6 +88,16 @@ public class AudioResource implements AbsAudioResource {
 		
 		if (impl != null) {
 			return impl.IsPlaying();
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean load() {
+		
+		if (impl != null) {
+			return impl.load();
 		}
 		
 		return false;
