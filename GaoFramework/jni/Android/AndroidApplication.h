@@ -33,6 +33,7 @@ public:
 	GaoVoid RunOnePass();
 
 	GaoVoid NotifyBackPressed();
+	GaoVoid NotifyAlertDialogResult(GaoBool value);
 
 protected:
 	virtual GaoBool OnInitialize();

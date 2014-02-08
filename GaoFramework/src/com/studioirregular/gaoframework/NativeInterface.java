@@ -22,5 +22,9 @@ public class NativeInterface {
 		}
 	}
 	
+	/*
+	 * Unless specify otherwise, following functions should be called in GL thread.
+	 */
 	public native void NotifyBackPressed();
+	public native void NotifyAlertDialogResult(boolean positiveButtonClicked);
 }

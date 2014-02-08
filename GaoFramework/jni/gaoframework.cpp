@@ -179,3 +179,22 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
         jni->Set(NULL);
     }
 }
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyAlertDialogResult
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyAlertDialogResult
+  (JNIEnv *env, jobject obj, jboolean value) {
+
+    LOGD(logger, "NotifyAlertDialogResult value:%d", value)
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->NotifyAlertDialogResult(value);
+
+        jni->Set(NULL);
+    }
+}

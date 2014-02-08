@@ -322,7 +322,7 @@ const char* GetUserLanguage()
 {
     // return [[[NSLocale preferredLanguages] objectAtIndex:0] UTF8String];
     LOGD(logger, "GetUserLanguage")
-    return "en";
+    return "zh-Hans";
 }
 
 void ComposeMail(const char* subject, const char* recipient, bool shouldAppendInfo)

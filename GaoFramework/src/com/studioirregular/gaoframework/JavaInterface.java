@@ -3,11 +3,11 @@ package com.studioirregular.gaoframework;
 import java.io.File;
 import java.io.IOException;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.studioirregular.gaoframework.functional.PresentAlertDialog;
 import com.studioirregular.gaoframework.gles.Circle;
 import com.studioirregular.gaoframework.gles.Rectangle;
 import com.testflightapp.lib.TestFlight;
@@ -15,8 +15,8 @@ import com.testflightapp.lib.TestFlight;
 
 public class JavaInterface {
 
-	private static final String TAG = "java-interface";
-	private static final boolean DEBUG_LOG = true;
+	private static final String TAG = "java-JavaInterface";
+	private static final boolean DEBUG_LOG = false;
 	
 	// Singleton.
 	public static JavaInterface getInstance() {
@@ -37,12 +37,12 @@ public class JavaInterface {
 	public void DrawRectangle(int left, int top, int right, int bottom, 
 			float red, float green, float blue, float alpha) {
 		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "DrawRectangle left:" + left + ",top:" + top + 
-					",right:" + right + ",bottom:" + bottom + 
-					",red:" + red + ",green:" + green + ",blue:" + blue + 
-					",alpha:" + alpha);
-		}
+//		if (DEBUG_LOG) {
+//			Log.d(TAG, "DrawRectangle left:" + left + ",top:" + top + 
+//					",right:" + right + ",bottom:" + bottom + 
+//					",red:" + red + ",green:" + green + ",blue:" + blue + 
+//					",alpha:" + alpha);
+//		}
 		
 		if (rectangle == null) {
 			rectangle = new Rectangle();
@@ -121,7 +121,7 @@ public class JavaInterface {
 		}
 		
 		Resources res = context.getResources();
-		final int id = res.getIdentifier(name, "name", context.getPackageName());
+		final int id = res.getIdentifier(name, "string", context.getPackageName());
 		
 		if (id == 0) {
 			if (BuildConfig.DEBUG) {
@@ -140,28 +140,20 @@ public class JavaInterface {
 		}
 	}
 	
-	public void ShowDialog(final String title, final String msg, final String ok) {
+	public void ShowDialog(String title, String msg, String ok) {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "ShowDialog title:" + title + ",msg:" + msg + ",button:" + ok);
 		}
 		
-		((AbsGameActivity)context).runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				
-				AlertDialog.Builder builder = new AlertDialog.Builder(context);
-				builder.setTitle(title).setMessage(msg);
-				if (ok != null) {
-					builder.setPositiveButton(ok, null);
-				}
-				
-				final AlertDialog dialog = builder.create();
-				dialog.show();
-			}
-			
-		});
+		// The title/msg/ok are string resource id, not localized string.
+		title = GetString(title);
+		msg = GetString(msg);
+		ok = ok != null ? GetString(ok) : null;
+		
+		PresentAlertDialog operation = new PresentAlertDialog(context, title, msg, ok);
+		
+		((AbsGameActivity)context).runOnUiThread(operation);
 	}
 	
 	// TestFlight
@@ -178,6 +170,10 @@ public class JavaInterface {
 	
 	// For java layer, native code should not use.
 	/* package */ void init(Context context, MyGLRenderer r) {
+		if (DEBUG_LOG) {
+			Log.w(TAG, "init");
+		}
+		
 		this.context = context;
 		this.renderer = r;
 	}

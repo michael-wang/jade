@@ -72,6 +72,7 @@ void JavaObject::CallVoidMethod(const char* name, const char* descriptor, ...) c
 	if (method == NULL) {
 		LOGE(log, "CallVoidMethod cannot find method with name:%s, descriptor:%s", 
 			name, descriptor)
+		return;
 	}
 
 	va_list args;

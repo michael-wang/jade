@@ -16,6 +16,14 @@ extern "C" {
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyBackPressed
   (JNIEnv *, jobject);
 
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyAlertDialogResult
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyAlertDialogResult
+  (JNIEnv *, jobject, jboolean);
+
 #ifdef __cplusplus
 }
 #endif

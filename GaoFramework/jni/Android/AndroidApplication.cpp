@@ -26,6 +26,7 @@ static const char SCRIPT_ROUTINE_START[] = "AndroidStart";
 static const char SCRIPT_ROUTINE_STOP[]  = "AndroidStop";
 static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
 static const char SCRIPT_ROUTINE_NOTIFY_BACK_PRESSED[] = "NotifyBackPressed";
+static const char SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT[] = "OnAlertUIResult";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
@@ -188,4 +189,12 @@ GaoVoid AndroidApplication::NotifyBackPressed() {
 	LOGD(log, "NotifyBackPressed")
 
 	luaManager->CallFunction(SCRIPT_ROUTINE_NOTIFY_BACK_PRESSED);
+}
+
+GaoVoid AndroidApplication::NotifyAlertDialogResult(GaoBool value) {
+
+	LOGD(log, "NotifyAlertDialogResult value:%d", value)
+
+	luaManager->PushValue(value ? 1 : 0);
+	luaManager->CallFunction(SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT);
 }

@@ -11,7 +11,7 @@ import com.studioirregular.gaoframework.BuildConfig;
 public class NonStreamingAudio implements AbsAudioResource {
 
 	private static final String TAG = "java-NonStreamingAudio";
-	private static final boolean DEBUG_LOG = true;
+	private static final boolean DEBUG_LOG = false;
 	
 	private static SoundPool soundPool = null;
 	static void open() {

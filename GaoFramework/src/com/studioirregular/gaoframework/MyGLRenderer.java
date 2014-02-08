@@ -8,6 +8,7 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import com.studioirregular.gaoframework.gles.GLThread;
 import com.studioirregular.gaoframework.gles.ShaderProgramPool;
 import com.studioirregular.gaoframework.gles.Shape;
 
@@ -64,6 +65,13 @@ public class MyGLRenderer implements Renderer {
 		
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		
+		while (GLThread.getInstance().hasPendingOperation()) {
+			Runnable op = GLThread.getInstance().nextPendingOperation();
+			if (op != null) {
+				op.run();
+			}
+		}
 		
 		RendererOnDrawFrame();
 		
