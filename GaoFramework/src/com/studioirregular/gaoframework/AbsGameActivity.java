@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.studioirregular.gaoframework.audio.SoundSystem;
+import com.studioirregular.gaoframework.functional.ProcessBackKeyPressed;
+import com.studioirregular.gaoframework.gles.GLThread;
 import com.testflightapp.lib.TestFlight;
 
 public abstract class AbsGameActivity extends Activity {
@@ -215,7 +217,7 @@ public abstract class AbsGameActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		
-		NativeInterface.getInstance().NotifyBackPressed();
+		GLThread.getInstance().scheduleOperation(new ProcessBackKeyPressed(this));
 		
 		// Native will handle back key on next update, and ask activity to
 		// finish if native cannot consume this back.

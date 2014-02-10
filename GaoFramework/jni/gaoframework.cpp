@@ -163,21 +163,25 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 
 /*
  * Class:     com_studioirregular_gaoframework_NativeInterface
- * Method:    NotifyBackPressed
- * Signature: ()V
+ * Method:    ProcessBackKey
+ * Signature: ()Z
  */
-JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyBackPressed
+JNIEXPORT jboolean JNICALL Java_com_studioirregular_gaoframework_NativeInterface_ProcessBackKey
   (JNIEnv *env, jobject obj) {
 
-    LOGD(logger, "NotifyBackPressed");
+    LOGD(logger, "ProcessBackKey");
+
+    jboolean result = FALSE;
 
     if (jni != NULL && app != NULL) {
         jni->Set(env);
 
-        app->NotifyBackPressed();
+        result = app->ProcessBackKeyPressed();
 
         jni->Set(NULL);
     }
+
+    return result;
 }
 
 /*

@@ -27,7 +27,9 @@ public class GLThread {
 	
 	public void scheduleOperation(Runnable op) {
 		
-		Log.w(TAG, "scheduleOperation:" + op);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "scheduleOperation:" + op);
+		}
 		
 		options.add(op);
 	}

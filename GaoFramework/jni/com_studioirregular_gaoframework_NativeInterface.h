@@ -10,10 +10,10 @@ extern "C" {
 
 /*
  * Class:     com_studioirregular_gaoframework_NativeInterface
- * Method:    NotifyBackPressed
- * Signature: ()V
+ * Method:    ProcessBackKey
+ * Signature: ()Z
  */
-JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyBackPressed
+JNIEXPORT jboolean JNICALL Java_com_studioirregular_gaoframework_NativeInterface_ProcessBackKey
   (JNIEnv *, jobject);
 
 /*

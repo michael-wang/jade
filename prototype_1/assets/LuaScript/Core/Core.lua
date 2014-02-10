@@ -440,14 +440,6 @@ function UpdateMain()
 	            ProcessTouch(touch);
 	        end
 	    end
-
-	    -- For back key.
-	    if (BACK_PRESSED) then
-	    	BACK_PRESSED = false;
-
-	    	local consumed = UIManager:ProcessBack();
-	   		g_JavaInterface:NotifyBackProcessResult(consumed);
-	    end
 	end
 
 	UpdateDelegate();
@@ -537,11 +529,9 @@ end
 -- For Android platform, back key is used to control game stage flow.
 -- Return true if consumed, false if not.
 
-BACK_PRESSED = false;
+function ProcessBackKey()
 
-function NotifyBackPressed()
-
-	BACK_PRESSED = true;
+	return UIManager:ProcessBack();
 end
 
 --=======================================================================

@@ -26,8 +26,6 @@ public:
 
 	void TestFlightPassCheckpoint(const char* msg);
 
-	void NotifyBackProcessResult(GaoBool consumed);
-
 	const char* GetString(const char* name);
 
 	void ShowMessage(const char* title, const char* message, const char* button);

@@ -114,13 +114,6 @@ void JavaInterface::TestFlightPassCheckpoint(const char* msg) {
 	jobj.CallVoidMethod("TestFlightPassCheckpoint", "(Ljava/lang/String;)V", jmsg);
 }
 
-void JavaInterface::NotifyBackProcessResult(GaoBool consumed) {
-
-	LOGD(log, "NotifyBackProcessResult consumed:%d", consumed)
-
-	jobj.CallVoidMethod("NotifyBackProcessResult", "(Z)V", consumed);
-}
-
 const char* JavaInterface::GetString(const char* name) {
 
 	LOGD(log, "GetString name:%s", name)

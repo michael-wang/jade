@@ -32,7 +32,7 @@ public:
 
 	GaoVoid RunOnePass();
 
-	GaoVoid NotifyBackPressed();
+	GaoBool ProcessBackKeyPressed();
 	GaoVoid NotifyAlertDialogResult(GaoBool value);
 
 protected:

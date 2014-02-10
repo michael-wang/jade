@@ -25,7 +25,7 @@ static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
 static const char SCRIPT_ROUTINE_START[] = "AndroidStart";
 static const char SCRIPT_ROUTINE_STOP[]  = "AndroidStop";
 static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
-static const char SCRIPT_ROUTINE_NOTIFY_BACK_PRESSED[] = "NotifyBackPressed";
+static const char SCRIPT_ROUTINE_PROCESS_BACK_KEY_PRESSED[] = "ProcessBackKey";
 static const char SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT[] = "OnAlertUIResult";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
@@ -184,11 +184,22 @@ GaoBool AndroidApplication::CallLua(GaoConstCharPtr func) {
 	return TRUE;
 }
 
-GaoVoid AndroidApplication::NotifyBackPressed() {
+GaoBool AndroidApplication::ProcessBackKeyPressed() {
 
-	LOGD(log, "NotifyBackPressed")
+	LOGD(log, "ProcessBackKeyPressed")
 
-	luaManager->CallFunction(SCRIPT_ROUTINE_NOTIFY_BACK_PRESSED);
+	GaoBool result = FALSE;
+
+	if (!luaManager->GetFunction(SCRIPT_ROUTINE_PROCESS_BACK_KEY_PRESSED)) {
+		LOGE(log, "ProcessBackKeyPressed: cannot find lua function: %s", 
+			SCRIPT_ROUTINE_PROCESS_BACK_KEY_PRESSED)
+		return result;
+	}
+
+	luaManager->CallFunction();
+	luaManager->GetValueAt(1, result);
+
+	return result;
 }
 
 GaoVoid AndroidApplication::NotifyAlertDialogResult(GaoBool value) {

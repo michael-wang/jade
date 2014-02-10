@@ -97,17 +97,6 @@ public class JavaInterface {
 		return InputSystem.getInstance().popTouchEvents();
 	}
 	
-	public void NotifyBackProcessResult(boolean consumed) {
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "NotifyBackProcessResult consumed:" + consumed);
-		}
-		
-		if (!consumed && context != null) {
-			((AbsGameActivity)context).toFinishOnUiThread();
-		}
-	}
-	
 	public String GetString(String name) {
 		
 		if (DEBUG_LOG) {
