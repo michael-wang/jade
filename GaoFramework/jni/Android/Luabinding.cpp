@@ -467,6 +467,22 @@ void BuyProduct(const char* productId, bool showMessage)
 //      }];
 // #endif
     LOGD(logger, "BuyProduct productId:%s, showMessage:%d", productId, showMessage)
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "BuyProduct: java == NULL")
+        return;
+    }
+
+    java->ToastMessage("debug_iap_not_ready");
+
+    // Tell lua purchase canceled so it won't wait for purchase result indefinitely.
+    if (g_ScriptManager != NULL && g_ScriptManager->GetFunction("OnPurchaseConfirmed")) {
+        g_ScriptManager->PushValue(FALSE);
+        g_ScriptManager->PushValue(productId);
+        g_ScriptManager->CallFunction();
+    }
 }
 
 void RestorePurchases()
@@ -487,6 +503,15 @@ void RestorePurchases()
 //      }];
 // #endif
     LOGD(logger, "RestorePurchases")
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "RestorePurchases: java == NULL")
+        return;
+    }
+
+    java->ToastMessage("debug_iap_not_ready");
 }
 
 bool IsFileExist(const char* fileName)
@@ -581,6 +606,8 @@ void ShowRatingChoices()
  //                          otherButtonTitles:NSLocalizedString(@"rate_yes", nil), nil];
 	// [alert show];
     LOGD(logger, "ShowRatingChoices")
+
+    ShowMessageChoices("rate_title", "rate_desc", "rate_yes");
 }
 
 void ShowIAPChoices()
@@ -592,6 +619,9 @@ void ShowIAPChoices()
  //                          cancelButtonTitle:NSLocalizedString(@"button_cancel", nil)
  //                          otherButtonTitles:NSLocalizedString(@"button_ok", nil), nil];
 	// [alert show];
+    LOGD(logger, "ShowIAPChoices")
+
+    ShowMessageChoices("iap_title", "iap_desc", "button_ok");
 }
 
 void ShowMessageChoices(const char* title, const char* desc, const char* action)

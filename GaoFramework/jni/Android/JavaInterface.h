@@ -32,6 +32,8 @@ public:
 
 	void ShowMessage(const char* title, const char* message, const char* button);
 
+	void ToastMessage(const char* message);
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;

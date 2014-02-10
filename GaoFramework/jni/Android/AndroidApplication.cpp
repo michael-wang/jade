@@ -195,6 +195,15 @@ GaoVoid AndroidApplication::NotifyAlertDialogResult(GaoBool value) {
 
 	LOGD(log, "NotifyAlertDialogResult value:%d", value)
 
-	luaManager->PushValue(value ? 1 : 0);
-	luaManager->CallFunction(SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT);
+	if (!luaManager->GetFunction(SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT)) {
+		LOGE(log, "Cannot find lua function:%s", SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT)
+		return;
+	}
+
+	int valueForLua = value ? 1 : 0;
+
+	luaManager->PushValue(valueForLua);
+	if (!luaManager->CallFunction()) {
+		LOGE(log, "Failed to run Lua function:%s", SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT)
+	}
 }

@@ -166,3 +166,15 @@ void JavaInterface::ShowMessage(const char* title, const char* message, const ch
 	if (jmessage != NULL) env->DeleteLocalRef(jmessage);
 	if (jbutton != NULL)  env->DeleteLocalRef(jbutton);
 }
+void JavaInterface::ToastMessage(const char* message) {
+
+	LOGD(log, "ToastMessage message:%s", message)
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jmessage = message != NULL ? env->NewStringUTF(message) : NULL;
+
+	jobj.CallVoidMethod("ToastMessage", "(Ljava/lang/String;)V", jmessage);
+
+	if (jmessage != NULL) env->DeleteLocalRef(jmessage);
+}

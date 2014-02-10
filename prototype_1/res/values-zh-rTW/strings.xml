@@ -3,6 +3,8 @@
 
     <string name="app_name">勾玉忍者</string>
     
+    <string name="debug_iap_not_ready">購買商品還在開發中喔</string>
+    
     <string name="feedback_title">請稍待片刻！</string>
     <string name="feedback_prefix">你喜歡當個「</string>
     <string name="feedback_postfix">」嗎？</string>

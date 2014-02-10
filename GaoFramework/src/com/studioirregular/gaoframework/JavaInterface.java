@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.studioirregular.gaoframework.functional.PresentAlertDialog;
+import com.studioirregular.gaoframework.functional.ToastMessage;
 import com.studioirregular.gaoframework.gles.Circle;
 import com.studioirregular.gaoframework.gles.Rectangle;
 import com.testflightapp.lib.TestFlight;
@@ -152,6 +153,19 @@ public class JavaInterface {
 		ok = ok != null ? GetString(ok) : null;
 		
 		PresentAlertDialog operation = new PresentAlertDialog(context, title, msg, ok);
+		
+		((AbsGameActivity)context).runOnUiThread(operation);
+	}
+	
+	public void ToastMessage(String msg) {
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ToastMessage msg:" + msg);
+		}
+		
+		// The title/msg/ok are string resource id, not localized string.
+		msg = GetString(msg);
+		
+		ToastMessage operation = new ToastMessage(context, msg);
 		
 		((AbsGameActivity)context).runOnUiThread(operation);
 	}

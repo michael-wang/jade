@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">Jade Ninja</string>
+    
+    <string name="debug_iap_not_ready">Buy product is NOT ready yet.</string>
 
     <string name="feedback_title">One moment please!</string>
     <string name="feedback_prefix">Do you enjoy being a </string>
