@@ -109,7 +109,14 @@ void ShowMessage(const char* title, const char* message)
 	// [alert show];
     LOGD(logger, "ShowMessage title:%s, message:%s", title, message)
 
-    ShowMessageChoices(title, message, NULL);
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ShowMessage: java == NULL")
+        return;
+    }
+
+    java->ShowMessage(title, message, "button_ok", NULL);
 }
 
 void OpenURL(const char* url)
@@ -206,7 +213,7 @@ const char* GetLocalizedString(const char* key)
     JavaInterface* java = JavaInterface::GetSingletonPointer();
 
     if (java == NULL) {
-        LOGE(logger, "java == NULL")
+        LOGE(logger, "GetLocalizedString: java == NULL")
         return key;
     }
 
@@ -582,6 +589,15 @@ void ShowLeaderboardChoices()
  //                          otherButtonTitles:NSLocalizedString(@"rate_yes", nil), nil];
 	// [alert show];
     LOGD(logger, "ShowLeaderboardChoices")
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ShowLeaderboardChoices: java == NULL")
+        return;
+    }
+
+    java->ShowMessage("gc_title", "gc_desc", "rate_yes", "rate_no");
 }
 
 void ShowLoveHateChoices()
@@ -594,6 +610,20 @@ void ShowLoveHateChoices()
  //                          otherButtonTitles:NSLocalizedString(@"feedback_love", nil), nil];
 	// [alert show];
     LOGD(logger, "ShowLoveHateChoices")
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ShowLoveHateChoices: java == NULL")
+        return;
+    }
+
+    GaoVector<GaoString> values;
+    values.push_back("feedback_prefix");
+    values.push_back("app_name");
+    values.push_back("feedback_postfix");
+
+    java->ShowDialogWithFormat("feedback_title", "feedback_love", "feedback_hate", "%s%s%s", values);
 }
 
 void ShowRatingChoices()
@@ -607,7 +637,14 @@ void ShowRatingChoices()
 	// [alert show];
     LOGD(logger, "ShowRatingChoices")
 
-    ShowMessageChoices("rate_title", "rate_desc", "rate_yes");
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ShowRatingChoices: java == NULL")
+        return;
+    }
+
+    java->ShowMessage("rate_title", "rate_desc", "rate_yes", "rate_no");
 }
 
 void ShowIAPChoices()
@@ -621,7 +658,14 @@ void ShowIAPChoices()
 	// [alert show];
     LOGD(logger, "ShowIAPChoices")
 
-    ShowMessageChoices("iap_title", "iap_desc", "button_ok");
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ShowIAPChoices: java == NULL")
+        return;
+    }
+
+    java->ShowMessage("iap_title", "iap_desc", "button_ok", "button_cancel");
 }
 
 void ShowMessageChoices(const char* title, const char* desc, const char* action)
@@ -638,11 +682,11 @@ void ShowMessageChoices(const char* title, const char* desc, const char* action)
     JavaInterface* java = JavaInterface::GetSingletonPointer();
 
     if (java == NULL) {
-        LOGE(logger, "ShowMessage: java == NULL")
+        LOGE(logger, "ShowMessageChoices: java == NULL")
         return;
     }
 
-    java->ShowMessage(title, desc, action);
+    java->ShowMessage(title, desc, action, "button_cancel");
 }
 
 void SaveFileToiCloud(const char* fileName)
@@ -669,6 +713,12 @@ void SyncFromiCloud()
 // #ifdef GAO_USE_ICLOUD
 //     [[NSUbiquitousKeyValueStore defaultStore] synchronize];
 // #endif
+    LOGD(logger, "SyncFromiCloud")
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+    if (java != NULL) {
+        java->ToastMessage("debug_cloud_save_not_ready");
+    }
 }
 
 void PF_RegisterPlayer()

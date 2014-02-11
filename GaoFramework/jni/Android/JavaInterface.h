@@ -28,7 +28,8 @@ public:
 
 	const char* GetString(const char* name);
 
-	void ShowMessage(const char* title, const char* message, const char* button);
+	void ShowMessage(const char* title, const char* message, const char* yes, const char* no);
+	void ShowDialogWithFormat(const char* title, const char* yes, const char* no, const char* format, GaoVector<GaoString> values);
 
 	void ToastMessage(const char* message);
 

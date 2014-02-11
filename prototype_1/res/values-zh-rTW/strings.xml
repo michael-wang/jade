@@ -3,7 +3,8 @@
 
     <string name="app_name">勾玉忍者</string>
     
-    <string name="debug_iap_not_ready">購買商品還在開發中喔</string>
+    <string name="debug_iap_not_ready">『購買商品』還在開發中喔，請下一版再嘗試看看～</string>
+    <string name="debug_cloud_save_not_ready">『雲端備份』還在開發中喔，請下一版再嘗試看看～</string>
     
     <string name="feedback_title">請稍待片刻！</string>
     <string name="feedback_prefix">你喜歡當個「</string>
@@ -67,9 +68,9 @@
     <string name="map_unlock_postfix">個金幣解鎖新關卡嗎？</string>
     <string name="shop_no_coin">你沒有足夠的銅錢！</string>
 
-    <string name="icloud_title">iCloud備份</string>
-    <string name="icloud_desc">是否開啟iCloud功能？它可幫你備份遊戲存檔，並且於各裝置之間同步</string>
-    <string name="icloud_sync">iCloud同步完成</string>
+    <string name="icloud_title">雲端備份？</string>
+    <string name="icloud_desc">是否開啟雲端備份功能？它可幫你備份遊戲存檔，並且於各裝置之間同步</string>
+    <string name="icloud_sync">雲端備份同步完成</string>
 
     <string name="ad_gold">你發現了「金幣 x</string>
     <string name="ad_coin">你發現了「銅錢 x</string>

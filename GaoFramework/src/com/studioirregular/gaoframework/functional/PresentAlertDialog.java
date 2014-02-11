@@ -12,12 +12,15 @@ public class PresentAlertDialog implements Function_4V<Context, String, String, 
 	private String title;
 	private String message;
 	private String positiveButton;
+	private String negativeButton;
 	
-	public PresentAlertDialog(Context context, String title, String message, String positiveButton) {
+	public PresentAlertDialog(Context context, String title, String message,
+			String positiveButton, String negativeButton) {
 		this.context = context;
 		this.title = title;
 		this.message = message;
 		this.positiveButton = positiveButton;
+		this.negativeButton = negativeButton;
 	}
 
 	@Override
@@ -25,13 +28,6 @@ public class PresentAlertDialog implements Function_4V<Context, String, String, 
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(title).setMessage(message).setCancelable(true);
-		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-			
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				notifyResult(false);
-			}
-		});
 		
 		if (positiveButton != null) {
 			builder.setPositiveButton(positiveButton, new DialogInterface.OnClickListener() {
@@ -43,8 +39,28 @@ public class PresentAlertDialog implements Function_4V<Context, String, String, 
 			});
 		}
 		
+		if (negativeButton != null) {
+			builder.setNegativeButton(negativeButton, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					notifyResult(false);
+				}
+			});
+		}
+		
+		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				notifyResult(false);
+			}
+		});
+		
 		final AlertDialog dialog = builder.create();
-		dialog.show();
+		if (dialog != null) {
+			dialog.show();
+		}
 	}
 	
 	private void notifyResult(boolean positiveConfirmed) {

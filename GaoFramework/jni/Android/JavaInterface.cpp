@@ -17,7 +17,7 @@ static const char METHOD_DESCRIPTOR_DRAW_CIRCLE[]      = "(FFFFFFF)V";
 
 JavaInterface::JavaInterface() :
 	jobj (JAVA_CLASS_PATH),
-	log ("native::framework::JavaInterface", true) {
+	log ("native::framework::JavaInterface", false) {
 
 	LOGD(log, "JavaInterface")
 
@@ -121,7 +121,7 @@ const char* JavaInterface::GetString(const char* name) {
 	JNIEnv* env = g_JniEnv->Get();
 	jstring jname = name != NULL ? env->NewStringUTF(name) : NULL;
 
-	jstring jstr = (jstring)jobj.CallObjectMethod("GetString", "(Ljava/lang/String;)Ljava/lang/String;", name);
+	jstring jstr = (jstring)jobj.CallObjectMethod("GetString", "(Ljava/lang/String;)Ljava/lang/String;", jname);
 	if (jname != NULL)   env->DeleteLocalRef(jname);
 
 	if (jstr == NULL) {
@@ -130,7 +130,6 @@ const char* JavaInterface::GetString(const char* name) {
 	}
 
 	const char* str = env->GetStringUTFChars(jstr, NULL);
-
 	if (str == NULL) {
 		LOGE(log, "GetString GetStringUTFChars returns NULL")
 		return name;
@@ -143,22 +142,58 @@ const char* JavaInterface::GetString(const char* name) {
 	return result;
 }
 
-void JavaInterface::ShowMessage(const char* title, const char* message, const char* button) {
+void JavaInterface::ShowMessage(const char* title, const char* message, const char* yes, const char* no) {
 
-	LOGD(log, "ShowMessage title:%s, message:%s, button:%s", title, message, button)
+	LOGD(log, "ShowMessage title:%s, message:%s, yes:%s", title, message, yes)
 
 	JNIEnv* env = g_JniEnv->Get();
 
-	jstring jtitle   = title != NULL ?   env->NewStringUTF(title) : NULL;
+	jstring jtitle   = title != NULL   ? env->NewStringUTF(title) : NULL;
 	jstring jmessage = message != NULL ? env->NewStringUTF(message) : NULL;
-	jstring jbutton  = button != NULL ?  env->NewStringUTF(button) : NULL;
+	jstring jyes     = yes != NULL     ? env->NewStringUTF(yes) : NULL;
+	jstring jno      = no != NULL      ? env->NewStringUTF(no) : NULL;
 
-	jobj.CallVoidMethod("ShowDialog", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", jtitle, jmessage, jbutton);
+	jobj.CallVoidMethod("ShowDialog", 
+		"(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", 
+		jtitle, jmessage, jyes, jno);
 
 	if (jtitle != NULL)   env->DeleteLocalRef(jtitle);
 	if (jmessage != NULL) env->DeleteLocalRef(jmessage);
-	if (jbutton != NULL)  env->DeleteLocalRef(jbutton);
+	if (jyes != NULL)     env->DeleteLocalRef(jyes);
+	if (jno != NULL)      env->DeleteLocalRef(jno);
 }
+
+void JavaInterface::ShowDialogWithFormat(const char* title, const char* yes, const char* no, 
+	const char* format, GaoVector<GaoString> values) {
+
+	LOGD(log, "ShowDialogWithFormat title:%s, yes:%s, no:%s, format:%s, #values:%d", 
+		title, yes, no, format, values.size())
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jtitle   = title != NULL   ? env->NewStringUTF(title) : NULL;
+	jstring jyes     = yes != NULL     ? env->NewStringUTF(yes) : NULL;
+	jstring jno      = no != NULL      ? env->NewStringUTF(no) : NULL;
+	jstring jformat  = format != NULL  ? env->NewStringUTF(format) : NULL;
+
+	jobjectArray jvalues = (jobjectArray)env->NewObjectArray(values.size(), 
+		env->FindClass("java/lang/String"), env->NewStringUTF(""));
+
+	for (int i = 0; i < values.size(); i++) {
+		env->SetObjectArrayElement(jvalues, i, env->NewStringUTF(values[i].c_str()));
+	}
+
+	jobj.CallVoidMethod("ShowDialogWithFormat", 
+		"(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V", 
+		jtitle, jyes, jno, jformat, jvalues);
+
+	if (jtitle != NULL)   env->DeleteLocalRef(jtitle);
+	if (jyes != NULL)     env->DeleteLocalRef(jyes);
+	if (jno != NULL)      env->DeleteLocalRef(jno);
+	if (jformat != NULL)  env->DeleteLocalRef(jformat);
+	if (jvalues != NULL)  env->DeleteLocalRef(jvalues);
+}
+
 void JavaInterface::ToastMessage(const char* message) {
 
 	LOGD(log, "ToastMessage message:%s", message)

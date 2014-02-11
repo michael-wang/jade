@@ -130,18 +130,44 @@ public class JavaInterface {
 		}
 	}
 	
-	public void ShowDialog(String title, String msg, String ok) {
+	public void ShowDialog(String title, String msg, String yes, String no) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "ShowDialog title:" + title + ",msg:" + msg + ",button:" + ok);
+			Log.d(TAG, "ShowDialog title:" + title + ",msg:" + msg + ",yes:" + yes + ",no:" + no);
 		}
 		
 		// The title/msg/ok are string resource id, not localized string.
 		title = GetString(title);
 		msg = GetString(msg);
-		ok = ok != null ? GetString(ok) : null;
+		yes = yes != null ? GetString(yes) : null;
+		no = no != null ? GetString(no) : null;
 		
-		PresentAlertDialog operation = new PresentAlertDialog(context, title, msg, ok);
+		PresentAlertDialog operation = new PresentAlertDialog(context, title, msg, yes, no);
+		
+		((AbsGameActivity)context).runOnUiThread(operation);
+	}
+	
+	public void ShowDialogWithFormat(String title, String yes, String no, String format, String[] formatValues) {
+		
+//		if (DEBUG_LOG) {
+		Log.d(TAG, "ShowDialogWithFormat title:" + title + ",yes:" + yes
+				+ ",no:" + no + ",format:" + format + ",#values"
+				+ formatValues.length);
+		//		}
+		
+		title = GetString(title);
+		yes = yes != null ? GetString(yes) : null;
+		no = no != null ? GetString(no) : null;
+		
+		String[] values = new String[formatValues.length];
+		for (int i = 0; i < formatValues.length; i++) {
+			final String id = formatValues[i];
+			values[i] = GetString(id);
+		}
+		
+		final String msg = String.format(format, (Object[])values);
+		
+		PresentAlertDialog operation = new PresentAlertDialog(context, title, msg, yes, no);
 		
 		((AbsGameActivity)context).runOnUiThread(operation);
 	}
