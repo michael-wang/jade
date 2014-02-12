@@ -9,6 +9,7 @@
 #include "Luabinding.h"
 #include <time.h>
 #include <Framework/LuaScriptManager.hpp>
+#include "AndroidFileSystem.h"
 #include "AndroidLogger.h"
 #include "JavaInterface.h"
 
@@ -536,7 +537,20 @@ bool IsFileExist(const char* fileName)
     
     // return [[NSFileManager defaultManager] fileExistsAtPath:fullPath];
     LOGD(logger, "IsFileExist fileName:%s", fileName)
-    return false;
+
+    AndroidFileSystem fs = AndroidFileSystem();
+    GaoConstCharPtr path = fs.MakeDocumentPath(fileName);
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+    if (java == NULL) {
+        LOGE(logger, "IsFileExist: java == NULL")
+        return false;
+    }
+
+    bool result = java->IsFileExist(path);
+    LOGD(logger, "IsFileExist result:%d", result)
+
+    return result;
 }
 
 bool RemoveFile(const char* fileName)
@@ -555,7 +569,20 @@ bool RemoveFile(const char* fileName)
     
     // return [[NSFileManager defaultManager] removeItemAtPath:fullPath error:&error];
     LOGD(logger, "RemoveFile fileName:%s", fileName)
-    return false;
+    
+    AndroidFileSystem fs = AndroidFileSystem();
+    GaoConstCharPtr path = fs.MakeDocumentPath(fileName);
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+    if (java == NULL) {
+        LOGE(logger, "RemoveFile: java == NULL")
+        return false;
+    }
+
+    bool result = java->RemoveFile(path);
+    LOGD(logger, "RemoveFile result:%d", result)
+
+    return result;
 }
 
 int GetInterfaceOrientation()

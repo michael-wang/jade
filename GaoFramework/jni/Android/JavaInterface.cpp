@@ -206,3 +206,31 @@ void JavaInterface::ToastMessage(const char* message) {
 
 	if (jmessage != NULL) env->DeleteLocalRef(jmessage);
 }
+
+GaoBool JavaInterface::IsFileExist(GaoConstCharPtr path) {
+
+	LOGD(log, "IsFileExist path:%s", path)
+
+	JNIEnv* env = g_JniEnv->Get();
+	jstring jpath   = path != NULL ? env->NewStringUTF(path) : NULL;
+
+	GaoBool result = jobj.CallBooleanMethod("IsFileExist", "(Ljava/lang/String;)Z", jpath);
+
+	if (jpath != NULL) env->DeleteLocalRef(jpath);
+
+	return result;
+}
+
+GaoBool JavaInterface::RemoveFile(GaoConstCharPtr path) {
+
+	LOGD(log, "RemoveFile path:%s", path)
+
+	JNIEnv* env = g_JniEnv->Get();
+	jstring jpath   = path != NULL ? env->NewStringUTF(path) : NULL;
+
+	GaoBool result = jobj.CallBooleanMethod("RemoveFile", "(Ljava/lang/String;)Z", jpath);
+
+	if (jpath != NULL) env->DeleteLocalRef(jpath);
+
+	return result;
+}

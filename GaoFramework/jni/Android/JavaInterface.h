@@ -33,6 +33,9 @@ public:
 
 	void ToastMessage(const char* message);
 
+	GaoBool IsFileExist(GaoConstCharPtr path);
+	GaoBool RemoveFile(GaoConstCharPtr path);
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;

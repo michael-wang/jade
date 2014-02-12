@@ -185,6 +185,33 @@ public class JavaInterface {
 		((AbsGameActivity)context).runOnUiThread(operation);
 	}
 	
+	public boolean IsFileExist(String path) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "IsFileExist path:" + path);
+		}
+		
+		File file = new File(path);
+		return file.exists();
+	}
+	
+	public boolean RemoveFile(String path) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "RemoveFile path:" + path);
+		}
+		
+		File file = new File(path);
+		if (!file.exists()) {
+			if (DEBUG_LOG) {
+				Log.w(TAG, "RemoveFile: file does not exists:" + path);
+			}
+			return false;
+		}
+		
+		return file.delete();
+	}
+	
 	// TestFlight
 	public void TestFlightPassCheckpoint(String msg) {
 		
