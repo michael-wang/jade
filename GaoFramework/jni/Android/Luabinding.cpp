@@ -234,7 +234,17 @@ const char* GetCurrentSystemTime()
     // NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
     // return [[NSString stringWithFormat:@"%f", now] UTF8String];
     LOGD(logger, "GetCurrentSystemTime")
-    return "0";
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "GetCurrentSystemTime: java == NULL")
+        return "0";
+    }
+
+    const char* result = java->GetCurrentSystemTime();
+    LOGD(logger, "GetCurrentSystemTime result:%s", result)
+    return result;
 }
 
 void ScheduleLocalNotification(const char* titleText, float duration)

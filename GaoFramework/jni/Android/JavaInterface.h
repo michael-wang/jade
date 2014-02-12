@@ -36,6 +36,8 @@ public:
 	GaoBool IsFileExist(GaoConstCharPtr path);
 	GaoBool RemoveFile(GaoConstCharPtr path);
 
+	const char* GetCurrentSystemTime();
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;

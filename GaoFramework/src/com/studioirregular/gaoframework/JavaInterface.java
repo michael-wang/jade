@@ -212,6 +212,23 @@ public class JavaInterface {
 		return file.delete();
 	}
 	
+	// Return seconds passed since 1 January 1970, GMT, in string format.
+	public String GetCurrentSystemTime() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "GetCurrentSystemTime");
+		}
+		
+		long inMillis = System.currentTimeMillis();
+		Long inSeconds = inMillis / 1000L;
+		final String result = inSeconds.toString();
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "GetCurrentSystemTime result:" + result);
+		}
+		return result;
+	}
+	
 	// TestFlight
 	public void TestFlightPassCheckpoint(String msg) {
 		

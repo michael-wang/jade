@@ -234,3 +234,21 @@ GaoBool JavaInterface::RemoveFile(GaoConstCharPtr path) {
 
 	return result;
 }
+
+const char* JavaInterface::GetCurrentSystemTime() {
+
+	LOGD(log, "GetCurrentSystemTime")
+
+	jstring jresult = (jstring)jobj.CallObjectMethod("GetCurrentSystemTime", "()Ljava/lang/String;");
+
+	JNIEnv* env = g_JniEnv->Get();
+	const char* cstrResult = env->GetStringUTFChars(jresult, NULL);
+
+	char* result = new char[std::strlen(cstrResult) + 1];
+	std::strcpy(result, cstrResult);
+	LOGD(log, "GetCurrentSystemTime result:%s", result)
+
+	env->ReleaseStringUTFChars(jresult, cstrResult);
+
+	return result;
+}
