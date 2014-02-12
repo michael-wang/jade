@@ -50,6 +50,7 @@ public class AndroidFileSystem {
 		Context context = JavaInterface.getInstance().getContext();
 		
 		if (context == null) {
+			Log.w(TAG, "MakeDocumentPath context == null");
 			return filename;
 		}
 		
@@ -59,6 +60,6 @@ public class AndroidFileSystem {
 			Log.d(TAG, "MakeDocumentPath result:" + result);
 		}
 		
-		return filename;
+		return result;
 	}
 }

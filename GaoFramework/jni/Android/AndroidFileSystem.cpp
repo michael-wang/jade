@@ -54,10 +54,11 @@ GaoConstCharPtr AndroidFileSystem::MakeDocumentPath(GaoConstCharPtr fileName) {
 
 	const char* pathChars = g_JniEnv->GetStringUTFChars(jpath, NULL);
 
-	GaoString result = (pathChars == NULL ? fileName : pathChars);
+	char* result = new char[std::strlen(pathChars) + 1];
+	std::strcpy(result, pathChars);
+
 	g_JniEnv->ReleaseStringUTFChars(jpath, pathChars);
 
-	LOGD(log, "result:%s", result.c_str())
-
-	return result.c_str();
+	LOGD(log, "result:%s", result)
+	return result;
 }
