@@ -68,7 +68,7 @@ public class SoundSystem {
 	}
 	
 	// temp solution to stop background music on app terminated.
-	void registerPlaying(StreamingAudio audio) {
+	void registerPlaying(AbsAudioResource audio) {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "registerPlaying:" + audio);
@@ -79,7 +79,7 @@ public class SoundSystem {
 		}
 	}
 	
-	void unregisterPlaying(StreamingAudio audio) {
+	void unregisterPlaying(AbsAudioResource audio) {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "unregisterPlaying:" + audio);
@@ -96,7 +96,7 @@ public class SoundSystem {
 			Log.d(TAG, "stopPlayingAudios");
 		}
 		
-		for (StreamingAudio audio : playingAudios) {
+		for (AbsAudioResource audio : playingAudios) {
 			audio.Stop();
 		}
 	}
@@ -107,7 +107,7 @@ public class SoundSystem {
 			Log.d(TAG, "pausePlayingAudios");
 		}
 		
-		for (StreamingAudio audio : playingAudios) {
+		for (AbsAudioResource audio : playingAudios) {
 			audio.Pause();
 		}
 	}
@@ -118,11 +118,11 @@ public class SoundSystem {
 			Log.d(TAG, "resumePlayingAudios");
 		}
 		
-		for (StreamingAudio audio : playingAudios) {
+		for (AbsAudioResource audio : playingAudios) {
 			audio.Play();
 		}
 	}
 	
 	private Context context;
-	private Set<StreamingAudio> playingAudios = new HashSet<StreamingAudio>();
+	private Set<AbsAudioResource> playingAudios = new HashSet<AbsAudioResource>();
 }

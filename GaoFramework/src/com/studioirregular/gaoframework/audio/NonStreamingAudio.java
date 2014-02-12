@@ -48,7 +48,7 @@ public class NonStreamingAudio implements AbsAudioResource {
 	@Override
 	public boolean Play() {
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Play");
+			Log.d(TAG, "Play path:" + filePath + ",loop:" + loop);
 		}
 		
 		if (soundID == INVALID_SOUND_ID) {
@@ -56,6 +56,11 @@ public class NonStreamingAudio implements AbsAudioResource {
 				Log.w(TAG, "Play: sound not ready:" + filePath);
 			}
 			return false;
+		}
+		
+		if (loop) {
+			// only looping sound needs to be registered as playing sound.
+			SoundSystem.getInstance().registerPlaying(this);
 		}
 		
 		final int loopMode = loop ? LOOP_FOREVER : NO_LOOP;
@@ -75,7 +80,19 @@ public class NonStreamingAudio implements AbsAudioResource {
 	public void Stop() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Stop");
+			Log.d(TAG, "Stop path:" + filePath + ",loop:" + loop);
+		}
+		
+		if (streamID != INVALID_STREAM_ID) {
+			soundPool.stop(streamID);
+			streamID = INVALID_STREAM_ID;
+		} else {
+			Log.w(TAG, "Stop: cannot stop invalid stream id:" + filePath);
+		}
+		
+		if (loop) {
+			// only looping sound needs to be unregistered as playing sound.
+			SoundSystem.getInstance().unregisterPlaying(this);
 		}
 	}
 
@@ -83,7 +100,13 @@ public class NonStreamingAudio implements AbsAudioResource {
 	public void Pause() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Pause");
+			Log.d(TAG, "Pause path:" + filePath + ",loop:" + loop);
+		}
+		
+		if (streamID != INVALID_STREAM_ID) {
+			soundPool.pause(streamID);
+		} else {
+			Log.w(TAG, "Pause: cannot pause invalid stream id:" + filePath);
 		}
 	}
 	
