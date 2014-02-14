@@ -743,6 +743,11 @@ void SaveFileToiCloud(const char* fileName)
     // BOOL result = [[NSUbiquitousKeyValueStore defaultStore] synchronize];
     // NSLog(@"SYNC result: %d / SIZE: %d", result, data.length);
     LOGD(logger, "SaveFileToiCloud fileName:%s", fileName)
+
+    // JavaInterface* java = JavaInterface::GetSingletonPointer();
+    // if (java != NULL) {
+    //     java->ToastMessage("debug_cloud_save_not_ready");
+    // }
 }
 
 void SyncFromiCloud()
@@ -752,10 +757,10 @@ void SyncFromiCloud()
 // #endif
     LOGD(logger, "SyncFromiCloud")
 
-    JavaInterface* java = JavaInterface::GetSingletonPointer();
-    if (java != NULL) {
-        java->ToastMessage("debug_cloud_save_not_ready");
-    }
+    // JavaInterface* java = JavaInterface::GetSingletonPointer();
+    // if (java != NULL) {
+    //     java->ToastMessage("debug_cloud_save_not_ready");
+    // }
 }
 
 void PF_RegisterPlayer()
