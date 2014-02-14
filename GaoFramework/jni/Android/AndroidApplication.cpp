@@ -27,6 +27,7 @@ static const char SCRIPT_ROUTINE_STOP[]  = "AndroidStop";
 static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
 static const char SCRIPT_ROUTINE_PROCESS_BACK_KEY_PRESSED[] = "ProcessBackKey";
 static const char SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT[] = "OnAlertUIResult";
+static const char SCRIPT_ROUTINE_NOTIFY_PLAY_MOVIE_COMPLETE[] = "OnMoviePlaybackCompleted";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
@@ -217,4 +218,11 @@ GaoVoid AndroidApplication::NotifyAlertDialogResult(GaoBool value) {
 	if (!luaManager->CallFunction()) {
 		LOGE(log, "Failed to run Lua function:%s", SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT)
 	}
+}
+
+GaoVoid AndroidApplication::NotifyPlayMovieComplete() {
+
+	LOGD(log, "NotifyPlayMovieComplete")
+
+	luaManager->CallFunction(SCRIPT_ROUTINE_NOTIFY_PLAY_MOVIE_COMPLETE);
 }

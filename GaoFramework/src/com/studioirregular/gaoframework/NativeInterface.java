@@ -28,4 +28,5 @@ public class NativeInterface {
 	// return true if back key consumed.
 	public native boolean ProcessBackKey();
 	public native void NotifyAlertDialogResult(boolean positiveButtonClicked);
+	public native void NotifyPlayMovieComplete();
 }

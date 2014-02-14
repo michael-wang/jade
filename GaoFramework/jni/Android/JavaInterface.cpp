@@ -252,3 +252,15 @@ const char* JavaInterface::GetCurrentSystemTime() {
 
 	return result;
 }
+
+void JavaInterface::PlayMovie(const char* filename) {
+
+	LOGD(log, "PlayMovie filename:%s", filename)
+
+	JNIEnv* env = g_JniEnv->Get();
+	jstring jfilename   = filename != NULL ? env->NewStringUTF(filename) : NULL;
+
+	jobj.CallVoidMethod("PlayMovie", "(Ljava/lang/String;)V", jfilename);
+
+	if (jfilename != NULL) env->DeleteLocalRef(jfilename);
+}

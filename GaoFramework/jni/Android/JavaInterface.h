@@ -38,6 +38,8 @@ public:
 
 	const char* GetCurrentSystemTime();
 
+	void PlayMovie(const char* filename);
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;

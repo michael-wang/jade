@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.studioirregular.gaoframework.audio.SoundSystem;
@@ -37,7 +36,15 @@ public abstract class AbsGameActivity extends Activity {
 		
 		TestFlight.takeOff(this.getApplication(), "e1d35c9d-3282-48a4-9ab6-2af2a52349d2");
 		
-		surfaceView = new GLSurfaceView(AbsGameActivity.this);
+		setContentView(R.layout.activity_main);
+		fpsTextView = (TextView)findViewById(R.id.textview);
+		
+		View view = findViewById(R.id.surfaceview);
+		if (view == null || !(view instanceof GLSurfaceView)) {
+			throw new RuntimeException("onCreate: cannot find valid surfaceview:" + view);
+		}
+		
+		surfaceView = (GLSurfaceView)view;
 		surfaceView.setEGLContextClientVersion(2);
 		surfaceView.setOnTouchListener(surfaaceViewTouchListener);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -71,15 +78,15 @@ public abstract class AbsGameActivity extends Activity {
 					Config.Asset.GetLuaScriptPath(AbsGameActivity.this));
 		}
 		
-		setContentView(R.layout.activity_main);
-		fpsTextView = (TextView)findViewById(R.id.textview);
-		
-		ViewGroup contentView = (ViewGroup)findViewById(R.id.main_content);
-		ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
-				ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.MATCH_PARENT);
-		// add surface view to bottom so text view can be seen.
-		contentView.addView(surfaceView, 0, lp);
+//		setContentView(R.layout.activity_main);
+//		fpsTextView = (TextView)findViewById(R.id.textview);
+//		
+//		ViewGroup contentView = (ViewGroup)findViewById(R.id.main_content);
+//		ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(
+//				ViewGroup.LayoutParams.MATCH_PARENT,
+//				ViewGroup.LayoutParams.MATCH_PARENT);
+//		// add surface view to bottom so text view can be seen.
+//		contentView.addView(surfaceView, 0, lp);
 	}
 	
 	private boolean isPortraitMode() {

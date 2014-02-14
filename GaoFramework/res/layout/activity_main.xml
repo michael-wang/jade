@@ -4,6 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
+    
+    <android.opengl.GLSurfaceView android:id="@+id/surfaceview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <TextView android:id="@+id/textview"
         android:layout_width="wrap_content"
@@ -12,5 +16,10 @@
         android:layout_alignParentTop="true"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textColor="#FFFF00" />
+    
+    <android.widget.VideoView android:id="@+id/videoview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </RelativeLayout>

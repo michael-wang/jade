@@ -109,4 +109,7 @@ public class Config {
 	public static final int WORLD_SHORT_SIDE = 
 			(Asset.TYPE == Asset.Type.Phone) ? 
 					PHONE_WORLD_SHORT : TABLET_WORLD_SHORT;
+	
+	public static final int MOVIE_WIDTH  = 960;
+	public static final int MOVIE_HEIGHT = 720;
 }

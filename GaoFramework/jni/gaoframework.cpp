@@ -202,3 +202,23 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
         jni->Set(NULL);
     }
 }
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyPlayMovieComplete
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyPlayMovieComplete
+  (JNIEnv *env, jobject obj) {
+    
+    LOGD(logger, "NotifyPlayMovieComplete")
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->NotifyPlayMovieComplete();
+
+        jni->Set(NULL);
+    }
+}
+

@@ -24,6 +24,14 @@ JNIEXPORT jboolean JNICALL Java_com_studioirregular_gaoframework_NativeInterface
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyAlertDialogResult
   (JNIEnv *, jobject, jboolean);
 
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyPlayMovieComplete
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyPlayMovieComplete
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

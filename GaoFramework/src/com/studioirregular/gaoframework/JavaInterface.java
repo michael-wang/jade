@@ -7,9 +7,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.studioirregular.gaoframework.functional.NotifyPlayMovieResult;
+import com.studioirregular.gaoframework.functional.PlayMovie;
 import com.studioirregular.gaoframework.functional.PresentAlertDialog;
 import com.studioirregular.gaoframework.functional.ToastMessage;
 import com.studioirregular.gaoframework.gles.Circle;
+import com.studioirregular.gaoframework.gles.GLThread;
 import com.studioirregular.gaoframework.gles.Rectangle;
 import com.testflightapp.lib.TestFlight;
 
@@ -227,6 +230,22 @@ public class JavaInterface {
 			Log.d(TAG, "GetCurrentSystemTime result:" + result);
 		}
 		return result;
+	}
+	
+	// Assume called by GL thread.
+	public void PlayMovie(String filename) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "PlayMovie:" + filename);
+		}
+		
+		if (context != null) {
+			PlayMovie op = new PlayMovie((AbsGameActivity)context, filename);
+			((AbsGameActivity)context).runOnUiThread(op);
+		} else {
+			NotifyPlayMovieResult op = new NotifyPlayMovieResult(false);
+			GLThread.getInstance().scheduleOperation(op);
+		}
 	}
 	
 	// TestFlight

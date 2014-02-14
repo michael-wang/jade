@@ -419,16 +419,27 @@ void PlayMovie(const char* fileName, const char* pathName)
     LOGD(logger, "PlayMovie fileName:%s, pathName:%s", fileName, pathName)
 
     // temp solution
-    GaoString file = fileName;
-    GaoString ENTERING = "jade";
-    GaoString BOSS = "boss";
-    if (file.compare(0, ENTERING.size(), ENTERING) == 0) {
-        g_ScriptManager->CallFunction("OnOPMoviePlaybackCompleted");
-    } else if (file.compare(0, BOSS.size(), BOSS) == 0) {
-        g_ScriptManager->CallFunction("OnBossMoviePlaybackCompleted");
-    } else {
-        LOGE(logger, "PlayMovie unexpected fileName:%s", fileName)
+    // GaoString file = fileName;
+    // GaoString ENTERING = "jade";
+    // GaoString BOSS = "boss";
+    // if (file.compare(0, ENTERING.size(), ENTERING) == 0) {
+    //     g_ScriptManager->CallFunction("OnOPMoviePlaybackCompleted");
+    // } else if (file.compare(0, BOSS.size(), BOSS) == 0) {
+    //     g_ScriptManager->CallFunction("OnBossMoviePlaybackCompleted");
+    // } else {
+    //     LOGE(logger, "PlayMovie unexpected fileName:%s", fileName)
+    // }
+
+//    g_ScriptManager->CallFunction("OnMoviePlaybackCompleted");
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "PlayMovie: java == NULL")
+        return;
     }
+
+    java->PlayMovie(fileName);
 }
 
 void LogEvent(const char* eventName, bool timedEvent)
