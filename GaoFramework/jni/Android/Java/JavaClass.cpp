@@ -9,7 +9,7 @@ JavaClass::JavaClass(const char* path) :
 	CLASS_PATH (path),
 	log ("native::framework::JavaClass", false) {
 	
-	LOGD(log, "Constructor: for class path:%s", path)
+	LOGD(log, "%s[%p]: path:%s", __func__, this, path)
 
 	JNIEnv* env = g_JniEnv->Get();
 
@@ -19,16 +19,16 @@ JavaClass::JavaClass(const char* path) :
 		if (clazz != NULL) {
 			classRef = (jclass)env->NewGlobalRef(clazz);
 		} else {
-			LOGE(log, "Constructor: cannot FindClass: %s", path)
+			LOGE(log, "%s[%p]: cannot FindClass: %s", __func__, this, path)
 		}
 	} else {
-		LOGE(log, "Constructor: cannot find JNIEnv*")
+		LOGE(log, "%s[%p]:: cannot find JNIEnv*", __func__, this)
 	}
 }
 
 JavaClass::~JavaClass() {
 
-	LOGD(log, "Destructor: for class path:%s", CLASS_PATH.c_str())
+	LOGW(log, "%s[%p]: for class:%s", __func__, this, CLASS_PATH.c_str())
 
 	if (classRef != NULL) {
 		JNIEnv* env = g_JniEnv->Get();
@@ -42,7 +42,11 @@ JavaClass::~JavaClass() {
 
 jmethodID JavaClass::GetMethodID(const char* name, const char* descriptor) {
 
-	LOGD(log, "GetMethodID: name:%s, descriptor:%s", name, descriptor)
+	LOGD(log, "%s[%p]: name:%s, descriptor:%s", __func__, this, name, descriptor)
+
+	if (classRef == NULL) {
+		LOGE(log, "%s[%p]: invalid classRef: NULL.", __func__, this)
+	}
 
 	JNIEnv* env = g_JniEnv->Get();
 	if (env == NULL) {
@@ -54,7 +58,11 @@ jmethodID JavaClass::GetMethodID(const char* name, const char* descriptor) {
 
 jobject JavaClass::CallStaticObjectMethod(const char* name, const char* descriptor, ...) {
 
-	LOGD(log, "CallStaticObjectMethod: name:%s, descriptor:%s", name, descriptor)
+	LOGD(log, "%s[%p]: name:%s, descriptor:%s", __func__, this, name, descriptor)
+
+	if (classRef == NULL) {
+		LOGE(log, "%s[%p]: invalid classRef: NULL.", __func__, this)
+	}
 
 	JNIEnv* env = g_JniEnv->Get();
 	if (env == NULL) {

@@ -9,13 +9,13 @@ JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
 	javaRef (NULL),
 	log ("native::framework::JavaObject", DO_LOG) {
 	
-	LOGD(log, "JavaObject classPath:%s, constructor:%s", classPath, constructor)
+	LOGD(log, "%s[%p]: classPath:%s, constructor:%s", __func__, this, classPath, constructor)
 
 	jmethodID ctor = NULL;
 	if (clazz != NULL) {
 		ctor = clazz->GetMethodID(JavaClass::CONSTRUCTOR_METHOD_NAME, constructor);
 	} else {
-		LOGE(log, "JavaObject cannot find class: %s", classPath)
+		LOGE(log, "%s[%p]: cannot find class: %s", __func__, this, classPath)
 	}
 
 	if (ctor != NULL) {
@@ -29,8 +29,8 @@ JavaObject::JavaObject(const char* classPath, const char* constructor, ...) :
 		// fix: local reference table overflow.
 		g_JniEnv->DeleteLocalRef(obj);
 	} else {
-		LOGE(log, "JavaObject cannot find constructor with name:%s, descriptor:%s", 
-			JavaClass::CONSTRUCTOR_METHOD_NAME, constructor)
+		LOGE(log, "%s[%p]: cannot find constructor with name:%s, descriptor:%s", 
+			__func__, this, JavaClass::CONSTRUCTOR_METHOD_NAME, constructor)
 	}
 }
 
@@ -39,19 +39,19 @@ JavaObject::JavaObject(const char* classPath) :
 	javaRef (NULL),
 	log ("native::framework::JavaObject", DO_LOG) {
 
-	LOGD(log, "Constructor classPath:%s", classPath)
+	LOGD(log, "%s[%p]: classPath:%s", __func__, this, classPath)
 }
 
 JavaObject::~JavaObject() {
 
-	LOGD(log, "Destructor path:%s", clazz->GetClassPath().c_str())
+	LOGW(log, "%s[%p]: path:%s, ref:%p", __func__, this, clazz->GetClassPath().c_str(), javaRef)
 
 	SetJavaRef(NULL);
 }
 
 void JavaObject::SetJavaRef(jobject ref) {
 
-	LOGD(log, "SetJavaRef: ref:%p, old ref:%p", ref, javaRef)
+	LOGD(log, "%s[%p]: ref:%p, old ref:%p", __func__, this, ref, javaRef)
 
 	if (javaRef != NULL) {
 		g_JniEnv->DeleteGlobalRef(javaRef);
@@ -66,12 +66,16 @@ void JavaObject::SetJavaRef(jobject ref) {
 
 void JavaObject::CallVoidMethod(const char* name, const char* descriptor, ...) const {
 	
-	LOGD(log, "CallVoidMethod name:%s, descriptor:%s", name, descriptor)
+	LOGD(log, "%s[%p]: name:%s, descriptor:%s", __func__, this, name, descriptor)
+
+	if (javaRef == NULL) {
+		LOGE(log, "%s: javaRef == NULL", __func__);
+	}
 
 	jmethodID method = clazz->GetMethodID(name, descriptor);
 	if (method == NULL) {
-		LOGE(log, "CallVoidMethod cannot find method with name:%s, descriptor:%s", 
-			name, descriptor)
+		LOGE(log, "%s[%p]: cannot find method with name:%s, descriptor:%s", 
+			__func__, this, name, descriptor)
 		return;
 	}
 
@@ -83,12 +87,16 @@ void JavaObject::CallVoidMethod(const char* name, const char* descriptor, ...) c
 
 bool JavaObject::CallBooleanMethod(const char* name, const char* descriptor, ...) const {
 
-	LOGD(log, "CallBooleanMethod name:%s, descriptor:%s", name, descriptor)
+	LOGD(log, "%s[%p]: name:%s, descriptor:%s", __func__, this, name, descriptor)
+
+	if (javaRef == NULL) {
+		LOGE(log, "%s[%p]: javaRef == NULL", __func__, this);
+	}
 
 	jmethodID method = clazz->GetMethodID(name, descriptor);
 	if (method == NULL) {
-		LOGE(log, "CallBooleanMethod cannot find method with name:%s, descriptor:%s", 
-			name, descriptor)
+		LOGE(log, "%s[%p]: cannot find method with name:%s, descriptor:%s", 
+			__func__, this, name, descriptor)
 		return false;
 	}
 
@@ -103,12 +111,16 @@ bool JavaObject::CallBooleanMethod(const char* name, const char* descriptor, ...
 jobject JavaObject::CallObjectMethod(const char* name, 
 	const char* descriptor, ...) const {
 	
-	LOGD(log, "CallObjectMethod name:%s, descriptor:%s", name, descriptor)
+	LOGD(log, "%s[%p]: name:%s, descriptor:%s", __func__, this, name, descriptor)
+
+	if (javaRef == NULL) {
+		LOGE(log, "%s[%p]: javaRef == NULL", __func__, this);
+	}
 
 	jmethodID method = clazz->GetMethodID(name, descriptor);
 	if (method == NULL) {
-		LOGE(log, "CallObjectMethod cannot find method with name:%s, descriptor:%s", 
-			name, descriptor)
+		LOGE(log, "%s[%p]: cannot find method with name:%s, descriptor:%s", 
+			__func__, this, name, descriptor)
 		return NULL;
 	}
 
@@ -122,12 +134,16 @@ jobject JavaObject::CallObjectMethod(const char* name,
 
 jfloat JavaObject::CallFloatMethod(const char* name, const char* descriptor, ...) const {
 
-	LOGD(log, "CallFloatMethod name:%s, descriptor:%s", name, descriptor)
+	LOGD(log, "%s[%p]: name:%s, descriptor:%s", __func__, this, name, descriptor)
+
+	if (javaRef == NULL) {
+		LOGE(log, "%s[%p]: javaRef == NULL", __func__, this);
+	}
 
 	jmethodID method = clazz->GetMethodID(name, descriptor);
 	if (method == NULL) {
-		LOGE(log, "CallObjectMethod cannot find method with name:%s, descriptor:%s", 
-			name, descriptor)
+		LOGE(log, "%s[%p]: cannot find method with name:%s, descriptor:%s", 
+			__func__, this, name, descriptor)
 		return NULL;
 	}
 
