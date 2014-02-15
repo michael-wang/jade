@@ -224,7 +224,7 @@ public abstract class AbsGameActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		
-		GLThread.getInstance().scheduleOperation(new ProcessBackKeyPressed(this));
+		GLThread.getInstance().scheduleFunction(new ProcessBackKeyPressed(this));
 		
 		// Native will handle back key on next update, and ask activity to
 		// finish if native cannot consume this back.

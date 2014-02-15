@@ -123,7 +123,7 @@ public class PlayMovieActivity extends Activity {
 	private void notifyResult(boolean success) {
 		
 		NotifyPlayMovieResult op = new NotifyPlayMovieResult(success);
-		GLThread.getInstance().scheduleOperation(op);
+		GLThread.getInstance().scheduleFunction(op);
 	}
 	
 	private void somethingWrong(String what) {

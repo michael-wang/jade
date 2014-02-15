@@ -244,7 +244,7 @@ public class JavaInterface {
 			((AbsGameActivity)context).runOnUiThread(op);
 		} else {
 			NotifyPlayMovieResult op = new NotifyPlayMovieResult(false);
-			GLThread.getInstance().scheduleOperation(op);
+			GLThread.getInstance().scheduleFunction(op);
 		}
 	}
 	

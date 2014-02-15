@@ -38,7 +38,7 @@ public class PlayMovie implements Function_2V<Activity, String> {
 	private void notifyResult(boolean success) {
 		
 		NotifyPlayMovieResult op = new NotifyPlayMovieResult(success);
-		GLThread.getInstance().scheduleOperation(op);
+		GLThread.getInstance().scheduleFunction(op);
 	}
 
 }

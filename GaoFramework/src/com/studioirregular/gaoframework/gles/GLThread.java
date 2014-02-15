@@ -25,22 +25,29 @@ public class GLThread {
 		}
 	}
 	
-	public void scheduleOperation(Runnable op) {
+	public synchronized void scheduleFunction(Runnable op) {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "scheduleOperation:" + op);
 		}
 		
-		options.add(op);
+		pendingFunctions.add(op);
 	}
 	
-	public boolean hasPendingOperation() {
-		return !options.isEmpty();
+	public synchronized void popPendingFunctions(Queue<Runnable> container) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "popOperations");
+		}
+		
+		if (pendingFunctions.isEmpty()) {
+			return;
+		}
+		
+		while (!pendingFunctions.isEmpty()) {
+			container.add(pendingFunctions.poll());
+		}
 	}
 	
-	public Runnable nextPendingOperation() {
-		return options.remove();
-	}
-	
-	private Queue<Runnable> options = new ArrayDeque<Runnable>();
+	private Queue<Runnable> pendingFunctions = new ArrayDeque<Runnable>();
 }

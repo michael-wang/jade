@@ -1,5 +1,8 @@
 package com.studioirregular.gaoframework;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -61,17 +64,15 @@ public class MyGLRenderer implements Renderer {
 	
 	@Override
 	public void onDrawFrame(GL10 gl) {
+		
+		// Some functions need to be performed in GL thread.
+		// Let's do it here.
+		handlePendingFunctions();
+		
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 		
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		
-		while (GLThread.getInstance().hasPendingOperation()) {
-			Runnable op = GLThread.getInstance().nextPendingOperation();
-			if (op != null) {
-				op.run();
-			}
-		}
 		
 		RendererOnDrawFrame();
 		
@@ -95,6 +96,18 @@ public class MyGLRenderer implements Renderer {
 		shape.draw(mMVPMatrix);
 	}
 	
+	private void handlePendingFunctions() {
+		
+		GLThread.getInstance().popPendingFunctions(pendingFunctions);
+		
+		while (!pendingFunctions.isEmpty()) {
+			Runnable op = pendingFunctions.remove();
+			if (op != null) {
+				op.run();
+			}
+		}
+	}
+	
 	private native void RendererOnSurfaceCreated();
 	private native void RendererOnSurfaceChanged(int w, int h);
 	private native void RendererOnDrawFrame();
@@ -102,4 +115,5 @@ public class MyGLRenderer implements Renderer {
 	private final float[] mMVPMatrix = new float[16];
 	
 	private FrameRateCalculator fps;
+	private Queue<Runnable> pendingFunctions = new ArrayDeque<Runnable>();
 }

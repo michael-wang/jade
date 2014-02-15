@@ -67,7 +67,7 @@ public class PresentAlertDialog implements Function_4V<Context, String, String, 
 		
 		Function_1V<Boolean> notifyOperation = new NotifyAlertDialogResult(positiveConfirmed);
 		
-		GLThread.getInstance().scheduleOperation(notifyOperation);
+		GLThread.getInstance().scheduleFunction(notifyOperation);
 	}
 
 }
