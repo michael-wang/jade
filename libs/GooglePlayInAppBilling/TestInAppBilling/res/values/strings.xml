@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TestInAppBilling</string>
+    <string name="action_test_coin">Test Coins</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="purchased">purchased</string>
+    <string name="canceled">canceled</string>
+    <string name="refunded">refunded</string>
+    <string name="unavailable">unavailable</string>
+    <string name="product_syphon">Syphon Tool</string>
+    <string name="get_sku_details">Get Sku Details</string>
+    <string name="purchase">Purchase</string>
+    <string name="purchased_list">Purchased Product List</string>
+    <string name="consume">Consume</string>
+    
+    <string name="purchase_canceled">Purchse canceled</string>
+    
+    <string name="coin">Coin</string>
+    
+    <string name="zero">0</string>
+    
+    <string name="buy_10_coins">Buy 10 Coins</string>
+    
+    <string name="buy_100_coins">Buy 100 Coins</string>
+    
+    <string name="buy_1000_coins">Buy 1000 Coins</string>
+
+</resources>
