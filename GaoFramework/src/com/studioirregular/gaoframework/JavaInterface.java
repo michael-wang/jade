@@ -11,6 +11,7 @@ import com.studioirregular.gaoframework.functional.BuyProduct;
 import com.studioirregular.gaoframework.functional.NotifyPlayMovieResult;
 import com.studioirregular.gaoframework.functional.PlayMovie;
 import com.studioirregular.gaoframework.functional.PresentAlertDialog;
+import com.studioirregular.gaoframework.functional.RestorePurchases;
 import com.studioirregular.gaoframework.functional.ToastMessage;
 import com.studioirregular.gaoframework.gles.Circle;
 import com.studioirregular.gaoframework.gles.GLThread;
@@ -271,6 +272,17 @@ public class JavaInterface {
 		AbsGameActivity activity = (AbsGameActivity)context;
 		BuyProduct buy = new BuyProduct(id, activity);
 		activity.runOnUiThread(buy);
+	}
+	
+	public void RestorePurchases() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "RestorePurchases");
+		}
+		
+		AbsGameActivity activity = (AbsGameActivity)context;
+		RestorePurchases restore = new RestorePurchases(activity);
+		activity.runOnUiThread(restore);
 	}
 	
 	// For java layer, native code should not use.

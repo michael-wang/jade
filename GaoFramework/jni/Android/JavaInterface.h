@@ -41,6 +41,7 @@ public:
 	void PlayMovie(const char* filename);
 
 	void BuyProduct(const char* id);
+	void RestorePurchases();
 
 private:
 	JavaObject jobj;

@@ -2,6 +2,7 @@ package com.studioirregular.gaoframework;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -392,6 +393,37 @@ public abstract class AbsGameActivity extends Activity {
 		}
 		
 		return false;
+	}
+	
+	public void restorePurchases() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "restorePurchases");
+		}
+		
+		List<PurchasedItem> items = iab.getPurchasedProducts(Product.Type.ONE_TIME_PURCHASE);
+		
+		for (PurchasedItem item : items) {
+			
+			final String id = item.productId;
+			if (getGameProducts().consumeRightAfterBought(id)) {
+				// For products that should consume right after purchase, they
+				// shouldn't be restored. If we got here means something wrong
+				// in the purchase flow, such as lost network before we got
+				// chance to consume it. And it won't cause problem for next
+				// time player purchase the same product, cause we can consume
+				// it then.
+				continue;
+			}
+			
+			if (DEBUG_LOG) {
+				Log.d(TAG, "=================================");
+				Log.d(TAG, item.toString());
+			}
+			
+			NotifyBuyProductResult notify = new NotifyBuyProductResult(id, true);
+			GLThread.getInstance().scheduleFunction(notify);
+		}
 	}
 
 	@Override

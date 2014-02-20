@@ -276,3 +276,10 @@ void JavaInterface::BuyProduct(const char* id) {
 
 	if (jid != NULL) env->DeleteLocalRef(jid);
 }
+
+void JavaInterface::RestorePurchases() {
+
+	LOGD(log, "RestorePurchases")
+
+	jobj.CallVoidMethod("RestorePurchases", "()V");
+}

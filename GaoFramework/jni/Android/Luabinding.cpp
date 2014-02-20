@@ -533,7 +533,8 @@ void RestorePurchases()
         return;
     }
 
-    java->ToastMessage("debug_iap_restore_not_ready");
+    //java->ToastMessage("debug_iap_restore_not_ready");
+    java->RestorePurchases();
 }
 
 bool IsFileExist(const char* fileName)
