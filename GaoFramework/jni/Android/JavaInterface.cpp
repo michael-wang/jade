@@ -264,3 +264,15 @@ void JavaInterface::PlayMovie(const char* filename) {
 
 	if (jfilename != NULL) env->DeleteLocalRef(jfilename);
 }
+
+void JavaInterface::BuyProduct(const char* id) {
+
+	LOGD(log, "BuydProduct id:%s", id)
+
+	JNIEnv* env = g_JniEnv->Get();
+	jstring jid   = id != NULL ? env->NewStringUTF(id) : NULL;
+
+	jobj.CallVoidMethod("BuyProduct", "(Ljava/lang/String;)V", jid);
+
+	if (jid != NULL) env->DeleteLocalRef(jid);
+}

@@ -40,6 +40,8 @@ public:
 
 	void PlayMovie(const char* filename);
 
+	void BuyProduct(const char* id);
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;

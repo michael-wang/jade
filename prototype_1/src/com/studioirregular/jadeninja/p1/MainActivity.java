@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import com.studioirregular.gaoframework.AbsGameActivity;
+import com.studioirregular.gaoframework.GameProducts;
 
 public class MainActivity extends AbsGameActivity {
 
@@ -18,4 +19,21 @@ public class MainActivity extends AbsGameActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	@Override
+	protected GameProducts getGameProducts() {
+		return new JadeNinjaGameProducts();
+	}
+	
+	@Override
+	protected String getPublicKey() {
+		return "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA9qbeUprhArKLspjUQ8ySihxTiZAUWFJGQuYXdbLtx7nBevT9TlMiNXvFUiHkYPboHROYackS8NTqt/tbkOruc27v8rnT5n8+hidqjGQt+HKQqgL2mQnfR8oSZ4gHYE2H6QNYMi/F2vKvNSEJtO+tXpIcPfEmkiUpOS1YleabSDZNDPbIJ0/uXMKPrWcMeJ3yQu2wsMEldXsy1LoFgzBeP0PRqSc/d8XoYwX/TxUTk1Xe39QUIJv9+DmMNsDecISq17p+oQszmWma9qUgceCCG/0vHUFKxPiirU/lVcMJniXEEr+bAnm6rmX3gPws59pAfwo25jOSYNnsvM5FXyPRjQIDAQAB";
+	}
+	
+	@Override
+	protected int getIabRequestCode() {
+		return IN_APP_BILLING_REQUEST_CODE;
+	}
+	
+	private static final int IN_APP_BILLING_REQUEST_CODE = 1001;
 }

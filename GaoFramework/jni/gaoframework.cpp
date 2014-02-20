@@ -222,3 +222,23 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
     }
 }
 
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyBuyResult
+ * Signature: (Ljava/lang/String;Z)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyBuyResult
+  (JNIEnv *env, jobject obj, jstring id, jboolean success) {
+
+    const char* cId = getJniString(env, id);
+
+    LOGD(logger, "NotifyBuyResult id:%s, success:%d", cId, success)
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->NotifyBuyResult(cId, success);
+
+        jni->Set(NULL);
+    }
+}

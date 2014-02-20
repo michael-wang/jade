@@ -32,6 +32,14 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyPlayMovieComplete
   (JNIEnv *, jobject);
 
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyBuyResult
+ * Signature: (Ljava/lang/String;Z)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyBuyResult
+  (JNIEnv *, jobject, jstring, jboolean);
+
 #ifdef __cplusplus
 }
 #endif

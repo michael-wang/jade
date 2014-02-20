@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 
+import com.studioirregular.gaoframework.functional.BuyProduct;
 import com.studioirregular.gaoframework.functional.NotifyPlayMovieResult;
 import com.studioirregular.gaoframework.functional.PlayMovie;
 import com.studioirregular.gaoframework.functional.PresentAlertDialog;
@@ -258,6 +259,18 @@ public class JavaInterface {
 		if (TestFlight.isActive()) {
 			TestFlight.passCheckpoint(msg);
 		}
+	}
+	
+	// In App Billing
+	public void BuyProduct(String id) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "BuyProduct id:" + id);
+		}
+		
+		AbsGameActivity activity = (AbsGameActivity)context;
+		BuyProduct buy = new BuyProduct(id, activity);
+		activity.runOnUiThread(buy);
 	}
 	
 	// For java layer, native code should not use.

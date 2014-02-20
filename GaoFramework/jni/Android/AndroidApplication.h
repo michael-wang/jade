@@ -35,6 +35,7 @@ public:
 	GaoBool ProcessBackKeyPressed();
 	GaoVoid NotifyAlertDialogResult(GaoBool value);
 	GaoVoid NotifyPlayMovieComplete();
+	GaoVoid NotifyBuyResult(GaoConstCharPtr id, GaoBool success);
 
 protected:
 	virtual GaoBool OnInitialize();

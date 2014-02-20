@@ -5,7 +5,11 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.json.JSONException;
+
 import android.app.Activity;
+import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
@@ -18,8 +22,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.studioirregular.gaoframework.audio.SoundSystem;
+import com.studioirregular.gaoframework.functional.NotifyBuyProductResult;
 import com.studioirregular.gaoframework.functional.ProcessBackKeyPressed;
 import com.studioirregular.gaoframework.gles.GLThread;
+import com.studioirregular.libinappbilling.IabException;
+import com.studioirregular.libinappbilling.InAppBilling;
+import com.studioirregular.libinappbilling.InAppBilling.NotSupportedException;
+import com.studioirregular.libinappbilling.InAppBilling.ServiceNotReadyException;
+import com.studioirregular.libinappbilling.Product;
+import com.studioirregular.libinappbilling.PurchasedItem;
+import com.studioirregular.libinappbilling.ServerResponseCode;
+import com.studioirregular.libinappbilling.SignatureVerificationException;
 import com.testflightapp.lib.TestFlight;
 
 public abstract class AbsGameActivity extends Activity {
@@ -87,6 +100,9 @@ public abstract class AbsGameActivity extends Activity {
 //				ViewGroup.LayoutParams.MATCH_PARENT);
 //		// add surface view to bottom so text view can be seen.
 //		contentView.addView(surfaceView, 0, lp);
+		
+		iab = new InAppBilling(getPublicKey(), null);
+		iab.open(AbsGameActivity.this);
 	}
 	
 	private boolean isPortraitMode() {
@@ -162,6 +178,10 @@ public abstract class AbsGameActivity extends Activity {
 		
 		if (DEBUG_LOG) {
 			Log.w(TAG, "onDestroy");
+		}
+		
+		if (iab != null) {
+			iab.close();
 		}
 		
 		ActivityOnDestroy();
@@ -308,4 +328,124 @@ public abstract class AbsGameActivity extends Activity {
 		System.loadLibrary("luabins");
 		System.loadLibrary("gaoframework");
 	}
+	
+	// For In App Billing.
+	private InAppBilling iab;
+	
+	protected abstract GameProducts getGameProducts();
+	protected abstract String getPublicKey();
+	// Let client decide purchase activity request code so we won't risk using same code.
+	protected abstract int getIabRequestCode();
+	
+	public void buyProduct(String id) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "buyProduct id:" + id);
+		}
+		
+		buyingProductId = id;
+		
+		try {
+			iab.purchase(Product.Type.ONE_TIME_PURCHASE, id,
+					AbsGameActivity.this, getIabRequestCode());
+			return;
+		} catch (NotSupportedException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		} catch (ServiceNotReadyException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		} catch (SendIntentException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		} catch (RuntimeException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		} catch (IabException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+			
+			final int code = e.errorCode.value;
+			if (code == ServerResponseCode.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
+				if (consumeProduct(id)) {
+					buyProduct(id);
+					return;
+				}
+			}
+		}
+		
+		notifyBuyResult(id, false);
+	}
+	
+	public boolean consumeProduct(String id) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "consumeProduct id:" + id);
+		}
+		
+		try {
+			iab.consume(Product.Type.ONE_TIME_PURCHASE, id);
+			return true;
+		} catch (NotSupportedException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		} catch (ServiceNotReadyException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		} catch (RuntimeException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		} catch (IabException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		}
+		
+		return false;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if (requestCode == getIabRequestCode()) {
+			handlePurchaseActivityResult(resultCode, data);
+			return;
+		}
+		
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	// I know, such a dirty state variable...
+	// But buy product is an atomic process, so its dirty, not harmful.
+	private String buyingProductId;
+	
+	private void handlePurchaseActivityResult(int resultCode, Intent data) {
+		
+		if (resultCode != Activity.RESULT_OK) {
+			Log.w(TAG, "In app billing result not ok:" + resultCode);
+			
+			notifyBuyResult(buyingProductId, false);
+			return;
+		}
+		
+		try {
+			PurchasedItem item = iab.onPurchaseActivityResult(data);
+			if (getGameProducts().consumeRightAfterBought(buyingProductId)) {
+				consumeProduct(buyingProductId);
+				// No mater consume success or not, we have to notify buy result
+				// as success since player already bought it.
+			}
+			notifyBuyResult(item.productId, true);
+			return;
+		} catch (IabException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		} catch (SignatureVerificationException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		} catch (JSONException e) {
+			if (DEBUG_LOG) e.printStackTrace();
+		}
+		
+		notifyBuyResult(buyingProductId, false);
+	}
+	
+	private void notifyBuyResult(String id, boolean success) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "notifyBuyResult id:" + id + ",success:" + success);
+		}
+		
+		NotifyBuyProductResult notify = new NotifyBuyProductResult(id, success);
+		GLThread.getInstance().scheduleFunction(notify);
+	}
+	
 }

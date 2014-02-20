@@ -504,14 +504,7 @@ void BuyProduct(const char* productId, bool showMessage)
         return;
     }
 
-    java->ToastMessage("debug_iap_not_ready");
-
-    // Tell lua purchase canceled so it won't wait for purchase result indefinitely.
-    if (g_ScriptManager != NULL && g_ScriptManager->GetFunction("OnPurchaseConfirmed")) {
-        g_ScriptManager->PushValue(FALSE);
-        g_ScriptManager->PushValue(productId);
-        g_ScriptManager->CallFunction();
-    }
+    java->BuyProduct(productId);
 }
 
 void RestorePurchases()
@@ -540,7 +533,7 @@ void RestorePurchases()
         return;
     }
 
-    java->ToastMessage("debug_iap_not_ready");
+    java->ToastMessage("debug_iap_restore_not_ready");
 }
 
 bool IsFileExist(const char* fileName)

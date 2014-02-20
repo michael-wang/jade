@@ -3,7 +3,7 @@
 
     <string name="app_name">勾玉忍者</string>
     
-    <string name="debug_iap_not_ready">『購買商品』還在開發中喔，請下一版再嘗試看看～</string>
+    <string name="debug_iap_restore_not_ready">『回復已購買的商品』還在開發中喔，請下一版再嘗試看看～</string>
     <string name="debug_cloud_save_not_ready">『雲端備份』還在開發中喔，請下一版再嘗試看看～</string>
     
     <string name="feedback_title">請稍待片刻！</string>
