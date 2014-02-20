@@ -40,6 +40,14 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyBuyResult
   (JNIEnv *, jobject, jstring, jboolean);
 
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyPurchaseRestored
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyPurchaseRestored
+  (JNIEnv *, jobject, jstring);
+
 #ifdef __cplusplus
 }
 #endif

@@ -242,3 +242,24 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
         jni->Set(NULL);
     }
 }
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyPurchaseRestored
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyPurchaseRestored
+  (JNIEnv *env, jobject obj, jstring id) {
+
+    const char* cId = getJniString(env, id);
+
+    LOGD(logger, "NotifyPurchaseRestored id:%s", cId)
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->NotifyPurchaseRestored(cId);
+        
+        jni->Set(NULL);
+    }
+}

@@ -30,4 +30,5 @@ public class NativeInterface {
 	public native void NotifyAlertDialogResult(boolean positiveButtonClicked);
 	public native void NotifyPlayMovieComplete();
 	public native void NotifyBuyResult(String id, boolean success);
+	public native void NotifyPurchaseRestored(String id);
 }

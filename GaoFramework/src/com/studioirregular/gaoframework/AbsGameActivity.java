@@ -9,6 +9,8 @@ import java.util.Observer;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
@@ -24,8 +26,10 @@ import android.widget.TextView;
 
 import com.studioirregular.gaoframework.audio.SoundSystem;
 import com.studioirregular.gaoframework.functional.NotifyBuyProductResult;
+import com.studioirregular.gaoframework.functional.NotifyPurchaseRestored;
 import com.studioirregular.gaoframework.functional.ProcessBackKeyPressed;
 import com.studioirregular.gaoframework.gles.GLThread;
+import com.studioirregular.libinappbilling.HandlePurchaseActivityResult;
 import com.studioirregular.libinappbilling.IabException;
 import com.studioirregular.libinappbilling.InAppBilling;
 import com.studioirregular.libinappbilling.InAppBilling.NotSupportedException;
@@ -364,7 +368,9 @@ public abstract class AbsGameActivity extends Activity {
 			final int code = e.errorCode.value;
 			if (code == ServerResponseCode.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
 				if (consumeProduct(id)) {
-					buyProduct(id);
+					// Don't call buyProduct directly here, I saw Google Play
+					// return with ITEM_ALREADY_OWNED (not consumed) if I do so.
+					JavaInterface.getInstance().BuyProduct(id);
 					return;
 				}
 			}
@@ -405,6 +411,11 @@ public abstract class AbsGameActivity extends Activity {
 		
 		for (PurchasedItem item : items) {
 			
+			if (DEBUG_LOG) {
+				Log.d(TAG, "=================================");
+				Log.d(TAG, item.toString());
+			}
+			
 			final String id = item.productId;
 			if (getGameProducts().consumeRightAfterBought(id)) {
 				// For products that should consume right after purchase, they
@@ -413,15 +424,13 @@ public abstract class AbsGameActivity extends Activity {
 				// chance to consume it. And it won't cause problem for next
 				// time player purchase the same product, cause we can consume
 				// it then.
+				if (DEBUG_LOG) {
+					Log.w(TAG, "Skip product restore for:" + id);
+				}
 				continue;
 			}
 			
-			if (DEBUG_LOG) {
-				Log.d(TAG, "=================================");
-				Log.d(TAG, item.toString());
-			}
-			
-			NotifyBuyProductResult notify = new NotifyBuyProductResult(id, true);
+			NotifyPurchaseRestored notify = new NotifyPurchaseRestored(id);
 			GLThread.getInstance().scheduleFunction(notify);
 		}
 	}
@@ -432,9 +441,9 @@ public abstract class AbsGameActivity extends Activity {
 		if (requestCode == getIabRequestCode()) {
 			handlePurchaseActivityResult(resultCode, data);
 			return;
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
 		}
-		
-		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
 	// I know, such a dirty state variable...
@@ -444,7 +453,28 @@ public abstract class AbsGameActivity extends Activity {
 	private void handlePurchaseActivityResult(int resultCode, Intent data) {
 		
 		if (resultCode != Activity.RESULT_OK) {
-			Log.w(TAG, "In app billing result not ok:" + resultCode);
+			if (DEBUG_LOG) {
+				Log.w(TAG, "handlePurchaseActivityResult: result code not ok:" + resultCode);
+			}
+			
+			HandlePurchaseActivityResult helper = new HandlePurchaseActivityResult(data);
+			ServerResponseCode response = helper.getResponseCode();
+			if (DEBUG_LOG) {
+				Log.w(TAG, "Response code:" + response);
+			}
+			
+			if (response.value == ServerResponseCode.BILLING_RESPONSE_RESULT_ERROR) {
+				// May failed because user's gmail is not in tester list.
+				// Ask they to send email to me now.
+				this.runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						askPlayerGmailToEnableTestBuying();
+					}
+					
+				});
+			}
 			
 			notifyBuyResult(buyingProductId, false);
 			return;
@@ -480,4 +510,28 @@ public abstract class AbsGameActivity extends Activity {
 		GLThread.getInstance().scheduleFunction(notify);
 	}
 	
+	private void askPlayerGmailToEnableTestBuying() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "askPlayerGmailToEnableTestBuying");
+		}
+		
+		new AlertDialog.Builder(AbsGameActivity.this)
+			.setTitle(JavaInterface.getInstance().GetString("debug_cannot_test_iap_title"))
+			.setMessage(JavaInterface.getInstance().GetString("debug_cannot_test_iap_message"))
+			.setPositiveButton(JavaInterface.getInstance().GetString("debug_cannot_test_iap_ok"), 
+					new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					JavaInterface.getInstance().SendEmail(
+							"debug_send_from_gmail_subject",
+							"debug_send_from_gmail_recipient",
+							"debug_send_from_gmail_message");
+				}
+			})
+			.setNegativeButton(JavaInterface.getInstance().GetString("debug_cannot_test_iap_no"), null)
+			.create()
+			.show();
+	}
 }

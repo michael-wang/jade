@@ -29,6 +29,7 @@ static const char SCRIPT_ROUTINE_PROCESS_BACK_KEY_PRESSED[] = "ProcessBackKey";
 static const char SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT[] = "OnAlertUIResult";
 static const char SCRIPT_ROUTINE_NOTIFY_PLAY_MOVIE_COMPLETE[] = "OnMoviePlaybackCompleted";
 static const char SCRIPT_ROUTINE_NOTIFY_BUY_RESULT[] = "OnPurchaseConfirmed";
+static const char SCRIPT_ROUTINE_NOTIFY_PURCHASE_RESTORED[] = "OnPurchaseRestored";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
@@ -242,5 +243,21 @@ GaoVoid AndroidApplication::NotifyBuyResult(GaoConstCharPtr id, GaoBool success)
 
 	if (!luaManager->CallFunction()) {
 		LOGE(log, "Failed to run Lua function:%s", SCRIPT_ROUTINE_NOTIFY_BUY_RESULT)
+	}
+}
+
+GaoVoid AndroidApplication::NotifyPurchaseRestored(GaoConstCharPtr id) {
+
+	LOGD(log, "NotifyPurchaseRestored id:%s", id)
+
+	if (!luaManager->GetFunction(SCRIPT_ROUTINE_NOTIFY_PURCHASE_RESTORED)) {
+		LOGE(log, "Cannot find lua function:%s", SCRIPT_ROUTINE_NOTIFY_PURCHASE_RESTORED)
+		return;
+	}
+
+	luaManager->PushValue(id);
+
+	if (!luaManager->CallFunction()) {
+		LOGE(log, "Failed to run Lua function:%s", SCRIPT_ROUTINE_NOTIFY_PURCHASE_RESTORED)
 	}
 }

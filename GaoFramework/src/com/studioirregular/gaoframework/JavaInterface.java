@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.studioirregular.gaoframework.functional.BuyProduct;
 import com.studioirregular.gaoframework.functional.NotifyPlayMovieResult;
@@ -247,6 +249,27 @@ public class JavaInterface {
 		} else {
 			NotifyPlayMovieResult op = new NotifyPlayMovieResult(false);
 			GLThread.getInstance().scheduleFunction(op);
+		}
+	}
+	
+	public void SendEmail(String subject, String recipient, String text) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SendEmail\n\tsubject:" + subject + "\n\trecipient:" + recipient + "\n\ttext:" + text);
+		}
+		
+		Intent i = new Intent(Intent.ACTION_SEND);
+		i.setType("message/rfc822");
+		i.putExtra(Intent.EXTRA_EMAIL  , new String[]{GetString(recipient)});
+		i.putExtra(Intent.EXTRA_SUBJECT, GetString(subject));
+		i.putExtra(Intent.EXTRA_TEXT   , GetString(text));
+		
+		Intent chooseEmailApp = Intent.createChooser(i, GetString("debug_cannot_test_iap_ok"));
+		AbsGameActivity activity = (AbsGameActivity)context;
+		try {
+			activity.startActivity(chooseEmailApp);
+		} catch (android.content.ActivityNotFoundException ex) {
+		    Toast.makeText(activity, GetString("debug_choose_mail_client_failed"), Toast.LENGTH_LONG).show();
 		}
 	}
 	
