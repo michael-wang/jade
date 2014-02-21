@@ -44,7 +44,7 @@ JavaObject::JavaObject(const char* classPath) :
 
 JavaObject::~JavaObject() {
 
-	LOGW(log, "%s[%p]: path:%s, ref:%p", __func__, this, clazz->GetClassPath().c_str(), javaRef)
+	LOGD(log, "%s[%p]: path:%s, ref:%p", __func__, this, clazz->GetClassPath().c_str(), javaRef)
 
 	SetJavaRef(NULL);
 }

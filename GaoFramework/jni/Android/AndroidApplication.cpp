@@ -30,6 +30,8 @@ static const char SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT[] = "OnAlertUIResult";
 static const char SCRIPT_ROUTINE_NOTIFY_PLAY_MOVIE_COMPLETE[] = "OnMoviePlaybackCompleted";
 static const char SCRIPT_ROUTINE_NOTIFY_BUY_RESULT[] = "OnPurchaseConfirmed";
 static const char SCRIPT_ROUTINE_NOTIFY_PURCHASE_RESTORED[] = "OnPurchaseRestored";
+static const char SCRIPT_ROUTINE_NOTIFY_UI_PRESENTED[] = "OnUIPresentCompleted";
+static const char SCRIPT_ROUTINE_NOTIFY_SEND_MAIL_RESULT[] = "OnMailResultReceived";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
@@ -259,5 +261,30 @@ GaoVoid AndroidApplication::NotifyPurchaseRestored(GaoConstCharPtr id) {
 
 	if (!luaManager->CallFunction()) {
 		LOGE(log, "Failed to run Lua function:%s", SCRIPT_ROUTINE_NOTIFY_PURCHASE_RESTORED)
+	}
+}
+
+GaoVoid AndroidApplication::NotifyUIPresented() {
+
+	LOGD(log, "NotifyUIPresented")
+
+	if (!luaManager->CallFunction(SCRIPT_ROUTINE_NOTIFY_UI_PRESENTED)) {
+		LOGE(log, "Failed to call Lua function:%s", SCRIPT_ROUTINE_NOTIFY_UI_PRESENTED)
+	}
+}
+
+GaoVoid AndroidApplication::NotifySendMailResult(GaoBool value) {
+	
+	LOGD(log, "NotifySendMailResult value:%d", value)
+
+	if (!luaManager->GetFunction(SCRIPT_ROUTINE_NOTIFY_SEND_MAIL_RESULT)) {
+		LOGE(log, "Cannot find lua function:%s", SCRIPT_ROUTINE_NOTIFY_SEND_MAIL_RESULT)
+		return;
+	}
+
+	luaManager->PushValue(value);
+
+	if (!luaManager->CallFunction()) {
+		LOGE(log, "Failed to run Lua function:%s", SCRIPT_ROUTINE_NOTIFY_SEND_MAIL_RESULT)
 	}
 }

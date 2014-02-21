@@ -3,8 +3,7 @@
 
     <string name="app_name">勾玉忍者</string>
     
-    <string name="debug_iap_restore_not_ready">『回復已購買的商品』還在開發中喔，請下一版再嘗試看看～</string>
-    <string name="debug_cloud_save_not_ready">『雲端備份』還在開發中喔，請下一版再嘗試看看～</string>
+    <string name="debug_function_not_ready">這功能還在開發中喔</string>
     <string name="debug_cannot_test_iap_title">需要您的幫忙</string>
     <string name="debug_cannot_test_iap_message">我需要您的 Gmail 帳號才能開啓購買的權限，請將我幫您準備好的信件寄給我。（Google Play 開通購買的權限需要幾個小時，也許你可以先挑戰暗影模式的魔王＾＾）</string>
     <string name="debug_cannot_test_iap_ok">寄信</string>

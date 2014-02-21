@@ -263,3 +263,41 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
         jni->Set(NULL);
     }
 }
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyUIPresented
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyUIPresented
+  (JNIEnv *env, jobject obj) {
+
+    LOGD(logger, "NotifyUIPresented")
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->NotifyUIPresented();
+
+        jni->Set(env);
+    }
+}
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifySendMailResult
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifySendMailResult
+  (JNIEnv *env, jobject obj, jboolean success) {
+
+    LOGD(logger, "NotifySendMailResult success:%d", success)
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->NotifySendMailResult(success);
+        
+        jni->Set(NULL);
+    }
+}

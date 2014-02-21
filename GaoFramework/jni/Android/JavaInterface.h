@@ -43,6 +43,10 @@ public:
 	void BuyProduct(const char* id);
 	void RestorePurchases();
 
+	void SendEmail(const char* subject, const char* recipient, const char* message);
+	void ShowLeaderboard(const char* id);
+	void ShowAchievements();
+
 private:
 	JavaObject jobj;
 	AndroidLogger log;

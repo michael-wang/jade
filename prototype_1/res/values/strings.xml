@@ -3,8 +3,7 @@
 
     <string name="app_name">Jade Ninja</string>
     
-    <string name="debug_iap_restore_not_ready">Restore purchased product is NOT ready yet.</string>
-    <string name="debug_cloud_save_not_ready">Cloud save is under development, maybe try again on next version.</string>
+    <string name="debug_function_not_ready">NOT ready yet.</string>
     <string name="debug_cannot_test_iap_title">Need you help</string>
     <string name="debug_cannot_test_iap_message">I need your Gmail so I can turn on your permission to buy things. Please send me the mail I\'ve prepared for you, no typing required. (Notice it takes hours for Google Play to turn on permission for you to buy things.)</string>
     <string name="debug_cannot_test_iap_ok">Send mail</string>

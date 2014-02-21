@@ -48,6 +48,22 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyPurchaseRestored
   (JNIEnv *, jobject, jstring);
 
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyUIPresented
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyUIPresented
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifySendMailResult
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifySendMailResult
+  (JNIEnv *, jobject, jboolean);
+
 #ifdef __cplusplus
 }
 #endif

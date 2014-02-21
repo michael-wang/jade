@@ -283,3 +283,43 @@ void JavaInterface::RestorePurchases() {
 
 	jobj.CallVoidMethod("RestorePurchases", "()V");
 }
+
+void JavaInterface::SendEmail(const char* subject, const char* recipient, const char* message) {
+
+	LOGD(log, "SendEmail subject:%s, recipient:%s, message:%s", subject, recipient, message)
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jsubject   = subject != NULL ? env->NewStringUTF(subject) : NULL;
+	jstring jrecipient = recipient != NULL ? env->NewStringUTF(recipient) : NULL;
+	jstring jmessage   = message != NULL ? env->NewStringUTF(message) : NULL;
+
+	jobj.CallVoidMethod("SendEmail", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", 
+		jsubject, jrecipient, jmessage);
+
+	if (jsubject != NULL)   env->DeleteLocalRef(jsubject);
+	if (jrecipient != NULL) env->DeleteLocalRef(jrecipient);
+	if (jmessage != NULL)   env->DeleteLocalRef(jmessage);
+}
+
+void JavaInterface::ShowLeaderboard(const char* id) {
+
+	LOGD(log, "ShowLeaderboard id:%s", id)
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jid = id != NULL ? env->NewStringUTF(id) : NULL;
+
+	jobj.CallVoidMethod("ShowLeaderboard", "(Ljava/lang/String;)V", jid);
+
+	if (jid != NULL) env->DeleteLocalRef(jid);
+}
+
+void JavaInterface::ShowAchievements() {
+
+	LOGD(log, "ShowAchievements")
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jobj.CallVoidMethod("ShowAchievements", "()V");
+}

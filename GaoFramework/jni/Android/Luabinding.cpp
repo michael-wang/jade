@@ -287,17 +287,37 @@ bool HasGameCenterAuthenticated()
     return false;
 }
 
+// Need to callback OnUIPresentCompleted.
 void ShowLeaderboard(const char* identifier)
 {
     // assert(identifier);
     // [g_ViewController showLeaderboard:[NSString stringWithUTF8String:identifier]];
     LOGD(logger, "ShowLeaderboard identifier:%s", identifier)
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ShowLeaderboard: java == NULL")
+        return;
+    }
+
+    java->ShowLeaderboard(identifier);
 }
 
+// Need to callback OnUIPresentCompleted.
 void ShowAchievements()
 {
     // [g_ViewController showAchievements];
     LOGD(logger, "ShowAchievements")
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ShowAchievements: java == NULL")
+        return;
+    }
+
+    java->ShowAchievements();
 }
 
 void SubmitScore(const char* category, double score)
@@ -343,6 +363,7 @@ const char* GetUserLanguage()
     return "zh-Hans";
 }
 
+// Need to callback OnUIPresentCompleted & OnMailResultReceived.
 void ComposeMail(const char* subject, const char* recipient, bool shouldAppendInfo)
 {
     // if (strcmp(recipient, "") == 0)
@@ -354,6 +375,15 @@ void ComposeMail(const char* subject, const char* recipient, bool shouldAppendIn
     //     [g_ViewController composeMail:[NSString stringWithUTF8String:subject] recipient:[NSString stringWithUTF8String:recipient] shouldAppendInfo:shouldAppendInfo];
     // }
     LOGD(logger, "ComposeMail subject:%s, recipient:%s, shouldAppendInfo:%d", subject, recipient, shouldAppendInfo)
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ComposeMail: java == NULL")
+        return;
+    }
+
+    java->SendEmail(subject, recipient, NULL);
 }
 
 void ComposeSocialMessageByValuePair(int type, unsigned int value1, unsigned int value2)

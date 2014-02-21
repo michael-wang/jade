@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.studioirregular.gaoframework.functional.BuyProduct;
 import com.studioirregular.gaoframework.functional.NotifyPlayMovieResult;
+import com.studioirregular.gaoframework.functional.NotifySendMailResult;
+import com.studioirregular.gaoframework.functional.NotifyUIPresented;
 import com.studioirregular.gaoframework.functional.PlayMovie;
 import com.studioirregular.gaoframework.functional.PresentAlertDialog;
 import com.studioirregular.gaoframework.functional.RestorePurchases;
@@ -108,6 +110,10 @@ public class JavaInterface {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "GetString name:" + name);
+		}
+		
+		if (name == null || name.isEmpty()) {
+			return name;
 		}
 		
 		if (context == null) {
@@ -253,9 +259,15 @@ public class JavaInterface {
 	}
 	
 	public void SendEmail(String subject, String recipient, String text) {
+		SendEmail(subject, recipient, text, true);
+	}
+	
+	public void SendEmail(String subject, String recipient, String text, boolean callback) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "SendEmail\n\tsubject:" + subject + "\n\trecipient:" + recipient + "\n\ttext:" + text);
+			Log.d(TAG, "SendEmail\n\tsubject:" + subject + "\n\trecipient:"
+					+ recipient + "\n\ttext:" + text + "\n\tcallback:"
+					+ callback);
 		}
 		
 		Intent i = new Intent(Intent.ACTION_SEND);
@@ -268,9 +280,40 @@ public class JavaInterface {
 		AbsGameActivity activity = (AbsGameActivity)context;
 		try {
 			activity.startActivity(chooseEmailApp);
+			
+			if (callback) {
+				GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
+				GLThread.getInstance().scheduleFunction(new NotifySendMailResult(true));
+			}
 		} catch (android.content.ActivityNotFoundException ex) {
 		    Toast.makeText(activity, GetString("debug_choose_mail_client_failed"), Toast.LENGTH_LONG).show();
+		    
+			if (callback) {
+				GLThread.getInstance().scheduleFunction(new NotifySendMailResult(false));
+			}
 		}
+	}
+	
+	public void ShowLeaderboard(String id) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowLeaderboard id:" + id);
+		}
+		
+		ToastMessage("debug_function_not_ready");
+		
+		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
+	}
+	
+	public void ShowAchievements() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowAchievements");
+		}
+		
+		ToastMessage("debug_function_not_ready");
+		
+		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
 	}
 	
 	// TestFlight
