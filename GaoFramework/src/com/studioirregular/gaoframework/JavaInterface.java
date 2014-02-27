@@ -143,7 +143,21 @@ public class JavaInterface {
 		}
 	}
 	
-	public void ShowDialog(String title, String msg, String yes, String no) {
+	public void ShowMessage(String title, String message) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowMessage title:" + title + ",message:" + message);
+		}
+		
+		title = GetString(title);
+		message = GetString(message);
+		String ok = GetString("button_ok");
+		
+		PresentAlertDialog operation = new PresentAlertDialog(context, title, message, ok);
+		((AbsGameActivity)context).runOnUiThread(operation);
+	}
+	
+	public void ShowDialogWithChoices(String title, String msg, String yes, String no) {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "ShowDialog title:" + title + ",msg:" + msg + ",yes:" + yes + ",no:" + no);
@@ -160,13 +174,13 @@ public class JavaInterface {
 		((AbsGameActivity)context).runOnUiThread(operation);
 	}
 	
-	public void ShowDialogWithFormat(String title, String yes, String no, String format, String[] formatValues) {
+	public void ShowDialogWithChoices(String title, String yes, String no, String format, String[] formatValues) {
 		
-//		if (DEBUG_LOG) {
+		if (DEBUG_LOG) {
 		Log.d(TAG, "ShowDialogWithFormat title:" + title + ",yes:" + yes
 				+ ",no:" + no + ",format:" + format + ",#values"
 				+ formatValues.length);
-		//		}
+		}
 		
 		title = GetString(title);
 		yes = yes != null ? GetString(yes) : null;
@@ -294,28 +308,6 @@ public class JavaInterface {
 		}
 	}
 	
-	public void ShowLeaderboard(String id) {
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "ShowLeaderboard id:" + id);
-		}
-		
-		ToastMessage("debug_function_not_ready");
-		
-		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
-	}
-	
-	public void ShowAchievements() {
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "ShowAchievements");
-		}
-		
-		ToastMessage("debug_function_not_ready");
-		
-		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
-	}
-	
 	// TestFlight
 	public void TestFlightPassCheckpoint(String msg) {
 		
@@ -349,6 +341,56 @@ public class JavaInterface {
 		AbsGameActivity activity = (AbsGameActivity)context;
 		RestorePurchases restore = new RestorePurchases(activity);
 		activity.runOnUiThread(restore);
+	}
+	
+	// Google Play Game service
+	public void ShowLeaderboard() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowLeaderboard");
+		}
+		
+		ToastMessage("debug_function_not_ready");
+		
+		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
+	}
+	
+	public void ShowAchievements() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowAchievements");
+		}
+		
+		ToastMessage("debug_function_not_ready");
+		
+		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
+	}
+	
+	public boolean IsGooglePlayGameServiceReady() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "IsGooglePlayGameServiceReady");
+		}
+		
+		return GameServices.getInstance().isConnected();
+	}
+	
+	public void SaveStateToCloud(String fileName) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SaveStateToCloud fileName:" + fileName);
+		}
+		
+		GameServices.getInstance().SaveStateToCloud(fileName);
+	}
+	
+	public void LoadStateFromCloud() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "LoadStateFromCloud");
+		}
+		
+		GameServices.getInstance().LoadStateFromCloud();
 	}
 	
 	// For java layer, native code should not use.

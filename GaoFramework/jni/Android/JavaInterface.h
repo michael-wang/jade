@@ -28,8 +28,9 @@ public:
 
 	const char* GetString(const char* name);
 
-	void ShowMessage(const char* title, const char* message, const char* yes, const char* no);
-	void ShowDialogWithFormat(const char* title, const char* yes, const char* no, const char* format, GaoVector<GaoString> values);
+	void ShowMessage(const char* title, const char* message);
+	void ShowDialogWithChoices(const char* title, const char* message, const char* yes, const char* no);
+	void ShowDialogWithChoices(const char* title, const char* yes, const char* no, const char* format, GaoVector<GaoString> values);
 
 	void ToastMessage(const char* message);
 
@@ -44,8 +45,13 @@ public:
 	void RestorePurchases();
 
 	void SendEmail(const char* subject, const char* recipient, const char* message);
+
+	GaoBool IsGooglePlayGameServiceReady();
 	void ShowLeaderboard(const char* id);
 	void ShowAchievements();
+
+	void SaveStateToCloud(const char* filename);
+	void LoadStateFromCloud();
 
 private:
 	JavaObject jobj;

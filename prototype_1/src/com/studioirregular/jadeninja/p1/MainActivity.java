@@ -6,6 +6,10 @@ import android.view.Menu;
 import com.studioirregular.gaoframework.AbsGameActivity;
 import com.studioirregular.gaoframework.GameProducts;
 
+/*
+ * Notice: do not use activity request code between: 
+ * [Global.FRAMEWORK_ACTIVITY_CODE_START, Global.FRAMEWORK_ACTIVITY_CODE_END].
+ */
 public class MainActivity extends AbsGameActivity {
 
 	@Override
@@ -29,11 +33,4 @@ public class MainActivity extends AbsGameActivity {
 	protected String getPublicKey() {
 		return "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA9qbeUprhArKLspjUQ8ySihxTiZAUWFJGQuYXdbLtx7nBevT9TlMiNXvFUiHkYPboHROYackS8NTqt/tbkOruc27v8rnT5n8+hidqjGQt+HKQqgL2mQnfR8oSZ4gHYE2H6QNYMi/F2vKvNSEJtO+tXpIcPfEmkiUpOS1YleabSDZNDPbIJ0/uXMKPrWcMeJ3yQu2wsMEldXsy1LoFgzBeP0PRqSc/d8XoYwX/TxUTk1Xe39QUIJv9+DmMNsDecISq17p+oQszmWma9qUgceCCG/0vHUFKxPiirU/lVcMJniXEEr+bAnm6rmX3gPws59pAfwo25jOSYNnsvM5FXyPRjQIDAQAB";
 	}
-	
-	@Override
-	protected int getIabRequestCode() {
-		return IN_APP_BILLING_REQUEST_CODE;
-	}
-	
-	private static final int IN_APP_BILLING_REQUEST_CODE = 1001;
 }

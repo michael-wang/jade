@@ -117,7 +117,7 @@ void ShowMessage(const char* title, const char* message)
         return;
     }
 
-    java->ShowMessage(title, message, "button_ok", NULL);
+    java->ShowMessage(title, message);
 }
 
 void OpenURL(const char* url)
@@ -277,14 +277,24 @@ bool IsGameCenterAvailable()
 {
     // return [g_ViewController isGameCenterAvailable];
     LOGD(logger, "IsGameCenterAvailable")
-    return false;
+
+    // Yes, we have Google Play Game service.
+    return true;
 }
 
 bool HasGameCenterAuthenticated()
 {
     // return [g_ViewController hasGameCenterAuthenticated];
     LOGD(logger, "HasGameCenterAuthenticated")
-    return false;
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "HasGameCenterAuthenticated: java == NULL")
+        return false;
+    }
+
+    return java->IsGooglePlayGameServiceReady();
 }
 
 // Need to callback OnUIPresentCompleted.
@@ -669,7 +679,7 @@ void ShowLeaderboardChoices()
         return;
     }
 
-    java->ShowMessage("gc_title", "gc_desc", "rate_yes", "rate_no");
+    java->ShowDialogWithChoices("gc_title", "gc_desc", "rate_yes", "rate_no");
 }
 
 void ShowLoveHateChoices()
@@ -695,7 +705,7 @@ void ShowLoveHateChoices()
     values.push_back("app_name");
     values.push_back("feedback_postfix");
 
-    java->ShowDialogWithFormat("feedback_title", "feedback_love", "feedback_hate", "%s%s%s", values);
+    java->ShowDialogWithChoices("feedback_title", "feedback_love", "feedback_hate", "%s%s%s", values);
 }
 
 void ShowRatingChoices()
@@ -716,7 +726,7 @@ void ShowRatingChoices()
         return;
     }
 
-    java->ShowMessage("rate_title", "rate_desc", "rate_yes", "rate_no");
+    java->ShowDialogWithChoices("rate_title", "rate_desc", "rate_yes", "rate_no");
 }
 
 void ShowIAPChoices()
@@ -737,7 +747,7 @@ void ShowIAPChoices()
         return;
     }
 
-    java->ShowMessage("iap_title", "iap_desc", "button_ok", "button_cancel");
+    java->ShowDialogWithChoices("iap_title", "iap_desc", "button_ok", "button_cancel");
 }
 
 void ShowMessageChoices(const char* title, const char* desc, const char* action)
@@ -758,7 +768,7 @@ void ShowMessageChoices(const char* title, const char* desc, const char* action)
         return;
     }
 
-    java->ShowMessage(title, desc, action, "button_cancel");
+    java->ShowDialogWithChoices(title, desc, action, "button_cancel");
 }
 
 void SaveFileToiCloud(const char* fileName)
@@ -779,10 +789,13 @@ void SaveFileToiCloud(const char* fileName)
     // NSLog(@"SYNC result: %d / SIZE: %d", result, data.length);
     LOGD(logger, "SaveFileToiCloud fileName:%s", fileName)
 
-    // JavaInterface* java = JavaInterface::GetSingletonPointer();
-    // if (java != NULL) {
-    //     java->ToastMessage("debug_cloud_save_not_ready");
-    // }
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+    if (java == NULL) {
+        LOGE(logger, "%s: java == NULL", __func__)
+        return;
+    }
+
+    java->SaveStateToCloud(fileName);
 }
 
 void SyncFromiCloud()
@@ -792,10 +805,13 @@ void SyncFromiCloud()
 // #endif
     LOGD(logger, "SyncFromiCloud")
 
-    // JavaInterface* java = JavaInterface::GetSingletonPointer();
-    // if (java != NULL) {
-    //     java->ToastMessage("debug_cloud_save_not_ready");
-    // }
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+    if (java == NULL) {
+        LOGE(logger, "%s: java == NULL", __func__)
+        return;
+    }
+
+    java->LoadStateFromCloud();
 }
 
 void PF_RegisterPlayer()

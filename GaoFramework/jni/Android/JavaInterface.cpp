@@ -142,9 +142,27 @@ const char* JavaInterface::GetString(const char* name) {
 	return result;
 }
 
-void JavaInterface::ShowMessage(const char* title, const char* message, const char* yes, const char* no) {
+void JavaInterface::ShowMessage(const char* title, const char* message) {
 
-	LOGD(log, "ShowMessage title:%s, message:%s, yes:%s", title, message, yes)
+	LOGD(log, "ShowMessage title:%s, message:%s", title, message)
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jtitle   = title != NULL   ? env->NewStringUTF(title) : NULL;
+	jstring jmessage = message != NULL ? env->NewStringUTF(message) : NULL;
+
+	jobj.CallVoidMethod("ShowMessage", 
+		"(Ljava/lang/String;Ljava/lang/String;)V", 
+		jtitle, jmessage);
+
+	if (jtitle != NULL)   env->DeleteLocalRef(jtitle);
+	if (jmessage != NULL) env->DeleteLocalRef(jmessage);
+}
+
+void JavaInterface::ShowDialogWithChoices(const char* title, const char* message, 
+	const char* yes, const char* no) {
+
+	LOGD(log, "ShowDialogWithChoices title:%s, message:%s, yes:%s", title, message, yes)
 
 	JNIEnv* env = g_JniEnv->Get();
 
@@ -153,7 +171,7 @@ void JavaInterface::ShowMessage(const char* title, const char* message, const ch
 	jstring jyes     = yes != NULL     ? env->NewStringUTF(yes) : NULL;
 	jstring jno      = no != NULL      ? env->NewStringUTF(no) : NULL;
 
-	jobj.CallVoidMethod("ShowDialog", 
+	jobj.CallVoidMethod("ShowDialogWithChoices", 
 		"(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", 
 		jtitle, jmessage, jyes, jno);
 
@@ -163,10 +181,10 @@ void JavaInterface::ShowMessage(const char* title, const char* message, const ch
 	if (jno != NULL)      env->DeleteLocalRef(jno);
 }
 
-void JavaInterface::ShowDialogWithFormat(const char* title, const char* yes, const char* no, 
-	const char* format, GaoVector<GaoString> values) {
+void JavaInterface::ShowDialogWithChoices(const char* title, const char* yes, 
+	const char* no, const char* format, GaoVector<GaoString> values) {
 
-	LOGD(log, "ShowDialogWithFormat title:%s, yes:%s, no:%s, format:%s, #values:%d", 
+	LOGD(log, "ShowDialogWithChoices title:%s, yes:%s, no:%s, format:%s, #values:%d", 
 		title, yes, no, format, values.size())
 
 	JNIEnv* env = g_JniEnv->Get();
@@ -183,7 +201,7 @@ void JavaInterface::ShowDialogWithFormat(const char* title, const char* yes, con
 		env->SetObjectArrayElement(jvalues, i, env->NewStringUTF(values[i].c_str()));
 	}
 
-	jobj.CallVoidMethod("ShowDialogWithFormat", 
+	jobj.CallVoidMethod("ShowDialogWithChoices", 
 		"(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V", 
 		jtitle, jyes, jno, jformat, jvalues);
 
@@ -302,6 +320,15 @@ void JavaInterface::SendEmail(const char* subject, const char* recipient, const 
 	if (jmessage != NULL)   env->DeleteLocalRef(jmessage);
 }
 
+GaoBool JavaInterface::IsGooglePlayGameServiceReady() {
+	
+	LOGD(log, "IsGooglePlayGameServiceReady")
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	return jobj.CallBooleanMethod("IsGooglePlayGameServiceReady", "()Z");
+}
+
 void JavaInterface::ShowLeaderboard(const char* id) {
 
 	LOGD(log, "ShowLeaderboard id:%s", id)
@@ -322,4 +349,26 @@ void JavaInterface::ShowAchievements() {
 	JNIEnv* env = g_JniEnv->Get();
 
 	jobj.CallVoidMethod("ShowAchievements", "()V");
+}
+
+void JavaInterface::SaveStateToCloud(const char* filename) {
+
+	LOGD(log, "saveStateToCloud")
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jfilename = filename != NULL ? env->NewStringUTF(filename) : NULL;
+
+	jobj.CallVoidMethod("SaveStateToCloud", "(Ljava/lang/String;)V", jfilename);
+
+	if (jfilename != NULL) env->DeleteLocalRef(jfilename);
+}
+
+void JavaInterface::LoadStateFromCloud() {
+
+	LOGD(log, "LoadStateFromCloud")
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jobj.CallVoidMethod("LoadStateFromCloud", "()V");
 }

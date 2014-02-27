@@ -33,4 +33,5 @@ public class NativeInterface {
 	public native void NotifyPurchaseRestored(String id);
 	public native void NotifyUIPresented();
 	public native void NotifySendMailResult(boolean success);
+	public native void NotifyStateLoadedFromCloud();
 }

@@ -13,14 +13,29 @@ public class PresentAlertDialog implements Function_4V<Context, String, String, 
 	private String message;
 	private String positiveButton;
 	private String negativeButton;
+	private final boolean notifyResult;
+	
+	public PresentAlertDialog(Context context, String title, String message,
+			String positiveButton) {
+		
+		this(context, title, message, positiveButton, null, false);
+	}
 	
 	public PresentAlertDialog(Context context, String title, String message,
 			String positiveButton, String negativeButton) {
+		
+		this(context, title, message, positiveButton, negativeButton, true);
+	}
+	
+	public PresentAlertDialog(Context context, String title, String message,
+			String positiveButton, String negativeButton, boolean notifyResult) {
+		
 		this.context = context;
 		this.title = title;
 		this.message = message;
 		this.positiveButton = positiveButton;
 		this.negativeButton = negativeButton;
+		this.notifyResult = notifyResult;
 	}
 
 	@Override
@@ -34,7 +49,10 @@ public class PresentAlertDialog implements Function_4V<Context, String, String, 
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					notifyResult(true);
+					
+					if (notifyResult) {
+						notifyResult(true);
+					}
 				}
 			});
 		}
@@ -44,7 +62,10 @@ public class PresentAlertDialog implements Function_4V<Context, String, String, 
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					notifyResult(false);
+					
+					if (notifyResult) {
+						notifyResult(false);
+					}
 				}
 			});
 		}
@@ -53,7 +74,10 @@ public class PresentAlertDialog implements Function_4V<Context, String, String, 
 			
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				notifyResult(false);
+				
+				if (notifyResult) {
+					notifyResult(false);
+				}
 			}
 		});
 		

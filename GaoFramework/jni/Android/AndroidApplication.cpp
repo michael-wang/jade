@@ -288,3 +288,12 @@ GaoVoid AndroidApplication::NotifySendMailResult(GaoBool value) {
 		LOGE(log, "Failed to run Lua function:%s", SCRIPT_ROUTINE_NOTIFY_SEND_MAIL_RESULT)
 	}
 }
+
+GaoVoid AndroidApplication::NotifyStateLoadedFromCloud() {
+
+	LOGD(log, "NotifyStateLoadedFromCloud")
+
+	if (!luaManager->CallFunction("ReadSaveDataFromFile")) {
+		LOGE(log, "Failed to run lua function: ReadSaveDataFromFile")
+	}
+}

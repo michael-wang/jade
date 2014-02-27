@@ -18,6 +18,7 @@ import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -40,10 +41,13 @@ import com.studioirregular.libinappbilling.ServerResponseCode;
 import com.studioirregular.libinappbilling.SignatureVerificationException;
 import com.testflightapp.lib.TestFlight;
 
-public abstract class AbsGameActivity extends Activity {
+public abstract class AbsGameActivity extends FragmentActivity {
 
 	private static final String TAG = "abs-game-activity";
 	private static final boolean DEBUG_LOG = false;
+	
+	private static final int IN_APP_BILLING_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START;
+	private static final int GAME_SERVICES_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START + 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,8 @@ public abstract class AbsGameActivity extends Activity {
 		
 		iab = new InAppBilling(getPublicKey(), null);
 		iab.open(AbsGameActivity.this);
+		
+		GameServices.getInstance().onCreate(this);
 	}
 	
 	private boolean isPortraitMode() {
@@ -228,6 +234,8 @@ public abstract class AbsGameActivity extends Activity {
 			Log.w(TAG, "onStart");
 		}
 		
+		GameServices.getInstance().onStart(GAME_SERVICES_REQUEST_CODE);
+		
 		ActivityOnStart();
 		
 		SoundSystem.getInstance().onStart();
@@ -235,6 +243,9 @@ public abstract class AbsGameActivity extends Activity {
 
 	@Override
 	protected void onStop() {
+		
+		GameServices.getInstance().onStop();
+		
 		super.onStop();
 		
 		if (DEBUG_LOG) {
@@ -340,7 +351,6 @@ public abstract class AbsGameActivity extends Activity {
 	protected abstract GameProducts getGameProducts();
 	protected abstract String getPublicKey();
 	// Let client decide purchase activity request code so we won't risk using same code.
-	protected abstract int getIabRequestCode();
 	
 	public void buyProduct(String id) {
 		
@@ -352,7 +362,7 @@ public abstract class AbsGameActivity extends Activity {
 		
 		try {
 			iab.purchase(Product.Type.ONE_TIME_PURCHASE, id,
-					AbsGameActivity.this, getIabRequestCode());
+					AbsGameActivity.this, IN_APP_BILLING_REQUEST_CODE);
 			return;
 		} catch (NotSupportedException e) {
 			if (DEBUG_LOG) e.printStackTrace();
@@ -438,9 +448,11 @@ public abstract class AbsGameActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
-		if (requestCode == getIabRequestCode()) {
+		if (requestCode == IN_APP_BILLING_REQUEST_CODE) {
 			handlePurchaseActivityResult(resultCode, data);
 			return;
+		} else if (requestCode == GAME_SERVICES_REQUEST_CODE) {
+			GameServices.getInstance().onActivityResult(resultCode, data);
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
@@ -534,4 +546,5 @@ public abstract class AbsGameActivity extends Activity {
 			.create()
 			.show();
 	}
+	
 }

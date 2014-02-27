@@ -54,7 +54,7 @@ public class AndroidFileSystem {
 			return filename;
 		}
 		
-		String result = context.getFilesDir().getAbsolutePath() + filename;
+		String result = context.getFilesDir().getAbsolutePath() + File.separatorChar + filename;
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "MakeDocumentPath result:" + result);

@@ -89,4 +89,9 @@ public class Global {
 	public static World2ViewMapping getWorld2ViewMapping() {
 		return world2ViewMapping;
 	}
+	
+	// Reserved activity request code used by framework, client activity should
+	// NOT using values in the range.
+	public static final int FRAMEWORK_ACTIVITY_CODE_START = 0x2A; // It all start from 42.
+	public static final int FRAMEWORK_ACTIVITY_CODE_END   = 0xFF;
 }

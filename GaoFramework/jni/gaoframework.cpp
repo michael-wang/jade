@@ -301,3 +301,22 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
         jni->Set(NULL);
     }
 }
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyStateLoadedFromCloud
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyStateLoadedFromCloud
+  (JNIEnv *env, jobject obj) {
+
+    LOGD(logger, "NotifyStateLoadedFromCloud")
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->NotifyStateLoadedFromCloud();
+        
+        jni->Set(NULL);
+    }
+}

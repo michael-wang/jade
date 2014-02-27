@@ -39,6 +39,7 @@ public:
 	GaoVoid NotifyPurchaseRestored(GaoConstCharPtr id);
 	GaoVoid NotifyUIPresented();
 	GaoVoid NotifySendMailResult(GaoBool value);
+	GaoVoid NotifyStateLoadedFromCloud();
 
 protected:
 	virtual GaoBool OnInitialize();

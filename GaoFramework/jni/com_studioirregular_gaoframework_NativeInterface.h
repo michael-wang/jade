@@ -64,6 +64,15 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifySendMailResult
   (JNIEnv *, jobject, jboolean);
 
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyStateLoadedFromCloud
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyStateLoadedFromCloud
+  (JNIEnv *, jobject);
+
+
 #ifdef __cplusplus
 }
 #endif
