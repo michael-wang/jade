@@ -48,6 +48,8 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	
 	private static final int IN_APP_BILLING_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START;
 	private static final int GAME_SERVICES_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START + 1;
+	private static final int SHOW_ACHIEVEMENTS_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START + 2;
+	private static final int SHOW_LEADERBOARDS_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START + 3;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -234,7 +236,8 @@ public abstract class AbsGameActivity extends FragmentActivity {
 			Log.w(TAG, "onStart");
 		}
 		
-		GameServices.getInstance().onStart(GAME_SERVICES_REQUEST_CODE);
+		GameServices.getInstance().onStart(GAME_SERVICES_REQUEST_CODE,
+				SHOW_ACHIEVEMENTS_REQUEST_CODE, SHOW_LEADERBOARDS_REQUEST_CODE);
 		
 		ActivityOnStart();
 		
@@ -448,11 +451,13 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		
+		if (GameServices.getInstance().onActivityResult(requestCode, resultCode, data)) {
+			return;
+		}
+		
 		if (requestCode == IN_APP_BILLING_REQUEST_CODE) {
 			handlePurchaseActivityResult(resultCode, data);
 			return;
-		} else if (requestCode == GAME_SERVICES_REQUEST_CODE) {
-			GameServices.getInstance().onActivityResult(resultCode, data);
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}

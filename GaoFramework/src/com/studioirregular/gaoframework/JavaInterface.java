@@ -344,13 +344,13 @@ public class JavaInterface {
 	}
 	
 	// Google Play Game service
-	public void ShowLeaderboard() {
+	public void ShowLeaderboard(String id) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "ShowLeaderboard");
+			Log.d(TAG, "ShowLeaderboard id:" + id);
 		}
 		
-		ToastMessage("debug_function_not_ready");
+		GameServices.getInstance().ShowLeaderboards();
 		
 		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
 	}
@@ -361,7 +361,7 @@ public class JavaInterface {
 			Log.d(TAG, "ShowAchievements");
 		}
 		
-		ToastMessage("debug_function_not_ready");
+		GameServices.getInstance().ShowAchievements();
 		
 		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
 	}

@@ -22,6 +22,7 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesActivityResultCodes;
 import com.studioirregular.gaoframework.functional.NotifyStateLoadedFromCloud;
 import com.studioirregular.gaoframework.gles.GLThread;
 
@@ -65,13 +66,15 @@ public class GameServices {
 			.build();
 	}
 	
-	public void onStart(int activityRequestCode) {
+	public void onStart(int activityRequestCode, int achievementsRequestCode, int leaderboardsRequestCode) {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "onStart");
 		}
 		
-		this.activityRequestCode = activityRequestCode;
+		this.connectionRequestCode = activityRequestCode;
+		this.achievementsRequestCode = achievementsRequestCode;
+		this.leaderboardsRequestCode = leaderboardsRequestCode;
 		
 		final int SERVICE_AVAILABLE_STATUS = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
 		if (SERVICE_AVAILABLE_STATUS != ConnectionResult.SUCCESS) {
@@ -108,11 +111,30 @@ public class GameServices {
 		return result;
 	}
 	
-	public void onActivityResult(int resultCode, Intent data) {
+	// Return true if consumed.
+	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "onActivityResult resultCode:" + resultCode + ",data:" + data);
+			Log.d(TAG, "onActivityResult requestCode:" + requestCode + ",resultCode:" + resultCode + ",data:" + data);
 		}
+		
+		if (requestCode == connectionRequestCode) {
+			handleConnectionActivity(resultCode);
+			return true;
+			
+		} else if (requestCode == achievementsRequestCode) {
+			handleShowAchievements(resultCode);
+			return true;
+			
+		} else if (requestCode == leaderboardsRequestCode) {
+			handleShowLeaderboards(resultCode);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private void handleConnectionActivity(int resultCode) {
 		
 		fixingError = false;
 		
@@ -125,6 +147,46 @@ public class GameServices {
 				Log.w(TAG, "User canceled trying to resolve activity.");
 			}
 		}
+	}
+	
+	private void handleShowAchievements(int resultCode) {
+		
+		if (resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED) {
+			apiClient.connect();
+		}
+	}
+	
+	private void handleShowLeaderboards(int resultCode) {
+		
+		if (resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED) {
+			apiClient.connect();
+		}
+	}
+	
+	/*
+	 * Achievement API.
+	 */
+	public void ShowAchievements() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowAchievements");
+		}
+		
+		Intent showAchievements = Games.Achievements.getAchievementsIntent(apiClient);
+		activity.startActivityForResult(showAchievements, achievementsRequestCode);
+	}
+	
+	/*
+	 * Leaderboard API.
+	 */
+	public void ShowLeaderboards() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowLeaderboards");
+		}
+		
+		Intent showLeaderboards = Games.Leaderboards.getAllLeaderboardsIntent(apiClient);
+		activity.startActivityForResult(showLeaderboards, leaderboardsRequestCode);
 	}
 	
 	/*
@@ -300,7 +362,7 @@ public class GameServices {
 			} else if (result.hasResolution()) {
 				fixingError = true;
 				try {
-					result.startResolutionForResult(activity, activityRequestCode);
+					result.startResolutionForResult(activity, connectionRequestCode);
 				} catch (SendIntentException e) {
 					// There was an error with the resolution intent. Try again.
 					apiClient.connect();
@@ -322,7 +384,7 @@ public class GameServices {
 		
 		Bundle args = new Bundle();
 		args.putInt(ErrorDialogFragment.ERROR_CODE, errorCode);
-		args.putInt(ErrorDialogFragment.ACTIVITY_REQUEST_CODE, activityRequestCode);
+		args.putInt(ErrorDialogFragment.ACTIVITY_REQUEST_CODE, connectionRequestCode);
 		dialogFragment.setArguments(args);
 		dialogFragment.show(activity.getSupportFragmentManager(), "errordialog");
 	}
@@ -369,5 +431,7 @@ public class GameServices {
 	private boolean fixingError = false;
 	
 	private FragmentActivity activity;
-	private int activityRequestCode;
+	private int connectionRequestCode;
+	private int achievementsRequestCode;
+	private int leaderboardsRequestCode;
 }
