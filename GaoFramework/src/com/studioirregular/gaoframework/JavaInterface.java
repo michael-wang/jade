@@ -149,11 +149,11 @@ public class JavaInterface {
 			Log.d(TAG, "ShowMessage title:" + title + ",message:" + message);
 		}
 		
-		title = GetString(title);
 		message = GetString(message);
-		String ok = GetString("button_ok");
 		
-		PresentAlertDialog operation = new PresentAlertDialog(context, title, message, ok);
+		// Let's use toast, for we don't want this kind of messages to interrupt user.
+		// For those which need user attention, we use ShowDialogWithChoices.
+		ToastMessage operation = new ToastMessage(context, message);
 		((AbsGameActivity)context).runOnUiThread(operation);
 	}
 	
