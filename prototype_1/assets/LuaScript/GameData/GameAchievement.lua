@@ -126,6 +126,36 @@ ACH_BOSS_LV3 = 903;
 ACH_BOSS_LV4 = 904;
 ACH_BOSS_LV5 = 905;
 
+-- Mapping from Game Center ID to Google Play Game Achievement's ID.
+-- These are subset of Game Center achievements, if an item is not mapped, its not on Google Play.
+if IS_PLATFORM_ANDROID then
+ACH_ANDROID_ID = {
+
+	[ACH_JADE_PROTECTION] = "CgkIwKPkvaccEAIQDg",
+
+	[ACH_NORMAL_MAP1_LV1] = "CgkIwKPkvaccEAIQCw",
+	[ACH_NORMAL_MAP1_LV2] = "CgkIwKPkvaccEAIQDA",
+	[ACH_NORMAL_MAP1_LV3] = "CgkIwKPkvaccEAIQDQ",
+
+	[ACH_COIN_EARNED_LV1] = "CgkIwKPkvaccEAIQDw",
+	[ACH_COIN_EARNED_LV2] = "CgkIwKPkvaccEAIQEA",
+	[ACH_COIN_EARNED_LV3] = "CgkIwKPkvaccEAIQEQ",
+	[ACH_COIN_EARNED_LV4] = "CgkIwKPkvaccEAIQEg",
+
+	[ACH_WEAPON_KATANA_LV1] = "CgkIwKPkvaccEAIQEw";
+	[ACH_WEAPON_KATANA_LV2] = "CgkIwKPkvaccEAIQFA";
+	[ACH_WEAPON_BLADE_LV1]  = "CgkIwKPkvaccEAIQFQ";
+	[ACH_WEAPON_BLADE_LV2]  = "CgkIwKPkvaccEAIQFg";
+	[ACH_WEAPON_SPEAR_LV1]  = "CgkIwKPkvaccEAIQFw";
+	[ACH_WEAPON_SPEAR_LV2]  = "CgkIwKPkvaccEAIQGA";
+
+};
+
+ACH_ANDROID_ONE_STEP = {
+	[ACH_JADE_PROTECTION] = true,
+};
+end -- IS_PLATFORM_ANDROID
+
 -------------------------------------------------------------------------
 GC_ACHEIVEMENT_MAX =
 {

@@ -40,6 +40,7 @@ public:
 	GaoVoid NotifyUIPresented();
 	GaoVoid NotifySendMailResult(GaoBool value);
 	GaoVoid NotifyStateLoadedFromCloud();
+	GaoVoid NotifyGameServiceConnectionStatus(GaoBool connected);
 
 protected:
 	virtual GaoBool OnInitialize();

@@ -320,3 +320,22 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
         jni->Set(NULL);
     }
 }
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyGameServiceConnectionStatus
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyGameServiceConnectionStatus
+  (JNIEnv *env, jobject obj, jboolean connected) {
+
+    LOGD(logger, "NotifyGameServiceConnectionStatus")
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->NotifyGameServiceConnectionStatus(connected);
+        
+        jni->Set(NULL);
+    }
+}

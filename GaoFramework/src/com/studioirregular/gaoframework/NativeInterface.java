@@ -34,4 +34,5 @@ public class NativeInterface {
 	public native void NotifyUIPresented();
 	public native void NotifySendMailResult(boolean success);
 	public native void NotifyStateLoadedFromCloud();
+	public native void NotifyGameServiceConnectionStatus(boolean connected);
 }

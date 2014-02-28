@@ -72,6 +72,13 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyStateLoadedFromCloud
   (JNIEnv *, jobject);
 
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    NotifyGameServiceConnectionStatus
+ * Signature: (Z)V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyGameServiceConnectionStatus
+  (JNIEnv *, jobject, jboolean);
 
 #ifdef __cplusplus
 }

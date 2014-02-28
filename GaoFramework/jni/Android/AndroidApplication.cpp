@@ -32,6 +32,7 @@ static const char SCRIPT_ROUTINE_NOTIFY_BUY_RESULT[] = "OnPurchaseConfirmed";
 static const char SCRIPT_ROUTINE_NOTIFY_PURCHASE_RESTORED[] = "OnPurchaseRestored";
 static const char SCRIPT_ROUTINE_NOTIFY_UI_PRESENTED[] = "OnUIPresentCompleted";
 static const char SCRIPT_ROUTINE_NOTIFY_SEND_MAIL_RESULT[] = "OnMailResultReceived";
+static const char SCRIPT_ROUTINE_NOTIFY_GAME_SERVICE_CONNECTION_STATUS[] = "OnGameCenterAuthorized";
 
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
@@ -295,5 +296,21 @@ GaoVoid AndroidApplication::NotifyStateLoadedFromCloud() {
 
 	if (!luaManager->CallFunction("ReadSaveDataFromFile")) {
 		LOGE(log, "Failed to run lua function: ReadSaveDataFromFile")
+	}
+}
+
+GaoVoid AndroidApplication::NotifyGameServiceConnectionStatus(GaoBool connected) {
+
+	LOGD(log, "NotifyGameServiceConnected connected:%d", connected)
+
+	if (!luaManager->GetFunction(SCRIPT_ROUTINE_NOTIFY_GAME_SERVICE_CONNECTION_STATUS)) {
+		LOGE(log, "Cannot find lua function:%s", SCRIPT_ROUTINE_NOTIFY_GAME_SERVICE_CONNECTION_STATUS)
+		return;
+	}
+
+	luaManager->PushValue(connected);
+
+	if (!luaManager->CallFunction()) {
+		LOGE(log, "Failed to run lua function: %s", SCRIPT_ROUTINE_NOTIFY_GAME_SERVICE_CONNECTION_STATUS)
 	}
 }

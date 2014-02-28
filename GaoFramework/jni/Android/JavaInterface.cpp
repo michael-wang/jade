@@ -346,9 +346,33 @@ void JavaInterface::ShowAchievements() {
 
 	LOGD(log, "ShowAchievements")
 
+	jobj.CallVoidMethod("ShowAchievements", "()V");
+}
+
+void JavaInterface::SubmitAchievement(const char* id, float value, bool increamental) {
+
+	LOGD(log, "SubmitAchievement id:%s, value:%f, increamental:%d", id, value, increamental)
+
 	JNIEnv* env = g_JniEnv->Get();
 
-	jobj.CallVoidMethod("ShowAchievements", "()V");
+	jstring jid = id != NULL ? env->NewStringUTF(id) : NULL;
+
+	jobj.CallVoidMethod("SubmitAchievement", "(Ljava/lang/String;FZ)V", jid, value, increamental);
+
+	if (jid != NULL) env->DeleteLocalRef(jid);
+}
+
+void JavaInterface::SubmitScore(const char* id, int value) {
+	
+	LOGD(log, "SubmitScore id:%s, value:%f", id, value)
+
+	JNIEnv* env = g_JniEnv->Get();
+
+	jstring jid = id != NULL ? env->NewStringUTF(id) : NULL;
+
+	jobj.CallVoidMethod("SubmitScore", "(Ljava/lang/String;I)V", jid, value);
+
+	if (jid != NULL) env->DeleteLocalRef(jid);
 }
 
 void JavaInterface::SaveStateToCloud(const char* filename) {

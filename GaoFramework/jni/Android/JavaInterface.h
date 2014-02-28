@@ -49,6 +49,8 @@ public:
 	GaoBool IsGooglePlayGameServiceReady();
 	void ShowLeaderboard(const char* id);
 	void ShowAchievements();
+	void SubmitAchievement(const char* id, float value, bool increamental);
+	void SubmitScore(const char* id, int value);
 
 	void SaveStateToCloud(const char* filename);
 	void LoadStateFromCloud();

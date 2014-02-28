@@ -23,6 +23,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
+import com.studioirregular.gaoframework.functional.NotifyGameServiceConnectionStatus;
 import com.studioirregular.gaoframework.functional.NotifyStateLoadedFromCloud;
 import com.studioirregular.gaoframework.gles.GLThread;
 
@@ -86,6 +87,8 @@ public class GameServices {
 		if (!apiClient.isConnecting() && !apiClient.isConnected()) {
 			apiClient.connect();
 		}
+		
+		notifyConnectionStatus(true);
 	}
 	
 	public void onStop() {
@@ -99,6 +102,7 @@ public class GameServices {
 		}
 		
 		isConnected = false;
+		notifyConnectionStatus(false);
 	}
 	
 	public boolean isConnected() {
@@ -176,17 +180,48 @@ public class GameServices {
 		activity.startActivityForResult(showAchievements, achievementsRequestCode);
 	}
 	
+	public void SubmitAchievement(String id, float value, boolean increamental) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SubmitAchievement id:" + id + ",value:" + value + ",increamental:" + increamental);
+		}
+		
+		if (increamental) {
+			int steps = Math.round(value);
+			if (steps <= 0) {
+				steps = 1;	// steps value must > 0;
+			}
+			Games.Achievements.setSteps(apiClient, id, steps);
+		} else {
+			Games.Achievements.unlock(apiClient, id);
+		}
+	}
+	
 	/*
 	 * Leaderboard API.
 	 */
-	public void ShowLeaderboards() {
+	public void ShowAllLeaderboards() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "ShowLeaderboards");
+			Log.d(TAG, "ShowAllLeaderboards");
 		}
 		
-		Intent showLeaderboards = Games.Leaderboards.getAllLeaderboardsIntent(apiClient);
-		activity.startActivityForResult(showLeaderboards, leaderboardsRequestCode);
+		Intent show = Games.Leaderboards.getAllLeaderboardsIntent(apiClient);
+		if (show == null) {
+			Log.w(TAG, "ShowLeaderboard unable to obtain intent");
+			return;
+		}
+		
+		activity.startActivityForResult(show, leaderboardsRequestCode);
+	}
+	
+	public void SubmitScore(String id, int value) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SubmitScore id:" + id + ",value:" + value);
+		}
+		
+		Games.Leaderboards.submitScore(apiClient, id, value);
 	}
 	
 	/*
@@ -423,6 +458,12 @@ public class GameServices {
 			GameServices.getInstance().onErrorDialogDismiss();
 		}
 		
+	}
+	
+	private void notifyConnectionStatus(boolean value) {
+		
+		NotifyGameServiceConnectionStatus notify = new NotifyGameServiceConnectionStatus(value);
+		GLThread.getInstance().scheduleFunction(notify);
 	}
 	
 	private boolean isConnected = false;

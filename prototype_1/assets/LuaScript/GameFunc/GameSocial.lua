@@ -7,12 +7,19 @@ GAO_SOCIAL_SINAWEIBO = 3;
 
 ITC_TOKEN_PREFIX = "com.monkeypotion.jadeninja";
 
-GC_LEADERBOARD_SCORE = "com.monkeypotion.jadeninja.score";
-GC_LEADERBOARD_BOSS = "com.monkeypotion.jadeninja.bosshunt";
-GC_LEADERBOARD_DISTANCE = "com.monkeypotion.jadeninja.distance";
-GC_LEADERBOARD_CHALLENGE = "com.monkeypotion.jadeninja.challenge";  -- Daily Challenge
-GC_LEADERBOARD_DEFAULT = GC_LEADERBOARD_DISTANCE;
-GC_ACHEIVEMENT_PREFIX = "com.monkeypotion.jadeninja.ac";
+if IS_PLATFORM_ANDROID then
+    GC_LEADERBOARD_SCORE = "CgkIwKPkvaccEAIQCA";
+    GC_LEADERBOARD_BOSS = "CgkIwKPkvaccEAIQCQ";
+    GC_LEADERBOARD_DISTANCE = "CgkIwKPkvaccEAIQBg";
+    GC_LEADERBOARD_CHALLENGE = "CgkIwKPkvaccEAIQCg";
+else
+    GC_LEADERBOARD_SCORE = "com.monkeypotion.jadeninja.score";
+    GC_LEADERBOARD_BOSS = "com.monkeypotion.jadeninja.bosshunt";
+    GC_LEADERBOARD_DISTANCE = "com.monkeypotion.jadeninja.distance";
+    GC_LEADERBOARD_CHALLENGE = "com.monkeypotion.jadeninja.challenge";  -- Daily Challenge
+end
+    GC_LEADERBOARD_DEFAULT = GC_LEADERBOARD_DISTANCE;
+    GC_ACHEIVEMENT_PREFIX = "com.monkeypotion.jadeninja.ac";
 
 --IAP_PRODUCT_CALLBACK = {};
 SEND_LOVE_CALLBACK = {};
@@ -228,11 +235,22 @@ function UpdateAchievement(id, inc, overwrite, doSave)
 --    if (APP_LITE_VERSION) then
 --        return;
 --    end
-    
+
+    if IS_PLATFORM_ANDROID then
+        local HAS_ANDROID_ACHIEVEMENT = ACH_ANDROID_ID[id];
+        if not HAS_ANDROID_ACHIEVEMENT then
+            return;
+        end
+    end
+
     GC_ACH_POOL[id] = GC_ACH_POOL[id] or { count=0, done=nil, };
     inc = inc or 1;
 
     local repeatable = GC_ACHEIVEMENT_REPEATABLE[id] or false;
+    if IS_PLATFORM_ANDROID then
+        -- Android use 'repeatable' to mean increamental (more than one step).
+        repeatable = not ACH_ANDROID_ONE_STEP[id];
+    end
     local ach = GC_ACH_POOL[id];
     
     if (overwrite) then
@@ -264,7 +282,13 @@ function UpdateAchievement(id, inc, overwrite, doSave)
     
     if (GC_HAS_AUTHORIZED) then
         --log("Achievement submit : "..id.." / [pct] "..percent.." / [#] "..ach["count"].." / [inc] "..inc)
-        GameKit.SubmitAchievement(GC_ACHEIVEMENT_PREFIX .. id, percent, repeatable);
+
+        if IS_PLATFORM_ANDROID then
+            local androidID = ACH_ANDROID_ID[id];
+            GameKit.SubmitAchievement(androidID, percent, repeatable);
+        else
+            GameKit.SubmitAchievement(GC_ACHEIVEMENT_PREFIX .. id, percent, repeatable);
+        end
     end
     
     if (doSave) then

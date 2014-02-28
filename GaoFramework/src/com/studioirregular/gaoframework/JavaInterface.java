@@ -16,6 +16,8 @@ import com.studioirregular.gaoframework.functional.NotifyUIPresented;
 import com.studioirregular.gaoframework.functional.PlayMovie;
 import com.studioirregular.gaoframework.functional.PresentAlertDialog;
 import com.studioirregular.gaoframework.functional.RestorePurchases;
+import com.studioirregular.gaoframework.functional.ShowAchievements;
+import com.studioirregular.gaoframework.functional.ShowAllLeaderboards;
 import com.studioirregular.gaoframework.functional.ToastMessage;
 import com.studioirregular.gaoframework.gles.Circle;
 import com.studioirregular.gaoframework.gles.GLThread;
@@ -350,7 +352,8 @@ public class JavaInterface {
 			Log.d(TAG, "ShowLeaderboard id:" + id);
 		}
 		
-		GameServices.getInstance().ShowLeaderboards();
+		ShowAllLeaderboards show = new ShowAllLeaderboards();
+		((AbsGameActivity)context).runOnUiThread(show);
 		
 		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
 	}
@@ -361,7 +364,8 @@ public class JavaInterface {
 			Log.d(TAG, "ShowAchievements");
 		}
 		
-		GameServices.getInstance().ShowAchievements();
+		ShowAchievements show = new ShowAchievements();
+		((AbsGameActivity)context).runOnUiThread(show);
 		
 		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
 	}
@@ -375,6 +379,27 @@ public class JavaInterface {
 		return GameServices.getInstance().isConnected();
 	}
 	
+	public void SubmitAchievement(String id, float value, boolean increamental) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SubmitAchievement id:" + id + ",value:" + value + ",increamental:" + increamental);
+		}
+		
+		GameServices.getInstance().SubmitAchievement(id, value, increamental);
+	}
+	
+	public void SubmitScore(String id, int value) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "SubmitScore id:" + id + ",value:" + value);
+		}
+		
+		GameServices.getInstance().SubmitScore(id, value);
+	}
+	
+	/*
+	 * Cloud Save.
+	 */
 	public void SaveStateToCloud(String fileName) {
 		
 		if (DEBUG_LOG) {
