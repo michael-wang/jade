@@ -41,6 +41,27 @@ public class Sprite extends Shape {
 		return true;
 	}
 	
+	public void SetAlpha(float value) {
+		
+		if (DEBUG_LOG()) {
+			Log.d(TAG(), "SetAlpha value:" + value);
+		}
+		
+		color.setAlpha(value);
+	}
+	
+	public void SetBlendingMode(int mode) {
+		
+		if (DEBUG_LOG()) {
+			Log.d(TAG(), "SetBlendingMode mode:" + mode);
+			if (texture != null) {
+				Log.d(TAG(), "\ttexture:" + texture);
+			}
+		}
+		
+		blendingMode = mode;
+	}
+	
 	public void SetTexture(Texture texture) {
 		
 		if (DEBUG_LOG()) {
@@ -248,7 +269,7 @@ public class Sprite extends Shape {
 			    "varying vec2 v_TexCoordinate;" +
 			    "uniform sampler2D u_Texture;" +
 			    "void main() {" +
-			    "  gl_FragColor = vColor + texture2D(u_Texture,v_TexCoordinate);" +
+			    "  gl_FragColor = vColor * texture2D(u_Texture,v_TexCoordinate);" +
 			    "}";
 		
 		result.add(new ShaderSource(GLES20.GL_FRAGMENT_SHADER,
@@ -283,6 +304,8 @@ public class Sprite extends Shape {
 	@Override
 	protected void onDraw() {
 		
+		applyBlendingMode();
+		
 		if (texture != null) {
 			texture.draw(getShaderProgram(), 
 					UNIFORM_TEXTURE, ATTRIBUTE_TEXTURE_COORDINATE, 
@@ -309,4 +332,19 @@ public class Sprite extends Shape {
 	private float dx, dy;
 	// Only given when Draw function called.
 	private float dxDraw, dyDraw;
+	
+	private static final int BLEND_WHITE_OUT = 0;
+	private static final int BLEND_FADE_OUT = 1;
+	private int blendingMode = BLEND_FADE_OUT;
+	
+	private void applyBlendingMode() {
+		
+		if (blendingMode == BLEND_WHITE_OUT) {
+			GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		} else if (blendingMode == BLEND_FADE_OUT) {
+			GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		} else {
+			Log.w(TAG(), "applyBlendingMode invalid blending mode:" + blendingMode);
+		}
+	}
 }

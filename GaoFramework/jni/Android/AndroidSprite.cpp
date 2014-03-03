@@ -41,6 +41,20 @@ GaoBool AndroidSprite::Create(Transform* transform, Texture* texture) {
 	return result;
 }
 
+GaoVoid AndroidSprite::SetAlpha(GaoReal32 value) {
+
+	LOGD(log, "SetAlpha value:%f", value)
+
+	jobj.CallVoidMethod("SetAlpha", "(F)V", value);
+}
+
+GaoVoid AndroidSprite::SetBlendingMode(GaoInt32 mode) {
+
+	LOGD(log, "SetBlendingMode mode:%d", mode)
+
+	jobj.CallVoidMethod("SetBlendingMode", "(I)V", mode);
+}
+
 GaoVoid AndroidSprite::SetTransform(GaoInt16 coordX, GaoInt16 coordY) {
 
 	LOGD(log, "SetTransform coordX:%d, coordX:%d", coordX, coordY);

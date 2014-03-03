@@ -16,6 +16,9 @@ public:
 	virtual GaoBool Create(Gao::Framework::Transform* transform, 
 		Gao::Framework::Texture* texture);
 
+	virtual GaoVoid SetAlpha(GaoReal32 value);
+	virtual GaoVoid SetBlendingMode(GaoInt32 mode);
+
 	virtual GaoVoid SetTransform(GaoInt16 coordX, GaoInt16 coordY);
 
 	virtual GaoVoid SetTexture(Gao::Framework::Texture* texture);

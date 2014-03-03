@@ -13,7 +13,8 @@ public abstract class Shape {
 	
 	public Shape() {
 		vertex = initVertex();
-		color = initColorBuffer();
+		color = new GLColor();
+		color.set(1, 1, 1, 1);
 		
 		ShaderProgram shaderProgram = ShaderProgramPool.getInstance().get(getClass());
 		if (shaderProgram == null) {
@@ -80,7 +81,7 @@ public abstract class Shape {
 		
 		vertex.bindValueToAttribute(shaderProgram, DEFAULT_ATTR_POSITION);
 		
-		setUniformColor(shaderProgram, DEFAULT_UNIFORM_COLOR, color);
+		setUniformColor(shaderProgram, DEFAULT_UNIFORM_COLOR, color.get());
 		
 		setUniformMVP(shaderProgram, DEFAULT_UNIFORM_MVP, mvpMatrix);
 		
@@ -125,12 +126,7 @@ public abstract class Shape {
 		return new Vertex(VERTEX_COUNT(), COMPONENT_PER_VERTEX());
 	}
 	
-	protected float[] color;
-	protected static final int COLOR_ELEMENT_COUNT = 4;
-	
-	protected float[] initColorBuffer() {
-		return new float[COLOR_ELEMENT_COUNT];
-	}
+	protected GLColor color;
 	
 	public void setColor(float red, float green, float blue, float alpha) {
 		
@@ -138,12 +134,7 @@ public abstract class Shape {
 			Log.d(TAG(), "setColor r:" + red + ",g:" + green + ",b:" + blue + ",a:" + alpha);
 		}
 		
-		if (color != null && color.length == COLOR_ELEMENT_COUNT) {
-			color[0] = red;
-			color[1] = green;
-			color[2] = blue;
-			color[3] = alpha;
-		}
+		color.set(red, green, blue, alpha);
 	}
 	
 	protected ShaderProgram buildShaderProgram() {
