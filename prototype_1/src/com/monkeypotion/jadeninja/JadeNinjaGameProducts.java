@@ -1,4 +1,4 @@
-package com.studioirregular.jadeninja.p1;
+package com.monkeypotion.jadeninja;
 
 import java.util.HashSet;
 import java.util.Set;

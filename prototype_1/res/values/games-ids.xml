@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Google Play game services IDs.
+Save this file as res/values/games-ids.xml in your project.
+-->
+<resources>
+  <string name="app_id">604888026658</string>
+  <string name="achievement_ninja_assault_beginner_class">CgkIopyLsc0REAIQAQ</string>
+  <string name="achievement_ninja_assault_apprentice_class">CgkIopyLsc0REAIQAg</string>
+  <string name="achievement_ninja_assault_veteran_class">CgkIopyLsc0REAIQAw</string>
+  <string name="achievement_ninja_assault_jade_class">CgkIopyLsc0REAIQBA</string>
+  <string name="achievement_army_attack_beginner_class">CgkIopyLsc0REAIQBQ</string>
+  <string name="achievement_army_attack_apprentice_class">CgkIopyLsc0REAIQBg</string>
+  <string name="achievement_army_attack_veteran_class">CgkIopyLsc0REAIQBw</string>
+  <string name="achievement_army_attack_jade_class">CgkIopyLsc0REAIQCA</string>
+  <string name="achievement_ghost_raid_beginner_class">CgkIopyLsc0REAIQCQ</string>
+  <string name="achievement_ghost_raid_apprentice_class">CgkIopyLsc0REAIQCg</string>
+  <string name="achievement_ghost_raid_veteran_class">CgkIopyLsc0REAIQCw</string>
+  <string name="achievement_ghost_raid_jade_class">CgkIopyLsc0REAIQDA</string>
+  <string name="leaderboard_total_distance">CgkIopyLsc0REAIQDQ</string>
+  <string name="leaderboard_best_score">CgkIopyLsc0REAIQDg</string>
+  <string name="leaderboard_boss_defeated">CgkIopyLsc0REAIQDw</string>
+  <string name="leaderboard_daily_challenge_distance">CgkIopyLsc0REAIQEA</string>
+</resources>

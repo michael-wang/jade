@@ -176,6 +176,11 @@ public class GameServices {
 			Log.d(TAG, "ShowAchievements");
 		}
 		
+		if (!isConnected()) {
+			Log.w(TAG, "ShowAchievements not connected to game service.");
+			return;
+		}
+		
 		Intent showAchievements = Games.Achievements.getAchievementsIntent(apiClient);
 		activity.startActivityForResult(showAchievements, achievementsRequestCode);
 	}
@@ -184,6 +189,11 @@ public class GameServices {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "SubmitAchievement id:" + id + ",value:" + value + ",increamental:" + increamental);
+		}
+		
+		if (!isConnected()) {
+			Log.w(TAG, "SubmitAchievement not connected to game service.");
+			return;
 		}
 		
 		if (increamental) {
@@ -206,6 +216,11 @@ public class GameServices {
 			Log.d(TAG, "ShowAllLeaderboards");
 		}
 		
+		if (!isConnected()) {
+			Log.w(TAG, "ShowAllLeaderboards not connected to game service.");
+			return;
+		}
+		
 		Intent show = Games.Leaderboards.getAllLeaderboardsIntent(apiClient);
 		if (show == null) {
 			Log.w(TAG, "ShowLeaderboard unable to obtain intent");
@@ -219,6 +234,11 @@ public class GameServices {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "SubmitScore id:" + id + ",value:" + value);
+		}
+		
+		if (!isConnected()) {
+			Log.w(TAG, "SubmitScore not connected to game service.");
+			return;
 		}
 		
 		Games.Leaderboards.submitScore(apiClient, id, value);

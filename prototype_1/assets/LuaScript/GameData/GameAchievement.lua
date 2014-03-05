@@ -131,23 +131,20 @@ ACH_BOSS_LV5 = 905;
 if IS_PLATFORM_ANDROID then
 ACH_ANDROID_ID = {
 
-	[ACH_JADE_PROTECTION] = "CgkIwKPkvaccEAIQDg",
+	[ACH_NORMAL_MAP1_LV1] = "achievement_ninja_assault_beginner_class",
+	[ACH_NORMAL_MAP1_LV2] = "achievement_ninja_assault_apprentice_class",
+	[ACH_NORMAL_MAP1_LV3] = "achievement_ninja_assault_veteran_class",
+	[ACH_NORMAL_MAP1_LV4] = "achievement_ninja_assault_jade_class",
 
-	[ACH_NORMAL_MAP1_LV1] = "CgkIwKPkvaccEAIQCw",
-	[ACH_NORMAL_MAP1_LV2] = "CgkIwKPkvaccEAIQDA",
-	[ACH_NORMAL_MAP1_LV3] = "CgkIwKPkvaccEAIQDQ",
+	[ACH_NORMAL_MAP2_LV1] = "achievement_army_attack_beginner_class",
+	[ACH_NORMAL_MAP2_LV2] = "achievement_army_attack_apprentice_class",
+	[ACH_NORMAL_MAP2_LV3] = "achievement_army_attack_veteran_class",
+	[ACH_NORMAL_MAP2_LV4] = "achievement_army_attack_jade_class",
 
-	[ACH_COIN_EARNED_LV1] = "CgkIwKPkvaccEAIQDw",
-	[ACH_COIN_EARNED_LV2] = "CgkIwKPkvaccEAIQEA",
-	[ACH_COIN_EARNED_LV3] = "CgkIwKPkvaccEAIQEQ",
-	[ACH_COIN_EARNED_LV4] = "CgkIwKPkvaccEAIQEg",
-
-	[ACH_WEAPON_KATANA_LV1] = "CgkIwKPkvaccEAIQEw";
-	[ACH_WEAPON_KATANA_LV2] = "CgkIwKPkvaccEAIQFA";
-	[ACH_WEAPON_BLADE_LV1]  = "CgkIwKPkvaccEAIQFQ";
-	[ACH_WEAPON_BLADE_LV2]  = "CgkIwKPkvaccEAIQFg";
-	[ACH_WEAPON_SPEAR_LV1]  = "CgkIwKPkvaccEAIQFw";
-	[ACH_WEAPON_SPEAR_LV2]  = "CgkIwKPkvaccEAIQGA";
+	[ACH_NORMAL_MAP3_LV1] = "achievement_ghost_raid_beginner_class",
+	[ACH_NORMAL_MAP3_LV2] = "achievement_ghost_raid_apprentice_class",
+	[ACH_NORMAL_MAP3_LV3] = "achievement_ghost_raid_veteran_class",
+	[ACH_NORMAL_MAP3_LV4] = "achievement_ghost_raid_jade_class",
 
 };
 

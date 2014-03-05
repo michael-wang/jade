@@ -8,10 +8,10 @@ GAO_SOCIAL_SINAWEIBO = 3;
 ITC_TOKEN_PREFIX = "com.monkeypotion.jadeninja";
 
 if IS_PLATFORM_ANDROID then
-    GC_LEADERBOARD_SCORE = "CgkIwKPkvaccEAIQCA";
-    GC_LEADERBOARD_BOSS = "CgkIwKPkvaccEAIQCQ";
-    GC_LEADERBOARD_DISTANCE = "CgkIwKPkvaccEAIQBg";
-    GC_LEADERBOARD_CHALLENGE = "CgkIwKPkvaccEAIQCg";
+    GC_LEADERBOARD_SCORE = "leaderboard_best_score";
+    GC_LEADERBOARD_BOSS = "leaderboard_boss_defeated";
+    GC_LEADERBOARD_DISTANCE = "leaderboard_total_distance";
+    GC_LEADERBOARD_CHALLENGE = "leaderboard_daily_challenge_distance";
 else
     GC_LEADERBOARD_SCORE = "com.monkeypotion.jadeninja.score";
     GC_LEADERBOARD_BOSS = "com.monkeypotion.jadeninja.bosshunt";
