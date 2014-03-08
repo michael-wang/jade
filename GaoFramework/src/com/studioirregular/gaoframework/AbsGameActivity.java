@@ -1,7 +1,5 @@
 package com.studioirregular.gaoframework;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -13,7 +11,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
@@ -84,22 +82,20 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		
 		JavaInterface.getInstance().init(AbsGameActivity.this, renderer);
 		
-		if (!isFilesCopiedToStorage(LUA_FILES_COPY_STATE)) {
-			copyAssetLuaFilesToStorage();
-		}
-		
 		SoundSystem.getInstance().onCreate(AbsGameActivity.this);
 		
 		if (isPortraitMode()) {
 			ActivityOnCreate(
 					Config.WORLD_SHORT_SIDE,
 					Config.WORLD_LONG_SIDE, 
-					Config.Asset.GetLuaScriptPath(AbsGameActivity.this));
+					Config.Asset.LUA_ASSET_PATH,
+					getAssets());
 		} else {
 			ActivityOnCreate(
 					Config.WORLD_LONG_SIDE,
 					Config.WORLD_SHORT_SIDE, 
-					Config.Asset.GetLuaScriptPath(AbsGameActivity.this));
+					Config.Asset.LUA_ASSET_PATH,
+					getAssets());
 		}
 		
 //		setContentView(R.layout.activity_main);
@@ -124,65 +120,6 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		display.getSize(size);
 		
 		return size.x <= size.y;
-	}
-	
-	private static final String LUA_FILES_COPY_STATE = "lua_copied";
-	
-	private boolean isFilesCopiedToStorage(String whichFiles) {
-		
-		SharedPreferences pref = getSharedPreferences(
-				Global.PREF_ASSET_FILE_COPY_STATE, MODE_PRIVATE);
-		if (pref != null) {
-			return pref.getBoolean(whichFiles, false);
-		}
-		return false;
-	}
-	
-	private void setFilesCopiedToStorage(String whichFiles) {
-		
-		SharedPreferences pref = getSharedPreferences(
-				Global.PREF_ASSET_FILE_COPY_STATE, MODE_PRIVATE);
-		
-		if (pref != null) {
-			SharedPreferences.Editor editor = pref.edit();
-			
-			if (editor != null) {
-				editor.putBoolean(whichFiles, true);
-				editor.commit();
-			}
-		}
-	}
-	
-	private boolean copyLuaToStorage() {
-		
-		File toHere = new File(Config.Asset.CopyLuaScriptFolderTo(AbsGameActivity.this));
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "copyLuaToStorage:" + toHere.getAbsolutePath());
-		}
-		
-		try {
-			
-			AssetHelper helper = new AssetHelper();
-			helper.copyAssetsToStorage(getAssets(), Config.Asset.LUA_SCRIPT_FOLDER, toHere);
-			
-		} catch (IOException e) {
-			if (BuildConfig.DEBUG) {
-				e.printStackTrace();
-			}
-			return false;
-		}
-		
-		return true;
-	}
-	
-	private void copyAssetLuaFilesToStorage() {
-		
-		if (copyLuaToStorage()) {
-			setFilesCopiedToStorage(LUA_FILES_COPY_STATE);
-		} else {
-			Log.e(TAG, "copyAssetLuaFilesIfNecessary: failed to copy asset lua files.");
-		}
 	}
 	
 	@Override
@@ -333,7 +270,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	};
 	private ShowFPS showFPS = new ShowFPS();
 	
-	private native void ActivityOnCreate(int worldWidth, int worldHeight, String luaScriptPath);
+	private native void ActivityOnCreate(int worldWidth, int worldHeight, String luaScriptPath, AssetManager am);
 	private native void ActivityOnDestroy();
 	private native void ActivityOnStart();
 	private native void ActivityOnStop();

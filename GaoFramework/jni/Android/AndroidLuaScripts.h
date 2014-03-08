@@ -8,11 +8,11 @@
 
 #include <lua.h>
 #include <Framework/LuaFunction.hpp>
-#include <Android/AndroidApplication.h>
 #include <Android/AndroidAudioRenderer.h>
 #include <Android/AndroidAudioResource.h>
 #include <Android/AndroidFileSystem.h>
 #include <Android/AndroidGraphicsRenderer.h>
+#include <Android/AndroidLuaManagerWrapper.h>
 #include <Android/AndroidSprite.h>
 #include <Android/AndroidTimer.h>
 #include <Android/AndroidTransform.h>
@@ -30,6 +30,13 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 	LOGD(log, "RegisterAndroidClasses")
 	
 	using namespace luabind;
+
+	module(state)
+	[
+		class_<AndroidLuaManagerWrapper>("AndroidLuaManagerWrapper")
+			.def(constructor<>())
+			.def("RunFromAsset", &AndroidLuaManagerWrapper::RunFromAsset)
+	];
 
 	module(state)
 	[

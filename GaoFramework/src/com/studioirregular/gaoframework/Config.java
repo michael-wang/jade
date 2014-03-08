@@ -87,13 +87,7 @@ public class Config {
 			}
 		}
 		
-		public static final String LUA_SCRIPT_FOLDER = "LuaScript";
-		
-		public static String GetLuaScriptPath(Context context) {
-			
-			return CopyLuaScriptFolderTo(context) + File.separator
-					+ LUA_SCRIPT_FOLDER + File.separator;
-		}
+		public static final String LUA_ASSET_PATH = "LuaScript" + File.separator;
 	}
 	
 	public static final int PHONE_WORLD_LONG = 480;

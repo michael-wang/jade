@@ -8,10 +8,11 @@
 #ifndef ANDROIDAPPLICATION_H_
 #define ANDROIDAPPLICATION_H_
 
+#include <android/asset_manager.h>
 #include <Framework/Application.hpp>
-#include <Framework/LuaScriptManager.hpp>
 #include <jni.h>
 #include "AndroidLogger.h"
+#include "AndroidLuaManager.h"
 #include "Resource.h"
 
 
@@ -20,11 +21,15 @@ public:
 	static AndroidApplication* Singleton;
 	
 public:
-	AndroidApplication(int worldWidth, int worldHeight, char* luaScriptPath);
+	AndroidApplication(int worldWidth, int worldHeight, char* luaScriptPath, AAssetManager* am);
 	virtual ~AndroidApplication();
 
 	GaoBool IsInitialized() {
 		return initialized;
+	}
+
+	AndroidLuaManager* GetLuaManager() {
+		return luaManager;
 	}
 
 	GaoVoid Start();
@@ -50,7 +55,7 @@ protected:
 	virtual GaoBool IsAppRunning();
 
 protected:
-	Gao::Framework::LuaScriptManager* luaManager;
+	AndroidLuaManager* luaManager;
 
 	GaoBool CallLua(GaoConstCharPtr func);
 

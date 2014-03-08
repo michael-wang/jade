@@ -1,0 +1,6 @@
+LUAC=../../../tools/lua/bin/luac
+echo "Using lua compiler: $LUAC"
+
+find Core -name *.lua | xargs $LUAC -o ./core.essence
+find GameData -name *.lua | xargs $LUAC -o ./love.essence
+find GameFunc -name *.lua | xargs $LUAC -o ./soul.essence

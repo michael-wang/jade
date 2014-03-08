@@ -15,7 +15,7 @@
 
 using namespace Gao::Framework;
 
-static const char INIT_LOGGER_SCRIPT[]  = "Core/init_logger.lua";
+static const char INIT_LOGGER_SCRIPT[]  = "Android/init_logger.lua";
 static const char CORE_SCRIPT[]         = "Core/Core.lua";
 static const char SCRIPT_ROUTINE_INIT[] = "InitializeLuaAndroid";
 static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
@@ -37,8 +37,8 @@ static const char SCRIPT_ROUTINE_NOTIFY_GAME_SERVICE_CONNECTION_STATUS[] = "OnGa
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
 
-AndroidApplication::AndroidApplication(int width, int height, char* luaScript) :
-	luaManager (new LuaScriptManager()),
+AndroidApplication::AndroidApplication(int width, int height, char* luaScript, AAssetManager* am) :
+	luaManager (new AndroidLuaManager(am)),
 	running (FALSE),
 	log ("native::framework::AndroidApplication", FALSE),
 	worldWidth (width),
@@ -123,12 +123,14 @@ GaoBool AndroidApplication::OnInitialize() {
 	std::string luaScript(luaScriptPath);
 	luaScript += INIT_LOGGER_SCRIPT;
 	LOGD(log, "luaScript:%s", luaScript.c_str());
-	luaManager->RunFromFullPathFile(luaScript);
+	if (!luaManager->RunFromAsset(luaScript)) {
+		LOGE(log, "Failed to run %s", luaScript.c_str());
+	}
 
 	std::string core(luaScriptPath);
 	core += CORE_SCRIPT;
 	LOGD(log, "core:%s", core.c_str());
-	if (!luaManager->RunFromFullPathFile(core)) {
+	if (!luaManager->RunFromAsset(core)) {
 		LOGE(log, "failed to run %s", core.c_str())
 		return FALSE;
 	}

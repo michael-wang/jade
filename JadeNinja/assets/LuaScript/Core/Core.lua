@@ -115,6 +115,7 @@ g_AudioEngine = nil;
 g_Timer = nil;
 g_AppData = nil;
 g_AppIsRunning = false;
+g_LuaManager = nil;
 
 
 
@@ -129,6 +130,7 @@ function InitializeLuaAndroid(worldWidth, worldHeight, luaScriptPath)
 	IS_PLATFORM_ANDROID = true;
 	APP_ASSET_PATH = "";
 	APP_LUA_PATH = luaScriptPath;
+	g_LuaManager = AndroidLuaManagerWrapper();
 
 	local portrait = (worldWidth < worldHeight);
 	local orientation = portrait and 0 or 1;
@@ -582,7 +584,15 @@ end
 function LoadScript(name, path)
     assert(name);
     assert(path);
-    dofile(string.format("%s%s%s", path, name, SCRIPT_FILE_EXT));    
+
+    local file = string.format("%s%s%s", path, name, SCRIPT_FILE_EXT);
+    g_Logger:Show("LoadScript file:" .. file);
+
+    if IS_PLATFORM_ANDROID then
+    	g_LuaManager:RunFromAsset(file);
+    else
+    	dofile(file);    
+	end
 end
 
 -------------------------------------------------------------------------
