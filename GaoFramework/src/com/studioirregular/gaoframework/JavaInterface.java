@@ -379,10 +379,10 @@ public class JavaInterface {
 		return GameServices.getInstance().isConnected();
 	}
 	
-	public void SubmitAchievement(String id, float value, boolean increamental) {
+	public void SubmitAchievement(String id, float value, boolean unlock) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "SubmitAchievement id:" + id + ",value:" + value + ",increamental:" + increamental);
+			Log.d(TAG, "SubmitAchievement id:" + id + ",value:" + value + ",unlock:" + unlock);
 		}
 		
 		final String idValue = GetString(id);
@@ -390,7 +390,7 @@ public class JavaInterface {
 			throw new IllegalArgumentException("SubmitAchievement invalid id:" + id);
 		}
 		
-		GameServices.getInstance().SubmitAchievement(idValue, value, increamental);
+		GameServices.getInstance().SubmitAchievement(idValue, value, unlock);
 	}
 	
 	public void SubmitScore(String id, int value) {

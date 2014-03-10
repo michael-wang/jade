@@ -185,10 +185,10 @@ public class GameServices {
 		activity.startActivityForResult(showAchievements, achievementsRequestCode);
 	}
 	
-	public void SubmitAchievement(String id, float value, boolean increamental) {
+	public void SubmitAchievement(String id, float value, boolean unlock) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "SubmitAchievement id:" + id + ",value:" + value + ",increamental:" + increamental);
+			Log.d(TAG, "SubmitAchievement id:" + id + ",value:" + value + ",unlock:" + unlock);
 		}
 		
 		if (!isConnected()) {
@@ -196,14 +196,17 @@ public class GameServices {
 			return;
 		}
 		
-		if (increamental) {
-			int steps = Math.round(value);
-			if (steps <= 0) {
-				steps = 1;	// steps value must > 0;
-			}
-			Games.Achievements.setSteps(apiClient, id, steps);
-		} else {
+		if (unlock) {
 			Games.Achievements.unlock(apiClient, id);
+			
+		} else {
+			// increamental
+			int steps = Math.round(value);
+			
+			if (0 < steps) {
+				// steps value must > 0;
+				Games.Achievements.setSteps(apiClient, id, steps);
+			}
 		}
 	}
 	

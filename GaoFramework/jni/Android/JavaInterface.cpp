@@ -349,15 +349,15 @@ void JavaInterface::ShowAchievements() {
 	jobj.CallVoidMethod("ShowAchievements", "()V");
 }
 
-void JavaInterface::SubmitAchievement(const char* id, float value, bool increamental) {
+void JavaInterface::SubmitAchievement(const char* id, float value, bool unlock) {
 
-	LOGD(log, "SubmitAchievement id:%s, value:%f, increamental:%d", id, value, increamental)
+	LOGD(log, "SubmitAchievement id:%s, value:%f, unlock:%d", id, value, unlock)
 
 	JNIEnv* env = g_JniEnv->Get();
 
 	jstring jid = id != NULL ? env->NewStringUTF(id) : NULL;
 
-	jobj.CallVoidMethod("SubmitAchievement", "(Ljava/lang/String;FZ)V", jid, value, increamental);
+	jobj.CallVoidMethod("SubmitAchievement", "(Ljava/lang/String;FZ)V", jid, value, unlock);
 
 	if (jid != NULL) env->DeleteLocalRef(jid);
 }

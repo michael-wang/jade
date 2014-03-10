@@ -247,10 +247,6 @@ function UpdateAchievement(id, inc, overwrite, doSave)
     inc = inc or 1;
 
     local repeatable = GC_ACHEIVEMENT_REPEATABLE[id] or false;
-    if IS_PLATFORM_ANDROID then
-        -- Android use 'repeatable' to mean increamental (more than one step).
-        repeatable = not ACH_ANDROID_ONE_STEP[id];
-    end
     local ach = GC_ACH_POOL[id];
     
     if (overwrite) then
@@ -285,7 +281,8 @@ function UpdateAchievement(id, inc, overwrite, doSave)
 
         if IS_PLATFORM_ANDROID then
             local androidID = ACH_ANDROID_ID[id];
-            GameKit.SubmitAchievement(androidID, percent, repeatable);
+            local unlock = maxCount == 1;
+            GameKit.SubmitAchievement(androidID, percent, unlock);
         else
             GameKit.SubmitAchievement(GC_ACHEIVEMENT_PREFIX .. id, percent, repeatable);
         end

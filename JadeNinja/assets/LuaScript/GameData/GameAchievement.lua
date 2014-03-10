@@ -241,10 +241,6 @@ ACH_ANDROID_ID = {
     [ACH_BOSS_LV4] = "achievement_boss_hunt_evil_fox",
     [ACH_BOSS_LV5] = "achievement_boss_hunt_devil_samurai",
 };
-
-ACH_ANDROID_ONE_STEP = {
-	[ACH_JADE_PROTECTION] = true,
-};
 end -- IS_PLATFORM_ANDROID
 
 -------------------------------------------------------------------------

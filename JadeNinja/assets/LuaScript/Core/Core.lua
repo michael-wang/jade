@@ -586,7 +586,6 @@ function LoadScript(name, path)
     assert(path);
 
     local file = string.format("%s%s%s", path, name, SCRIPT_FILE_EXT);
-    g_Logger:Show("LoadScript file:" .. file);
 
     if IS_PLATFORM_ANDROID then
     	g_LuaManager:RunFromAsset(file);

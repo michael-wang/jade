@@ -347,12 +347,12 @@ void SubmitScore(const char* category, double score)
     java->SubmitScore(category, (int)score);
 }
 
-void SubmitAchievement(const char* identifier, float percent, bool repeatable)
+void SubmitAchievement(const char* identifier, float percent, bool unlock)
 {
     // assert(identifier);
     // assert(percent >= 0);
     // [g_ViewController submitAchievement:[NSString stringWithUTF8String:identifier] percentComplete:percent repeatable:repeatable];
-    LOGD(logger, "SubmitAchievement identifier:%s, percent:%f, repeatable:%d", identifier, percent, repeatable)
+    LOGD(logger, "SubmitAchievement identifier:%s, percent:%f, unlock:%d", identifier, percent, unlock)
 
     JavaInterface* java = JavaInterface::GetSingletonPointer();
 
@@ -361,7 +361,7 @@ void SubmitAchievement(const char* identifier, float percent, bool repeatable)
         return;
     }
 
-    java->SubmitAchievement(identifier, percent, repeatable);
+    java->SubmitAchievement(identifier, percent, unlock);
 }
 
 void ResetAchievements()
