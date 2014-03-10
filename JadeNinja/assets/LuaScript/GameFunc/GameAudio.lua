@@ -202,7 +202,7 @@ AudioManager =
 	            { SFX_CHAR_INNOCENT_ELDER, "sfx_char_innocent_oldfemale.ogg" },
 	            { SFX_CHAR_SKILL_BLOCK, "sfx_char_skill_block.ogg" },
 	            { SFX_CHAR_SKILL_HEAL, "sfx_char_skill_heal.ogg" },
-				{ SFX_CHAR_SKILL_INVINCIBLE, "sfx_char_animal_skill.caf" },
+				{ SFX_CHAR_SKILL_INVINCIBLE, "sfx_char_animal_skill.ogg" },
 				{ SFX_CHAR_NINJA_WOUNDED_1, "sfx_char_ninja_wounded1.ogg" },
 				{ SFX_CHAR_NINJA_WOUNDED_2, "sfx_char_ninja_wounded2.ogg" },
 				{ SFX_CHAR_NINJA_WOUNDED_3, "sfx_char_ninja_wounded3.ogg" },
