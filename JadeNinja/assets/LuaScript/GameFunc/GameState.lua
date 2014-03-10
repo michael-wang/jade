@@ -1414,8 +1414,8 @@ ScrollPreEffectBackdropStates =
     {
         OnEnter = function(go, sm, args)
             if (args) then
-                go["Transform"]:SetTranslate(480, 52 + 107);
-                go["Motion"]:AppendNextTarget(0, 52 + 107);
+                go["Transform"]:SetTranslate(480, 51 + 107);
+                go["Motion"]:AppendNextTarget(0, 51 + 107);
             else
                 go["Transform"]:SetTranslate(-480, 52);
                 go["Motion"]:AppendNextTarget(0, 52);
