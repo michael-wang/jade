@@ -696,46 +696,28 @@ UIManager =
 	--------------------------------------------------------------------------------
 	-- Return true if back key consumed, false if not.
 	ProcessBack = function(self)
+		-- g_Logger:Show("ProcessBack");
 
 		local back = self:FindActiveBackUI();
-		if (back == nil) then
-			g_Logger:Show("ProcessBack: cannot find back UI.");
+		if back then
 
-			-- if (self.m_ModalUI ~= nil) then
-			-- 	for key, ui in pairs(self.m_ModalUI) do
-			-- 		g_Logger:Show("m_ModalUI[" .. key .. "]");
-			-- 		for k, _ in pairs(ui["m_Widgets"]) do
-			-- 			g_Logger:Show("widgets[" .. k .. "]");
-			-- 		end
-			-- 	end
-			-- end
-			-- if (self.m_ActiveUI ~= nil) then
-			-- 	for key, ui in pairs(self.m_ActiveUI) do
-			-- 		g_Logger:Show("m_ActiveUI[" .. key .. "]");
-			-- 		for k, _ in pairs(ui["m_Widgets"]) do
-			-- 			g_Logger:Show("widgets[" .. k .. "]");
-			-- 		end
-			-- 	end
-			-- end
+			-- process only if there is no modal UI.
+			if (self.m_OnModalUI) then
+				-- g_Logger:Show("ProcessBack: back consumed, but NOT processed.");
+			else
+				if (back["m_OnMouseUp"] ~= nil) then
+					back["m_OnMouseUp"](0, 0);
+					-- g_Logger:Show("ProcessBack: back consumed, and also processed.");
+				else
+					-- g_Logger:Show("ProcessBack find back UI, but cannot find its m_OnMouseUp.");
+				end
+			end
 
-			return false;
-		end
-
-		-- process only if there is no modal UI.
-		if (self.m_OnModalUI) then
-			-- not process, but consumed.
-			g_Logger:Show("ProcessBack: back consumed, but NOT processed.");
 			return true;
 		end
 
-		if (back["m_OnMouseUp"] ~= nil) then
-			back["m_OnMouseUp"](0, 0);
-			g_Logger:Show("ProcessBack: back consumed, and also processed.");
-		else
-			g_Logger:Show("ProcessBack find back UI, but cannot find its m_OnMouseUp.");
-		end
-
-		return true;
+		local consumeBack = not self:IsInMainMenu();
+		return consumeBack;
 	end,
 	--------------------------------------------------------------------------------
 	FindActiveBackUI = function(self)
@@ -755,6 +737,18 @@ UIManager =
 		end
 
 		return nil;
+	end,
+	--------------------------------------------------------------------------------
+	IsInMainMenu = function(self)
+
+		local id = StageManager:GetCurrentStageId();
+		-- g_Logger:Show("Current stage:" .. id);
+
+		if id == "MainEntry" then
+			return true;
+		end
+
+		return false;
 	end,
 };
 
