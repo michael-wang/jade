@@ -225,12 +225,12 @@ function ResetDefaultDataDelegate()
         ds["Level"]["Normal"][3] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
         ds["Level"]["Normal"][4] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
         ds["Level"]["Normal"][5] = { Distance = 3000, Coin = 0, Score = 100000, Medal=3, };
-        ds["Level"]["Shadow"][1] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
-        ds["Level"]["Shadow"][1] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
-        ds["Level"]["Shadow"][2] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
-        ds["Level"]["Shadow"][3] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
-        ds["Level"]["Shadow"][4] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
-        ds["Level"]["Shadow"][5] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        -- ds["Level"]["Shadow"][1] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        -- ds["Level"]["Shadow"][1] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        -- ds["Level"]["Shadow"][2] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        -- ds["Level"]["Shadow"][3] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        -- ds["Level"]["Shadow"][4] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
+        -- ds["Level"]["Shadow"][5] = { Distance = 3000, Coin = 0, Score = 1000000, Medal=3, };
     end
 
     return dataSet;
