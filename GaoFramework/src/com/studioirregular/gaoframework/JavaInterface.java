@@ -332,6 +332,10 @@ public class JavaInterface {
 		AbsGameActivity activity = (AbsGameActivity)context;
 		BuyProduct buy = new BuyProduct(id, activity);
 		activity.runOnUiThread(buy);
+
+		// For debug: send fake purchase success to lua.
+//		NotifyBuyProductResult notify = new NotifyBuyProductResult(id, true);
+//		GLThread.getInstance().scheduleFunction(notify);
 	}
 	
 	public void RestorePurchases() {

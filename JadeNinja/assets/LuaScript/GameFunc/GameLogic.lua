@@ -1514,7 +1514,9 @@ end
 -------------------------------------------------------------------------
 function ReviveFromIAP()
     --log("ReviveFromIAP !!!!!");
-    UIManager:ToggleUI("Wait");
+    if not IS_PLATFORM_ANDROID then
+        UIManager:ToggleUI("Wait");
+    end
     StageManager:ChangeStage("InGame");
     ReviveGame(false);
     GameKit.LogEventWithParameter("Revive", "YES", "IAP", false);

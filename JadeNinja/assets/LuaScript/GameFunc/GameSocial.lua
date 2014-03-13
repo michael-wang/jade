@@ -824,7 +824,7 @@ function BuyProduct(id, func, showMessage)
     GameKit.LogEventWithParameter("IAP", id, "product", false);    
     GameKit.BuyProduct(id, showMessage);
     
-    --IAP_PRODUCT_CALLBACK[id] = func;
+    IAP_PRODUCT_CALLBACK[id] = func;
 end
 
 -------------------------------------------------------------------------
@@ -926,12 +926,17 @@ end
 
 -------------------------------------------------------------------------
 function OnBoughtKobanRevival(id)
+    --log("OnBoughtKobanRevival id:" .. id);
     if (id == "com.monkeypotion.jadeninja.newkoban1") then
         GameKit.LogEventWithLocale("IAP_Country", "newkoban1_revival");
         LogPocket(1);
         KobanEarned(TREASURE_COUNT[1] + 1);
-    	UIManager:ToggleUI("Wait");
-    	UIManager:GetWidgetComponent("Wait", "Content", "StateMachine"):ChangeState("revive");
+
+        if not IS_PLATFORM_ANDROID then
+            UIManager:ToggleUI("Wait");
+            UIManager:GetWidgetComponent("Wait", "Content", "StateMachine"):ChangeState("revive");
+        end
+        ReviveFromIAP();
     end
 end
 
