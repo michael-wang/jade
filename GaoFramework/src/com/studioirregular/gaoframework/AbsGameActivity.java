@@ -478,10 +478,13 @@ public abstract class AbsGameActivity extends FragmentActivity {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					JavaInterface.getInstance().SendEmail(
-							"debug_send_from_gmail_subject",
-							"debug_send_from_gmail_recipient",
-							"debug_send_from_gmail_message");
+					
+					final JavaInterface ji = JavaInterface.getInstance();
+					
+					ji.SendEmail(
+							ji.GetString("debug_send_from_gmail_subject"),
+							ji.GetString("debug_send_from_gmail_recipient"),
+							ji.GetString("debug_send_from_gmail_message"));
 				}
 			})
 			.setNegativeButton(JavaInterface.getInstance().GetString("debug_cannot_test_iap_no"), null)

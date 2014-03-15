@@ -1,8 +1,14 @@
 package com.studioirregular.gaoframework.gles;
 
+import android.util.Log;
+
+import com.studioirregular.gaoframework.BuildConfig;
+
 
 public class GLColor {
 
+	private static final String TAG = "java-GLColor";
+	
 	public static final int NUMBER_OF_COMPONENTS = 4;	// r,g,b,a
 	
 	private float[] values;
@@ -47,7 +53,10 @@ public class GLColor {
 	private void checkValue(float value, String name) {
 		
 		if (value < 0 || 1.0f < value) {
-			throw new IllegalArgumentException(name + " Invalid value:" + value + ", valid range: [0, 1]");
+			final String msg = name + ": invalid value:" + value + ", valid range: [0, 1]";
+			if (BuildConfig.DEBUG) {
+				Log.e(TAG, msg);
+			}
 		}
 	}
 }

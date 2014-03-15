@@ -6,6 +6,7 @@ import java.io.IOException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -286,13 +287,20 @@ public class JavaInterface {
 					+ callback);
 		}
 		
-		Intent i = new Intent(Intent.ACTION_SEND);
-		i.setType("message/rfc822");
-		i.putExtra(Intent.EXTRA_EMAIL  , new String[]{GetString(recipient)});
-		i.putExtra(Intent.EXTRA_SUBJECT, GetString(subject));
-		i.putExtra(Intent.EXTRA_TEXT   , GetString(text));
+		Intent sendMail = new Intent(Intent.ACTION_SEND);
+		sendMail.setType("message/rfc822");
 		
-		Intent chooseEmailApp = Intent.createChooser(i, GetString("debug_cannot_test_iap_ok"));
+		if (!TextUtils.isEmpty(recipient)) {
+			sendMail.putExtra(Intent.EXTRA_EMAIL  , new String[]{recipient});
+		}
+		if (!TextUtils.isEmpty(subject)) {
+			sendMail.putExtra(Intent.EXTRA_SUBJECT, subject);
+		}
+		if (!TextUtils.isEmpty(text)) {
+			sendMail.putExtra(Intent.EXTRA_TEXT   , text);
+		}
+		
+		Intent chooseEmailApp = Intent.createChooser(sendMail, GetString("debug_cannot_test_iap_ok"));
 		AbsGameActivity activity = (AbsGameActivity)context;
 		try {
 			activity.startActivity(chooseEmailApp);
