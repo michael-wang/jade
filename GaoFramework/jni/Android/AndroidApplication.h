@@ -21,7 +21,7 @@ public:
 	static AndroidApplication* Singleton;
 	
 public:
-	AndroidApplication(int worldWidth, int worldHeight, char* luaScriptPath, AAssetManager* am);
+	AndroidApplication(int worldWidth, int worldHeight, char* luaScriptPath, AAssetManager* am, GaoBool debugMode);
 	virtual ~AndroidApplication();
 
 	GaoBool IsInitialized() {
@@ -65,6 +65,8 @@ protected:
 	GaoBool running;
 	GaoBool initialized;
 	AndroidLogger log;
+
+	GaoBool debugMode;
 };
 
 #endif /* ANDROIDAPPLICATION_H_ */

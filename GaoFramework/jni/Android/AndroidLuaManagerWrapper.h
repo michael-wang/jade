@@ -32,6 +32,21 @@ public:
 		return luaManager->RunFromAsset(strPath);
 	}
 
+	GaoBool RunFromFullPathFile(const char* path) {
+
+		LOGD(log, "RunFromFullPathFile path:%s", path)
+
+		AndroidLuaManager* luaManager = AndroidApplication::Singleton->GetLuaManager();
+
+		if (luaManager == NULL) {
+			LOGE(log, "RunFromFullPathFile luaManager == NULL")
+			return FALSE;
+		}
+
+		std::string strPath = path;
+		return luaManager->RunFromFullPathFile(strPath);
+	}
+
 private:
 	AndroidLogger log;
 };

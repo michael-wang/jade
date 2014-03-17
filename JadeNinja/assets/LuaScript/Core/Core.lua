@@ -57,7 +57,7 @@ PREBUILD_DEVICE_SCRIPT_POOL =
 	[APP_DEVICE_ANDROID_TABLET] = "android.bottle",
 };
 
-APP_DEBUG_MODE = true;
+APP_DEBUG_MODE = false;
 APP_USE_COMPILED_SCRIPT = false;
 APP_ASSET_PATH = nil;
 APP_LUA_PATH = nil;
@@ -124,13 +124,14 @@ g_LuaManager = nil;
 --=======================================================================
 
 -------------------------------------------------------------------------
-function InitializeLuaAndroid(worldWidth, worldHeight, luaScriptPath)
+function InitializeLuaAndroid(worldWidth, worldHeight, luaScriptPath, debugMode)
 
-	g_Logger:Show("InitializeLuaAndroid w:" .. worldWidth .. ",h:" .. worldHeight .. ",luaScriptPath:" .. luaScriptPath);
+	g_Logger:Show("InitializeLuaAndroid w:" .. worldWidth .. ",h:" .. worldHeight .. ",luaScriptPath:" .. luaScriptPath .. ",debugMode:" .. tostring(debugMode));
 	IS_PLATFORM_ANDROID = true;
 	APP_ASSET_PATH = "";
 	APP_LUA_PATH = luaScriptPath;
 	g_LuaManager = AndroidLuaManagerWrapper();
+	APP_DEBUG_MODE = debugMode;
 
 	local portrait = (worldWidth < worldHeight);
 	local orientation = portrait and 0 or 1;
@@ -588,7 +589,12 @@ function LoadScript(name, path)
     local file = string.format("%s%s%s", path, name, SCRIPT_FILE_EXT);
 
     if IS_PLATFORM_ANDROID then
-    	g_LuaManager:RunFromAsset(file);
+    	if APP_DEBUG_MODE then
+    		-- g_Logger:Show("LoadScript file:" .. file);
+    		g_LuaManager:RunFromFullPathFile(file);
+    	else
+    		g_LuaManager:RunFromAsset(file);
+    	end
     else
     	dofile(file);    
 	end

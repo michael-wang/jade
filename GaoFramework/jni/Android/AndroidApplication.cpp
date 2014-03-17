@@ -37,14 +37,15 @@ static const char SCRIPT_ROUTINE_NOTIFY_GAME_SERVICE_CONNECTION_STATUS[] = "OnGa
 AndroidApplication* AndroidApplication::Singleton = NULL;
 
 
-AndroidApplication::AndroidApplication(int width, int height, char* luaScript, AAssetManager* am) :
+AndroidApplication::AndroidApplication(int width, int height, char* luaScript, AAssetManager* am, GaoBool debug) :
 	luaManager (new AndroidLuaManager(am)),
 	running (FALSE),
 	log ("native::framework::AndroidApplication", FALSE),
 	worldWidth (width),
 	worldHeight (height),
 	luaScriptPath (luaScript),
-	initialized (FALSE) {
+	initialized (FALSE),
+	debugMode (debug) {
 
 	LOGD(log, "Constructor w:%d, h:%d, luaScript:%s", width, height, luaScript)
 
@@ -123,16 +124,29 @@ GaoBool AndroidApplication::OnInitialize() {
 	std::string luaScript(luaScriptPath);
 	luaScript += INIT_LOGGER_SCRIPT;
 	LOGD(log, "luaScript:%s", luaScript.c_str());
-	if (!luaManager->RunFromAsset(luaScript)) {
-		LOGE(log, "Failed to run %s", luaScript.c_str());
+	if (debugMode) {
+		if (!luaManager->RunFromFullPathFile(luaScript)) {
+			LOGE(log, "Failed to run %s", luaScript.c_str());
+		}
+	} else {
+		if (!luaManager->RunFromAsset(luaScript)) {
+			LOGE(log, "Failed to run %s", luaScript.c_str());
+		}
 	}
 
 	std::string core(luaScriptPath);
 	core += CORE_SCRIPT;
 	LOGD(log, "core:%s", core.c_str());
-	if (!luaManager->RunFromAsset(core)) {
-		LOGE(log, "failed to run %s", core.c_str())
-		return FALSE;
+	if (debugMode) {
+		if (!luaManager->RunFromFullPathFile(core)) {
+			LOGE(log, "failed to run %s", core.c_str())
+			return FALSE;
+		}
+	} else {
+		if (!luaManager->RunFromAsset(core)) {
+			LOGE(log, "failed to run %s", core.c_str())
+			return FALSE;
+		}
 	}
 
 	if (!luaManager->GetFunction(SCRIPT_ROUTINE_INIT)) {
@@ -142,6 +156,7 @@ GaoBool AndroidApplication::OnInitialize() {
 	luaManager->PushValue(worldWidth);
 	luaManager->PushValue(worldHeight);
 	luaManager->PushValue(luaScriptPath);
+	luaManager->PushValue(debugMode);
 	LOGD(log, "before call function: %s", SCRIPT_ROUTINE_INIT);
 	if (!luaManager->CallFunction()) {
 		LOGE(log, "Failed to run lua function: %s", SCRIPT_ROUTINE_INIT);

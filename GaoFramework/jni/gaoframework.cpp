@@ -36,17 +36,17 @@ static char* getJniString(JNIEnv* env, jstring jstr) {
 /*
  * Class:     com_studioirregular_gaoframework_AbsGameActivity
  * Method:    ActivityOnCreate
- * Signature: (IILjava/lang/String;Landroid/content/res/AssetManager;)V
+ * Signature: (IILjava/lang/String;Landroid/content/res/AssetManager;Z)V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnCreate
-  (JNIEnv *env, jobject obj, jint worldWidth, jint worldHeight, jstring luaScriptPath, jobject assetManager) {    
+  (JNIEnv *env, jobject obj, jint worldWidth, jint worldHeight, jstring luaScriptPath, jobject assetManager, jboolean debugMode) {    
     LOGD(logger, "ActivityOnCreate")
 
     WORLD_WIDTH = worldWidth;
     WORLD_HEIGHT = worldHeight;
     AAssetManager* am = AAssetManager_fromJava(env, assetManager);
 
-    app = new AndroidApplication(worldWidth, worldHeight, getJniString(env, luaScriptPath), am);
+    app = new AndroidApplication(worldWidth, worldHeight, getJniString(env, luaScriptPath), am, debugMode);
     jni = new JniEnv();
 }
 

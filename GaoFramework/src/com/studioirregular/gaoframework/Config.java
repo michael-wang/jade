@@ -87,7 +87,10 @@ public class Config {
 			}
 		}
 		
-		public static final String LUA_ASSET_PATH = "LuaScript" + File.separator;
+		public static final String LUA_ASSET_PATH = BuildConfig.DEBUG ?
+				Environment.getExternalStoragePublicDirectory(
+						Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + File.separator + "LuaScript" + File.separator : 
+				"LuaScript" + File.separator;
 	}
 	
 	public static final int PHONE_WORLD_LONG = 480;

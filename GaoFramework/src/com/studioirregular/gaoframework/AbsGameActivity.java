@@ -84,19 +84,15 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		
 		SoundSystem.getInstance().onCreate(AbsGameActivity.this);
 		
-		if (isPortraitMode()) {
-			ActivityOnCreate(
-					Config.WORLD_SHORT_SIDE,
-					Config.WORLD_LONG_SIDE, 
-					Config.Asset.LUA_ASSET_PATH,
-					getAssets());
-		} else {
-			ActivityOnCreate(
-					Config.WORLD_LONG_SIDE,
-					Config.WORLD_SHORT_SIDE, 
-					Config.Asset.LUA_ASSET_PATH,
-					getAssets());
-		}
+		final int worldWidth  = isPortraitMode() ? Config.WORLD_SHORT_SIDE : Config.WORLD_LONG_SIDE;
+		final int worldHeight = isPortraitMode() ? Config.WORLD_LONG_SIDE : Config.WORLD_SHORT_SIDE;
+		
+		ActivityOnCreate(
+				worldWidth,
+				worldHeight, 
+				Config.Asset.LUA_ASSET_PATH,
+				getAssets(),
+				BuildConfig.DEBUG);
 		
 //		setContentView(R.layout.activity_main);
 //		fpsTextView = (TextView)findViewById(R.id.textview);
@@ -270,7 +266,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	};
 	private ShowFPS showFPS = new ShowFPS();
 	
-	private native void ActivityOnCreate(int worldWidth, int worldHeight, String luaScriptPath, AssetManager am);
+	private native void ActivityOnCreate(int worldWidth, int worldHeight, String luaScriptPath, AssetManager am, boolean debugMode);
 	private native void ActivityOnDestroy();
 	private native void ActivityOnStart();
 	private native void ActivityOnStop();

@@ -36,6 +36,7 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 		class_<AndroidLuaManagerWrapper>("AndroidLuaManagerWrapper")
 			.def(constructor<>())
 			.def("RunFromAsset", &AndroidLuaManagerWrapper::RunFromAsset)
+			.def("RunFromFullPathFile", &AndroidLuaManagerWrapper::RunFromFullPathFile)
 	];
 
 	module(state)
