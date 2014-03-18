@@ -1227,6 +1227,8 @@ UIFrame =
 			self.m_SwipeData["swipeDuration"] = g_Timer:GetElapsedTime();
 			self.m_SwipeData["x"] = x;
 			self.m_SwipeData["y"] = y;
+			self.m_SwipeData["xBegin"] = x;
+			self.m_SwipeData["yBegin"] = y;
 		end
 	end,
 	--------------------------------------------------------------------------------
@@ -1275,16 +1277,17 @@ UIFrame =
 			return;
 		end
 		
-		local newCenterIndex;
-		local finalOffset;
+		local newCenterIndex = self.m_SwipeData["centerIndex"];
+		local xDiff = x - self.m_SwipeData["xBegin"];
+
 		-- Quick swipe gesture
-		if (g_Timer:GetElapsedTime() - self.m_SwipeData["swipeDuration"] <= 0.2) then --0.3) then
-			newCenterIndex = self.m_SwipeData["centerIndex"];
-			
-			if (x - self.m_SwipeData["x"] > 0) then
+		local swipeDuration = g_Timer:GetElapsedTime() - self.m_SwipeData["swipeDuration"];
+		if (swipeDuration <= 200) then
+
+			if (0 < xDiff) then
 			-- Center to previous index
 				newCenterIndex = newCenterIndex - 1;
-			elseif (x - self.m_SwipeData["x"] < 0) then
+			elseif (xDiff < 0) then
 			-- Center to next index
 				newCenterIndex = newCenterIndex + 1;
 			end
@@ -1295,22 +1298,72 @@ UIFrame =
 				newCenterIndex = self.m_SwipeData["maxIndex"];
 			end
 
-			finalOffset = self.m_SwipeData["center"] - self.m_SwipeData["obj"][newCenterIndex]["Transform"]:GetTranslateX();
 		else
-		-- Compare object distances, center to nearest object
-			local center = self.m_SwipeData["center"];		
-			local offset = 1000000;
-			
-			for index, obj in ipairs(self.m_SwipeData["obj"]) do
-				local pos = obj["Transform"]:GetTranslateX();
-				
-				if (offset > math.abs(center - pos)) then
-					offset = math.abs(center - pos);
-					finalOffset = center - pos;
-					newCenterIndex = index;
-				end			
-			end		
+			local threshold = 0.9;
+			local center = self.m_SwipeData["center"];
+			local centerIndex = self.m_SwipeData["centerIndex"];
+			-- g_Logger:Show("OnSwipeEndedAxisX centerIndex:" .. centerIndex .. ", xDiff:" .. xDiff);
+
+			if (0 < xDiff) then
+				-- g_Logger:Show("Swipe direction o-->", obj move to right);
+
+				for i = centerIndex, 1, -1 do
+
+					local obj = self.m_SwipeData["obj"][i];
+					local pos = obj["Transform"]:GetTranslateX();
+					-- g_Logger:Show("i:" .. i .. ", pos:" .. pos .. ", center:" .. center);
+
+					if (pos <= center) then
+
+						local dx = center - pos;
+						local dxNext = self.m_SwipeData["obj"][i + 1]["Transform"]:GetTranslateX() - pos;
+						local dxToPrev = dxNext * threshold;
+						-- g_Logger:Show("dxToPrev:" .. dxToPrev .. ", dx:" .. dx );
+
+						if (dxToPrev <= dx) then
+							newCenterIndex = i + 1;
+						else
+							newCenterIndex = i;
+						end
+
+						break;
+					end
+
+				end
+			elseif (xDiff < 0) then
+				-- g_Logger:Show("Swipe direction: <--o, obj move to left.");
+
+				local maxIndex = self.m_SwipeData["maxIndex"];
+
+				for i = centerIndex, maxIndex do
+
+					local obj = self.m_SwipeData["obj"][i];
+					local pos = obj["Transform"]:GetTranslateX();
+					-- g_Logger:Show("i:" .. i .. ", pos:" .. pos .. ", center:" .. center);
+
+					if (center < pos) then
+
+						local dx = pos - center;
+						local dxPrev = pos - self.m_SwipeData["obj"][i - 1]["Transform"]:GetTranslateX();
+						local dxToNext = dxPrev * threshold;
+						-- g_Logger:Show("dxToNext:" .. dxToNext .. ", dx:" .. dx );
+
+						if (dxToNext <= dx) then
+							newCenterIndex = i - 1;
+						else
+							newCenterIndex = i;
+						end
+
+						break;
+					end
+				end
+			end
+
 		end
+
+		g_Logger:Show("OnSwipeEndedAxisX newCenterIndex:" .. newCenterIndex);
+
+		local finalOffset = self.m_SwipeData["center"] - self.m_SwipeData["obj"][newCenterIndex]["Transform"]:GetTranslateX();
 
 		--log("NEW CENTER INDEX: "..newCenterIndex.." / finalOffset: "..finalOffset)
 		self.m_SwipeData["centerIndex"] = newCenterIndex;
