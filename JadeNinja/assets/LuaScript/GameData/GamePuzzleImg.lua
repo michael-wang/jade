@@ -6109,6 +6109,50 @@ PuzzleImage
 -----------------------------------------------------------------
 PuzzleImage
 {
+	name = "ui_history_button.pi",
+	image = "ui_history_button.png",
+
+	{
+		name = "ui_history_button_back",
+		uv = { 0,0,0.1641791,0.9333333 },
+		size = { 55,42 },
+	},
+
+	{
+		name = "ui_button_achievement",
+		uv = { 0.1641791,0,0.3283582,0.9333333 },
+		size = { 55,42 },
+	},
+
+	{
+		name = "ui_button_leaderboard",
+		uv = { 0.3283582,0,0.4925373,0.9333333 },
+		size = { 55,42 },
+	},
+
+	{
+		name = "ui_button_placeholder_1",
+		uv = { 0.4925373,0,0.6567164,0.9333333 },
+		size = { 55,42 },
+	},
+
+	{
+		name = "ui_button_placeholder_2",
+		uv = { 0.6567164,0,0.8208955,0.9333333 },
+		size = { 55,42 },
+	},
+
+	{
+		name = "ui_button_placeholder_3",
+		uv = { 0.8208955,0,0.9850746,0.9333333 },
+		size = { 55,42 },
+	},
+}
+
+
+-----------------------------------------------------------------
+PuzzleImage
+{
 	name = "ui_challenge.pi",
 	image = "ui_challenge.png",
 

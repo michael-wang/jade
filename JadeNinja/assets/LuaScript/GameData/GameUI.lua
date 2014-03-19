@@ -583,119 +583,140 @@ GameUITemplate
 			},
 		},
 		
-		{
-			class = "PuzzleCheckButton",
-			name = "iCloud",
-			x = 380 - 53,
-			y = 279,
+		-- {
+		-- 	class = "PuzzleCheckButton",
+		-- 	name = "iCloud",
+		-- 	x = 380 - 53,
+		-- 	y = 279,
 
-            onStateChange = function(state)
-				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
-				if (state == true) then
-					ShowiCloudChoices();
-				else
-					EnableiCloudSync(false);
-				end
-			end,
+  --           onStateChange = function(state)
+		-- 		AudioManager:PlaySfx(SFX_UI_BUTTON_1);
+		-- 		if (state == true) then
+		-- 			ShowiCloudChoices();
+		-- 		else
+		-- 			EnableiCloudSync(false);
+		-- 		end
+		-- 	end,
 			
-			components =
-			{
-				{
-					class = "PuzzleSprite",
-					image = "ui_mainmenu_icloud",
-				},
-			},
-		},
+		-- 	components =
+		-- 	{
+		-- 		{
+		-- 			class = "PuzzleSprite",
+		-- 			image = "ui_mainmenu_icloud",
+		-- 		},
+		-- 	},
+		-- },
 				
-        {
-			class = "PuzzlePicture",
-			name = "GearBackdrop",
-			x = 213 - 53,
-			y = 277,
-			hide = true,
+  --       {
+		-- 	class = "PuzzlePicture",
+		-- 	name = "GearBackdrop",
+		-- 	x = 213 - 53,
+		-- 	y = 277,
+		-- 	hide = true,
 			
-			components =
-			{
-				{
-					class = "PuzzleSprite",
-					image = "ui_mainmenu_gearbackground",
-				},
-			},
-		},
+		-- 	components =
+		-- 	{
+		-- 		{
+		-- 			class = "PuzzleSprite",
+		-- 			image = "ui_mainmenu_gearbackground",
+		-- 		},
+		-- 	},
+		-- },
 		
-        {
-			class = "PuzzleButton",
-			name = "Leaderboard",
-			x = 380 - 53,
-			y = 280,
-			hide = true,
+  --       {
+		-- 	class = "PuzzleButton",
+		-- 	name = "Leaderboard",
+		-- 	x = 380 - 53,
+		-- 	y = 280,
+		-- 	hide = true,
 			
-            onMouseUp = function(x, y)
-				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
-				ShowLeaderboard();
-			end,
+  --           onMouseUp = function(x, y)
+		-- 		AudioManager:PlaySfx(SFX_UI_BUTTON_1);
+		-- 		ShowLeaderboard();
+		-- 	end,
 			
-			components =
-			{
-				{
-					class = "PuzzleSprite",
-					image = "ui_mainmenu_gamecenter",
-				},
-			},
-		},		
+		-- 	components =
+		-- 	{
+		-- 		{
+		-- 			class = "PuzzleSprite",
+		-- 			image = "ui_mainmenu_gamecenter",
+		-- 		},
+		-- 	},
+		-- },		
 		
-        {
-			class = "PuzzleButton",
-			name = "Achievement",
-			x = 326 - 53,
-			y = 280,
-			hide = true,
+  --       {
+		-- 	class = "PuzzleButton",
+		-- 	name = "Achievement",
+		-- 	x = 326 - 53,
+		-- 	y = 280,
+		-- 	hide = true,
 			
-            onMouseUp = function(x, y)
-				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
-				ShowAchievements();
-			end,
+  --           onMouseUp = function(x, y)
+		-- 		AudioManager:PlaySfx(SFX_UI_BUTTON_1);
+		-- 		ShowAchievements();
+		-- 	end,
 			
-			components =
-			{
-				{
-					class = "PuzzleSprite",
-					image = "ui_mainmenu_achievement",
-				},
-			},
-		},		
+		-- 	components =
+		-- 	{
+		-- 		{
+		-- 			class = "PuzzleSprite",
+		-- 			image = "ui_mainmenu_achievement",
+		-- 		},
+		-- 	},
+		-- },		
 		
-        {
-			class = "PuzzleButton",
-			name = "Twitter",
-			x = 272 - 53,
-			y = 280,
-			hide = true,
+  --       {
+		-- 	class = "PuzzleButton",
+		-- 	name = "Twitter",
+		-- 	x = 272 - 53,
+		-- 	y = 280,
+		-- 	hide = true,
 			
-            onMouseUp = function(x, y)
-				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
-				if (GameKit.GetUserLanguage() == "zh-Hans") then
-					OpenSelfSinaWeibo();
-				else
-					OpenSelfTwitter();
-				end
-			end,
+  --           onMouseUp = function(x, y)
+		-- 		AudioManager:PlaySfx(SFX_UI_BUTTON_1);
+		-- 		if (GameKit.GetUserLanguage() == "zh-Hans") then
+		-- 			OpenSelfSinaWeibo();
+		-- 		else
+		-- 			OpenSelfTwitter();
+		-- 		end
+		-- 	end,
 			
-			components =
-			{
-				{
-					class = "PuzzleSprite",
-					image = "ui_mainmenu_twitter",
-				},
-			},
-		},
+		-- 	components =
+		-- 	{
+		-- 		{
+		-- 			class = "PuzzleSprite",
+		-- 			image = "ui_mainmenu_twitter",
+		-- 		},
+		-- 	},
+		-- },
+
+  --       {
+		-- 	class = "PuzzleButton",
+		-- 	name = "Gear",
+		-- 	x = 434 - 53,
+		-- 	y = 280 ,
+		-- 	doUpdate = true,
+			
+  --           onMouseUp = function(x, y)
+		-- 		AudioManager:PlaySfx(SFX_UI_BUTTON_1);
+		-- 		ToggleMainMenuGears();
+		-- 	end,
+			
+		-- 	components =
+		-- 	{
+		-- 		{
+		-- 			class = "PuzzleAnimation",
+		-- 			anim = "ui_mainmenu_gear_off",
+		-- 			animating = true,
+		-- 		},
+		-- 	},
+		-- },
 
         {
 			class = "PuzzleButton",
 			name = "History",
-			x = 218 - 53,
+			x = 434 - 53 - 53,
 			y = 280,
-			hide = true,
 			
             onMouseUp = function(x, y)
 				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
@@ -713,24 +734,26 @@ GameUITemplate
 			},
 		},		
 
-        {
-			class = "PuzzleButton",
-			name = "Gear",
+		{
+			class = "PuzzleCheckButton",
+			name = "iCloud",
 			x = 434 - 53,
 			y = 280,
-			doUpdate = true,
-			
-            onMouseUp = function(x, y)
+
+            onStateChange = function(state)
 				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
-				ToggleMainMenuGears();
+				if (state == true) then
+					ShowiCloudChoices();
+				else
+					EnableiCloudSync(false);
+				end
 			end,
 			
 			components =
 			{
 				{
-					class = "PuzzleAnimation",
-					anim = "ui_mainmenu_gear_off",
-					animating = true,
+					class = "PuzzleSprite",
+					image = "ui_mainmenu_icloud",
 				},
 			},
 		},
@@ -776,11 +799,11 @@ GameUITemplate
 --]]
 	},
 	
-	groups =
-	{
-		Buttons = { "Play", "Sfx", "Bgm", "Hand", "Gear", "Info", "iCloud" },
-		GearOptions = { "GearBackdrop", "Leaderboard", "Achievement", "Twitter", "History" },
-	},
+	-- groups =
+	-- {
+	-- 	Buttons = { "Play", "Sfx", "Bgm", "Hand", "Gear", "Info", "iCloud" },
+	-- 	GearOptions = { "GearBackdrop", "Leaderboard", "Achievement", "Twitter", "History" },
+	-- },
 };
 
 -------------------------------------------------------------------------
@@ -937,6 +960,7 @@ GameUITemplate
 			},
 		},
 --]]	
+
 		{
 			class = "PuzzleButton",
 			name = "BACK",
@@ -1388,10 +1412,51 @@ GameUITemplate
             {
                 {
                     class = "PuzzleSprite",
-                    image = "ui_button_back",
+                    image = "ui_history_button_back",
                 },
 			},
 		},
+
+        {
+			class = "PuzzleButton",
+			name = "Achievement",
+			x = UI_BUTTON_POS[2],
+			y = 0,
+			
+            onMouseUp = function(x, y)
+				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
+				ShowAchievements();
+			end,
+			
+			components =
+			{
+				{
+					class = "PuzzleSprite",
+					image = "ui_button_achievement",
+				},
+			},
+		},		
+
+        {
+			class = "PuzzleButton",
+			name = "Leaderboard",
+			x = UI_BUTTON_POS[3],
+			y = 0,
+			
+            onMouseUp = function(x, y)
+				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
+				ShowLeaderboard();
+			end,
+			
+			components =
+			{
+				{
+					class = "PuzzleSprite",
+					image = "ui_button_leaderboard",
+				},
+			},
+		},		
+		
 	},
 };
 

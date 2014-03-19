@@ -14,7 +14,7 @@ GameStageTemplate
 		--=========
 		SwitchDayNightUI();
 		
-		UIManager:ToggleWidgetGroup("MainEntry", "Buttons", false);
+		-- UIManager:ToggleWidgetGroup("MainEntry", "Buttons", false);
 		UIManager:EnableWidget("MainEntry", "Char1", false);
 		UIManager:GetUI("MainEntry"):LockAllButtons();
 
@@ -40,16 +40,16 @@ GameStageTemplate
 	end,
 
 	OnExit = function()
-		UIManager:ToggleWidgetGroup("MainEntry", "Buttons", true);
+		-- UIManager:ToggleWidgetGroup("MainEntry", "Buttons", true);
 		UIManager:GetUI("MainEntry"):UnlockAllButtons();
 
 	    SyncFromCloud();
     
 		-- Special case: China SNS
-		if (GameKit.GetUserLanguage() == "zh-Hans") then
-			UIManager:GetWidget("MainEntry", "Twitter"):SetImage("ui_mainmenu_sina");
-			UIManager:GetWidget("GameStat", "Twitter"):SetImage("ui_stat_sina");
-		end
+		-- if (GameKit.GetUserLanguage() == "zh-Hans") then
+		-- 	UIManager:GetWidget("MainEntry", "Twitter"):SetImage("ui_mainmenu_sina");
+		-- 	UIManager:GetWidget("GameStat", "Twitter"):SetImage("ui_stat_sina");
+		-- end
 		
 		InitAd();
 		--ListCurrentUsedTextures("MainEntry");
