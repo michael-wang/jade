@@ -46,15 +46,23 @@ public class PlayMovieActivity extends Activity {
 			Log.d(TAG, "filename:" + filename);
 		}
 		
-		final String resName = filename.substring(0, filename.lastIndexOf("."));
-		final int id = getResources().getIdentifier(resName, "raw", getPackageName());
-		Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + id);
-		if (DEBUG_LOG) {
-			Log.d(TAG, "uri:" + uri);
+		if (BuildConfig.DEBUG) {
+			loadFromFile(filename, videoView);
+		} else {
+			loadFromResource(filename, videoView);
 		}
 		
-		videoView.setVideoURI(uri);
 		videoView.start();
+	}
+	
+	@Override
+	protected void onStop() {
+		
+		final boolean success = !houstonWeGotProblem;
+		NotifyPlayMovieResult op = new NotifyPlayMovieResult(success);
+		GLThread.getInstance().scheduleFunction(op);
+		
+		super.onStop();
 	}
 	
 	private VideoView setupVideoView(RelativeLayout contentView) {
@@ -94,6 +102,24 @@ public class PlayMovieActivity extends Activity {
 		return vv;
 	}
 	
+	private void loadFromResource(String resourceName, VideoView view) {
+		
+		final String resName = resourceName.substring(0, resourceName.lastIndexOf("."));
+		final int id = getResources().getIdentifier(resName, "raw", getPackageName());
+		Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + id);
+		if (DEBUG_LOG) {
+			Log.d(TAG, "uri:" + uri);
+		}
+		
+		view.setVideoURI(uri);
+	}
+	
+	private void loadFromFile(String fileName, VideoView view) {
+		
+		final String path = Config.Asset.GetVideoPath() + fileName;
+		view.setVideoPath(path);
+	}
+	
 	private MediaPlayer.OnErrorListener errorListener = new MediaPlayer.OnErrorListener() {
 
 		@Override
@@ -114,24 +140,19 @@ public class PlayMovieActivity extends Activity {
 				Log.d(TAG, "onCompletion");
 			}
 			
-			notifyResult(true);
 			finish();
 		}
 		
 	};
 	
-	private void notifyResult(boolean success) {
-		
-		NotifyPlayMovieResult op = new NotifyPlayMovieResult(success);
-		GLThread.getInstance().scheduleFunction(op);
-	}
-	
 	private void somethingWrong(String what) {
 		
-		Log.e(TAG, "somethingWrong:" + what);
+		Log.e(TAG, "Houston we got problem:" + what);
 		
-		notifyResult(false);
+		houstonWeGotProblem = true;
 		finish();
 	}
+	
+	private boolean houstonWeGotProblem = false;
 
 }

@@ -44,8 +44,8 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	private static final String TAG = "abs-game-activity";
 	private static final boolean DEBUG_LOG = false;
 	
-	private static final int IN_APP_BILLING_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START;
-	private static final int GAME_SERVICES_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START + 1;
+	private static final int IN_APP_BILLING_REQUEST_CODE    = Global.FRAMEWORK_ACTIVITY_CODE_START;
+	private static final int GAME_SERVICES_REQUEST_CODE     = Global.FRAMEWORK_ACTIVITY_CODE_START + 1;
 	private static final int SHOW_ACHIEVEMENTS_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START + 2;
 	private static final int SHOW_LEADERBOARDS_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START + 3;
 	

@@ -20,8 +20,6 @@ public class Config {
 		public static final Type TYPE = Type.Phone;
 		
 		private static String ASSET_PATH = null;
-		private static String IMAGE_PATH = null;
-		private static String SOUND_PATH = null;
 		
 		private static String GetAssetPath() {
 			
@@ -43,32 +41,34 @@ public class Config {
 		
 		public static String GetImagePath() {
 			
-			if (IMAGE_PATH != null) {
-				return IMAGE_PATH;
-			}
-			
 			if (BuildConfig.DEBUG) {
-				IMAGE_PATH = GetAssetPath() + File.separator + "Image" + File.separator;
+				return GetDebugAssetPath("Image");
 			} else {
-				IMAGE_PATH = GetAssetPath();
+				return GetAssetPath();
 			}
-			
-			return IMAGE_PATH;
 		}
 		
 		public static String GetSoundPath() {
 			
-			if (SOUND_PATH != null) {
-				return SOUND_PATH;
+			if (BuildConfig.DEBUG) {
+				return GetDebugAssetPath("Sound");
+			} else {
+				return GetAssetPath();
 			}
+		}
+		
+		public static String GetVideoPath() {
 			
 			if (BuildConfig.DEBUG) {
-				SOUND_PATH = GetAssetPath() + File.separator + "Sound" + File.separator;
+				return GetDebugAssetPath("Video");
 			} else {
-				SOUND_PATH = GetAssetPath();
+				return GetAssetPath();
 			}
+		}
+		
+		private static String GetDebugAssetPath(String type) {
 			
-			return SOUND_PATH;
+			return GetAssetPath() + File.separator + type + File.separator;
 		}
 		
 		public static String CopyLuaScriptFolderTo(Context context) {
