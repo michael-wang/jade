@@ -100,13 +100,27 @@ public class NonStreamingAudio implements AbsAudioResource {
 	public void Pause() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Pause path:" + filePath + ",loop:" + loop);
+			Log.d(TAG, "Pause path:" + filePath);
 		}
 		
 		if (streamID != INVALID_STREAM_ID) {
 			soundPool.pause(streamID);
 		} else {
 			Log.w(TAG, "Pause: cannot pause invalid stream id:" + filePath);
+		}
+	}
+	
+	@Override
+	public void Resume() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Resume path:" + filePath);
+		}
+		
+		if (streamID != INVALID_STREAM_ID) {
+			soundPool.resume(streamID);
+		} else {
+			Log.w(TAG, "Resume: cannot resume invalid stream id:" + filePath);
 		}
 	}
 	

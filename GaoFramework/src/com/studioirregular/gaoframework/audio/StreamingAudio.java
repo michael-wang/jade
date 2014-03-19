@@ -7,6 +7,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
+import com.studioirregular.gaoframework.BuildConfig;
+
 public class StreamingAudio implements AbsAudioResource {
 
 	private static final String TAG = "java-StreamingAudio";
@@ -51,29 +53,39 @@ public class StreamingAudio implements AbsAudioResource {
 			Log.d(TAG, "Stop: " + filePath);
 		}
 		
-		SoundSystem.getInstance().unregisterPlaying(this);
-		
-		if (mplayer != null) {
-			if (mplayer.isPlaying()) {
-				mplayer.stop();
+		if (mplayer == null) {
+			if (DEBUG_LOG) {
+				Log.w(TAG, "Stop: audio not playing:" + filePath);
 			}
-			
-			mplayer.release();
-			mplayer = null;
-		} else {
-			Log.w(TAG, "Stop: audio not playing:" + filePath);
+			return;
 		}
+		
+		mplayer.stop();
+		
+		onAudioStopped();
 	}
 
 	@Override
 	public void Pause() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Pause");
+			Log.d(TAG, "Pause: " + filePath);
 		}
 		
 		if (mplayer != null && mplayer.isPlaying()) {
 			mplayer.pause();
+		}
+	}
+
+	@Override
+	public void Resume() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "Resume: " + filePath);
+		}
+		
+		if (mplayer != null) {
+			mplayer.start();
 		}
 	}
 
@@ -113,7 +125,9 @@ public class StreamingAudio implements AbsAudioResource {
 		}
 		
 		if (DEBUG_LOG) {
-			Log.w(TAG, "IsPlaying:" + result);
+			if (!result) {
+				Log.w(TAG, "IsPlaying:" + result);
+			}
 		}
 		return result;
 	}
@@ -137,6 +151,20 @@ public class StreamingAudio implements AbsAudioResource {
 			}
 			
 			mplayer.setLooping(looping);
+		}
+		
+		if (!looping) {
+			mplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+				
+				@Override
+				public void onCompletion(MediaPlayer mp) {
+					
+					if (DEBUG_LOG) {
+						Log.w(TAG, "OnCompletionListener:" + filePath);
+					}
+					onAudioStopped();
+				}
+			});
 		}
 		
 		return true;
@@ -174,6 +202,20 @@ public class StreamingAudio implements AbsAudioResource {
 			return null;
 		}
 		return MediaPlayer.create(ctx, resid);
+	}
+	
+	private void onAudioStopped() {
+		
+		if (mplayer != null) {
+			mplayer.release();
+			mplayer = null;
+		} else {
+			if (BuildConfig.DEBUG) {
+				Log.w(TAG, "onAudioStopped: expect mplayer != null");
+			}
+		}
+		
+		SoundSystem.getInstance().unregisterPlaying(this);
 	}
 	
 	@Override

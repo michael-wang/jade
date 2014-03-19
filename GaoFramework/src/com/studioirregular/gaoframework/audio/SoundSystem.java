@@ -119,7 +119,7 @@ public class SoundSystem {
 		}
 		
 		for (AbsAudioResource audio : playingAudios) {
-			audio.Play();
+			audio.Resume();
 		}
 	}
 	

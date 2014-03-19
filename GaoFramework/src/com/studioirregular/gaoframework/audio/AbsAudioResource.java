@@ -9,6 +9,7 @@ public interface AbsAudioResource {
 	public boolean Play();
 	public void    Stop();
 	public void    Pause();
+	public void    Resume();
 	public void    SetLoop(boolean loop);
 	public void    SetVolume(float volume);
 	public boolean IsPlaying();
