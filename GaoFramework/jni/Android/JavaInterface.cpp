@@ -105,15 +105,6 @@ void JavaInterface::DrawCircle(
 		x, y, radius, red, green, blue, alpha);
 }
 
-void JavaInterface::TestFlightPassCheckpoint(const char* msg) {
-	
-	LOGD(log, "TestFlightPassCheckpoint msg:%s", msg)
-
-	jstring jmsg = g_JniEnv->NewStringUTF(msg);
-
-	jobj.CallVoidMethod("TestFlightPassCheckpoint", "(Ljava/lang/String;)V", jmsg);
-}
-
 const char* JavaInterface::GetString(const char* name) {
 
 	LOGD(log, "GetString name:%s", name)

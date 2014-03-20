@@ -23,7 +23,6 @@ import com.studioirregular.gaoframework.functional.ToastMessage;
 import com.studioirregular.gaoframework.gles.Circle;
 import com.studioirregular.gaoframework.gles.GLThread;
 import com.studioirregular.gaoframework.gles.Rectangle;
-import com.testflightapp.lib.TestFlight;
 
 
 public class JavaInterface {
@@ -315,18 +314,6 @@ public class JavaInterface {
 			if (callback) {
 				GLThread.getInstance().scheduleFunction(new NotifySendMailResult(false));
 			}
-		}
-	}
-	
-	// TestFlight
-	public void TestFlightPassCheckpoint(String msg) {
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "TestFlightPassCheckpoint msg:" + msg);
-		}
-		
-		if (TestFlight.isActive()) {
-			TestFlight.passCheckpoint(msg);
 		}
 	}
 	

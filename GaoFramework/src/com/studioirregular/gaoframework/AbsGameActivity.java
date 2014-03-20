@@ -37,7 +37,6 @@ import com.studioirregular.libinappbilling.Product;
 import com.studioirregular.libinappbilling.PurchasedItem;
 import com.studioirregular.libinappbilling.ServerResponseCode;
 import com.studioirregular.libinappbilling.SignatureVerificationException;
-import com.testflightapp.lib.TestFlight;
 
 public abstract class AbsGameActivity extends FragmentActivity {
 
@@ -55,8 +54,6 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		if (DEBUG_LOG) {
 			Log.w(TAG, "onCreate");
 		}
-		
-		TestFlight.takeOff(this.getApplication(), "e1d35c9d-3282-48a4-9ab6-2af2a52349d2");
 		
 		setContentView(R.layout.activity_main);
 		fpsTextView = (TextView)findViewById(R.id.textview);

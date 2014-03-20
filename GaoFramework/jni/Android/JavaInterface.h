@@ -24,8 +24,6 @@ public:
 	void DrawCircle(GaoReal32 x, GaoReal32 y, GaoReal32 radius,
 		GaoReal32 red, GaoReal32 green, GaoReal32 blue, GaoReal32 alpha);
 
-	void TestFlightPassCheckpoint(const char* msg);
-
 	const char* GetString(const char* name);
 
 	void ShowMessage(const char* title, const char* message);
