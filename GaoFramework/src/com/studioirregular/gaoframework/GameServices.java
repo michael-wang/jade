@@ -2,6 +2,8 @@ package com.studioirregular.gaoframework;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -25,6 +27,7 @@ import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.studioirregular.gaoframework.functional.NotifyGameServiceConnectionStatus;
 import com.studioirregular.gaoframework.functional.NotifyStateLoadedFromCloud;
+import com.studioirregular.gaoframework.functional.Operation_1V;
 import com.studioirregular.gaoframework.gles.GLThread;
 
 
@@ -259,7 +262,19 @@ public class GameServices {
 		}
 		
 		if (!isConnected) {
-			Log.w(TAG, "SaveStateToCloud: Google Play Game service NOT connected.");
+			if (DEBUG_LOG) {
+				Log.w(TAG, "SaveStateToCloud: service NOT connected, save operation and execute it when connected.");
+			}
+			
+			scheduleOperationForServiceConnected(new Operation_1V<String>(fileName) {
+
+				@Override
+				public void run() {
+					SaveStateToCloud(arg1);
+				}
+				
+			});
+			
 			return;
 		}
 		
@@ -298,7 +313,19 @@ public class GameServices {
 		}
 		
 		if (!isConnected) {
-			Log.w(TAG, "LoadStateFromCloud: Google Play Game service NOT connected.");
+			if (DEBUG_LOG) {
+				Log.w(TAG, "LoadStateFromCloud: service NOT connected, save operation and execute it when connected.");
+			}
+			
+			scheduleOperationForServiceConnected(new Runnable() {
+
+				@Override
+				public void run() {
+					LoadStateFromCloud();
+				}
+				
+			});
+			
 			return;
 		}
 		
@@ -390,6 +417,8 @@ public class GameServices {
 			}
 			
 			isConnected = true;
+			
+			executePendingOperationAfterConnected();
 		}
 
 		@Override
@@ -415,6 +444,9 @@ public class GameServices {
 			
 			if (fixingError) {
 				Log.e(TAG, "Connection failed: already tried to resolve the error, but still failed.");
+				if (pendingOperationAfterConnected != null) {
+					pendingOperationAfterConnected.clear();
+				}
 				return;
 				
 			} else if (result.hasResolution()) {
@@ -427,6 +459,9 @@ public class GameServices {
 				}
 			} else {
 				showErrorDialog(result.getErrorCode());
+				if (pendingOperationAfterConnected != null) {
+					pendingOperationAfterConnected.clear();
+				}
 			}
 		}
 		
@@ -498,4 +533,31 @@ public class GameServices {
 	private int connectionRequestCode;
 	private int achievementsRequestCode;
 	private int leaderboardsRequestCode;
+	
+	private List<Runnable> pendingOperationAfterConnected;
+	private void scheduleOperationForServiceConnected(Runnable op) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "scheduleOperationForServiceConnected op:" + op);
+		}
+		
+		if (pendingOperationAfterConnected == null) {
+			pendingOperationAfterConnected = new ArrayList<Runnable>();
+		}
+		
+		pendingOperationAfterConnected.add(op);
+	}
+	
+	private void executePendingOperationAfterConnected() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "executePendingOperationAfterConnected");
+		}
+		
+		if (pendingOperationAfterConnected != null) {
+			for (Runnable op : pendingOperationAfterConnected) {
+				op.run();
+			}
+		}
+	}
 }

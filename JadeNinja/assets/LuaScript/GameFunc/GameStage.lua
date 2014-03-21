@@ -82,7 +82,13 @@ GameStageTemplate
 		--CheckPaidGift();  -- v2.0 gift
 		
 		if (IOManager:GetRecord(IO_CAT_OPTION, "iCloud") == nil) then
-			ShowiCloudChoices();
+
+			if IS_PLATFORM_ANDROID then
+				-- default turn on cloud save on Android
+				OnAlertUIResultForiCloud(1);
+			else
+				ShowiCloudChoices();
+			end
 		end
 	end,
 };
