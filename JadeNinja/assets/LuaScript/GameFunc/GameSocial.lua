@@ -367,7 +367,8 @@ end
 function OpenMail(subject, appendInfo)
     UIManager:GetWidgetComponent("Wait", "Content", "StateMachine"):ChangeState("active");
 	GameKit.LogEventWithParameter("Social", "mail", "action", false);
-    GameKit.ComposeMail(subject, "", appendInfo);
+    local recipient = GameKit.GetLocalizedString("support_mail_recipient");
+    GameKit.ComposeMail(subject, recipient, appendInfo);
 end
 
 -------------------------------------------------------------------------

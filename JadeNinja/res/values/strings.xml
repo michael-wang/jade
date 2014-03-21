@@ -12,6 +12,7 @@
     <string name="debug_send_from_gmail_subject">[Jade Ninja] Add tester for In App Billing</string>
     <string name="debug_send_from_gmail_recipient">support@studioirregular.in</string>
     <string name="debug_send_from_gmail_message">I would like to test in app billing, please add my gmail to tester list.</string>
+    <string name="support_mail_recipient">support@studioirregular.in</string>
 
     <string name="feedback_title">One moment please!</string>
     <string name="feedback_prefix">Do you enjoy being a </string>
