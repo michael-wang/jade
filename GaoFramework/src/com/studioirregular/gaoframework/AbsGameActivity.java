@@ -7,8 +7,6 @@ import java.util.Observer;
 import org.json.JSONException;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.res.AssetManager;
@@ -410,19 +408,6 @@ public abstract class AbsGameActivity extends FragmentActivity {
 				Log.w(TAG, "Response code:" + response);
 			}
 			
-			if (response.value == ServerResponseCode.BILLING_RESPONSE_RESULT_ERROR) {
-				// May failed because user's gmail is not in tester list.
-				// Ask they to send email to me now.
-				this.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						askPlayerGmailToEnableTestBuying();
-					}
-					
-				});
-			}
-			
 			notifyBuyResult(buyingProductId, false);
 			return;
 		}
@@ -455,34 +440,6 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		
 		NotifyBuyProductResult notify = new NotifyBuyProductResult(id, success);
 		GLThread.getInstance().scheduleFunction(notify);
-	}
-	
-	private void askPlayerGmailToEnableTestBuying() {
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "askPlayerGmailToEnableTestBuying");
-		}
-		
-		new AlertDialog.Builder(AbsGameActivity.this)
-			.setTitle(JavaInterface.getInstance().GetString("debug_cannot_test_iap_title"))
-			.setMessage(JavaInterface.getInstance().GetString("debug_cannot_test_iap_message"))
-			.setPositiveButton(JavaInterface.getInstance().GetString("debug_cannot_test_iap_ok"), 
-					new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					
-					final JavaInterface ji = JavaInterface.getInstance();
-					
-					ji.SendEmail(
-							ji.GetString("debug_send_from_gmail_subject"),
-							ji.GetString("debug_send_from_gmail_recipient"),
-							ji.GetString("debug_send_from_gmail_message"));
-				}
-			})
-			.setNegativeButton(JavaInterface.getInstance().GetString("debug_cannot_test_iap_no"), null)
-			.create()
-			.show();
 	}
 	
 }
