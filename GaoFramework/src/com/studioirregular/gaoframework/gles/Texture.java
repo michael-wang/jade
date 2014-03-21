@@ -90,7 +90,7 @@ public class Texture {
 	public boolean Reload() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Reload");
+			Log.d(TAG, "Reload file:" + file);
 		}
 		
 		if (file == null) {
@@ -106,7 +106,7 @@ public class Texture {
 	public void Unload() {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "Unload");
+			Log.d(TAG, "Unload file:" + file);
 		}
 		
 		if (name != INVALID_NAME) {
@@ -126,7 +126,7 @@ public class Texture {
 		
 		if (name == INVALID_NAME) {
 			if (BuildConfig.DEBUG) {
-				Log.e(TAG, "draw invalid texture name:" + name);
+				Log.e(TAG, "draw invalid texture file:" + file);
 			}
 			return;
 		}
