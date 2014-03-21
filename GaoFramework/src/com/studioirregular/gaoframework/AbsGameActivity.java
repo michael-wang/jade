@@ -3,9 +3,8 @@ package com.studioirregular.gaoframework;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
 import org.json.JSONException;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
@@ -20,7 +19,6 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-
 import com.studioirregular.gaoframework.audio.SoundSystem;
 import com.studioirregular.gaoframework.functional.NotifyBuyProductResult;
 import com.studioirregular.gaoframework.functional.NotifyPurchaseRestored;
@@ -54,6 +52,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		}
 		
 		setContentView(R.layout.activity_main);
+		setImmersiveMode();
 		fpsTextView = (TextView)findViewById(R.id.textview);
 		
 		View view = findViewById(R.id.surfaceview);
@@ -440,6 +439,22 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		
 		NotifyBuyProductResult notify = new NotifyBuyProductResult(id, success);
 		GLThread.getInstance().scheduleFunction(notify);
+	}
+	
+	@SuppressLint("InlinedApi")
+	private void setImmersiveMode() {
+		
+		View content = findViewById(R.id.main_content);
+		if (content == null) {
+			Log.e(TAG, "setImmersiveMode: cannot find content view.");
+			return;
+		}
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+					| View.SYSTEM_UI_FLAG_FULLSCREEN
+					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		}
 	}
 	
 }
