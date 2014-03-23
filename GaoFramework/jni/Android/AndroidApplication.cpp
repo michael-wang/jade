@@ -275,6 +275,7 @@ GaoVoid AndroidApplication::NotifyPurchaseRestored(GaoConstCharPtr id) {
 		return;
 	}
 
+	luaManager->PushValue(true);
 	luaManager->PushValue(id);
 
 	if (!luaManager->CallFunction()) {

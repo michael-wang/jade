@@ -3,11 +3,14 @@ package com.studioirregular.gaoframework;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+
 import org.json.JSONException;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
@@ -19,6 +22,7 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
 import com.studioirregular.gaoframework.audio.SoundSystem;
 import com.studioirregular.gaoframework.functional.NotifyBuyProductResult;
 import com.studioirregular.gaoframework.functional.NotifyPurchaseRestored;
@@ -306,12 +310,18 @@ public abstract class AbsGameActivity extends FragmentActivity {
 			if (DEBUG_LOG) e.printStackTrace();
 			
 			final int code = e.errorCode.value;
+			Log.e(TAG, "buyProduct errorCode:" + e.errorCode);
+			
 			if (code == ServerResponseCode.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED) {
-				if (consumeProduct(id)) {
-					// Don't call buyProduct directly here, I saw Google Play
-					// return with ITEM_ALREADY_OWNED (not consumed) if I do so.
-					JavaInterface.getInstance().BuyProduct(id);
-					return;
+				if (getGameProducts().isConsumable(id)) {
+					if (consumeProduct(id)) {
+						// Don't call buyProduct directly here, I saw Google Play
+						// return with ITEM_ALREADY_OWNED (not consumed) if I do so.
+						JavaInterface.getInstance().BuyProduct(id);
+						return;
+					}
+				} else {
+					Log.e(TAG, "Internal state error: should not allow user buy a product they already owned.");
 				}
 			}
 		}
@@ -336,6 +346,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 			if (DEBUG_LOG) e.printStackTrace();
 		} catch (IabException e) {
 			if (DEBUG_LOG) e.printStackTrace();
+			Log.e(TAG, "buyProduct errorCode:" + e.errorCode);
 		}
 		
 		return false;
@@ -373,6 +384,8 @@ public abstract class AbsGameActivity extends FragmentActivity {
 			NotifyPurchaseRestored notify = new NotifyPurchaseRestored(id);
 			GLThread.getInstance().scheduleFunction(notify);
 		}
+		
+		setIABRestored();
 	}
 
 	@Override
@@ -455,6 +468,30 @@ public abstract class AbsGameActivity extends FragmentActivity {
 					| View.SYSTEM_UI_FLAG_FULLSCREEN
 					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 		}
+	}
+	
+	public boolean isIABRestored() {
+		
+		SharedPreferences pref = getSharedPreferences("package", Activity.MODE_PRIVATE);
+		final boolean result = pref.getBoolean("restored", false);
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "isIABRestored:" + result);
+		}
+		
+		return result;
+	}
+	
+	private void setIABRestored() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "setIABRestored");
+		}
+		
+		SharedPreferences.Editor editor = 
+				getSharedPreferences("package", Activity.MODE_PRIVATE).edit();
+		editor.putBoolean("restored", true);
+		editor.commit();
 	}
 	
 }

@@ -40,6 +40,7 @@ public:
 	void PlayMovie(const char* filename);
 
 	void BuyProduct(const char* id);
+	GaoBool IsIABRestored();
 	void RestorePurchases();
 
 	void SendEmail(const char* subject, const char* recipient, const char* message);

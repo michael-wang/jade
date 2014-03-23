@@ -644,6 +644,15 @@ function ReadSaveDataFromFile()
     OnCloudSaveFileReceived(IO_ICLOUD_DATA)
     GameKit.RemoveFile(IO_ICLOUD_DATA);
     --GameDataManager:SetData("CloudData", nil);
+
+    -- Restore IAB product after sync from cloud, so we avoid potential conflict.
+    -- E.g. restore might find thief char is bought before but not in cloud data 
+    -- (maybe we didn't got chance to save the state to cloud when player bought it)
+    if IS_PLATFORM_ANDROID then
+        if not g_JavaInterface:IsIABRestored() then
+            GameKit.RestorePurchases();
+        end
+    end
 end
 
 -------------------------------------------------------------------------
@@ -855,7 +864,7 @@ function OnPurchaseRestored(result, id)
     -- Purchase success
     --log("OK")
         IAP_RESTORE_CALLBACK[id](id);
-        AudioManager:PlaySfx(SFX_UI_MONEY_GAIN);
+        -- AudioManager:PlaySfx(SFX_UI_MONEY_GAIN);
     --else
     --log("no no")    
     end
@@ -983,6 +992,28 @@ function OnBoughtJade1(id)
         end
         ShopManager:BuyJadeByDollar(1, firstBuy);
     end
+end
+
+-------------------------------------------------------------------------
+function OnRestoreStarterKit(id)
+    ShopManager:SerializeAvatar(AVATAR_THIEF);
+    IOManager:SetRecord(IO_CAT_HACK, "StarterKit", true);
+end
+
+-------------------------------------------------------------------------
+function OnRestoreChar1(id)
+    ShopManager:SerializeAvatar(AVATAR_THIEF);
+end
+
+-------------------------------------------------------------------------
+function OnRestoreChar2(id)
+    ShopManager:SerializeAvatar(AVATAR_WARLORD);
+end
+
+-------------------------------------------------------------------------
+function OnRestoreJade1(id)
+    IOManager:SetValue(IO_CAT_HACK, "Jade", JADE_EFFECT_INNO_PROTECT, 1);
+    IOManager:SetValue(IO_CAT_HACK, "Jade", "Equip", JADE_EFFECT_INNO_PROTECT, true);
 end
 
 -------------------------------------------------------------------------

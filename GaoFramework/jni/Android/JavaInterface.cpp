@@ -286,6 +286,13 @@ void JavaInterface::BuyProduct(const char* id) {
 	if (jid != NULL) env->DeleteLocalRef(jid);
 }
 
+GaoBool JavaInterface::IsIABRestored() {
+
+	LOGD(log, "IsIABRestored")
+
+	return jobj.CallBooleanMethod("IsIABRestored", "()Z");
+}
+
 void JavaInterface::RestorePurchases() {
 
 	LOGD(log, "RestorePurchases")
@@ -355,7 +362,7 @@ void JavaInterface::SubmitAchievement(const char* id, float value, bool unlock) 
 
 void JavaInterface::SubmitScore(const char* id, int value) {
 	
-	LOGD(log, "SubmitScore id:%s, value:%f", id, value)
+	LOGD(log, "SubmitScore id:%s, value:%d", id, value)
 
 	JNIEnv* env = g_JniEnv->Get();
 
