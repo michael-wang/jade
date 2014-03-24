@@ -962,7 +962,7 @@ function OnBoughtStarterKit(id, firstBuy)
 end
 
 -------------------------------------------------------------------------
-function OnBoughtChar1(id)
+function OnBoughtChar1(id, firstBuy)
     if (id == "com.monkeypotion.jadeninja.avatar1") then
         if (firstBuy) then
             GameKit.LogEventWithLocale("IAP_Country", "avatar1");
@@ -973,7 +973,7 @@ function OnBoughtChar1(id)
 end
 
 -------------------------------------------------------------------------
-function OnBoughtChar2(id)
+function OnBoughtChar2(id, firstBuy)
     if (id == "com.monkeypotion.jadeninja.avatar2") then
         if (firstBuy) then
             GameKit.LogEventWithLocale("IAP_Country", "avatar2");
@@ -984,7 +984,7 @@ function OnBoughtChar2(id)
 end
 
 -------------------------------------------------------------------------
-function OnBoughtJade1(id)
+function OnBoughtJade1(id, firstBuy)
     if (id == "com.monkeypotion.jadeninja.jade1") then
         if (firstBuy) then
             GameKit.LogEventWithLocale("IAP_Country", "jade1");
