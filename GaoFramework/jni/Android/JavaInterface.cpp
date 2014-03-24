@@ -80,8 +80,10 @@ char* JavaInterface::GetLogFilePath() {
 	}
 	const char* cstrPath = env->GetStringUTFChars(jstrPath, NULL);
 
-	char* result = new char[std::strlen(cstrPath) + 1];
+	const int len = std::strlen(cstrPath);
+	char* result = new char[len + 1];
 	std::strcpy(result, cstrPath);
+	result[len] = 0;
 	LOGD(log, "GetLogFilePath path:%s", result)
 
 	env->ReleaseStringUTFChars(jstrPath, cstrPath);
@@ -322,11 +324,17 @@ GaoConstCharPtr JavaInterface::GetAppVersion() {
 
 	LOGD(log, "GetAppVersion")
 
-	jstring jresult = jobj.CallObjectMethod("GetAppVersion", "()Ljava/lang/String;");
+	jstring jresult = (jstring)jobj.CallObjectMethod("GetAppVersion", "()Ljava/lang/String;");
 
 	JNIEnv* env = g_JniEnv->Get();
-	const char* result = g_JniEnv->GetStringUTFChars(jresult, NULL);
-	g_JniEnv->ReleaseStringUTFChars(jpath, pathChars);
+	const char* buf = g_JniEnv->GetStringUTFChars(jresult, NULL);
+
+	const int len = strlen(buf);
+	char* result = new char[len + 1];
+	std::strcpy(result, buf);
+	result[len] = 0;
+
+	g_JniEnv->ReleaseStringUTFChars(jresult, buf);
 
 	return result;
 }
