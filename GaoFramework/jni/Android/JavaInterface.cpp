@@ -318,6 +318,19 @@ void JavaInterface::SendEmail(const char* subject, const char* recipient, const 
 	if (jmessage != NULL)   env->DeleteLocalRef(jmessage);
 }
 
+GaoConstCharPtr JavaInterface::GetAppVersion() {
+
+	LOGD(log, "GetAppVersion")
+
+	jstring jresult = jobj.CallObjectMethod("GetAppVersion", "()Ljava/lang/String;");
+
+	JNIEnv* env = g_JniEnv->Get();
+	const char* result = g_JniEnv->GetStringUTFChars(jresult, NULL);
+	g_JniEnv->ReleaseStringUTFChars(jpath, pathChars);
+
+	return result;
+}
+
 GaoBool JavaInterface::IsGooglePlayGameServiceReady() {
 	
 	LOGD(log, "IsGooglePlayGameServiceReady")

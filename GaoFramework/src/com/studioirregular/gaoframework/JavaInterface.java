@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.text.TextUtils;
 import android.util.Log;
@@ -315,6 +316,27 @@ public class JavaInterface {
 				GLThread.getInstance().scheduleFunction(new NotifySendMailResult(false));
 			}
 		}
+	}
+	
+	public String GetAppVersion() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "GetAppVersion");
+		}
+		
+		if (context == null) {
+			return "";
+		}
+		
+		try {
+			return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			if (DEBUG_LOG) {
+				Log.e(TAG, "GetAppVersion exception:" + e);
+			}
+		}
+		
+		return "";
 	}
 	
 	// In App Billing

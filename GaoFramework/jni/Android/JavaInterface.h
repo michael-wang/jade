@@ -45,6 +45,8 @@ public:
 
 	void SendEmail(const char* subject, const char* recipient, const char* message);
 
+	GaoConstCharPtr GetAppVersion();
+
 	GaoBool IsGooglePlayGameServiceReady();
 	void ShowLeaderboard(const char* id);
 	void ShowAchievements();

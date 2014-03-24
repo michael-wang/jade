@@ -226,7 +226,15 @@ const char* GetAppVersion()
     // NSString* appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     // return [appVersion UTF8String];
     LOGD(logger, "GetAppVersion")
-    return "Android-1.0.0";
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "GetAppVersion: java == null")
+        return "";
+    }
+
+    return java->GetAppVersion();
 }
 
 const char* GetCurrentSystemTime()
