@@ -154,8 +154,13 @@ function InitializeLuaAndroid(worldWidth, worldHeight, luaScriptPath, debugMode)
 		deviceType = APP_DEVICE_ANDROID_TABLET;
 	end
 
-	return InitializeLuaIphone(deviceType, worldWidth, worldHeight, orientation, 
+	local result = InitializeLuaIphone(deviceType, worldWidth, worldHeight, orientation, 
 		unitX, unitY, false);
+
+	-- Notify java about init done, they got some chore to be done.
+	g_JavaInterface:OnNativeInitializeDone();
+
+	return result;
 end
 
 function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, useCompiledScript)

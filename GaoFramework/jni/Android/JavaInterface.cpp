@@ -42,6 +42,13 @@ JavaInterface::JavaInterface() :
 JavaInterface::~JavaInterface() {
 }
 
+void JavaInterface::OnNativeInitializeDone() {
+
+	LOGD(log, "OnNativeInitializeDone")
+
+	jobj.CallVoidMethod("OnNativeInitializeDone", "()V");
+}
+
 TouchEventArray* JavaInterface::GetTouchEvents() {
 
 	TouchEventArray* result = new TouchEventArray();

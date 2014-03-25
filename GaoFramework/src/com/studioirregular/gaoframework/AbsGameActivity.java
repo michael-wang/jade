@@ -57,6 +57,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		
 		setContentView(R.layout.activity_main);
 		setImmersiveMode();
+		setSplash();
 		fpsTextView = (TextView)findViewById(R.id.textview);
 		
 		View view = findViewById(R.id.surfaceview);
@@ -284,6 +285,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	
 	protected abstract GameProducts getGameProducts();
 	protected abstract String getPublicKey();
+	protected abstract int getSplashImageResource();
 	// Let client decide purchase activity request code so we won't risk using same code.
 	
 	public void buyProduct(String id) {
@@ -468,6 +470,20 @@ public abstract class AbsGameActivity extends FragmentActivity {
 					| View.SYSTEM_UI_FLAG_FULLSCREEN
 					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 		}
+	}
+	
+	private LaunchSplash splash;
+	
+	private void setSplash() {
+		splash = new LaunchSplash();
+		splash.setMinimumDuration(2000);
+		splash.showSplash(AbsGameActivity.this, getSplashImageResource(), R.id.splash);
+	}
+	
+	public void notifyNativeInitDone() {
+		
+		splash.hideSplash(AbsGameActivity.this, R.id.main_content);
+		splash = null;
 	}
 	
 	public boolean isIABRestored() {

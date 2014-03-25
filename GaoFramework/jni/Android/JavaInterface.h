@@ -14,6 +14,8 @@ public:
 	JavaInterface();
 	virtual ~JavaInterface();
 
+	void OnNativeInitializeDone();
+
 	TouchEventArray* GetTouchEvents();
 	char* GetLogFilePath();
 

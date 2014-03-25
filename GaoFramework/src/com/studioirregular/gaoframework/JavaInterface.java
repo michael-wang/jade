@@ -47,6 +47,17 @@ public class JavaInterface {
 	}
 	
 	// Java APIs for native code.
+	public void OnNativeInitializeDone() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "OnNativeInitializeDone");
+		}
+		
+		if (context != null) {
+			((AbsGameActivity)context).notifyNativeInitDone();
+		}
+	}
+	
 	public void DrawRectangle(int left, int top, int right, int bottom, 
 			float red, float green, float blue, float alpha) {
 		

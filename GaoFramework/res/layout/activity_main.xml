@@ -16,10 +16,10 @@
         android:layout_alignParentTop="true"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textColor="#FFFF00" />
-    
-    <android.widget.VideoView android:id="@+id/videoview"
+
+    <ImageView android:id="@+id/splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
-
+        android:scaleType="centerCrop" />
+    
 </RelativeLayout>

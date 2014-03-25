@@ -43,6 +43,7 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 	[
 		class_<JavaInterface>("JavaInterface")
 			.def(constructor<>())
+			.def("OnNativeInitializeDone", &JavaInterface::OnNativeInitializeDone)
 			.def("GetTouchEvents", &JavaInterface::GetTouchEvents)
 			.def("GetLogFilePath", &JavaInterface::GetLogFilePath)
 			.def("IsIABRestored", &JavaInterface::IsIABRestored)

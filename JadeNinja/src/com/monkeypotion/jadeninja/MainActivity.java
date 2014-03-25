@@ -33,4 +33,9 @@ public class MainActivity extends AbsGameActivity {
 	protected String getPublicKey() {
 		return "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm0w8J+/+vL9EPy1fnNDAYFWv9CQeic9Yzw45ITKprz28tCG/Rz2wQKcg4APU0X+EKrrrhJazN1D1Suykl36FLfXELSLQYUXTVSq4Bnn1ZfJqL3vTL+OfHg25D101PPe73qbCOjUQAJBzbzLOTnx3P54mAn2FfpKWTAF/wc9YJXD8Y3zVjPHjn/GBM+uEgtRpX8B4fYGSEpo56x69Ag/u90Yh/ZaQFCJoJoo0BpHinjKjSEheKB8Nn1EcDKJesxUWzMo5faeUi4T2vbdXfFEpFByDcLGVRIUGsfOVUxZRCrzB0h5GztaW8HWA7h1l1t/LmkEAURBfLY4gjCv+WfdQDQIDAQAB";
 	}
+	
+	@Override
+	protected int getSplashImageResource() {
+		return R.drawable.splash;
+	}
 }
