@@ -142,7 +142,7 @@ public class JavaInterface {
 		
 		if (id == 0) {
 			if (BuildConfig.DEBUG) {
-				throw new RuntimeException(TAG + ":GetString cannot find string for name:" + name);
+				Log.e(TAG, "GetString cannot find string for name:" + name);
 			}
 			return name;
 		}
@@ -151,7 +151,7 @@ public class JavaInterface {
 			return res.getString(id);
 		} catch (Resources.NotFoundException e) {
 			if (BuildConfig.DEBUG) {
-				throw e;
+				Log.e(TAG, "GetString cannot find string for name:" + name);
 			}
 			return name;
 		}
