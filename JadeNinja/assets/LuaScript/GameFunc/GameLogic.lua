@@ -187,7 +187,7 @@ function ResetDefaultDataDelegate()
     --==================================
     -- TESTING
     --==================================
-    if APP_DEBUG_MODE then
+    if APP_TESTER_BUILD then
         local ds = dataSet[IO_CAT_HACK];
         
         ds["Weapon"][WEAPON_TYPE_KATANA] = 5;

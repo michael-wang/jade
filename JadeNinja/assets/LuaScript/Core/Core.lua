@@ -57,6 +57,7 @@ PREBUILD_DEVICE_SCRIPT_POOL =
 	[APP_DEVICE_ANDROID_TABLET] = "android.bottle",
 };
 
+APP_TESTER_BUILD = true; -- turn off on official release.
 APP_DEBUG_MODE = false;
 APP_USE_COMPILED_SCRIPT = false;
 APP_ASSET_PATH = nil;
