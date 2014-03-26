@@ -65,6 +65,7 @@ void RegisterGameFunctions(LuaState state)
         def("PostFacebookFeedByValuePair", &PostFacebookFeedByValuePair),
         // Game Center
         def("ShowLeaderboard", &ShowLeaderboard),
+        def("ShowLeaderboardForToday", &ShowLeaderboardForToday),
         def("ShowAchievements", &ShowAchievements),
         def("SubmitScore", &SubmitScore),
         def("SubmitAchievement", &SubmitAchievement),
@@ -320,6 +321,14 @@ void ShowLeaderboard(const char* identifier)
     }
 
     java->ShowLeaderboard(identifier);
+}
+
+void ShowLeaderboardForToday(const char* id) {
+
+    LOGD(logger, "ShowLeaderboardForToday id:%s", id)
+
+    // Google Play leaderboard does not support show only today's leaderboard.
+    ShowLeaderboard(id);
 }
 
 // Need to callback OnUIPresentCompleted.

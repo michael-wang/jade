@@ -19,7 +19,7 @@ import com.studioirregular.gaoframework.functional.PlayMovie;
 import com.studioirregular.gaoframework.functional.PresentAlertDialog;
 import com.studioirregular.gaoframework.functional.RestorePurchases;
 import com.studioirregular.gaoframework.functional.ShowAchievements;
-import com.studioirregular.gaoframework.functional.ShowAllLeaderboards;
+import com.studioirregular.gaoframework.functional.ShowLeaderboard;
 import com.studioirregular.gaoframework.functional.ToastMessage;
 import com.studioirregular.gaoframework.gles.Circle;
 import com.studioirregular.gaoframework.gles.GLThread;
@@ -390,13 +390,15 @@ public class JavaInterface {
 	}
 	
 	// Google Play Game service
-	public void ShowLeaderboard(String id) {
+	public void ShowLeaderboard(String idStringId) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "ShowLeaderboard id:" + id);
+			Log.d(TAG, "ShowLeaderboard idStringId:" + idStringId);
 		}
 		
-		ShowAllLeaderboards show = new ShowAllLeaderboards();
+		final String idValue = GetString(idStringId);
+		
+		ShowLeaderboard show = new ShowLeaderboard(idValue);
 		((AbsGameActivity)context).runOnUiThread(show);
 		
 		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
@@ -423,29 +425,29 @@ public class JavaInterface {
 		return GameServices.getInstance().isConnected();
 	}
 	
-	public void SubmitAchievement(String id, float value, boolean unlock) {
+	public void SubmitAchievement(String idStringId, float value, boolean unlock) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "SubmitAchievement id:" + id + ",value:" + value + ",unlock:" + unlock);
+			Log.d(TAG, "SubmitAchievement idStringId:" + idStringId + ",value:" + value + ",unlock:" + unlock);
 		}
 		
-		final String idValue = GetString(id);
-		if (idValue.equals(id)) {
-			throw new IllegalArgumentException("SubmitAchievement invalid id:" + id);
+		final String idValue = GetString(idStringId);
+		if (idValue.equals(idStringId)) {
+			throw new IllegalArgumentException("SubmitAchievement invalid id:" + idStringId);
 		}
 		
 		GameServices.getInstance().SubmitAchievement(idValue, value, unlock);
 	}
 	
-	public void SubmitScore(String id, int value) {
+	public void SubmitScore(String idStringId, int value) {
 		
 		if (DEBUG_LOG) {
-			Log.d(TAG, "SubmitScore id:" + id + ",value:" + value);
+			Log.d(TAG, "SubmitScore idStringId:" + idStringId + ",value:" + value);
 		}
 		
-		final String idValue = GetString(id);
-		if (idValue.equals(id)) {
-			throw new IllegalArgumentException("SubmitAchievement invalid id:" + id);
+		final String idValue = GetString(idStringId);
+		if (idValue.equals(idStringId)) {
+			throw new IllegalArgumentException("SubmitAchievement invalid id:" + idStringId);
 		}
 		
 		GameServices.getInstance().SubmitScore(idValue, value);

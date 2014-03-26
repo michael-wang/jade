@@ -229,7 +229,27 @@ public class GameServices {
 		
 		Intent show = Games.Leaderboards.getAllLeaderboardsIntent(apiClient);
 		if (show == null) {
-			Log.w(TAG, "ShowLeaderboard unable to obtain intent");
+			Log.w(TAG, "ShowAllLeaderboards unable to obtain intent");
+			return;
+		}
+		
+		activity.startActivityForResult(show, leaderboardsRequestCode);
+	}
+	
+	public void ShowLeaderboard(String id) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowLeaderboard id:" + id);
+		}
+		
+		if (!isConnected()) {
+			Log.w(TAG, "ShowLeaderboard not connected to game service.");
+			return;
+		}
+		
+		Intent show = Games.Leaderboards.getLeaderboardIntent(apiClient, id);
+		if (show == null) {
+			Log.w(TAG, "ShowLeaderboard: unable to obtain intent for leaderboard id:" + id);
 			return;
 		}
 		

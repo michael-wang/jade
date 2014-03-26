@@ -29,6 +29,7 @@ void EnableAccelerometer(bool enable);
 bool IsGameCenterAvailable();
 bool HasGameCenterAuthenticated();
 void ShowLeaderboard(const char* identifier);
+void ShowLeaderboardForToday(const char* id);
 void ShowAchievements();
 void SubmitScore(const char* category, double score);
 void SubmitAchievement(const char* identifier, float percent, bool repeatable);
