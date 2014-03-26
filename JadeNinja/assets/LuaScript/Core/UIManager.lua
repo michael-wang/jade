@@ -730,6 +730,8 @@ UIManager =
 			if (widgets) then
 				if (widgets["BACK"]) then
 					return widgets["BACK"];
+				elseif (widgets["Exit"]) then
+					return widgets["Exit"];
 				elseif (widgets["Pause"]) then
 					return widgets["Pause"];
 				end
