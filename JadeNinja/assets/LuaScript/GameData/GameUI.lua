@@ -2448,7 +2448,7 @@ GameUITemplate
         {
             class = "PuzzlePicture",
             x = 25,
-            y = 16, --y = 32,
+            y = 32,
             name = "Seller",
 			doUpdate = true,
             
