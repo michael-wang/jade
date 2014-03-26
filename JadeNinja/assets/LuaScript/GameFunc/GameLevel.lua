@@ -2136,8 +2136,10 @@ LevelManager =
 				self:EnableDistanceCounter(true);
 					
 				-- Initial boost
-				if (self.m_IsChallengeMode and (UIManager:GetWidget("InGame", "DistanceCounter"):GetValue() == 0)) then
-					self:BoostDistance(1500);
+				if (self.m_IsChallengeMode) then
+					if (UIManager:GetWidget("InGame", "DistanceCounter"):GetValue() == 0) then
+						self:BoostDistance(1500);
+					end
 				else
 					local boostDistance = IOManager:GetValue(IO_CAT_HACK, "Boost", "Initial");
 					if (boostDistance > 0) then
