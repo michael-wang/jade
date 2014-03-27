@@ -60,9 +60,11 @@ public class StreamingAudio implements AbsAudioResource {
 			return;
 		}
 		
-		mplayer.stop();
-		
-		onAudioStopped();
+		if (mplayer.isPlaying()) {
+			mplayer.stop();
+			
+			onAudioStopped();
+		}
 	}
 
 	@Override

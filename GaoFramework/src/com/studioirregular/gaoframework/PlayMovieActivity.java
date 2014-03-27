@@ -26,6 +26,9 @@ public class PlayMovieActivity extends Activity {
 		
 		setContentView(R.layout.activity_play_movie);
 		
+		immersiveMode = new ImmersiveMode(this);
+		immersiveMode.setImmersiveMode();
+		
 		RelativeLayout contentView = (RelativeLayout)findViewById(R.id.main_content);
 		if (contentView == null) {
 			somethingWrong("Cannot find content view.");
@@ -53,6 +56,15 @@ public class PlayMovieActivity extends Activity {
 		}
 		
 		videoView.start();
+	}
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		
+		if (immersiveMode != null) {
+			immersiveMode.onWindowFocusChanged(hasFocus);
+		}
 	}
 	
 	@Override
@@ -154,5 +166,6 @@ public class PlayMovieActivity extends Activity {
 	}
 	
 	private boolean houstonWeGotProblem = false;
+	private ImmersiveMode immersiveMode;
 
 }

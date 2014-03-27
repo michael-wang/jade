@@ -6,7 +6,6 @@ import java.util.Observer;
 
 import org.json.JSONException;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
@@ -48,6 +47,8 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	private static final int SHOW_ACHIEVEMENTS_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START + 2;
 	private static final int SHOW_LEADERBOARDS_REQUEST_CODE = Global.FRAMEWORK_ACTIVITY_CODE_START + 3;
 	
+	private ImmersiveMode immersiveMode;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,7 +57,8 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		}
 		
 		setContentView(R.layout.activity_main);
-		setImmersiveMode();
+		immersiveMode = new ImmersiveMode(this);
+		immersiveMode.setImmersiveMode();
 		setSplash();
 		fpsTextView = (TextView)findViewById(R.id.textview);
 		
@@ -456,19 +458,12 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		GLThread.getInstance().scheduleFunction(notify);
 	}
 	
-	@SuppressLint("InlinedApi")
-	private void setImmersiveMode() {
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
 		
-		View content = findViewById(R.id.main_content);
-		if (content == null) {
-			Log.e(TAG, "setImmersiveMode: cannot find content view.");
-			return;
-		}
-		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			content.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-					| View.SYSTEM_UI_FLAG_FULLSCREEN
-					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		if (immersiveMode != null) {
+			immersiveMode.onWindowFocusChanged(hasFocus);
 		}
 	}
 	
