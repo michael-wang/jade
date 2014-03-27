@@ -808,7 +808,7 @@ GameUITemplate
 
 -------------------------------------------------------------------------
 UI_CREDIT_POS = { 30, 135 };
-UI_CREDIT_PAGE_MAX = 7;
+UI_CREDIT_PAGE_MAX = 8;
 
 GameUITemplate
 {
