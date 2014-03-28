@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.studioirregular.gaoframework.audio.AudioLoader;
 import com.studioirregular.gaoframework.audio.SoundSystem;
 import com.studioirregular.gaoframework.functional.NotifyBuyProductResult;
 import com.studioirregular.gaoframework.functional.NotifyPurchaseRestored;
@@ -133,6 +134,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		
 		ActivityOnDestroy();
 		
+		AudioLoader.getInstance().cleanRemainingTasks();
 		SoundSystem.getInstance().onDestroy();
 	}
 	

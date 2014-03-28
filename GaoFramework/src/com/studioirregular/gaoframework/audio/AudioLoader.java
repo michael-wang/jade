@@ -37,6 +37,14 @@ public class AudioLoader {
 		kickOffIfNotWorking();
 	}
 	
+	// No need to load other audio if App destroyed.
+	public void cleanRemainingTasks() {
+		synchronized (waiting) {
+			Log.w(TAG, "cleanRemainingTasks #tasks:" + waiting.size());
+			waiting.clear();
+		}
+	}
+	
 	private synchronized void kickOffIfNotWorking() {
 		
 		if (worker != null) {
@@ -67,7 +75,7 @@ public class AudioLoader {
 		synchronized (AudioLoader.this) {
 			
 			if (waiting.isEmpty()) {
-				takeBreak();
+				retire();
 				return false;
 			} else {
 				next = waiting.remove();
@@ -80,7 +88,7 @@ public class AudioLoader {
 		return true;
 	}
 	
-	private synchronized void takeBreak() {
+	private synchronized void retire() {
 		worker = null;
 	}
 }
