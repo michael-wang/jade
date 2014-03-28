@@ -241,6 +241,28 @@ ACH_ANDROID_ID = {
     [ACH_BOSS_LV4] = "achievement_boss_hunt_evil_fox",
     [ACH_BOSS_LV5] = "achievement_boss_hunt_devil_samurai",
 };
+
+-- There are two types of achievement in Android: incremental and unlock, which require different API to submit.
+-- And achievement cnnot change type after added to Google Play.
+-- So I need to way to know which type an achievement is.
+ACH_UNLOCK_TYPE = {
+
+    [ACH_INNOCENT_HURT]        = true;
+    [ACH_ENERGY_LOW]           = true,
+    [ACH_INNOCENT_MULTLE_HURT] = true,
+    [ACH_MAIL_MAN]             = true,
+    [ACH_MONKEY_POTION]        = true,
+    [ACH_BOMBER_MAN]           = true,
+    [ACH_ENEMY_BLOCKED]        = true,
+    [ACH_TUTORIAL_COMPLETED]   = true,
+    [ACH_NINJA_GRANNY_SPOT]    = true,
+
+    [ACH_BOSS_LV1]             = true,
+    [ACH_BOSS_LV2]             = true,
+    [ACH_BOSS_LV3]             = true,
+    [ACH_BOSS_LV4]             = true,
+    [ACH_BOSS_LV5]             = true,
+};
 end -- IS_PLATFORM_ANDROID
 
 -------------------------------------------------------------------------

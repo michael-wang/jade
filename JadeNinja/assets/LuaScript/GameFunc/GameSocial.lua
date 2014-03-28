@@ -281,7 +281,7 @@ function UpdateAchievement(id, inc, overwrite, doSave)
 
         if IS_PLATFORM_ANDROID then
             local androidID = ACH_ANDROID_ID[id];
-            local unlock = maxCount == 1;
+            local unlock = ACH_UNLOCK_TYPE[id] == true;
             GameKit.SubmitAchievement(androidID, percent, unlock);
         else
             GameKit.SubmitAchievement(GC_ACHEIVEMENT_PREFIX .. id, percent, repeatable);
