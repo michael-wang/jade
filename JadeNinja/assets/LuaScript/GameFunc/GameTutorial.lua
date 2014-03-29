@@ -16,27 +16,27 @@ TUTORIAL_SLASH_TARGET = { 205, 205 };
 
 TUTORIAL_SWIPE_POS_SET =
 {
-	[DEFAULT_HAND_SET] = { 10, 250 },
-	[INVERSE_HAND_SET] = { 380, 250 },
+	[DEFAULT_HAND_SET] = { 10, 250 + 16 },
+	[INVERSE_HAND_SET] = { 380, 250 + 16 },
 };
 
 TUTORIAL_SWIPE_TARGET_SET =
 {
-	[DEFAULT_HAND_SET] = { 90, 250 },
-	[INVERSE_HAND_SET] = { 460, 250 },
+	[DEFAULT_HAND_SET] = { 90, 250 + 16 },
+	[INVERSE_HAND_SET] = { 460, 250 + 16 },
 };
 
 TUTORIAL_TAP_POS_SET =
 {
 	[DEFAULT_HAND_SET] =
 	{
-		{ 325, 220 },
-		{ 255, 220 },
+		{ 325, 220 + 32 },
+		{ 255, 220 + 32 },
 	},
 	[INVERSE_HAND_SET] =
 	{
-		{ -30, 220 },
-		{ 40, 220 },
+		{ -30, 220 + 32 },
+		{ 40, 220 + 32 },
 	},
 };
 
