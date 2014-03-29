@@ -60,8 +60,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 		immersiveMode = new ImmersiveMode(this);
 		immersiveMode.setImmersiveMode();
-		setSplash();
-		fpsTextView = (TextView)findViewById(R.id.textview);
+		showSplash();
 		
 		View view = findViewById(R.id.surfaceview);
 		if (view == null || !(view instanceof GLSurfaceView)) {
@@ -78,9 +77,9 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		MyGLRenderer renderer = new MyGLRenderer();
 		surfaceView.setRenderer(renderer);
 		
-		fps = new FrameRateCalculator();
-		fps.addObserver(frameRateObserver);
-		renderer.calculateFrameRate(fps);
+		if (Config.SHOW_FRAME_RATE) {
+			initShowFPS(renderer);
+		}
 		
 		JavaInterface.getInstance().init(AbsGameActivity.this, renderer);
 		
@@ -232,42 +231,59 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	
 	private GLSurfaceView surfaceView;
 	
-	private FrameRateCalculator fps;
-	private TextView fpsTextView;
-	private Observer frameRateObserver = new Observer() {
-
-		@Override
-		public void update(Observable observable, Object data) {
-			
-			if (observable == fps) {
-				final Float value = (Float)data;
-				if (DEBUG_LOG) {
-					Log.w(TAG, "fps:" + value);
-				}
-				
-				showFPS.setFPS(value);
-				AbsGameActivity.this.runOnUiThread(showFPS);
-			}
-		}
-		
-	};
 	private class ShowFPS implements Runnable {
 
 		private float value = 0;
+		private TextView textView;
 		
-		public void setFPS(float value) {
+		public ShowFPS(TextView view) {
+			this.textView = view;
+		}
+		
+		public void show(float value) {
 			this.value = value;
+			
+			if (textView != null) {
+				textView.post(ShowFPS.this);
+			}
 		}
 		
 		@Override
 		public void run() {
-			if (fpsTextView != null) {
-				fpsTextView.setText("fps:" + value);
+			if (textView != null) {
+				textView.setText("fps:" + value);
 			}
 		}
 		
 	};
-	private ShowFPS showFPS = new ShowFPS();
+	
+	private ShowFPS showFPS;
+	
+	private void initShowFPS(MyGLRenderer renderer) {
+		
+		TextView view = (TextView)findViewById(R.id.textview);
+		showFPS = new ShowFPS(view);
+		
+		Observer frameRateObserver = new Observer() {
+
+			@Override
+			public void update(Observable observable, Object data) {
+				
+				final Float value = (Float)data;
+				if (DEBUG_LOG) {
+					Log.d(TAG, "fps:" + value);
+				}
+				
+				showFPS.show(value);
+//				AbsGameActivity.this.runOnUiThread(showFPS);
+			}
+			
+		};
+		
+		FrameRateCalculator fps = new FrameRateCalculator();
+		fps.addObserver(frameRateObserver);
+		renderer.calculateFrameRate(fps);
+	}
 	
 	private native void ActivityOnCreate(int worldWidth, int worldHeight, String luaScriptPath, AssetManager am, boolean debugMode);
 	private native void ActivityOnDestroy();
@@ -471,7 +487,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	
 	private LaunchSplash splash;
 	
-	private void setSplash() {
+	private void showSplash() {
 		splash = new LaunchSplash();
 		splash.setMinimumDuration(2000);
 		splash.showSplash(AbsGameActivity.this, getSplashImageResource(), R.id.splash);

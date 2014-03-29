@@ -10,6 +10,8 @@ import android.os.Environment;
  */
 public class Config {
 	
+	public static final boolean SHOW_FRAME_RATE = false;
+	
 	public static class Asset {
 		
 		public static enum Type {
