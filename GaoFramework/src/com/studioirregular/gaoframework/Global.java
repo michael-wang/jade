@@ -92,6 +92,10 @@ public class Global {
 	
 	// Reserved activity request code used by framework, client activity should
 	// NOT using values in the range.
-	public static final int FRAMEWORK_ACTIVITY_CODE_START = 0x2A; // It all start from 42.
+	public static final int FRAMEWORK_ACTIVITY_CODE_START = 0x2A; // Ha! I got it, its 42. Now what's the question again...
 	public static final int FRAMEWORK_ACTIVITY_CODE_END   = 0xFF;
+	
+	// Lua global function names.
+	public static final String LUA_IS_SFX_ENABLED = "IsSfxEnabled";
+	public static final String LUA_IS_BGM_ENABLED = "IsBgmEnabled";
 }

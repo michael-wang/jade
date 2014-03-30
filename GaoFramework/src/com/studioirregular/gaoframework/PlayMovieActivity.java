@@ -49,6 +49,10 @@ public class PlayMovieActivity extends Activity {
 			Log.d(TAG, "filename:" + filename);
 		}
 		
+		if (shouldMuteVideo()) {
+			muteVideo(videoView);
+		}
+		
 		if (BuildConfig.DEBUG) {
 			loadFromFile(filename, videoView);
 		} else {
@@ -167,5 +171,36 @@ public class PlayMovieActivity extends Activity {
 	
 	private boolean houstonWeGotProblem = false;
 	private ImmersiveMode immersiveMode;
+	
+	private boolean shouldMuteVideo() {
+		
+		final boolean soundDisabled = !NativeInterface.getInstance().CallBooleanLuaFunction(Global.LUA_IS_SFX_ENABLED);
+		if (soundDisabled) {
+			return true;
+		}
+		
+		final boolean musicDisabled = !NativeInterface.getInstance().CallBooleanLuaFunction(Global.LUA_IS_BGM_ENABLED);
+		return musicDisabled;
+	}
+	
+	private void muteVideo(VideoView videoView) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "muteVideo");
+		}
+		
+		if (videoView != null) {
+			videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+				
+				@Override
+				public void onPrepared(MediaPlayer mp) {
+					
+					if (mp != null) {
+						mp.setVolume(0, 0);
+					}
+				}
+			});
+		}
+	}
 
 }

@@ -35,4 +35,5 @@ public class NativeInterface {
 	public native void NotifySendMailResult(boolean success);
 	public native void NotifyStateLoadedFromCloud();
 	public native void NotifyGameServiceConnectionStatus(boolean connected);
+	public native boolean CallBooleanLuaFunction(String name);
 }

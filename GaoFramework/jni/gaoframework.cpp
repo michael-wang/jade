@@ -340,3 +340,39 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
         jni->Set(NULL);
     }
 }
+
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    CallBooleanLuaFunction
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_studioirregular_gaoframework_NativeInterface_CallBooleanLuaFunction
+  (JNIEnv *env, jobject obj, jstring func) {
+    
+    const char* cFunc = getJniString(env, func);
+    LOGD(logger, "CallBooleanLuaFunction func:%s", cFunc)
+
+    GaoBool result = FALSE; // default value.
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        AndroidLuaManager* luaManager = app->GetLuaManager();
+        if (luaManager == NULL) {
+            LOGE(logger, "CallBooleanLuaFunction: cannot get lua manager.")
+            return result;
+        }
+
+        if (!luaManager->GetFunction(cFunc)) {
+            LOGE(logger, "CallBooleanLuaFunction: cannot find lua function: %s", cFunc)
+            return result;
+        }
+
+        luaManager->CallFunction();
+        luaManager->GetValueAt(1, result);
+
+        jni->Set(NULL);
+    }
+
+    return result;
+}

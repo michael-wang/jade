@@ -705,6 +705,14 @@ AudioManager =
 			end
 		end
 	end,
+	---------------------------------------------------------------------
+	IsSfxEnabled = function(self)
+		return self.m_SfxEnabled;
+	end,
+	---------------------------------------------------------------------
+	IsBgmEnabled = function(self)
+		return self.m_BgmEnabled;
+	end,
 };
 
 --------------------------------------------------------------------------------
@@ -720,4 +728,12 @@ end
 --------------------------------------------------------------------------------
 function SetVolumeCallback(value, go)
 	go:SetVolume(value);
+end
+--------------------------------------------------------------------------------
+function IsSfxEnabled()
+	return AudioManager:IsSfxEnabled();
+end
+--------------------------------------------------------------------------------
+function IsBgmEnabled()
+	return AudioManager:IsBgmEnabled();
 end

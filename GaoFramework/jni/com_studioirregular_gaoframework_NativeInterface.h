@@ -80,6 +80,15 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_Not
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_NativeInterface_NotifyGameServiceConnectionStatus
   (JNIEnv *, jobject, jboolean);
 
+/*
+ * Class:     com_studioirregular_gaoframework_NativeInterface
+ * Method:    CallBooleanLuaFunction
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_studioirregular_gaoframework_NativeInterface_CallBooleanLuaFunction
+  (JNIEnv *, jobject, jstring);
+
+
 #ifdef __cplusplus
 }
 #endif
