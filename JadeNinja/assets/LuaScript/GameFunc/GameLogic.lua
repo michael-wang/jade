@@ -1518,7 +1518,9 @@ function ReviveFromIAP()
         UIManager:ToggleUI("Wait");
     end
     StageManager:ChangeStage("InGame");
-    ReviveGame(false);
+    EnemyManager:CleanupFromRevive();
+    LevelManager:Revive();
+
     GameKit.LogEventWithParameter("Revive", "YES", "IAP", false);
 end
 
