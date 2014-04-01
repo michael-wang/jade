@@ -46,7 +46,6 @@ GaoVoid RegisterAndroidClasses(LuaState state) {
 			.def("OnNativeInitializeDone", &JavaInterface::OnNativeInitializeDone)
 			.def("GetTouchEvents", &JavaInterface::GetTouchEvents)
 			.def("GetLogFilePath", &JavaInterface::GetLogFilePath)
-			.def("IsIABRestored", &JavaInterface::IsIABRestored)
 	];
 
     module(state, "GaoApp")

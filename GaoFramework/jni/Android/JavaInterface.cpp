@@ -295,13 +295,6 @@ void JavaInterface::BuyProduct(const char* id) {
 	if (jid != NULL) env->DeleteLocalRef(jid);
 }
 
-GaoBool JavaInterface::IsIABRestored() {
-
-	LOGD(log, "IsIABRestored")
-
-	return jobj.CallBooleanMethod("IsIABRestored", "()Z");
-}
-
 void JavaInterface::RestorePurchases() {
 
 	LOGD(log, "RestorePurchases")

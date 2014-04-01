@@ -366,18 +366,6 @@ public class JavaInterface {
 //		GLThread.getInstance().scheduleFunction(notify);
 	}
 	
-	public boolean IsIABRestored() {
-		
-		AbsGameActivity activity = (AbsGameActivity)context;
-		final boolean result = activity.isIABRestored();
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "IsIABRestored: " + result);
-		}
-		
-		return result;
-	}
-	
 	public void RestorePurchases() {
 		
 		if (DEBUG_LOG) {

@@ -9,7 +9,6 @@ import org.json.JSONException;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Point;
 import android.opengl.GLSurfaceView;
@@ -406,8 +405,6 @@ public abstract class AbsGameActivity extends FragmentActivity {
 			NotifyPurchaseRestored notify = new NotifyPurchaseRestored(id);
 			GLThread.getInstance().scheduleFunction(notify);
 		}
-		
-		setIABRestored();
 	}
 
 	@Override
@@ -497,30 +494,6 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		
 		splash.hideSplash(AbsGameActivity.this, R.id.main_content);
 		splash = null;
-	}
-	
-	public boolean isIABRestored() {
-		
-		SharedPreferences pref = getSharedPreferences("package", Activity.MODE_PRIVATE);
-		final boolean result = pref.getBoolean("restored", false);
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "isIABRestored:" + result);
-		}
-		
-		return result;
-	}
-	
-	private void setIABRestored() {
-		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "setIABRestored");
-		}
-		
-		SharedPreferences.Editor editor = 
-				getSharedPreferences("package", Activity.MODE_PRIVATE).edit();
-		editor.putBoolean("restored", true);
-		editor.commit();
 	}
 	
 }

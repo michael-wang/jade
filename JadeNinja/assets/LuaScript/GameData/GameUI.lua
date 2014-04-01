@@ -1000,7 +1000,7 @@ GameUITemplate
                 },
 			},
 		},		
-
+--[[ Android version auto restore purchase on app launch, we don't need restore button here.
 		{
 			class = "PuzzleButton",
 			name = "Restore",
@@ -1019,7 +1019,7 @@ GameUITemplate
                 },
 			},
 		},
-
+--]]
 		{
 			class = "PuzzlePicture",
 			name = "Content",

@@ -649,9 +649,7 @@ function ReadSaveDataFromFile()
     -- E.g. restore might find thief char is bought before but not in cloud data 
     -- (maybe we didn't got chance to save the state to cloud when player bought it)
     if IS_PLATFORM_ANDROID then
-        if not g_JavaInterface:IsIABRestored() then
-            GameKit.RestorePurchases();
-        end
+        GameKit.RestorePurchases();
     end
 end
 
@@ -706,8 +704,13 @@ end
 function SyncFromCloud()
     if (IOManager:GetRecord(IO_CAT_OPTION, "iCloud") == true) then
         GameKit.SyncFromiCloud();
-    --else
+    else
     --log("SyncFromCloud : N/A")
+        -- If cloud sync is not turn on, restore purchases here.
+        -- If cloud sync is on, restore purchases in ReadSaveDataFromFile.
+        if IS_PLATFORM_ANDROID then
+            GameKit.RestorePurchases();
+        end
     end
 end
 
