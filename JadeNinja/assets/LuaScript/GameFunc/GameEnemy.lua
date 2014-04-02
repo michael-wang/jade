@@ -1409,12 +1409,12 @@ EnemyManager =
 			LevelManager:LaunchComboEffect(1);
 		elseif (self.m_ComboCount == 50) then
 			LevelManager:LaunchComboEffect(2);
-		elseif (self.m_ComboCount == 100) then
+		elseif (self.m_ComboCount == GC_ACHEIVEMENT_MAX[ACH_COMBO_MAX_LV1]) then
 			LevelManager:LaunchComboEffect(3);
 			UpdateAchievement(ACH_COMBO_MAX_LV1, GC_ACHEIVEMENT_MAX[ACH_COMBO_MAX_LV1], true);
-		elseif (self.m_ComboCount == 250) then
+		elseif (self.m_ComboCount == GC_ACHEIVEMENT_MAX[ACH_COMBO_MAX_LV2]) then
 			UpdateAchievement(ACH_COMBO_MAX_LV2, GC_ACHEIVEMENT_MAX[ACH_COMBO_MAX_LV2], true);
-		elseif (self.m_ComboCount == 500) then
+		elseif (self.m_ComboCount == GC_ACHEIVEMENT_MAX[ACH_COMBO_MAX_LV3]) then
 			UpdateAchievement(ACH_COMBO_MAX_LV3, GC_ACHEIVEMENT_MAX[ACH_COMBO_MAX_LV3], true);
 		end
 

@@ -247,6 +247,9 @@ function UpdateAchievement(id, inc, overwrite, doSave)
     inc = inc or 1;
 
     local repeatable = GC_ACHEIVEMENT_REPEATABLE[id] or false;
+    if IS_PLATFORM_ANDROID then
+        repeatable = false;
+    end
     local ach = GC_ACH_POOL[id];
     
     if (overwrite) then
