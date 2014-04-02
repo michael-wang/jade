@@ -28,7 +28,7 @@ public class StreamingAudio implements AbsAudioResource {
 	}
 
 	@Override
-	public boolean Play() {
+	public synchronized boolean Play() {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "Play: " + filePath);
@@ -47,7 +47,7 @@ public class StreamingAudio implements AbsAudioResource {
 	}
 	
 	@Override
-	public void Stop() {
+	public synchronized void Stop() {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "Stop: " + filePath);
@@ -68,7 +68,7 @@ public class StreamingAudio implements AbsAudioResource {
 	}
 
 	@Override
-	public void Pause() {
+	public synchronized void Pause() {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "Pause: " + filePath);
@@ -80,7 +80,7 @@ public class StreamingAudio implements AbsAudioResource {
 	}
 
 	@Override
-	public void Resume() {
+	public synchronized void Resume() {
 		
 		if (DEBUG_LOG) {
 			Log.d(TAG, "Resume: " + filePath);
@@ -118,7 +118,7 @@ public class StreamingAudio implements AbsAudioResource {
 	}
 
 	@Override
-	public boolean IsPlaying() {
+	public synchronized boolean IsPlaying() {
 		
 		boolean result = false;
 		
@@ -128,7 +128,7 @@ public class StreamingAudio implements AbsAudioResource {
 		
 		if (DEBUG_LOG) {
 			if (!result) {
-				Log.w(TAG, "IsPlaying:" + result);
+				Log.w(TAG, "IsPlaying:" + filePath + ", result:" + result);
 			}
 		}
 		return result;
@@ -206,7 +206,11 @@ public class StreamingAudio implements AbsAudioResource {
 		return MediaPlayer.create(ctx, resid);
 	}
 	
-	private void onAudioStopped() {
+	private synchronized void onAudioStopped() {
+		
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onAudioStopped:" + filePath);
+		}
 		
 		if (mplayer != null) {
 			mplayer.release();
