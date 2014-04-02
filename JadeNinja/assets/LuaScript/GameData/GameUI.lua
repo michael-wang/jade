@@ -5755,58 +5755,8 @@ GameUITemplate
 	
 		{
 			class = "PuzzleButton",
-			name = "Twitter",
+			name = "Leaderboard",
 			x = 12,
-			y = 267,
-			
-			onMouseUp = function(x, y)
-				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
---[[ @OLD				
-				OpenTwitter();
---]]
-				if (GameKit.GetUserLanguage() == "zh-Hans") then
-					ComposeSocialMessage(GAO_SOCIAL_SINAWEIBO);
-				else
-					ComposeSocialMessage(GAO_SOCIAL_TWITTER);
-				end
-			end,
-		
-			components =
-			{
-				{
-					class = "PuzzleSprite",
-					image = "ui_stat_twitter",
-				},
-			},
-		},
-
-		{
-			class = "PuzzleButton",
-			name = "Facebook",
-			x = 74,
-			y = 267,
-			
-			onMouseUp = function(x, y)
-				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
---[[ @OLD				
-				OpenFacebook();
---]]				
-				ComposeSocialMessage(GAO_SOCIAL_FACEBOOK);
-			end,
-
-			components =
-			{
-				{
-					class = "PuzzleSprite",
-					image = "ui_stat_facebook",
-				},
-			},
-		},
-	
-		{
-			class = "PuzzleButton",
-			name = "Gamecenter",
-			x = 136,
 			y = 267,
 			
 			onMouseUp = function(x, y)
@@ -5818,7 +5768,27 @@ GameUITemplate
 			{
 				{
 					class = "PuzzleSprite",
-					image = "ui_stat_gamecenter",
+					image = "ui_stat_leaderboard",
+				},
+			},
+		},
+
+		{
+			class = "PuzzleButton",
+			name = "Achievement",
+			x = 74,
+			y = 267,
+			
+			onMouseUp = function(x, y)
+				AudioManager:PlaySfx(SFX_UI_BUTTON_1);
+				ShowAchievements();
+			end,
+		
+			components =
+			{
+				{
+					class = "PuzzleSprite",
+					image = "ui_stat_achievement",
 				},
 			},
 		},
@@ -5896,8 +5866,8 @@ GameUITemplate
 	groups =
 	{
 		AllWidgets = { "Again", "Shop", "DistanceNum", "CoinGetNum", "ScoreNum", "StatText", "Avatar",
-					   "BestScoreEffect", "BestScoreText", "BestScoreNum", "Facebook", "Twitter", "Gamecenter", "Exit" },
-		ButtonWidgets = { "Shop", "Again", "Twitter", "Gamecenter", "Facebook", "Exit" },
+					   "BestScoreEffect", "BestScoreText", "BestScoreNum", "Achievement", "Leaderboard", "Exit" },
+		ButtonWidgets = { "Shop", "Again", "Achievement", "Leaderboard", "Exit" },
 		SkipWidgets = { "DistanceNum", "CoinGetNum", "ScoreNum" },
 	},
 };

@@ -9337,7 +9337,7 @@ PuzzleImage
 	},
 
 	{
-		name = "ui_stat_gamecenter",
+		name = "ui_stat_leaderboard",
 		uv = { 0.4357143,0.3846154,0.5714286,0.9692308 },
 		size = { 38,38 },
 	},
@@ -9469,7 +9469,7 @@ PuzzleImage
 	},
 
 	{
-		name = "ui_stat_sina",
+		name = "ui_stat_achievement",
 		uv = { 0.5714286,0.3846154,0.7071428,0.9692308 },
 		size = { 38,38 },
 	},
