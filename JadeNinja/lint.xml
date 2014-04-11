@@ -2,5 +2,6 @@
 <lint>
     <issue id="MissingTranslation">
         <ignore path="res/values/games-ids.xml" />
+        <ignore path="res/values/strings.xml" />
     </issue>
 </lint>
