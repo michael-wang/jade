@@ -68,6 +68,8 @@ public class GameServices {
 			.addConnectionCallbacks(googleApiConnectionCallback)
 			.addOnConnectionFailedListener(googleApiConnectionFailedListener)
 			.build();
+		
+		allowToConnectOnStart = true;
 	}
 	
 	public void onStart(int activityRequestCode, int achievementsRequestCode, int leaderboardsRequestCode) {
@@ -87,11 +89,25 @@ public class GameServices {
 			return;
 		}
 		
-		if (!apiClient.isConnecting() && !apiClient.isConnected()) {
-			apiClient.connect();
+		if (!allowToConnectOnStart) {
+			if (DEBUG_LOG) {
+				Log.d(TAG, "Skip connection for allowToConnectOnStart == false");
+			}
+			return;
 		}
 		
+		if (apiClient.isConnecting() || apiClient.isConnected()) {
+			return;
+		}
+		
+		if (DEBUG_LOG) {
+			Log.w(TAG, "onStart connecting to game service!");
+		}
+		
+		apiClient.connect();
 		notifyConnectionStatus(true);
+		
+		allowToConnectOnStart = false;
 	}
 	
 	public void onStop() {
@@ -580,4 +596,8 @@ public class GameServices {
 			}
 		}
 	}
+	
+	// This flag prevent connect every time activity restarts (e.g. after play movie)
+	// Once player reject connect on app launch, don't bother him any more.
+	private boolean allowToConnectOnStart = true;
 }
