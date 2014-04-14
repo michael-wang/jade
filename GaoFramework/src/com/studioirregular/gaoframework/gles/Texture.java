@@ -60,6 +60,10 @@ public class Texture {
 			return false;
 		}
 		
+		if (DEBUG_LOG) {
+			Log.w(TAG,"file:" + file + " w:" + bmp.getWidth() + ",h:" + bmp.getHeight());
+		}
+		
 		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, this.name);
 		
 		if (filtered) {
@@ -75,7 +79,7 @@ public class Texture {
 		
 		GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
 		
-		if (glError.hasError(TAG, "texImage2D failed.")) {
+		if (glError.hasError(TAG, "texImage2D failed for path:" + path)) {
 			workingBuf.put(0, this.name);
 			GLES20.glDeleteTextures(1, workingBuf);
 			this.name = INVALID_NAME;
