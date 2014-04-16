@@ -1018,8 +1018,7 @@ end
 
 -------------------------------------------------------------------------
 function OnRestoreJade1(id)
-    IOManager:SetValue(IO_CAT_HACK, "Jade", JADE_EFFECT_INNO_PROTECT, 1);
-    IOManager:SetValue(IO_CAT_HACK, "Jade", "Equip", JADE_EFFECT_INNO_PROTECT, true);
+    ShopManager:SerializeJade(JADE_EFFECT_INNO_PROTECT);
 end
 
 -------------------------------------------------------------------------

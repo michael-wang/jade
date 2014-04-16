@@ -838,11 +838,22 @@ ShopManager =
 	end,
 	---------------------------------------------------------------------
 	SerializeAvatar = function(self, id)
-		IOManager:SetValue(IO_CAT_HACK, "Avatar", id, 1);
-		IOManager:SetValue(IO_CAT_HACK, "AvatarLv", id, 1);
-		IOManager:SetValue(IO_CAT_HACK, "AvatarExp", id, 0);
-		IOManager:SetValue(IO_CAT_HACK, "Avatar", "Equip", id, true);
-		--log("BuyAvatar @ avatar id # "..id.." => item id: "..self.m_TargetItemId)
+
+		if (not IOManager:GetValue(IO_CAT_HACK, "Avatar", id)) then
+			IOManager:SetValue(IO_CAT_HACK, "Avatar", id, 1);
+			IOManager:SetValue(IO_CAT_HACK, "AvatarLv", id, 1);
+			IOManager:SetValue(IO_CAT_HACK, "AvatarExp", id, 0);
+			IOManager:SetValue(IO_CAT_HACK, "Avatar", "Equip", id, true);
+			--log("BuyAvatar @ avatar id # "..id.." => item id: "..self.m_TargetItemId)
+		end
+	end,
+	---------------------------------------------------------------------	
+	SerializeJade = function(self, id)
+
+		if (not IOManager:GetValue(IO_CAT_HACK, "Jade", id)) then
+			IOManager:SetValue(IO_CAT_HACK, "Jade", JADE_EFFECT_INNO_PROTECT, 1);
+			IOManager:SetValue(IO_CAT_HACK, "Jade", "Equip", JADE_EFFECT_INNO_PROTECT, true);
+		end
 	end,
 	---------------------------------------------------------------------	
 	BuyAvatar = function(self)

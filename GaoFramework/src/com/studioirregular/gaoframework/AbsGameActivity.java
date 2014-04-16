@@ -375,11 +375,11 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	
 	public void restorePurchases() {
 		
-		if (DEBUG_LOG) {
-			Log.d(TAG, "restorePurchases");
-		}
-		
 		List<PurchasedItem> items = iab.getPurchasedProducts(Product.Type.ONE_TIME_PURCHASE);
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "restorePurchases #items:" + (items == null ? 0 : items.size()));
+		}
 		
 		for (PurchasedItem item : items) {
 			
