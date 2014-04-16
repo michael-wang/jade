@@ -3,6 +3,8 @@ package com.studioirregular.gaoframework.audio;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
+import com.studioirregular.libinappbilling.Global;
+
 import android.util.Log;
 import android.os.Process;
 
@@ -28,7 +30,9 @@ public class AudioLoader {
 	
 	public void scheduleLoad(NonStreamingAudio audio) {
 		
-		Log.d(TAG, "scheduleLoad:" + audio);
+		if (Global.DEBUG_LOG) {
+			Log.d(TAG, "scheduleLoad:" + audio);
+		}
 		
 		synchronized (waiting) {
 			waiting.add(audio);
@@ -40,7 +44,9 @@ public class AudioLoader {
 	// No need to load other audio if App destroyed.
 	public void cleanRemainingTasks() {
 		synchronized (waiting) {
-			Log.w(TAG, "cleanRemainingTasks #tasks:" + waiting.size());
+			if (Global.DEBUG_LOG) {
+				Log.w(TAG, "cleanRemainingTasks #tasks:" + waiting.size());
+			}
 			waiting.clear();
 		}
 	}
@@ -56,11 +62,15 @@ public class AudioLoader {
 			@Override
 			public void run() {
 				
-				Log.w(TAG, "new thread running:" + this.getName());
+				if (Global.DEBUG_LOG) {
+					Log.w(TAG, "new thread running:" + this.getName());
+				}
 				
 				while (loadNext());
 				
-				Log.w(TAG, "thread about to end:" + this.getName());
+				if (Global.DEBUG_LOG) {
+					Log.w(TAG, "thread about to end:" + this.getName());
+				}
 			}
 			
 		};

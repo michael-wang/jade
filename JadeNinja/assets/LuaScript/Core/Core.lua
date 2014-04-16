@@ -127,12 +127,15 @@ g_LuaManager = nil;
 -------------------------------------------------------------------------
 function InitializeLuaAndroid(worldWidth, worldHeight, luaScriptPath, debugMode)
 
-	g_Logger:Show("InitializeLuaAndroid w:" .. worldWidth .. ",h:" .. worldHeight .. ",luaScriptPath:" .. luaScriptPath .. ",debugMode:" .. tostring(debugMode));
 	IS_PLATFORM_ANDROID = true;
 	APP_ASSET_PATH = "";
 	APP_LUA_PATH = luaScriptPath;
 	g_LuaManager = AndroidLuaManagerWrapper();
 	APP_DEBUG_MODE = debugMode;
+
+	if APP_DEBUG_MODE then
+		g_Logger:Show("InitializeLuaAndroid w:" .. worldWidth .. ",h:" .. worldHeight .. ",luaScriptPath:" .. luaScriptPath .. ",debugMode:" .. tostring(debugMode));
+	end
 
 	local portrait = (worldWidth < worldHeight);
 	local orientation = portrait and 0 or 1;
@@ -147,7 +150,10 @@ function InitializeLuaAndroid(worldWidth, worldHeight, luaScriptPath, debugMode)
 		unitX = worldWidth / APP_BASE_Y;
 		unitY = worldHeight / APP_BASE_X;
 	end
-	g_Logger:Show("InitializeLuaAndroid unitX:" .. unitX .. ",unitY:" .. unitY);
+	
+	if APP_DEBUG_MODE then
+		g_Logger:Show("InitializeLuaAndroid unitX:" .. unitX .. ",unitY:" .. unitY);
+	end
 
 	local deviceType = APP_DEVICE_ANDROID_PHONE;
 	if (worldWidth > (portrait and APP_BASE_X or APP_BASE_Y)) then

@@ -18,7 +18,7 @@
 // Luabind
 //==============================================================================================================
 
-static AndroidLogger logger("native::GameKit", true);
+static AndroidLogger logger("native::GameKit", FALSE);
 
 void RegisterGameFunctions(LuaState state)
 {

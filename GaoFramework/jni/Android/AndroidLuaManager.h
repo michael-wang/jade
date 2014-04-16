@@ -16,13 +16,12 @@ public:
 
 	GaoBool RunFromAsset(GaoString& path) {
 
-		AndroidLogger logger("AndroidLuaManager");
-		LOGD(logger, "%s: path:%s", __func__, path.c_str())
+		LOGD(log, "%s: path:%s", __func__, path.c_str())
 
 		AAsset* asset = AAssetManager_open(assetManager, path.c_str(), AASSET_MODE_UNKNOWN);
 
 		int len = AAsset_getLength(asset);
-		LOGD(logger, "len:%d", len)
+		LOGD(log, "len:%d", len)
 
 		char* buf = new char[len + 1];
 		int readCount = AAsset_read(asset, (void*) buf, len);
@@ -30,7 +29,7 @@ public:
 		AAsset_close(asset);
 
 		if (len != readCount) {
-			LOGE(logger, "read count:%d != file length:%d", readCount, len);
+			LOGE(log, "read count:%d != file length:%d", readCount, len);
 			return FALSE;
 		}
 
