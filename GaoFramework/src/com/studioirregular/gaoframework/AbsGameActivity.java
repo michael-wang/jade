@@ -110,10 +110,16 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		GameServices.getInstance().onCreate(this);
 	}
 	
+	@SuppressWarnings("deprecation")
 	private boolean isPortraitMode() {
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
-		display.getSize(size);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+			display.getSize(size);
+		} else {
+			size.set(display.getWidth(), display.getHeight());
+		}
 		
 		return size.x <= size.y;
 	}
