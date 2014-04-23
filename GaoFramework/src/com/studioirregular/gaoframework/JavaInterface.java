@@ -386,7 +386,7 @@ public class JavaInterface {
 		
 		final String idValue = GetString(idStringId);
 		
-		ShowLeaderboard show = new ShowLeaderboard(idValue);
+		ShowLeaderboard show = new ShowLeaderboard(getMainActivity(), idValue);
 		((AbsGameActivity)context).runOnUiThread(show);
 		
 		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
@@ -398,7 +398,7 @@ public class JavaInterface {
 			Log.d(TAG, "ShowAchievements");
 		}
 		
-		ShowAchievements show = new ShowAchievements();
+		ShowAchievements show = new ShowAchievements(getMainActivity());
 		((AbsGameActivity)context).runOnUiThread(show);
 		
 		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());

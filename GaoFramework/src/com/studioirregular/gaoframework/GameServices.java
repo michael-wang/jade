@@ -105,7 +105,7 @@ public class GameServices {
 		}
 		
 		apiClient.connect();
-		notifyConnectionStatus(true);
+//		notifyConnectionStatus(true);
 		
 		allowToConnectOnStart = false;
 	}
@@ -121,7 +121,7 @@ public class GameServices {
 		}
 		
 		isConnected = false;
-		notifyConnectionStatus(false);
+//		notifyConnectionStatus(false);
 	}
 	
 	public boolean isConnected() {
@@ -132,6 +132,37 @@ public class GameServices {
 			Log.d(TAG, "isConnected:" + result);
 		}
 		return result;
+	}
+	
+	public void connect() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "connect");
+		}
+		
+		if (apiClient != null) {
+			apiClient.connect();
+		}
+	}
+	
+	// I don't want to make scheduleOperationForServiceConnected public, 
+	//  because the only timing it will work is just before connection.
+	public void connect(Runnable pendingActionAfterConnected) {
+		
+		scheduleOperationForServiceConnected(pendingActionAfterConnected);
+		
+		connect();
+	}
+	
+	public void disconnect() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "disconnect");
+		}
+		
+		if (apiClient != null) {
+			apiClient.disconnect();
+		}
 	}
 	
 	// Return true if consumed.
@@ -159,6 +190,10 @@ public class GameServices {
 	
 	private void handleConnectionActivity(int resultCode) {
 		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "handleConnectionActivity resultCode:" + resultCode);
+		}
+		
 		fixingError = false;
 		
 		if (resultCode == Activity.RESULT_OK) {
@@ -174,12 +209,20 @@ public class GameServices {
 	
 	private void handleShowAchievements(int resultCode) {
 		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "handleShowAchievements resultCode:" + resultCode);
+		}
+		
 		if (resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED) {
 			apiClient.connect();
 		}
 	}
 	
 	private void handleShowLeaderboards(int resultCode) {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "handleShowLeaderboards resultCode:" + resultCode);
+		}
 		
 		if (resultCode == GamesActivityResultCodes.RESULT_RECONNECT_REQUIRED) {
 			apiClient.connect();
@@ -453,6 +496,7 @@ public class GameServices {
 			}
 			
 			isConnected = true;
+			notifyConnectionStatus(true);
 			
 			executePendingOperationAfterConnected();
 		}
@@ -465,6 +509,7 @@ public class GameServices {
 			}
 			
 			isConnected = false;
+			notifyConnectionStatus(false);
 		}
 		
 	};

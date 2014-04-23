@@ -86,4 +86,10 @@
     <string name="notif_bye">心如止水，我的朋友</string>
     <string name="notif_challenge">每日挑戰已開啓！可從寶箱中獲得2倍金幣！</string>
     
+    <!-- Google Play login dialog -->
+    <string name="signin_google_play_title">需要登入</string>
+    <string name="signin_google_play_message">Google Play 遊戲提供以下服務：\n\t\t雲端備份\n\t\t排行榜\n\t\t成就\n使用你的 Google+ 帳號登入？</string>
+    <string name="signin_google_play_positive">登入</string>
+    <string name="signin_google_play_negative">先不要</string>
+    
 </resources>

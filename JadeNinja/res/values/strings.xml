@@ -85,4 +85,11 @@
     <string name="notif_sp3"> times! Can you beat the final boss Devil Samurai?</string>
     <string name="notif_bye">Be water, my friend.</string>
     <string name="notif_challenge">Daily Challenge is open! Get 2x GOLD from treasure box!</string>
+    
+    <!-- Google Play login dialog -->
+    <string name="signin_google_play_title">Sign in required</string>
+    <string name="signin_google_play_message">Google Play game service prodives:\n\t\tCloud save\n\t\tLeaderboards\n\t\tAchievements\nSign in with Google+ account?</string>
+    <string name="signin_google_play_positive">Sign in</string>
+    <string name="signin_google_play_negative">Maybe later</string>
+    
 </resources>
