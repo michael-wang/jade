@@ -70,12 +70,51 @@ JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_Act
 }
 
 /*
+ * Class:     com_studioirregular_gaoframework_AbsGameActivity
+ * Method:    ActivityOnResume
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnResume
+  (JNIEnv *env, jobject obj) {
+
+    LOGD(logger, "ActivityOnResume")
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->Resume();
+
+        jni->Set(NULL);
+    }
+}
+
+/*
+ * Class:     com_studioirregular_gaoframework_AbsGameActivity
+ * Method:    ActivityOnPause
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_AbsGameActivity_ActivityOnPause
+  (JNIEnv *env, jobject) {
+
+    LOGD(logger, "ActivityOnPause")
+
+    if (jni != NULL && app != NULL) {
+        jni->Set(env);
+
+        app->Pause();
+
+        jni->Set(NULL);
+    }
+}
+
+
+/*
  * Class:     com_studioirregular_gaoframework_MyGLRenderer
  * Method:    RendererOnSurfaceCreated
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_com_studioirregular_gaoframework_MyGLRenderer_RendererOnSurfaceCreated
-  (JNIEnv *, jobject) {
+  (JNIEnv *env, jobject obj) {
 
     LOGD(logger, "RendererOnSurfaceCreated")
 }

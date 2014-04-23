@@ -21,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.studioirregular.gaoframework.NotifyMainActivityLifeCycle.LifeCycleEvent;
 import com.studioirregular.gaoframework.audio.AudioLoader;
 import com.studioirregular.gaoframework.audio.SoundSystem;
 import com.studioirregular.gaoframework.functional.NotifyBuyProductResult;
@@ -153,6 +154,9 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		if (surfaceView != null) {
 			surfaceView.onResume();
 		}
+		
+		NotifyMainActivityLifeCycle notifyLua = new NotifyMainActivityLifeCycle(LifeCycleEvent.ON_RESUME);
+		GLThread.getInstance().scheduleFunction(notifyLua);
 	}
 	
 	@Override
@@ -166,6 +170,8 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		if (surfaceView != null) {
 			surfaceView.onPause();
 		}
+		
+		ActivityOnPause();
 	}
 	
 	@Override
@@ -179,9 +185,9 @@ public abstract class AbsGameActivity extends FragmentActivity {
 		GameServices.getInstance().onStart(GAME_SERVICES_REQUEST_CODE,
 				SHOW_ACHIEVEMENTS_REQUEST_CODE, SHOW_LEADERBOARDS_REQUEST_CODE);
 		
-		ActivityOnStart();
-		
 		SoundSystem.getInstance().onStart();
+		
+		ActivityOnStart();
 	}
 
 	@Override
@@ -195,9 +201,9 @@ public abstract class AbsGameActivity extends FragmentActivity {
 			Log.w(TAG, "onStop");
 		}
 		
-		ActivityOnStop();
-		
 		SoundSystem.getInstance().onStop();
+		
+		ActivityOnStop();
 	}
 
 	@Override
@@ -292,8 +298,10 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	
 	private native void ActivityOnCreate(int worldWidth, int worldHeight, String luaScriptPath, AssetManager am, boolean debugMode);
 	private native void ActivityOnDestroy();
-	private native void ActivityOnStart();
-	private native void ActivityOnStop();
+	/* package */native void ActivityOnStart();
+	/* package */native void ActivityOnStop();
+	/* package */native void ActivityOnResume();
+	/* package */native void ActivityOnPause();
 	
 	// On my Nexus S (running 4.1.2), it requires all dependent libs be loaded
 	// in order, or UnsatisfiedLinkError is raised.

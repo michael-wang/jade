@@ -470,10 +470,18 @@ public class JavaInterface {
 		
 		this.context = context;
 		this.renderer = r;
+		
+		if (context instanceof AbsGameActivity) {
+			this.mainActivity = (AbsGameActivity)context;
+		}
 	}
 	
 	/* package */ Context getContext() {
 		return context;
+	}
+	
+	AbsGameActivity getMainActivity() {
+		return mainActivity;
 	}
 	
 	public MyGLRenderer getRenderer() {
@@ -481,6 +489,7 @@ public class JavaInterface {
 	}
 	
 	private Context context;
+	private AbsGameActivity mainActivity;
 	private MyGLRenderer renderer;
 	
 	private Circle circle;

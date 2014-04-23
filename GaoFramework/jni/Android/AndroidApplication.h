@@ -34,6 +34,8 @@ public:
 
 	GaoVoid Start();
 	GaoVoid Stop();
+	GaoVoid Pause();
+	GaoVoid Resume();
 
 	GaoVoid RunOnePass();
 

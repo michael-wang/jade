@@ -22,8 +22,10 @@ static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
 static const char SCRIPT_ROUTINE_UPDATE[] = "UpdateMain";
 static const char SCRIPT_ROUTINE_RENDER[] = "RenderMain";
 static const char SCRIPT_ROUTINE_TOUCH[]  = "OnTouch";
-static const char SCRIPT_ROUTINE_START[] = "AndroidStart";
-static const char SCRIPT_ROUTINE_STOP[]  = "AndroidStop";
+static const char SCRIPT_ROUTINE_ANDROID_START[] = "AndroidStart";
+static const char SCRIPT_ROUTINE_ANDROID_STOP[]  = "AndroidStop";
+static const char SCRIPT_ROUTINE_ANDROID_PAUSE[] = "AndroidPause";
+static const char SCRIPT_ROUTINE_ANDROID_RESUME[] = "AndroidResume";
 static const char SCRIPT_ROUTINE_ONTERMINATE[]= "Terminate";
 static const char SCRIPT_ROUTINE_PROCESS_BACK_KEY_PRESSED[] = "ProcessBackKey";
 static const char SCRIPT_ROUTINE_NOTIFY_DIALOG_RESULT[] = "OnAlertUIResult";
@@ -63,20 +65,13 @@ GaoVoid AndroidApplication::Start() {
 
 	LOGD(log, "Start")
 
-	if (running) {
-		LOGW(log, "Start: already running.")
-		return;
-	}
-
-	running = TRUE;
-
 	if (!initialized) {
 		LOGW(log, "Start skipt for not initialized.")
 		return;
 	}
 
-	if (!luaManager->CallFunction(SCRIPT_ROUTINE_START)) {
-		LOGE(log, "Failed to call:%s", SCRIPT_ROUTINE_START)
+	if (!luaManager->CallFunction(SCRIPT_ROUTINE_ANDROID_START)) {
+		LOGE(log, "Failed to call:%s", SCRIPT_ROUTINE_ANDROID_START)
 	}
 }
 
@@ -84,20 +79,41 @@ GaoVoid AndroidApplication::Stop() {
 
 	LOGD(log, "Stop")
 
-	if (!running) {
-		LOGW(log, "Stop: already not running.")
-		return;
-	}
-
-	running = FALSE;
-
 	if (!initialized) {
 		LOGW(log, "Stop skipt for not initialized.")
 		return;
 	}
 
-	if (!luaManager->CallFunction(SCRIPT_ROUTINE_STOP)) {
-		LOGE(log, "Failed to call:%s", SCRIPT_ROUTINE_STOP)
+	if (!luaManager->CallFunction(SCRIPT_ROUTINE_ANDROID_STOP)) {
+		LOGE(log, "Failed to call:%s", SCRIPT_ROUTINE_ANDROID_STOP)
+	}
+}
+
+GaoVoid AndroidApplication::Pause() {
+
+	LOGD(log, "Pause")
+
+	running = FALSE;
+
+	if (initialized) {
+
+		if (!luaManager->CallFunction(SCRIPT_ROUTINE_ANDROID_PAUSE)) {
+			LOGE(log, "Failed to call:%s", SCRIPT_ROUTINE_ANDROID_PAUSE)
+		}
+	}
+}
+
+GaoVoid AndroidApplication::Resume() {
+
+	LOGD(log, "Resume")
+
+	running = TRUE;
+
+	if (initialized) {
+
+		if (!luaManager->CallFunction(SCRIPT_ROUTINE_ANDROID_RESUME)) {
+			LOGE(log, "Failed to call:%s", SCRIPT_ROUTINE_ANDROID_RESUME)
+		}
 	}
 }
 

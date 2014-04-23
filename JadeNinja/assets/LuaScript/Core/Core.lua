@@ -433,19 +433,6 @@ function UpdateMain()
 
 	if IS_PLATFORM_ANDROID then
 
-		-- Start/Stop
-		if ANDROID_START then
-
-			OnEnterForeground();
-			ANDROID_START = false;
-
-		elseif ANDROID_STOP then
-
-			OnEnterBackground();
-			ANDROID_STOP = false;
-
-		end
-
 		-- For touch events
 	    local arrEvents = g_JavaInterface:GetTouchEvents();
 	    local SIZE = arrEvents:GetSize();
@@ -496,23 +483,47 @@ function Pause(onPause)
 end
 
 -------------------------------------------------------------------------
--- AndroidStart is called on main thread, while lua need to be run on GL thread.
-ANDROID_START = false;
-
+-- OK for non-GL thread.
 function AndroidStart()
-	g_Logger:Show("AndroidStart");
-
-	ANDROID_START = true;
+	if APP_DEBUG_MODE then
+		g_Logger:Show("AndroidStart");
+	end
 end
 
 -------------------------------------------------------------------------
--- AndroidStop is called on main thread, while lua need to be run on GL thread.
-ANDROID_STOP = false;
-
+-- OK for non-GL thread.
 function AndroidStop()
-	g_Logger:Show("AndroidStop");
+	if APP_DEBUG_MODE then
+		g_Logger:Show("AndroidStop");
+	end
+end
 
-	ANDROID_STOP = true;
+-------------------------------------------------------------------------
+-- Only for GL thread (for it could do drawing).
+function AndroidResume()
+	if APP_DEBUG_MODE then
+		g_Logger:Show("AndroidResume");
+	end
+
+	if (StageManager:IsOnStage("InGame")) then
+		-- game state already paused on AndroidPause, here is for drawing pause UI.
+		-- The reason we do drawing here, is because AndroidPause cannot be called from GL thread.
+		-- Detail: at the moment system call activity onPause, GL thread could be suspended.
+		-- Which means no more onDrawFrame will be called, therefore no change to ask gl renderer to call AndroidPause.
+		PauseGame(true);
+	end
+end
+
+-------------------------------------------------------------------------
+-- OK for non-GL thread.
+function AndroidPause()
+	if APP_DEBUG_MODE then
+		g_Logger:Show("AndroidPause");
+	end
+
+	if (StageManager:IsOnStage("InGame")) then
+		EnableUpdateGameObjects(false);
+	end
 end
 
 -------------------------------------------------------------------------
