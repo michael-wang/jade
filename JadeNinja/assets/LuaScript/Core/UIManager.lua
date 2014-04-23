@@ -1363,7 +1363,7 @@ UIFrame =
 
 		end
 
-		g_Logger:Show("OnSwipeEndedAxisX newCenterIndex:" .. newCenterIndex);
+		-- g_Logger:Show("OnSwipeEndedAxisX newCenterIndex:" .. newCenterIndex);
 
 		local finalOffset = self.m_SwipeData["center"] - self.m_SwipeData["obj"][newCenterIndex]["Transform"]:GetTranslateX();
 
