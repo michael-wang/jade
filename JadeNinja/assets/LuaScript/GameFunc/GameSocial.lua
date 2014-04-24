@@ -193,7 +193,12 @@ function ShowLeaderboard()
 	UIManager:GetWidgetComponent("Wait", "Content", "StateMachine"):ChangeState("active");
     
 	GameKit.LogEventWithParameter("Social", "leaderboard", "action", false);
-	GameKit.ShowLeaderboard(GC_LEADERBOARD_DEFAULT);
+
+    if IS_PLATFORM_ANDROID then
+        GameKit.ShowAllLeaderboards();
+    else
+        GameKit.ShowLeaderboard(GC_LEADERBOARD_DEFAULT);
+    end
 end
 
 -------------------------------------------------------------------------

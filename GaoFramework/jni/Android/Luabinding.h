@@ -30,6 +30,7 @@ bool IsGameCenterAvailable();
 bool HasGameCenterAuthenticated();
 void ShowLeaderboard(const char* identifier);
 void ShowLeaderboardForToday(const char* id);
+void ShowAllLeaderboards();
 void ShowAchievements();
 void SubmitScore(const char* category, double score);
 void SubmitAchievement(const char* identifier, float percent, bool repeatable);

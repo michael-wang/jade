@@ -343,8 +343,6 @@ GaoBool JavaInterface::IsGooglePlayGameServiceReady() {
 	
 	LOGD(log, "IsGooglePlayGameServiceReady")
 
-	JNIEnv* env = g_JniEnv->Get();
-
 	return jobj.CallBooleanMethod("IsGooglePlayGameServiceReady", "()Z");
 }
 
@@ -359,6 +357,13 @@ void JavaInterface::ShowLeaderboard(const char* id) {
 	jobj.CallVoidMethod("ShowLeaderboard", "(Ljava/lang/String;)V", jid);
 
 	if (jid != NULL) env->DeleteLocalRef(jid);
+}
+
+void JavaInterface::ShowAllLeaderboards() {
+
+	LOGD(log, "ShowAllLeaderboards")
+
+	jobj.CallVoidMethod("ShowAllLeaderboards", "()V");
 }
 
 void JavaInterface::ShowAchievements() {

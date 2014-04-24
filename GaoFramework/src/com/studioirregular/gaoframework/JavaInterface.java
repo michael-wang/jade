@@ -19,6 +19,7 @@ import com.studioirregular.gaoframework.functional.PlayMovie;
 import com.studioirregular.gaoframework.functional.PresentAlertDialog;
 import com.studioirregular.gaoframework.functional.RestorePurchases;
 import com.studioirregular.gaoframework.functional.ShowAchievements;
+import com.studioirregular.gaoframework.functional.ShowAllLeaderboards;
 import com.studioirregular.gaoframework.functional.ShowLeaderboard;
 import com.studioirregular.gaoframework.functional.ToastMessage;
 import com.studioirregular.gaoframework.gles.Circle;
@@ -387,6 +388,18 @@ public class JavaInterface {
 		final String idValue = GetString(idStringId);
 		
 		ShowLeaderboard show = new ShowLeaderboard(getMainActivity(), idValue);
+		((AbsGameActivity)context).runOnUiThread(show);
+		
+		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());
+	}
+	
+	public void ShowAllLeaderboards() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "ShowAllLeaderboards");
+		}
+		
+		ShowAllLeaderboards show = new ShowAllLeaderboards(getMainActivity());
 		((AbsGameActivity)context).runOnUiThread(show);
 		
 		GLThread.getInstance().scheduleFunction(new NotifyUIPresented());

@@ -50,6 +50,7 @@ public:
 
 	GaoBool IsGooglePlayGameServiceReady();
 	void ShowLeaderboard(const char* id);
+	void ShowAllLeaderboards();
 	void ShowAchievements();
 	void SubmitAchievement(const char* id, float value, bool unlock);
 	void SubmitScore(const char* id, int value);

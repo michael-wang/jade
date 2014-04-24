@@ -66,6 +66,7 @@ void RegisterGameFunctions(LuaState state)
         // Game Center
         def("ShowLeaderboard", &ShowLeaderboard),
         def("ShowLeaderboardForToday", &ShowLeaderboardForToday),
+        def("ShowAllLeaderboards", &ShowAllLeaderboards),
         def("ShowAchievements", &ShowAchievements),
         def("SubmitScore", &SubmitScore),
         def("SubmitAchievement", &SubmitAchievement),
@@ -329,6 +330,20 @@ void ShowLeaderboardForToday(const char* id) {
 
     // Google Play leaderboard does not support show only today's leaderboard.
     ShowLeaderboard(id);
+}
+
+void ShowAllLeaderboards() {
+    
+    LOGD(logger, "ShowAllLeaderboards")
+
+    JavaInterface* java = JavaInterface::GetSingletonPointer();
+
+    if (java == NULL) {
+        LOGE(logger, "ShowAllLeaderboards: java == NULL")
+        return;
+    }
+
+    java->ShowAllLeaderboards();
 }
 
 // Need to callback OnUIPresentCompleted.
