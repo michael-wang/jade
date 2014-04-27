@@ -1090,7 +1090,6 @@ GameStageTemplate
 	ui = "InGame",
 
 	OnEnter = function()
-		EnemyManager:ResetCombo();
 		BladeManager:ResetCriticalHit();
 		
 		EnableUpdateGameObjects(false);
