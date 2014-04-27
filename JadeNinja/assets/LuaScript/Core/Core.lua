@@ -53,8 +53,6 @@ PREBUILD_DEVICE_SCRIPT_POOL =
 	[APP_DEVICE_IPHONE_TALLER] = "iphone5.bottle",
 	[APP_DEVICE_IPAD] = "ipad.bottle",
 	[APP_DEVICE_IPAD_RETINA] = "ipad.bottle",
-	[APP_DEVICE_ANDROID_PHONE] = "android.bottle",
-	[APP_DEVICE_ANDROID_TABLET] = "android.bottle",
 };
 
 APP_TESTER_BUILD = false; -- turn off on official release.
@@ -121,7 +119,7 @@ g_LuaManager = nil;
 
 
 --=======================================================================
--- Core routines (iPhone)
+-- Core routines (Android)
 --=======================================================================
 
 -------------------------------------------------------------------------
@@ -161,7 +159,7 @@ function InitializeLuaAndroid(worldWidth, worldHeight, luaScriptPath, debugMode)
 	end
 
 	local result = InitializeLuaIphone(deviceType, worldWidth, worldHeight, orientation, 
-		unitX, unitY, false);
+		unitX, unitY, true);
 
 	-- Notify java about init done, they got some chore to be done.
 	g_JavaInterface:OnNativeInitializeDone();
@@ -169,6 +167,11 @@ function InitializeLuaAndroid(worldWidth, worldHeight, luaScriptPath, debugMode)
 	return result;
 end
 
+--=======================================================================
+-- Core routines (iPhone)
+--=======================================================================
+
+-------------------------------------------------------------------------
 function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, useCompiledScript)
     assert(device);
 	assert(width);
@@ -204,8 +207,10 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
 	
 	PLAIN_DEVICE_SCRIPT_LIST = PLAIN_DEVICE_SCRIPT_POOL[device];
 	assert(PLAIN_DEVICE_SCRIPT_LIST);
-	PREBUILD_DEVICE_SCRIPT_NAME = PREBUILD_DEVICE_SCRIPT_POOL[device];
-	assert(PREBUILD_DEVICE_SCRIPT_NAME);
+	if not IS_PLATFORM_ANDROID then
+		PREBUILD_DEVICE_SCRIPT_NAME = PREBUILD_DEVICE_SCRIPT_POOL[device];
+		assert(PREBUILD_DEVICE_SCRIPT_NAME);
+	end
 
 	if (useCompiledScript) then
 		APP_USE_COMPILED_SCRIPT = true;
@@ -232,12 +237,20 @@ function InitializeLuaIphone(device, width, height, orientation, unitX, unitY, u
     
     -- Load game scripts
 	if (APP_USE_COMPILED_SCRIPT) then
-		dofile(string.format("%s/%s", APP_LUA_PATH, PREBUILD_DEVICE_SCRIPT_NAME));
-		dofile(string.format("%s/%s", APP_LUA_PATH, PREBUILD_FUNC_SCRIPT_NAME));
+		if IS_PLATFORM_ANDROID then
+			LoadPrecompiledScript(PREBUILD_FUNC_SCRIPT_NAME, APP_LUA_PATH);
 
-        InitializeAppDataDelegate();
-		
-		dofile(string.format("%s/%s", APP_LUA_PATH, PREBUILD_DATA_SCRIPT_NAME));
+	        InitializeAppDataDelegate();
+			
+			LoadPrecompiledScript(PREBUILD_DATA_SCRIPT_NAME, APP_LUA_PATH);
+		else
+			dofile(string.format("%s/%s", APP_LUA_PATH, PREBUILD_DEVICE_SCRIPT_NAME));
+			dofile(string.format("%s/%s", APP_LUA_PATH, PREBUILD_FUNC_SCRIPT_NAME));
+
+	        InitializeAppDataDelegate();
+			
+			dofile(string.format("%s/%s", APP_LUA_PATH, PREBUILD_DATA_SCRIPT_NAME));
+		end
     else
 		-- NOTE: Must called before other scripts
         LoadScript(GAME_CORE_FILE, SCRIPT_FUNC_PATH);
@@ -620,6 +633,20 @@ function LoadScript(name, path)
     	end
     else
     	dofile(file);    
+	end
+end
+
+-------------------------------------------------------------------------
+function LoadPrecompiledScript(name, path)
+    assert(name);
+    assert(path);
+
+	local file = string.format("%s%s", path, name);
+
+	if APP_DEBUG_MODE then
+		g_LuaManager:RunFromFullPathFile(file);
+	else
+		g_LuaManager:RunFromAsset(file);
 	end
 end
 

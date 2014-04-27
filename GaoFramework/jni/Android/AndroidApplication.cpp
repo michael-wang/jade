@@ -15,8 +15,8 @@
 
 using namespace Gao::Framework;
 
-static const char INIT_LOGGER_SCRIPT[]  = "Android/init_logger.lua";
-static const char CORE_SCRIPT[]         = "Core/Core.lua";
+static const char BOOTSTRAP_SCRIPT[]  = "bootstrap.go";
+static const char CORE_SCRIPT[]       = "monkey.potion";
 static const char SCRIPT_ROUTINE_INIT[] = "InitializeLuaAndroid";
 static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
 static const char SCRIPT_ROUTINE_UPDATE[] = "UpdateMain";
@@ -42,7 +42,7 @@ AndroidApplication* AndroidApplication::Singleton = NULL;
 AndroidApplication::AndroidApplication(int width, int height, char* luaScript, AAssetManager* am, GaoBool debug) :
 	luaManager (new AndroidLuaManager(am)),
 	running (FALSE),
-	log ("native::framework::AndroidApplication", FALSE),
+	log ("native::framework::AndroidApplication", TRUE),
 	worldWidth (width),
 	worldHeight (height),
 	luaScriptPath (luaScript),
@@ -138,7 +138,7 @@ GaoBool AndroidApplication::OnInitialize() {
 	RegisterGameFunctions(luaManager->GetLuaState());
 
 	std::string luaScript(luaScriptPath);
-	luaScript += INIT_LOGGER_SCRIPT;
+	luaScript += BOOTSTRAP_SCRIPT;
 	LOGD(log, "luaScript:%s", luaScript.c_str());
 	if (debugMode) {
 		if (!luaManager->RunFromFullPathFile(luaScript)) {
@@ -167,7 +167,7 @@ GaoBool AndroidApplication::OnInitialize() {
 
 	if (!luaManager->GetFunction(SCRIPT_ROUTINE_INIT)) {
 		LOGE(log, "Cannot find lua function: %s", SCRIPT_ROUTINE_INIT)
-		return false;
+		return FALSE;
 	}
 	luaManager->PushValue(worldWidth);
 	luaManager->PushValue(worldHeight);

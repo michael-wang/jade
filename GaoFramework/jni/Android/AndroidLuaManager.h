@@ -19,21 +19,40 @@ public:
 		LOGD(log, "%s: path:%s", __func__, path.c_str())
 
 		AAsset* asset = AAssetManager_open(assetManager, path.c_str(), AASSET_MODE_UNKNOWN);
+		if (asset == NULL) {
+			LOGE(log, "RunFromAsset no such asset:%s", path.c_str())
+			return FALSE;
+		}
 
 		int len = AAsset_getLength(asset);
 		LOGD(log, "len:%d", len)
 
-		char* buf = new char[len + 1];
+		char* buf = new char[len];
 		int readCount = AAsset_read(asset, (void*) buf, len);
-		buf[len] = '\0';	// mark end of string.
 		AAsset_close(asset);
+		LOGD(log, "readCount:%d", readCount)
 
 		if (len != readCount) {
 			LOGE(log, "read count:%d != file length:%d", readCount, len);
 			return FALSE;
 		}
 
-		return RunFromString(buf);
+		LuaState L = GetLuaState();
+		int error = luaL_loadbuffer(L, buf, len, path.c_str());
+		LOGD(log, "error:%d", error)
+		if (error) {
+			LOGE(log, "Failed to load:%s, error: %s", path.c_str(), luaL_checkstring(L, lua_gettop(L)))
+			return FALSE;
+		}
+
+		error = lua_pcall(L, 0, 0, 0);
+		LOGD(log, "error:%d", error)
+		if (error) {
+			LOGE(log, "Failed to run:%s, error: %s", path.c_str(), luaL_checkstring(L, lua_gettop(L)))
+			return FALSE;
+		}
+
+		return TRUE;
 	}
 
 private:

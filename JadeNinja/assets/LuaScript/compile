@@ -1,6 +1,10 @@
-LUAC=../../../tools/lua/bin/luac
+LUAC=../../../tools/lua/luac
 echo "Using lua compiler: $LUAC"
 
-find Core -name *.lua | xargs $LUAC -o ./core.essence
-find GameData -name *.lua | xargs $LUAC -o ./love.essence
-find GameFunc -name *.lua | xargs $LUAC -o ./soul.essence
+$LUAC -s -o ./monkey.potion Core/ObjectFactory.lua Core/Core.lua Core/Utility.lua Core/StageManager.lua Core/TaskManager.lua Core/RoutineManager.lua Core/PoolManager.lua Core/ObjectComponent.lua Core/PuzzleComponent.lua Core/StateMachineComponent.lua Core/UIManager.lua Core/UIPuzzleWidget.lua Core/IOManager.lua
+
+$LUAC -s -o ./soul.essence GameFunc/GameLogic.lua GameFunc/GameSocial.lua GameFunc/GameState.lua GameFunc/GameStateEnemy.lua GameFunc/GameStage.lua GameFunc/GameEnemy.lua GameFunc/GameBlade.lua GameFunc/GameScroll.lua GameFunc/GameShop.lua GameFunc/GameMoney.lua GameFunc/GameLevel.lua GameFunc/GameAudio.lua GameFunc/GameTutorial.lua GameFunc/GameCore.lua
+
+$LUAC -s -o ./love.essence GameData/GamePuzzleImg.lua GameData/GameGlobal.lua GameData/GamePuzzleAnim.lua GameData/GameObject.lua GameData/GameUI.lua GameData/GameAvatarData.lua GameData/GameEnemyData.lua GameData/GameStuffData.lua GameData/GameLevelData.lua GameData/GameSceneData.lua GameData/GameAchievement.lua
+
+$LUAC -s -o ./bootstrap.go ./Android/init_logger.lua
