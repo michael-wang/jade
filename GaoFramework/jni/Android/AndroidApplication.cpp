@@ -42,7 +42,7 @@ AndroidApplication* AndroidApplication::Singleton = NULL;
 AndroidApplication::AndroidApplication(int width, int height, char* luaScript, AAssetManager* am, GaoBool debug) :
 	luaManager (new AndroidLuaManager(am)),
 	running (FALSE),
-	log ("native::framework::AndroidApplication", TRUE),
+	log ("native::framework::AndroidApplication", FALSE),
 	worldWidth (width),
 	worldHeight (height),
 	luaScriptPath (luaScript),
@@ -66,7 +66,7 @@ GaoVoid AndroidApplication::Start() {
 	LOGD(log, "Start")
 
 	if (!initialized) {
-		LOGW(log, "Start skipt for not initialized.")
+		LOGD(log, "Start skipt for not initialized.")
 		return;
 	}
 

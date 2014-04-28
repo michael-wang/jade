@@ -17,7 +17,7 @@ class JniEnv : public Gao::Framework::Singleton<JniEnv> {
 public:
 	JniEnv() : 
 		env (NULL), 
-		log ("JniEnv") {
+		log ("JniEnv", FALSE) {
 		
 		LOGD(log, "Constructor")
 	}

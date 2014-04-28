@@ -89,10 +89,13 @@ public class Config {
 			}
 		}
 		
+		// This is the folder to store precompiled lua scripts, make it not so obvious about its lua content.
+		private static final String LUA_ASSET_FOLDER = "AUl";
+		
 		public static final String LUA_ASSET_PATH = BuildConfig.DEBUG ?
 				Environment.getExternalStoragePublicDirectory(
-						Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + File.separator + "LuaScript" + File.separator : 
-				"LuaScript" + File.separator;
+						Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + File.separator + LUA_ASSET_FOLDER + File.separator : 
+						LUA_ASSET_FOLDER + File.separator;
 	}
 	
 	public static final int PHONE_WORLD_LONG = 480;
