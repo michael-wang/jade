@@ -105,7 +105,6 @@ public class GameServices {
 		}
 		
 		apiClient.connect();
-//		notifyConnectionStatus(true);
 		
 		allowToConnectOnStart = false;
 	}
@@ -121,7 +120,8 @@ public class GameServices {
 		}
 		
 		isConnected = false;
-//		notifyConnectionStatus(false);
+		
+		cleanUpPendingOperationsForServiceConnected();
 	}
 	
 	public boolean isConnected() {
@@ -193,8 +193,6 @@ public class GameServices {
 		if (DEBUG_LOG) {
 			Log.d(TAG, "handleConnectionActivity resultCode:" + resultCode);
 		}
-		
-		fixingError = false;
 		
 		if (resultCode == Activity.RESULT_OK) {
 			if (!apiClient.isConnecting() && !apiClient.isConnected()) {
@@ -523,29 +521,20 @@ public class GameServices {
 				Log.d(TAG, "onConnectionFailed result:" + result);
 			}
 			
-			if (fixingError) {
-				Log.e(TAG, "Connection failed: already tried to resolve the error, but still failed.");
-				if (pendingOperationAfterConnected != null) {
-					pendingOperationAfterConnected.clear();
-				}
-				return;
-				
-			} else if (result.hasResolution()) {
-				fixingError = true;
+			if (result.hasResolution()) {
 				try {
 					result.startResolutionForResult(activity, connectionRequestCode);
 				} catch (SendIntentException e) {
 					// There was an error with the resolution intent. Try again.
 					apiClient.connect();
 				}
-			} else {
-				showErrorDialog(result.getErrorCode());
-				if (pendingOperationAfterConnected != null) {
-					pendingOperationAfterConnected.clear();
-				}
+				return;
 			}
+			
+			showErrorDialog(result.getErrorCode());
+			
+			cleanUpPendingOperationsForServiceConnected();
 		}
-		
 	};
 	
 	private void showErrorDialog(int errorCode) {
@@ -564,7 +553,6 @@ public class GameServices {
 	}
 	
 	public void onErrorDialogDismiss() {
-		fixingError = false;
 	}
 	
 	public static class ErrorDialogFragment extends DialogFragment {
@@ -608,7 +596,6 @@ public class GameServices {
 	private boolean isConnected = false;
 	
 	private GoogleApiClient apiClient;
-	private boolean fixingError = false;
 	
 	private FragmentActivity activity;
 	private int connectionRequestCode;
@@ -639,6 +626,17 @@ public class GameServices {
 			for (Runnable op : pendingOperationAfterConnected) {
 				op.run();
 			}
+		}
+	}
+	
+	private void cleanUpPendingOperationsForServiceConnected() {
+		
+		if (DEBUG_LOG) {
+			Log.d(TAG, "cleanUpPendingOperationsForServiceConnected");
+		}
+		
+		if (pendingOperationAfterConnected != null) {
+			pendingOperationAfterConnected.clear();
 		}
 	}
 	
