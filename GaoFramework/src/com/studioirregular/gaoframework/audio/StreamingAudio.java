@@ -61,7 +61,9 @@ public class StreamingAudio implements AbsAudioResource {
 		}
 		
 		if (mplayer.isPlaying()) {
-			mplayer.stop();
+			// Don't stop before release media player.
+			// see this issue: https://code.google.com/p/android/issues/detail?id=63345
+			// mplayer.stop();
 			
 			onAudioStopped();
 		}
