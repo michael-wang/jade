@@ -69,7 +69,7 @@ public class GameServices {
 			.addOnConnectionFailedListener(googleApiConnectionFailedListener)
 			.build();
 		
-		allowToConnectOnStart = true;
+		reonnectOnStart = true;
 	}
 	
 	public void onStart(int activityRequestCode, int achievementsRequestCode, int leaderboardsRequestCode) {
@@ -89,24 +89,22 @@ public class GameServices {
 			return;
 		}
 		
-		if (!allowToConnectOnStart) {
-			if (DEBUG_LOG) {
-				Log.d(TAG, "Skip connection for allowToConnectOnStart == false");
+		if (reonnectOnStart) {
+			reonnectOnStart = false;
+			
+			if (!apiClient.isConnected() && !apiClient.isConnecting()) {
+				
+				if (DEBUG_LOG) {
+					Log.d(TAG, "onStart connecting to game service!");
+				}
+				
+				apiClient.connect();
 			}
-			return;
+		} else {
+			if (DEBUG_LOG) {
+				Log.d(TAG, "Skip connection for reonnectOnStart == false");
+			}
 		}
-		
-		if (apiClient.isConnecting() || apiClient.isConnected()) {
-			return;
-		}
-		
-		if (DEBUG_LOG) {
-			Log.w(TAG, "onStart connecting to game service!");
-		}
-		
-		apiClient.connect();
-		
-		allowToConnectOnStart = false;
 	}
 	
 	public void onStop() {
@@ -117,6 +115,8 @@ public class GameServices {
 		
 		if (apiClient != null && apiClient.isConnected()) {
 			apiClient.disconnect();
+			
+			reonnectOnStart = true;
 		}
 		
 		isConnected = false;
@@ -490,7 +490,7 @@ public class GameServices {
 		public void onConnected(Bundle connectionHint) {
 			
 			if (DEBUG_LOG) {
-				Log.d(TAG, "onConnected connectionHint:" + connectionHint);
+				Log.w(TAG, "onConnected connectionHint:" + connectionHint);
 			}
 			
 			isConnected = true;
@@ -503,7 +503,7 @@ public class GameServices {
 		public void onConnectionSuspended(int cause) {
 			
 			if (DEBUG_LOG) {
-				Log.d(TAG, "onConnectionSuspended cause:" + cause);
+				Log.w(TAG, "onConnectionSuspended cause:" + cause);
 			}
 			
 			isConnected = false;
@@ -518,7 +518,7 @@ public class GameServices {
 		public void onConnectionFailed(ConnectionResult result) {
 			
 			if (DEBUG_LOG) {
-				Log.d(TAG, "onConnectionFailed result:" + result);
+				Log.w(TAG, "onConnectionFailed result:" + result);
 			}
 			
 			if (result.hasResolution()) {
@@ -640,7 +640,8 @@ public class GameServices {
 		}
 	}
 	
-	// This flag prevent connect every time activity restarts (e.g. after play movie)
-	// Once player reject connect on app launch, don't bother him any more.
-	private boolean allowToConnectOnStart = true;
+	// The reason to use this flag: if player choose NOT to connect to Google
+	// Play, then we shouldn't try to reconnect on every onStart.
+	// PS: turn on this flag onCreate or we won't connect onStart.
+	private boolean reonnectOnStart = true;
 }
