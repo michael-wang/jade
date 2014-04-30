@@ -16,6 +16,7 @@
 using namespace Gao::Framework;
 
 static const char BOOTSTRAP_SCRIPT[]  = "bootstrap.go";
+static const char BOOTSTRAP_INIT[]    = "init";
 static const char CORE_SCRIPT[]       = "monkey.potion";
 static const char SCRIPT_ROUTINE_INIT[] = "InitializeLuaAndroid";
 static const char SCRIPT_ROUTINE_SURFACE_CHANGED[] = "OnSurfaceChanged";
@@ -150,6 +151,11 @@ GaoBool AndroidApplication::OnInitialize() {
 		}
 	}
 
+	if (!luaManager->CallFunction(BOOTSTRAP_INIT)) {
+		LOGE(log, "Failed to run lua function: %s", BOOTSTRAP_INIT)
+		return FALSE;
+	}
+
 	std::string core(luaScriptPath);
 	core += CORE_SCRIPT;
 	LOGD(log, "core:%s", core.c_str());
@@ -175,7 +181,8 @@ GaoBool AndroidApplication::OnInitialize() {
 	luaManager->PushValue(debugMode);
 	LOGD(log, "before call function: %s", SCRIPT_ROUTINE_INIT);
 	if (!luaManager->CallFunction()) {
-		LOGE(log, "Failed to run lua function: %s", SCRIPT_ROUTINE_INIT);
+		LOGE(log, "Failed to run lua function: %s", SCRIPT_ROUTINE_INIT)
+		return FALSE;
 	}
 
 	initialized = TRUE;

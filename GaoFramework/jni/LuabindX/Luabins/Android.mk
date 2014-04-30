@@ -17,9 +17,10 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
 
 LOCAL_EXPORT_C_INCLUDES += $(LOCAL_PATH)/include
 
-LOCAL_SHARED_LIBRARIES := lua
+LOCAL_SHARED_LIBRARIES := luajit
 
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-add-path, $(LOCAL_PATH)/../)
-$(call import-module, LuabindX/Lua)
+# $(call import-module, LuabindX/Lua)
+$(call import-module, LuabindX/LuaJIT)

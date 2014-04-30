@@ -33,12 +33,13 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../LuabindX/Luabind/include
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../LuabindX/Luabins/include
 LOCAL_C_INCLUDES += $(MY_BOOST_PATH)
 
-LOCAL_SHARED_LIBRARIES := lua luabind luabins
+LOCAL_SHARED_LIBRARIES := luajit luabind luabins
 
 include $(BUILD_STATIC_LIBRARY)
 
 $(call import-add-path, $(LOCAL_PATH)/../)
 
-$(call import-module, LuabindX/Lua)
+# $(call import-module, LuabindX/Lua)
+$(call import-module, LuabindX/LuaJIT)
 $(call import-module, LuabindX/Luabind)
 $(call import-module, LuabindX/Luabins)

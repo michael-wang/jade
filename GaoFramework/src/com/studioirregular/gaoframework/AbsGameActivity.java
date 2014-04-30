@@ -306,7 +306,7 @@ public abstract class AbsGameActivity extends FragmentActivity {
 	// On my Nexus S (running 4.1.2), it requires all dependent libs be loaded
 	// in order, or UnsatisfiedLinkError is raised.
 	static {
-		System.loadLibrary("lua");
+		System.loadLibrary("luajit");
 		System.loadLibrary("stlport_shared");
 		System.loadLibrary("luabind");
 		System.loadLibrary("luabins");
