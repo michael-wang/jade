@@ -67,9 +67,9 @@
     <string name="map_unlock_postfix"> golds?</string>
     <string name="shop_no_coin">You don\'t have enough coins!</string>
 
-    <string name="icloud_title">iCloud Backup</string>
-    <string name="icloud_desc">Do you want to enable iCloud? It will help you backup game save and can be sync on your devices</string>
-    <string name="icloud_sync">iCloud Sync Completed</string>
+    <string name="icloud_title">Cloud Save Backup</string>
+    <string name="icloud_desc">Do you want to enable Cloud Save? It will help you backup game save and can be sync on your devices</string>
+    <string name="icloud_sync">Cloud Save Sync Completed</string>
 
     <string name="ad_gold">You found Gold x</string>
     <string name="ad_coin">You found Coin x</string>
